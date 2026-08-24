@@ -1,0 +1,9 @@
+{
+  // The venv lives outside the workspace (~/venvs/), so VS Code cannot
+  // auto-discover it. Point at it explicitly.
+  "python.defaultInterpreterPath": "/home/jaydenlee/venvs/test-ecg-training/bin/python",
+  "python.terminal.activateEnvironment": true,
+
+  // Notebooks load ECGData.mat by relative path -> run from the workspace root.
+  "jupyter.notebookFileRoot": "${workspaceFolder}"
+}

@@ -1,0 +1,382 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 89
+    },
+    "id": "Lq_z0zLg53Gr",
+    "outputId": "54b6cf53-346e-4617-ee14-d960268c395b"
+   },
+   "outputs": [
+    {
+     "ename": "",
+     "evalue": "",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31mRunning cells with 'Python 3.11.7' requires the ipykernel package.\n",
+      "\u001b[1;31m<a href='command:jupyter.createPythonEnvAndSelectController'>Create a Python Environment</a> with the required packages.\n",
+      "\u001b[1;31mOr install 'ipykernel' using the command: 'c:/msys64/ucrt64/bin/python.exe -m pip install ipykernel -U --user --force-reinstall'"
+     ]
+    }
+   ],
+   "source": [
+    "# ==========================================\n",
+    "# Upload ECGData.mat\n",
+    "# ==========================================\n",
+    "from google.colab import files\n",
+    "uploaded = files.upload()\n",
+    "\n",
+    "# ==========================================\n",
+    "# Load MAT file\n",
+    "# ==========================================\n",
+    "import scipy.io as sio\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "mat = sio.loadmat('ECGData.mat')\n",
+    "\n",
+    "print(mat.keys())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "rEyHo2bc6Bu6",
+    "outputId": "41802e86-94e2-4c28-b506-5c3086cbc660"
+   },
+   "outputs": [],
+   "source": [
+    "# ==========================================\n# Extract ECGData Structure\n# ==========================================\n\nECGData = mat['ECGData']\n\n# MATLAB struct fields\nData = ECGData['Data'][0, 0]\nLabels = ECGData['Labels'][0, 0]\n\nprint(\"Data Shape   :\", Data.shape)\nprint(\"Labels Shape :\", Labels.shape)\n\n# Convert MATLAB cell/string labels to clean Python strings\nlabel_list = [str(Labels[i, 0][0]) for i in range(len(Labels))]\n\nprint(\"Unique Labels:\", np.unique(label_list))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/"
+    },
+    "id": "_rck-3t08vHb",
+    "outputId": "fc969b03-ab2a-4ccc-b59f-1682b68f3ad8"
+   },
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# Segment ECG into 500 sample windows\n",
+    "# ==========================================\n",
+    "\n",
+    "SEG_LEN = 500\n",
+    "\n",
+    "segments = []\n",
+    "segment_labels = []\n",
+    "\n",
+    "for i in range(Data.shape[0]):\n",
+    "\n",
+    "    signal = Data[i, :]\n",
+    "    label = label_list[i]\n",
+    "\n",
+    "    n_segments = len(signal) // SEG_LEN\n",
+    "\n",
+    "    for j in range(n_segments):\n",
+    "\n",
+    "        start = j * SEG_LEN\n",
+    "        end = start + SEG_LEN\n",
+    "\n",
+    "        seg = signal[start:end]\n",
+    "\n",
+    "        segments.append(seg)\n",
+    "        segment_labels.append(label)\n",
+    "\n",
+    "segments = np.array(segments)\n",
+    "segment_labels = np.array(segment_labels)\n",
+    "\n",
+    "print(\"Segments Shape :\", segments.shape)\n",
+    "print(\"Labels Shape   :\", segment_labels.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "colab": {
+     "base_uri": "https://localhost:8080/",
+     "height": 805
+    },
+    "id": "7wW7IOni_4Ya",
+    "outputId": "1ce57e6c-63c6-42e3-fdb9-de0877e5ac5e"
+   },
+   "outputs": [],
+   "source": [
+    "classes = np.unique(segment_labels)\n",
+    "\n",
+    "print(\"Available Classes:\", classes)\n",
+    "\n",
+    "plt.figure(figsize=(15,10))\n",
+    "\n",
+    "for idx, cls in enumerate(classes):\n",
+    "\n",
+    "    indices = np.where(segment_labels == cls)[0]\n",
+    "\n",
+    "    print(cls, \":\", len(indices))\n",
+    "\n",
+    "    if len(indices) == 0:\n",
+    "        continue\n",
+    "\n",
+    "    sample_idx = indices[0]\n",
+    "\n",
+    "    plt.subplot(len(classes),1,idx+1)\n",
+    "    plt.plot(segments[sample_idx])\n",
+    "    plt.title(f'{cls} ECG Segment')\n",
+    "    plt.grid(True)\n",
+    "\n",
+    "plt.tight_layout()\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "id": "w4Ca4BDx_5VJ"
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Variational Mode Decomposition (VMD)\n",
+    "\n",
+    "VMD is applied to each complete ECG recording before the 500-sample segmentation step. The decomposition returns `K` band-limited modes whose sum reconstructs the ECG signal. The dataset does not contain a sampling-frequency field, so center frequencies are kept in normalized frequency units."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# Install / import VMD\n",
+    "# ==========================================\n",
+    "\n",
+    "# vmdpy provides the VMD implementation used below.\n",
+    "# It is also maintained within sktime, but vmdpy is the\n",
+    "# smallest dependency for this notebook.\n",
+    "!pip -q install vmdpy\n",
+    "\n",
+    "from vmdpy import VMD\n",
+    "from tqdm.auto import tqdm\n",
+    "\n",
+    "print(\"VMD imported successfully\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# VMD Parameters\n",
+    "# ==========================================\n",
+    "\n",
+    "VMD_ALPHA = 2000       # bandwidth constraint\n",
+    "VMD_TAU = 0.0          # noise-tolerance / relaxed fidelity\n",
+    "VMD_K = 5              # number of modes\n",
+    "VMD_DC = 0             # do not force the first mode to DC\n",
+    "VMD_INIT = 1           # uniformly initialize center frequencies\n",
+    "VMD_TOL = 1e-7         # convergence tolerance\n",
+    "\n",
+    "print(\"VMD configuration:\")\n",
+    "print(f\"  alpha = {VMD_ALPHA}\")\n",
+    "print(f\"  tau   = {VMD_TAU}\")\n",
+    "print(f\"  K     = {VMD_K}\")\n",
+    "print(f\"  DC    = {VMD_DC}\")\n",
+    "print(f\"  init  = {VMD_INIT}\")\n",
+    "print(f\"  tol   = {VMD_TOL}\")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n# Apply VMD to one complete ECG recording\n# ==========================================\n\ndef decompose_ecg_vmd(signal, alpha=VMD_ALPHA, tau=VMD_TAU,\n                       K=VMD_K, DC=VMD_DC, init=VMD_INIT,\n                       tol=VMD_TOL):\n    \"\"\"Decompose one 1-D ECG signal into K variational modes.\"\"\"\n    signal = np.asarray(signal, dtype=np.float64).ravel()\n\n    if signal.ndim != 1:\n        raise ValueError(\"signal must be one-dimensional\")\n    if len(signal) < 10:\n        raise ValueError(\"signal is too short for VMD\")\n\n    modes, mode_spectra, center_frequencies = VMD(\n        signal, alpha, tau, K, DC, init, tol\n    )\n\n    return modes, mode_spectra, center_frequencies\n\n\n# Use the first ARR recording as a concrete example.\nexample_index = 0\nexample_signal = Data[example_index, :]\nexample_label = label_list[example_index]\n\nexample_modes, example_mode_spectra, example_omega = decompose_ecg_vmd(example_signal)\nexample_reconstruction = np.sum(example_modes, axis=0)\n\nprint(\"Example recording:\", example_index)\nprint(\"Label:\", example_label)\nprint(\"Original shape:\", example_signal.shape)\nprint(\"Modes shape:\", example_modes.shape)\nprint(\"Center frequencies:\", example_omega[-1])\nprint(\n    \"Relative reconstruction error:\",\n    np.linalg.norm(example_signal - example_reconstruction)\n    / np.linalg.norm(example_signal),\n)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# Visualize the VMD decomposition\n",
+    "# ==========================================\n",
+    "\n",
+    "fig, axes = plt.subplots(VMD_K + 2, 1, figsize=(15, 2.2 * (VMD_K + 2)), sharex=True)\n",
+    "\n",
+    "axes[0].plot(example_signal, linewidth=1)\n",
+    "axes[0].set_title(f\"Original ECG - {example_label}\")\n",
+    "axes[0].grid(True)\n",
+    "\n",
+    "for k in range(VMD_K):\n",
+    "    axes[k + 1].plot(example_modes[k], linewidth=1)\n",
+    "    axes[k + 1].set_title(f\"VMD Mode {k + 1}\")\n",
+    "    axes[k + 1].grid(True)\n",
+    "\n",
+    "axes[-1].plot(example_signal - example_reconstruction, linewidth=1)\n",
+    "axes[-1].set_title(\"Reconstruction Residual\")\n",
+    "axes[-1].set_xlabel(\"Sample\")\n",
+    "axes[-1].grid(True)\n",
+    "\n",
+    "plt.tight_layout()\n",
+    "plt.show()\n\n",
+    "# Optional: show the learned center frequencies in normalized units.\n",
+    "plt.figure(figsize=(8, 4))\n",
+    "plt.stem(np.arange(1, VMD_K + 1), example_omega[-1])\n",
+    "plt.xlabel(\"Mode\")\n",
+    "plt.ylabel(\"Normalized center frequency\")\n",
+    "plt.title(\"VMD Center Frequencies\")\n",
+    "plt.grid(True)\n",
+    "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# Apply VMD to the ECG dataset\n",
+    "# ==========================================\n",
+    "\n",
+    "# VMD on all 162 long recordings can be computationally expensive.\n",
+    "# Set MAX_VMD_SIGNALS = None to process every recording.\n",
+    "MAX_VMD_SIGNALS = 5\n",
+    "\n",
+    "n_to_process = Data.shape[0] if MAX_VMD_SIGNALS is None else min(MAX_VMD_SIGNALS, Data.shape[0])\n",
+    "\n",
+    "# Store results as a list so we do not allocate one large 4-D array.\n",
+    "# Each element has shape (VMD_K, 65536).\n",
+    "vmd_results = []\n",
+    "vmd_omegas = []\n",
+    "vmd_labels = []\n",
+    "\n",
+    "for i in tqdm(range(n_to_process), desc=\"VMD decomposition\"):\n",
+    "    modes, _, omega = decompose_ecg_vmd(Data[i, :])\n",
+    "    vmd_results.append(modes.astype(np.float32))\n",
+    "    vmd_omegas.append(omega[-1].astype(np.float32))\n",
+    "    vmd_labels.append(label_list[i])\n",
+    "\n",
+    "vmd_omegas = np.asarray(vmd_omegas)\n",
+    "vmd_labels = np.asarray(vmd_labels)\n\nprint(f\"Processed {n_to_process} / {Data.shape[0]} recordings\")\nprint(\"Each VMD result shape:\", vmd_results[0].shape if vmd_results else None)\nprint(\"VMD labels shape:\", vmd_labels.shape)\nprint(\"Center-frequency matrix shape:\", vmd_omegas.shape)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# Convert VMD modes into 500-sample windows\n",
+    "# ==========================================\n",
+    "\n",
+    "# This creates one sample per (recording, mode, window).\n",
+    "# The resulting tensor is suitable for downstream ML experiments.\n",
+    "\n",
+    "VMD_SEG_LEN = SEG_LEN\n\n",
+    "vmd_segments = []\n",
+    "vmd_segment_labels = []\n",
+    "vmd_segment_mode = []\n",
+    "vmd_segment_record = []\n",
+    "\n",
+    "for record_idx, modes in enumerate(vmd_results):\n",
+    "    n_segments = modes.shape[1] // VMD_SEG_LEN\n",
+    "\n",
+    "    for mode_idx in range(modes.shape[0]):\n",
+    "        for j in range(n_segments):\n",
+    "            start = j * VMD_SEG_LEN\n",
+    "            end = start + VMD_SEG_LEN\n",
+    "\n",
+    "            vmd_segments.append(modes[mode_idx, start:end])\n",
+    "            vmd_segment_labels.append(vmd_labels[record_idx])\n",
+    "            vmd_segment_mode.append(mode_idx)\n",
+    "            vmd_segment_record.append(record_idx)\n",
+    "\n",
+    "vmd_segments = np.asarray(vmd_segments, dtype=np.float32)\n",
+    "vmd_segment_labels = np.asarray(vmd_segment_labels)\n",
+    "vmd_segment_mode = np.asarray(vmd_segment_mode)\n",
+    "vmd_segment_record = np.asarray(vmd_segment_record)\n\n",
+    "print(\"VMD Segments Shape :\", vmd_segments.shape)\n",
+    "print(\"Labels Shape       :\", vmd_segment_labels.shape)\n",
+    "print(\"Mode index shape   :\", vmd_segment_mode.shape)\n",
+    "print(\"Record index shape :\", vmd_segment_record.shape)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# ==========================================\n",
+    "# Example: inspect one 500-sample VMD window\n",
+    "# ==========================================\n",
+    "\n",
+    "record_to_plot = 0\n",
+    "window_to_plot = 0\n",
+    "\n",
+    "start = window_to_plot * VMD_SEG_LEN\n",
+    "end = start + VMD_SEG_LEN\n",
+    "\n",
+    "fig, axes = plt.subplots(VMD_K, 1, figsize=(14, 2 * VMD_K), sharex=True)\n",
+    "if VMD_K == 1:\n",
+    "    axes = [axes]\n",
+    "\n",
+    "for k, ax in enumerate(axes):\n",
+    "    ax.plot(vmd_results[record_to_plot][k, start:end])\n",
+    "    ax.set_ylabel(f\"Mode {k + 1}\")\n",
+    "    ax.grid(True)\n",
+    "\n",
+    "axes[-1].set_xlabel(\"Sample within 500-sample window\")\n",
+    "fig.suptitle(\n",
+    "    f\"VMD Modes | Record {record_to_plot} | Label {vmd_labels[record_to_plot]}\",\n",
+    "    y=1.02\n",
+    ")\n",
+    "plt.tight_layout()\n",
+    "plt.show()\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "accelerator": "GPU",
+  "colab": {
+   "gpuType": "T4",
+   "provenance": []
+  },
+  "kernelspec": {
+   "display_name": "Python 3",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 0
+}
