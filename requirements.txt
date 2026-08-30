@@ -15,3 +15,10 @@ tqdm==4.70.0
 jupyterlab==4.6.3
 ipykernel==7.3.0
 ipywidgets==8.1.9
+
+# --- quantum stage (ecgvmd/quantum.py) ------------------------------------
+# Imported lazily, so the classical pipeline runs without these installed.
+# lightning.qubit is the C++ statevector simulator; 12 qubits is trivial for it.
+# Pin exactly: PennyLane's device and qnn APIs churn between minor releases.
+pennylane==0.45.1
+pennylane-lightning==0.45.0

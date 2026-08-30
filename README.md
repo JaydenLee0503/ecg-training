@@ -21,11 +21,16 @@ bookkeeping, the 28-descriptor IMF feature extraction, record-wise cross-validat
 VMD-vs-control ablation, the alpha sweep, and mRMR reduction to 12 features. Every number
 in this README came out of that code and reproduces.
 
-**Not started.** The quantum stage. There is no circuit, no training loop, and no quantum
-dependency — `requirements.txt` has neither PennyLane nor Qiskit. What exists is the
-*handoff*: `ecgvmd/select.py::quantum_ready` scales features into rotation angles, and
-notebook 3 writes `features/quantum_<signature>_q12.npz`. See
-[The quantum stage](#the-quantum-stage) for the plan and its open decisions.
+**In progress.** The quantum stage. `ecgvmd/quantum.py` holds the feature maps, the
+kernel estimator and the variational classifier; `requirements.txt` pins PennyLane.
+Results so far are in [QUANTUM_STAGE.md](QUANTUM_STAGE.md), the run-by-run chronology in
+[EXPERIMENT_LOG.md](EXPERIMENT_LOG.md). Headline: the quantum kernel reaches parity with
+classical, and plain angle encoding turns out to be classically tractable by
+construction. The classical→quantum handoff is unchanged:
+`ecgvmd/select.py::quantum_ready` scales features into rotation angles and notebook 3
+writes `features/quantum_<signature>_q12.npz`, though the estimators in
+`ecgvmd/quantum.py` read the *full* feature file and select in-fold instead, which is the
+honest path. See [The quantum stage](#the-quantum-stage) for the original plan.
 
 **Current artefacts** (both on disk, both gitignored):
 
@@ -73,6 +78,7 @@ ecgvmd/                 the library — import this, don't copy-paste from noteb
   features.py           IMF feature extraction (the main event)
   evaluate.py           record-wise cross-validation, leakage measurement
   select.py             mRMR reduction to a qubit-sized feature set
+  quantum.py            feature maps, quantum kernel, variational classifier
 
 01_vmd_core.ipynb                    what VMD is, does the solver work, did it converge
 02_imf_features.ipynb                windows -> IMFs -> feature matrix   [the main one]
@@ -80,6 +86,10 @@ ecgvmd/                 the library — import this, don't copy-paste from noteb
 
 run_pipeline.py         command-line extraction, for when you don't want a notebook
 scripts/alpha_sweep.py  the convergence/alpha experiment
+scripts/quantum_kernel_probe.py   the quantum-kernel gate, with Gram diagnostics
+
+QUANTUM_STAGE.md        what the quantum stage measured, and what it means
+EXPERIMENT_LOG.md       run-by-run chronology, failures included
 make_colab_bundle.py    zips the package for upload to Colab
 legacy/                 the three original notebooks, superseded, kept for provenance
 
@@ -363,7 +373,10 @@ step list it was drafted from.
 
 Steps 1–5 exist and run. Step 5 exists in two forms: `quantum_ready` (correct, refits
 per call) and the `X` array baked into `quantum_*.npz` (fitted on all data — see the
-caveat below). Steps 6–11 are unwritten.
+caveat below). Steps 6–11 are **partly built** — see
+[QUANTUM_STAGE.md](QUANTUM_STAGE.md) for what was measured and
+[EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) for the chronology. Path A (the quantum kernel)
+is concluded; path B (the variational circuit) is in progress.
 
 ### Critique of the drafted step list
 
@@ -403,8 +416,8 @@ why. It earns its place only if the feature budget grows past ~64.
 **2. Feature selection is missing from the list, and it is where the qubit count comes
 from.** "VMD → encode into qubits" skips a step that is doing real work. VMD produces
 236 features; nothing encodes 236 features onto near-term hardware. `MRMRSelector` cuts
-that to 8, and that number *is* the qubit count under angle encoding. It also costs
-something measurable — 0.786 macro-F1 at 236 features against 0.705 at 8 — so it belongs
+that to 12, and that number *is* the qubit count under angle encoding. It also costs
+something measurable — 0.786 macro-F1 at 236 features against 0.724 at 12 — so it belongs
 in the diagram where the loss can be seen, not left implicit.
 
 **3. "Quantum state" is not a first step.** It is the output of step [6], not an input to
@@ -449,8 +462,13 @@ Also worth knowing before committing to path B: **the ZZ feature map has a well-
 failure mode**. As feature dimension grows, kernel values concentrate — off-diagonal
 entries collapse toward zero, the Gram matrix approaches the identity, and the SVM
 memorises the training set. At 12 features it is usually still fine, but plot the Gram
-matrix before trusting the score. If it looks like an identity matrix, scale the data
-down (the standard trick is a multiplier on `phi`) rather than adding repetitions.
+matrix before trusting the score.
+
+  **Measured, and the standard advice needs a caveat.** Both ends fail. Shrinking the
+  data does pull the Gram off the identity, but overshoot it and every entry collapses
+  toward 1.0 instead, which is the *opposite* failure — no discrimination left. On these
+  features the usable band is narrow and the natural default sits outside it; see
+  [QUANTUM_STAGE.md](QUANTUM_STAGE.md) finding 2 for the sweep.
 
 ### Two things to do before writing any circuit
 
@@ -476,7 +494,7 @@ quantum model reads it and never reaches back into VMD.
 | `feature_names` | (q,) | which descriptors were chosen |
 | `enc_lo`, `enc_hi` | (q,) | the min/max limits used for the angle scaling |
 | `encoding` | scalar | `"angle"` — the limits above are specific to it |
-| `n_qubits` | scalar | 8 |
+| `n_qubits` | scalar | 12 |
 | `classical_baseline_f1` | scalar | 0.7861 — all 236 features, honest CV |
 | `classical_baseline_f1_k` | scalar | 0.7243 — mRMR-12 in-fold — **the fair comparison** |
 | `full_feature_file` | str | path to the full feature `.npz` |

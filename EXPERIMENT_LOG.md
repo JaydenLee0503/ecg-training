@@ -1,0 +1,369 @@
+# Experiment log — the quantum stage
+
+A running lab notebook. Newest entries at the bottom. Every row is something that was
+actually run; failures and bugs are recorded alongside results, because a number that
+came from a broken configuration is the most dangerous kind.
+
+Conclusions and tables live in [QUANTUM_STAGE.md](QUANTUM_STAGE.md); this file is the
+chronology.
+
+**On timestamps.** E1-E15 were run without capturing the wall clock, so only their
+**order and measured durations** are recorded - both of which are exact. Clock times are
+deliberately absent rather than reconstructed; an earlier draft of this file estimated
+them from durations and produced times that were provably wrong (some in the future).
+The session ran between the commits `c52944c` (2026-08-29 20:20) and the present. From
+**E16 onward every entry carries a real timestamp read from the system clock** at the
+moment of recording.
+
+**Standing definitions.** Unless a row says otherwise: features are
+`features/fixed_K8_a2000_L500_it500_eeb2053b.npz`, block `VMD modes + rhythm` (236
+features), reduced by `MRMRSelector(k=12)` **fitted inside each training fold**, scored
+as macro-F1 under `StratifiedGroupKFold(5)` on the record id. "n=324" means 2 windows
+per record, "n=486" means 3, "n=1620" means 10 — always all 162 records.
+
+**Reference points.** RF on all 236 features = 0.7861. RF on mRMR-12 in-fold = 0.7243.
+MLP on mRMR-12 in-fold = 0.7061.
+
+---
+
+## 2026-08-29
+
+### E1 — Readiness check · 6 s
+
+MLP on the existing handoff file and on in-fold selected features, to confirm the
+classical→quantum interface works before building anything.
+
+| | macro-F1 |
+|---|---:|
+| MLP on `quantum_*_q12.npz` `X` (transductively leaky) | 0.7368 |
+| MLP, mRMR-12 selected in-fold, angle-scaled | 0.7061 |
+
+**Verdict.** Interface sound. The leaky number sits just above the 0.7243 RF target and
+the honest one just below, exactly as expected. No bug in encoding, scaling, or split.
+
+### E2 — Angle wrap-around diagnostic · 3 s
+
+Question: does in-fold `MinMaxScaler` to `[0, pi]` ever produce out-of-range test angles?
+
+**Result.** 60 / 19440 values (0.31%) fall outside `[0, pi]`; worst overshoot 1.40*pi.
+
+**Verdict.** Real bug, small incidence. Since `<Z> = cos(t)`, an overshooting feature
+reads back as mid-range instead of extreme — monotonicity inverts on exactly the outlier
+samples. Motivated `TanhAngleScaler`. Recorded in QUANTUM_STAGE.md finding 3.
+
+### E3 — Environment · ~2 min
+
+`pennylane==0.45.1` + `pennylane-lightning==0.45.0` dry-run then installed. Clean resolve
+against the existing pins; no numpy/scipy/sklearn downgrade. `qiskit`/
+`qiskit-machine-learning` also checked and would resolve cleanly — not installed.
+
+### E4 — Kernel correctness and throughput · 1 min
+
+Gram vs brute force: max error 1.11e-15. Symmetric, unit diagonal, PSD (min eigenvalue
+0.485). Parameter broadcasting works. Throughput flat at **~0.47 ms/pair** from batch 64
+to 16384 (memory-bound, not call-bound).
+
+### E5 — First stage-2 probe · 240 s — **INVALID, wrong bandwidth**
+
+`scripts/quantum_kernel_probe.py`, n=486, `TanhAngleScaler(scale=1.0)`.
+
+| model | macro-F1 |
+|---|---:|
+| RF, all 236 features | 0.7490 |
+| RF, mRMR-12 | 0.6883 |
+| SVC-rbf, standardised | 0.7048 |
+| SVC-rbf, tanh-scaled (matched control) | 0.6794 |
+| QuantumKernelSVC, bandwidth=1.0 | 0.6460 |
+
+Gram off-diagonal: mean 0.0419, median 0.0013, frac>0.01 = 0.325.
+
+**Verdict. Do not cite the 0.6460.** The Gram was in the identity regime, so the score
+reflects kernel concentration, not class separability. An earlier concentration check
+had been run on MinMax-scaled data and was assumed to carry over to the tanh scaler; it
+does not. Lesson: re-measure Gram geometry whenever the scaler changes.
+
+### E6 — Gram geometry sweep · 90 s
+
+n=324, 12 in-fold features. Off-diagonal mean / median / frac>0.01:
+
+| scaling | mean | median | frac>0.01 | |
+|---|---:|---:|---:|---|
+| MinMax `[0, pi]` | 0.185 | 0.108 | 0.842 | |
+| tanh, scale=1.00 | 0.042 | 0.001 | 0.319 | identity regime |
+| tanh, scale=0.75 | 0.107 | 0.034 | 0.681 | |
+| tanh, scale=0.50 | 0.295 | 0.244 | 0.998 | usable |
+| tanh, scale=0.35 | 0.518 | 0.509 | 1.000 | usable |
+| tanh, scale=0.25 | 0.703 | 0.711 | 1.000 | |
+| tanh, scale=0.15 | 0.878 | 0.885 | 1.000 | all-ones regime |
+
+**Verdict.** Usable band ~0.35–0.50. Both failure modes are live. QUANTUM_STAGE.md
+finding 2.
+
+### E7 — Bandwidth CV sweep · 730 s
+
+n=486, same controls as E5.
+
+| bandwidth | macro-F1 |
+|---:|---:|
+| 0.50 | 0.6887 |
+| 0.35 | 0.6968 |
+| 0.25 | 0.7039 |
+
+**Verdict.** Monotone increase as bandwidth falls. Best (0.7039) beats the matched
+control (0.6794) and draws level with the untuned standardised RBF (0.7048).
+Hypothesised at the time that the kernel was degenerating toward a classical RBF —
+partly right, see E9.
+
+### E8 — Product-state factorisation · 1 s — **key finding**
+
+Tested whether the RY angle kernel has a closed form.
+
+```
+|<phi(x)|phi(y)>|^2  ==  prod_i cos^2((x_i - y_i)/2)
+```
+
+**Result.** Max absolute difference vs the statevector simulator **1.665e-16**; closed
+form **1634x faster**.
+
+**Verdict.** `AngleEmbedding` with no entangling gates prepares a product state, so the
+kernel factorises and is classically tractable *by construction*. Every number in E5 and
+E7 is a classical product-cosine kernel. Motivated `product_angle_kernel` and the
+`embedding="iqp"` path. QUANTUM_STAGE.md finding 1.
+
+### E9 — Deeper bandwidths + tuned rivals · 720 s
+
+| model | macro-F1 |
+|---|---:|
+| QuantumKernelSVC bw=0.15 | 0.7029 |
+| QuantumKernelSVC bw=0.10 | 0.4694 |
+| QuantumKernelSVC bw=0.05 | 0.2481 |
+
+**Verdict.** The E7 degeneration hypothesis was wrong in its specifics — the score does
+not plateau at the RBF value, it **peaks near 0.2 and then collapses** as the Gram
+saturates to all-ones. There is a genuine operating point.
+
+The tuned-RBF half of this run **crashed**: `GridSearchCV` nested inside a `Pipeline`
+does not receive `groups` (`ValueError: Pipeline.fit does not accept the groups
+parameter`). Had it silently succeeded with a non-grouped inner CV it would have leaked
+records across inner folds. Rerun in E10 with a manual outer loop.
+
+### E10 — IQP geometry, tuned rivals, full-scale product kernel · 400 s
+
+IQP Gram geometry (n=162): mean 0.036 @ bw=1.0, **0.237 @ bw=0.5**, 0.654 @ 0.25,
+0.912 @ 0.12 → usable band ~0.4–0.6, so IQP is viable at 12 qubits.
+
+Tuned classical rivals, `gamma`/`C` selected in-fold, n=486: standardised **0.7110**,
+tanh(0.25) **0.7051**.
+
+**Product-cosine kernel on the full n=1620** (closed form, so now affordable):
+
+| bandwidth | macro-F1 | wall clock |
+|---:|---:|---:|
+| **0.35** | **0.7246** | 1 s |
+| 0.25 | 0.7129 | 1 s |
+| 0.15 | 0.7023 | 1 s |
+
+**Verdict.** 0.7246 lands on the RF mRMR-12 baseline of 0.7243. Best 12-feature number
+in the project, and it takes one second. Also: once the RBF is tuned properly it edges
+out the angle kernel at n=486 (0.7110 vs 0.7039), so the earlier "+0.024 over control"
+was hyperparameter budget, not kernel structure.
+
+### E11 — Entangled IQP vs classical rivals · 1830 s
+
+n=324, identical rows and folds.
+
+| model | macro-F1 | wall clock |
+|---|---:|---:|
+| IQP (entangled), bw=0.50 | 0.7032 | 906 s |
+| product-cosine, bw=0.35 | 0.7004 | 0 s |
+| SVC-rbf, standardised, untuned | 0.6971 | 0 s |
+| IQP (entangled), bw=0.40 | 0.6911 | 918 s |
+| SVC-rbf, `gamma`/`C` tuned in-fold | 0.6784 | 2 s |
+
+**Verdict.** Entanglement bought **+0.0028 for 906 seconds**. Note also that in-fold
+tuning *hurt* the RBF at this sample size (0.6784 vs 0.6971) — the inner grid search
+overfits at n=324.
+
+### E12 — Noise floor · 60 s — **the number that interprets E11**
+
+The same product-cosine model across 8 subsample/CV seeds:
+
+| model | mean | sd | range |
+|---|---:|---:|---:|
+| product-cosine | 0.6860 | 0.0271 | 0.6298 – 0.7308 |
+| SVC-rbf | 0.6940 | 0.0320 | 0.6468 – 0.7659 |
+
+**Verdict.** A single model reseeded moves by up to **0.101**. E11's quantum margin of
++0.0028 is one tenth of a standard deviation. At n=324 these models are
+indistinguishable and no ranking among them is meaningful. **Path A concluded: parity.**
+
+### E13 — VQC throughput · 3 min
+
+`AngleEmbedding` → `StronglyEntanglingLayers` → 12 `<Z>`, `diff_method="adjoint"`.
+Gradient wall-clock per step:
+
+| depth | batch 32 | batch 128 | batch 512 |
+|---:|---:|---:|---:|
+| 2 | 0.414 s | **0.370 s** | 14.6 s |
+| 4 | 1.99 s | 5.68 s | 21.8 s |
+
+**Verdict.** Depth 2 at batch 128 is the operating point; depth 4 is ~15x worse and
+batch 512 thrashes memory. Implies a full n=1620 five-fold run costs ~19 min, so stage 4
+can run at full scale without subsampling.
+
+### E14 — VQC first smoke test · 148 s — **FAILED, model collapsed**
+
+n=324, one fold, 30 epochs, batch 128, lr 0.01, no class weighting.
+
+```
+loss 1.1083 -> 0.8683      train macro-F1 0.2451      test macro-F1 0.2516
+```
+
+**Verdict.** The model predicts **ARR on every sample**. "Always predict ARR" scores
+exactly 0.2481 on this class distribution. Two causes:
+
+1. **Step budget.** 259 training windows at batch 128 = 3 steps/epoch; 30 epochs = **90
+   Adam steps** for 111 parameters. The batch size had been chosen from E13's throughput
+   benchmark without checking how many steps it left at this sample size.
+2. **Class imbalance.** 59% ARR / 19% CHF / 22% NSR. Loss 0.868 is *below* the prior
+   entropy 0.9566, so the circuit was genuinely learning — but argmax could not overcome
+   the prior.
+
+Fixes: `class_weight="balanced"` is now the default, and `n_steps_` is computed and
+reported at fit time so the budget is visible rather than implicit.
+
+**This is the entry to remember.** Run at full scale without the smoke test, this would
+have produced ~0.245 across five folds and looked exactly like the "VQC underperforms,
+parity confirmed" result that had been forecast all session. A prediction of parity makes
+a bad number *easier* to accept, not harder.
+
+### E15 — VQC learning-rate and step-budget sweep · 737 s then killed
+
+n=486, one fold (train 387 / test 99), `class_weight="balanced"`. Timed out at 3000 s
+after the first of three configurations; the other two never ran.
+
+| config | steps | loss | train F1 | test F1 | gap |
+|---|---:|---:|---:|---:|---:|
+| lr 0.05, 120 ep, batch 32 | 1560 | 1.081 → 0.439 | 0.8196 | 0.5812 | +0.2384 |
+
+**Verdict.** The E14 collapse is fixed — the model learns (train 0.82) and predicts all
+three classes. But it now **overfits hard**: a 0.24 train/test gap, with 111 parameters
+against 387 training windows drawn from roughly 130 records. Test 0.5812 is far short of
+the ~0.70 parity threshold.
+
+Diagnosis is sample size, not hyperparameters: at full n=1620 a training fold is 1296
+windows, 3.3x more data against the same parameter count. Going to full scale rather
+than tuning further at n=486.
+
+### E16 — VQC training curve at full scale · started 23:02:07, killed at 3000 s timeout (epoch 30 of 100)
+
+n=1620, one fold (train 1296 / test 324), lr 0.05, batch 128, 100 epochs, evaluated
+every 5 epochs. Added `eval_set` / `eval_every` to `VQCClassifier` for this — it records
+train F1, val F1 and the gap into `history_` during training, so the overfitting curve is
+visible instead of inferred from a single endpoint.
+
+Looking for: where val F1 peaks, and whether it then decays (overfitting) or plateaus
+(capacity-limited). That determines the epoch budget for the five-fold run.
+
+Curve as far as it ran, recorded 2026-08-29 23:17:02 while still running:
+
+| epoch | steps | loss | train F1 | val F1 | gap |
+|---:|---:|---:|---:|---:|---:|
+| 5 | 55 | 0.7940 | 0.6288 | 0.5498 | +0.0790 |
+| 10 | 110 | 0.7305 | 0.6813 | 0.5503 | +0.1311 |
+| 15 | 165 | 0.6901 | 0.6856 | 0.5523 | +0.1333 |
+| 20 | 220 | 0.6718 | 0.7062 | 0.5532 | +0.1530 |
+| 25 | 275 | 0.6579 | 0.6990 | 0.5577 | +0.1412 |
+| 30 | 330 | 0.6432 | 0.6937 | 0.5126 | +0.1811 |
+
+Killed by the 3000 s timeout at epoch 30; final state recorded 2026-08-29 23:48:20.
+
+**Verdict.** Val is **flat at ~0.55** across all 30 epochs and never trends upward.
+Train stalls too, peaking at 0.7062 and then drifting *down* while the loss keeps
+falling — the loss is being reduced on the weighted objective without translating into
+better decisions. Not the
+predicted overfitting-after-a-peak shape, and **not sample size** — n=486 gave test
+0.5812 (E15), n=1620 gives 0.5532. Train reaches only 0.706, so the model underfits even
+the training set. That points at capacity or optimisation, not generalisation, and
+prompted E17.
+
+### E17 — The linear-head control · recorded 2026-08-29 23:17:02 · 20 s — **the control that should have come first**
+
+The question E16 could not answer: is the *circuit* contributing anything? Hold the head
+fixed and remove the circuit. Same 12 in-fold features, same `TanhAngleScaler`, same
+folds, n=1620.
+
+| model | macro-F1 |
+|---|---:|
+| MLP, 32 hidden (nonlinear head, no circuit) | 0.7212 |
+| **LogisticRegression (linear head, no circuit)** | **0.6771** |
+| VQC = circuit + linear head (E16, epoch 20) | 0.5532 |
+
+**Verdict.** The circuit is a **net negative**. A plain linear model on the same twelve
+inputs scores 0.6771; inserting the variational circuit before that same linear head
+drops it to 0.5532. The circuit is discarding class-relevant information rather than
+adding representational power.
+
+This control isolates the circuit's contribution by holding the head fixed — exactly the
+argument used to reject the reference paper's dressed front end (a trainable layer on
+both sides makes the quantum contribution unattributable). The argument was applied to
+their architecture and not to ours. It should have been the first stage-4 experiment,
+before `VQCClassifier` was written.
+
+Still open at the time of writing: whether 0.5532 is an expressivity ceiling or an
+optimisation failure. **Answered by E18 — it is not expressivity.**
+
+### E18 — Capacity probe (overfit 96 samples) · recorded 2026-08-30 00:10:39
+
+Can the circuit memorise a tiny set? 96 training windows, 32 per class, depth 2, 200
+epochs, batch 32, lr 0.05. Generalisation is irrelevant here — the only question is
+whether the model *can* fit.
+
+| model | TRAIN F1 on 96 samples |
+|---|---:|
+| linear head alone, no circuit | 0.8636 |
+| **depth 2, 600 steps** (loss 1.1112 → 0.1695) | **0.9792** |
+| depth 4 | *not reached — see below* |
+
+**Verdict — this reverses the E16/E17 reading.** The depth-2 circuit memorises 96
+samples almost perfectly (0.9792) and *beats* the linear head on the same data (0.8636).
+**There is no expressivity ceiling.** 72 parameters are ample.
+
+So E16's train F1 of 0.7062 was **undertrained, not capacity-limited**: it ran only 330
+Adam steps at batch 128 before the timeout, while this probe used 600 steps at batch 32
+on a far smaller problem. The correct reading of stage 4 so far is that the VQC is a
+**high-variance model that fits but does not generalise** on 1290 windows drawn from 162
+records — not that it cannot represent the task.
+
+**Consequences for what has been claimed.**
+
+* The E16 conclusion "capacity or optimisation, not generalisation" was **wrong in the
+  direction it pointed**. Capacity is fine.
+* E17's finding stands as measured (circuit 0.5532 vs no circuit 0.6771 at 330 steps),
+  but must **not** be reported as "the circuit is inherently subtractive". It is
+  subtractive *at that training budget*.
+* **Nothing about stage 4 is concluded.** The full-scale run needs a step budget of the
+  right order — hundreds of epochs, not 30 — before any VQC number is reportable.
+
+### E18b — Depth 4 · **NOT RUN**
+
+Killed by the shutdown before the depth-4 arm started. Rerun both arms together; depth 4
+costs ~15x depth 2 per step (E13), so budget ~45 min.
+
+**Two runs of E18 were lost to operator error before this one produced anything**: the
+first (300 epochs, 2400 s timeout) was sized below the ~36 min the workload needed, and
+its output was piped through `grep`, which block-buffers — when SIGTERM killed the
+pipeline `grep` died without flushing, so the already-computed depth-2 result was
+destroyed. **Do not pipe a long run through `grep`; write to a file with `python -u`.**
+
+---
+
+## Open items
+
+1. **IQP at the full n=1620** — ~7.5 h. The E11 comparison is suggestive, not conclusive.
+2. **Stage 4 full five-fold**, once E15 shows a fold that trains cleanly.
+3. **Bandwidth is selected transductively.** Chosen from Gram statistics over the whole
+   subsample. Fine for a probe; a published number needs it nested in-fold or fixed a
+   priori and declared.
+4. **CNN falsification test** — see QUANTUM_STAGE.md.
+5. **Quantum genetic feature selector** (paper method 1) — untouched.

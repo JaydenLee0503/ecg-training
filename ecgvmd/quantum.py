@@ -56,7 +56,8 @@ from sklearn.svm import SVC
 from sklearn.utils.validation import check_is_fitted
 
 __all__ = ["TanhAngleScaler", "angle_kernel_qnode", "iqp_kernel_qnode",
-           "product_angle_kernel", "gram_matrix", "QuantumKernelSVC"]
+           "product_angle_kernel", "gram_matrix", "QuantumKernelSVC",
+           "VQCClassifier"]
 
 #: Pairs pushed through one broadcast call. Measured flat at ~0.47 ms/pair from 64 to
 #: 16384 (memory-bound, not call-bound), so this is chosen for footprint, not speed.
@@ -268,3 +269,174 @@ class QuantumKernelSVC(BaseEstimator, ClassifierMixin):
 
     def decision_function(self, X):
         return self.svc_.decision_function(self._test_kernel(X))
+
+
+# --------------------------------------------------------------------------------
+# Path B: the variational classifier
+# --------------------------------------------------------------------------------
+
+def vqc_qnode(n_qubits: int, n_layers: int):
+    """Angle embedding, entangling ansatz, one <Z> per qubit.
+
+    Unlike the angle *kernel*, this circuit is genuinely entangled:
+    `StronglyEntanglingLayers` interleaves parameterised rotations with a ring of CNOTs,
+    so the state does not factorise and `product_angle_kernel`'s shortcut does not apply
+    here. The embedding alone was never quantum; the ansatz is.
+
+    `diff_method="adjoint"` computes all gradients in roughly one backward pass instead
+    of the parameter-shift rule's two circuit evaluations per parameter per step. On
+    hardware you would pay parameter-shift; on a simulator paying it is waste.
+    """
+    import pennylane as qml
+
+    dev = qml.device("lightning.qubit", wires=n_qubits, shots=None)
+
+    @qml.qnode(dev, diff_method="adjoint")
+    def circuit(x, w):
+        qml.AngleEmbedding(x, wires=range(n_qubits), rotation="Y")
+        qml.StronglyEntanglingLayers(w, wires=range(n_qubits))
+        return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
+
+    return circuit
+
+
+class VQCClassifier(BaseEstimator, ClassifierMixin):
+    """Variational quantum classifier with a linear read-out head.
+
+        angle embed -> StronglyEntanglingLayers(depth) -> <Z> per qubit
+                    -> Linear(n_qubits -> n_classes) -> softmax
+
+    Measuring `<Z>` on *all* qubits and passing the vector to a small classical head is
+    the honest multi-class arrangement. A single `<Z>` is a scalar in [-1, 1]: one
+    decision boundary, two classes. This problem has three (ARR / CHF / NSR).
+
+    The head is deliberately a single linear layer with no hidden units. Anything richer
+    - and in particular a trainable layer *before* the circuit, as in the dressed circuit
+    of Mari et al. (2020) - lets the classical parameters absorb the work and makes the
+    quantum layer's contribution unattributable. Here the circuit sees the selected
+    features directly, so it is the only thing that can explain a difference.
+
+    Depth 2 on 12 qubits is 72 quantum parameters plus 39 classical: small enough that
+    barren plateaus are not yet the problem. Measured cost on `lightning.qubit`, batch
+    128: 0.37 s per gradient step at depth 2, 5.7 s at depth 4. Buy depth only against
+    measured validation gain.
+
+    Two things this class learned the hard way, both about the training budget rather
+    than the circuit:
+
+    **Count gradient steps, not epochs.** A 259-window training fold at `batch_size=128`
+    is 3 steps per epoch; 30 epochs is 90 Adam steps, which at lr=0.01 moves 111
+    parameters almost not at all. The loss descends convincingly and the model still
+    predicts one class throughout. Budget by `epochs * ceil(n / batch_size)`.
+
+    **Weight the classes.** The split is 59% ARR / 19% CHF / 22% NSR, so a model with
+    informative probabilities can still argmax to ARR on every sample - macro-F1 0.2481,
+    which is exactly what "always predict ARR" scores. `class_weight="balanced"` is the
+    default here for that reason; unweighted cross-entropy on this prior is a trap.
+    """
+
+    def __init__(self, n_layers: int = 2, epochs: int = 60, batch_size: int = 128,
+                 lr: float = 0.01, seed: int = 0, verbose: bool = False,
+                 class_weight="balanced", eval_set=None, eval_every: int = 0):
+        self.n_layers = n_layers
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.lr = lr
+        self.seed = seed
+        self.verbose = verbose
+        self.class_weight = class_weight
+        self.eval_set = eval_set
+        self.eval_every = eval_every
+
+    def _logits(self, z, W, b):
+        return z @ W + b
+
+    def fit(self, X, y):
+        import pennylane as qml
+        from pennylane import numpy as pnp
+
+        X = np.asarray(X, dtype=float)
+        self.classes_ = np.unique(y)
+        n_c = len(self.classes_)
+        self.n_qubits_ = X.shape[1]
+        yi = np.searchsorted(self.classes_, y)
+        Y = np.eye(n_c)[yi]
+        if self.class_weight == "balanced":
+            cw = len(y) / (n_c * np.bincount(yi, minlength=n_c))
+        elif self.class_weight is None:
+            cw = np.ones(n_c)
+        else:
+            cw = np.asarray([self.class_weight[c] for c in self.classes_], dtype=float)
+        self.class_weight_ = cw
+        sw = cw[yi]
+
+        circuit = vqc_qnode(self.n_qubits_, self.n_layers)
+        rng = np.random.default_rng(self.seed)
+        shape = qml.StronglyEntanglingLayers.shape(self.n_layers, self.n_qubits_)
+        w = pnp.array(rng.normal(0, 0.1, shape), requires_grad=True)
+        W = pnp.array(rng.normal(0, 0.1, (self.n_qubits_, n_c)), requires_grad=True)
+        b = pnp.array(np.zeros(n_c), requires_grad=True)
+
+        def cost(w, W, b, xb, yb, wb):
+            z = pnp.stack(circuit(xb, w)).T
+            lg = self._logits(z, W, b)
+            m = pnp.max(lg, axis=1, keepdims=True)
+            logp = lg - m - pnp.log(pnp.sum(pnp.exp(lg - m), axis=1, keepdims=True))
+            return -pnp.sum(wb * pnp.sum(yb * logp, axis=1)) / pnp.sum(wb)
+
+        opt = qml.AdamOptimizer(self.lr)
+        n = len(X)
+        self.loss_ = []
+        self.history_ = []
+        self.n_steps_ = self.epochs * int(np.ceil(n / self.batch_size))
+        if self.verbose:
+            print(f"    {n} samples, {self.n_steps_} Adam steps, "
+                  f"{int(np.prod(shape)) + W.size + n_c} parameters", flush=True)
+        for ep in range(self.epochs):
+            perm = rng.permutation(n)
+            ep_loss = 0.0
+            for s in range(0, n, self.batch_size):
+                idx = perm[s:s + self.batch_size]
+                xb = pnp.array(X[idx], requires_grad=False)
+                yb = pnp.array(Y[idx], requires_grad=False)
+                wb = pnp.array(sw[idx], requires_grad=False)
+                (w, W, b, _, _, _), c = opt.step_and_cost(cost, w, W, b, xb, yb, wb)
+                ep_loss += float(c) * len(idx)
+            self.loss_.append(ep_loss / n)
+            self.w_, self.W_, self.b_ = w, W, b
+            self._circuit = circuit
+            if self.eval_every and (ep + 1) % self.eval_every == 0:
+                from sklearn.metrics import f1_score
+                row = {"epoch": ep + 1,
+                       "steps": (ep + 1) * int(np.ceil(n / self.batch_size)),
+                       "loss": self.loss_[-1],
+                       "train_f1": f1_score(y, self.predict(X), average="macro")}
+                if self.eval_set is not None:
+                    Xv, yv = self.eval_set
+                    row["val_f1"] = f1_score(yv, self.predict(Xv), average="macro")
+                    row["gap"] = row["train_f1"] - row["val_f1"]
+                self.history_.append(row)
+                if self.verbose:
+                    print("    " + "  ".join(f"{k}={v:.4f}" if isinstance(v, float)
+                                             else f"{k}={v}" for k, v in row.items()),
+                          flush=True)
+            elif self.verbose and (ep % 10 == 0 or ep == self.epochs - 1):
+                print(f"    epoch {ep:3d}  loss {self.loss_[-1]:.4f}", flush=True)
+
+        self.w_, self.W_, self.b_ = w, W, b
+        self._circuit = circuit
+        return self
+
+    def decision_function(self, X):
+        from pennylane import numpy as pnp
+        check_is_fitted(self, "w_")
+        X = np.asarray(X, dtype=float)
+        out = []
+        for s in range(0, len(X), 512):
+            xb = pnp.array(X[s:s + 512], requires_grad=False)
+            z = np.asarray(pnp.stack(self._circuit(xb, self.w_)).T, dtype=float)
+            out.append(self._logits(z, np.asarray(self.W_), np.asarray(self.b_)))
+        return np.vstack(out)
+
+    def predict(self, X):
+        return self.classes_[np.argmax(self.decision_function(X), axis=1)]
