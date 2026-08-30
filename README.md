@@ -9,7 +9,56 @@ interface (`features/quantum_*.npz`).
 rhythm, 36). Predict the class from the signal.
 
 **Approach.** Cut each recording into short windows, decompose each window into `K`
-intrinsic mode functions with VMD, reduce each IMF to 28 descriptors, and classify.
+intrinsic mode functions with VMD, reduce each IMF to 28 descriptors, select a
+qubit-sized subset, and classify.
+
+---
+
+## Status — what is done, and what to run
+
+**Finished and measured.** Loading, segmentation, the VMD solver and its convergence
+bookkeeping, the 28-descriptor IMF feature extraction, record-wise cross-validation, the
+VMD-vs-control ablation, the alpha sweep, and mRMR reduction to 12 features. Every number
+in this README came out of that code and reproduces.
+
+**Not started.** The quantum stage. There is no circuit, no training loop, and no quantum
+dependency — `requirements.txt` has neither PennyLane nor Qiskit. What exists is the
+*handoff*: `ecgvmd/select.py::quantum_ready` scales features into rotation angles, and
+notebook 3 writes `features/quantum_<signature>_q12.npz`. See
+[The quantum stage](#the-quantum-stage) for the plan and its open decisions.
+
+**Current artefacts** (both on disk, both gitignored):
+
+| file | contents |
+|---|---|
+| `features/fixed_K8_a2000_L500_it500_eeb2053b.npz` | 1620 windows x 282 features + raw IMF tensor |
+| `features/quantum_fixed_K8_a2000_L500_it500_eeb2053b_q12.npz` | the 12 selected features, angle-scaled |
+
+### Commands, with measured wall-clock
+
+`V=~/venvs/test-ecg-training/bin/python`, single core, from the project root.
+
+| what | command | time |
+|---|---|---|
+| wiring check, 3 windows/record | `$V run_pipeline.py --smoke` | 35 s |
+| **reproduce the tables below** | `$V run_pipeline.py --n-per-record 10` | 1 min 17 s |
+| every window (21222 of them) | `$V run_pipeline.py` | 8 min 47 s |
+| the convergence experiment | `$V scripts/alpha_sweep.py` | ~40 min |
+
+Two things about that table are easy to get wrong.
+
+**`run_pipeline.py` with no arguments does not reproduce the results below.** Bare, it
+segments *every* window — 21222 of them — and scores slightly differently (VMD+rhythm
+0.777 rather than 0.786, and the everything-block rises to 0.794). The published tables
+are the `--n-per-record 10` run, 1620 windows, which is also what `FAST = True` means in
+notebook 2. `FAST = True` is not a smoke setting; it is the shipped configuration.
+
+**Only notebook 3 writes `quantum_*.npz`.** `run_pipeline.py` stops at the full feature
+file. If you need the quantum handoff rebuilt, run
+`03_baseline_and_quantum_prep.ipynb` — there is no CLI path to it yet.
+
+Read [Three things that will bite you](#three-things-that-will-bite-you) before trusting
+any number here.
 
 ---
 
@@ -68,8 +117,10 @@ The environment is already set up at `~/venvs/test-ecg-training`, and
    to the workspace folder, so `ECGData.mat` resolves without any path fiddling.
 
 Start with `02_imf_features.ipynb` — it is the one that produces something. `FAST = True`
-in its config cell takes about 3 minutes; `FAST = False` processes every window and takes
-roughly 40 minutes on one core.
+in its config cell is 10 windows per record (1620 total) and takes a couple of minutes;
+it is the setting that produced every table in this README, not a smoke mode.
+`FAST = False` is all 21222 windows — about 9 minutes for extraction and scoring, longer
+in the notebook because `KEEP_IMFS = True` also writes the raw mode tensor.
 
 **If the kernel is missing entirely**, rebuild it:
 ```bash
@@ -85,14 +136,16 @@ python3 -m venv ~/venvs/test-ecg-training
 cd /mnt/d/Projects/test-ecg-training
 V=~/venvs/test-ecg-training/bin/python
 
-$V run_pipeline.py --smoke                    # ~1 min, checks the wiring
-$V run_pipeline.py                            # every window, K=8, alpha=2000
+$V run_pipeline.py --smoke                    # 35 s, checks the wiring
+$V run_pipeline.py --n-per-record 10          # 1 min, reproduces the published tables
+$V run_pipeline.py                            # every window (21222), 9 min
 $V run_pipeline.py --seg-mode beat --n-per-record 25 --keep-imfs
-$V scripts/alpha_sweep.py                     # the convergence experiment
+$V scripts/alpha_sweep.py                     # the convergence experiment, ~40 min
 ```
 
 `run_pipeline.py --help` lists every option. The output `.npz` is what notebook 3 and
-the quantum stage read.
+the quantum stage read. It does **not** write the quantum handoff file — only notebook 3
+does that.
 
 ---
 
@@ -155,7 +208,8 @@ ECGData.mat  ──load_ecgdata──▶  162 x 65536 float64, labels, record_id
              ──segment──────▶  (B, 500) z-scored windows + labels + GROUPS
              ──extract_features─▶  VMD each window into K IMFs, 28 descriptors each
              ──evaluate─────▶  record-wise cross-validated macro-F1
-             ──MRMRSelector─▶  8–16 features, qubit-sized
+             ──MRMRSelector─▶  12 features, qubit-sized
+             ──quantum_ready▶  scaled to [0, pi]  ──▶  the quantum stage (not built)
 ```
 
 **Feature blocks produced** (K=8):
@@ -263,35 +317,197 @@ Reducing to a qubit-sized set (mRMR, selected **inside** each training fold):
 |---|---:|---:|---:|---:|---:|---:|
 | segment macro-F1 | 0.661 | 0.705 | 0.724 | 0.722 | 0.740 | 0.786 |
 
+**12 is the shipped operating point.** It beats 8 by 0.019 for four more qubits, which
+cost nothing on a simulator. The dip at 16 is noise, not a ceiling — 24 is better again,
+so if the register ever gets cheaper, keep widening it.
+
 ---
 
 ## The quantum stage
 
-Notebook 3 ends by writing `features/quantum_<signature>_q8.npz`. That file is the
-interface; the quantum model reads it and never reaches back into VMD.
+Not built yet. This section is the design: the full chain, then the corrections to the
+step list it was drafted from.
+
+### The chain, end to end
+
+```
+ ECGData.mat                162 records x 65536 samples, 128 Hz
+     |
+ [1] segment                (1620, 500)  z-scored windows  + y + groups
+     |
+ [2] VMD                    (1620, 8, 500)  eight IMFs per window
+     |
+ [3] descriptors            (1620, 236)  28 per mode + rhythm
+     |
+ [4] mRMR select            (1620, 12)   <- the qubit budget is decided HERE
+     |
+ [5] scale to angles        (1620, 12) in [0, pi]     MUST be fit on the train fold
+     |
+ ================= classical | quantum ==================
+     |
+ [6] feature map            ONE of: angle (RY) | amplitude | ZZ second-order
+     |                      -> a 12-qubit state |phi(x)>
+     |
+     +---- path A: quantum kernel ----> K[i,j] = |<phi(xi)|phi(xj)>|^2 -> SVM -> class
+     |                                  (no trainable quantum parameters at all)
+     |
+     +---- path B: variational -------> [7] ansatz: parameterised rotations
+                                            + entangling layer, repeated d times
+                                        [8] measure <Z> per qubit
+                                        [9] classical head -> 3 logits -> softmax
+                                        [10] cross-entropy -> parameter-shift -> Adam
+     |
+ [11] evaluate              StratifiedGroupKFold on `groups`, macro-F1
+                            target to beat: 0.7243 (in-fold mRMR-12)
+```
+
+Steps 1–5 exist and run. Step 5 exists in two forms: `quantum_ready` (correct, refits
+per call) and the `X` array baked into `quantum_*.npz` (fitted on all data — see the
+caveat below). Steps 6–11 are unwritten.
+
+### Critique of the drafted step list
+
+The list this was built from read: *quantum state → VMD → encode into qubits → angle
+encoding → amplitude encoding → ZZ feature map → variational quantum circuit
+(parameterised gates, entanglement layers, trainable parameters) → measure expectation
+values → classification.* The shape is right. Six things in it are wrong or missing, in
+descending order of how much damage they do.
+
+**1. The three encodings are alternatives, not consecutive steps.** This is the one that
+matters. Angle encoding, amplitude encoding and the ZZ feature map all occupy slot [6];
+you choose one, or you benchmark them against each other. Running them in series is not
+a thing — the second would overwrite the state the first prepared. And ZZ is not a
+sibling of angle encoding but a *superset* of it: the second-order Pauli-Z expansion of
+Havlicek et al. is single-qubit rotations (angle encoding) followed by entangling
+`ZZ(phi(x_i, x_j))` phases. Writing them as a sequence hides that.
+
+For this project the choice is close to forced:
+
+| map | qubits for 12 features | depth | verdict here |
+|---|---|---|---|
+| angle (RY) | 12 | 1 layer | **start here** — already implemented, trivially interpretable |
+| ZZ, 2nd order | 12 | 1 + 66 two-qubit gates per rep | the interesting one; try after angle works |
+| amplitude | 4 | O(2^n) state prep | **skip** — see below |
+
+**Amplitude encoding is the wrong choice at this scale and should be dropped.** Its
+selling point is exponential compression, 2^n features into n qubits. With 12 features it
+saves eight qubits on a simulator where twelve qubits costs nothing, in exchange for a
+state-preparation circuit far deeper than everything else combined. Worse, it is lossy in
+a way that matters here: normalising each row to unit L2 norm discards the row's overall
+magnitude, and several selected features (`u5_tkeo`, `u5_wave_len`, `u6_tkeo`,
+`u6_wave_len`) are
+*energy* measures whose absolute scale is the class signal. `quantum_ready(mode=
+"amplitude")` will happily do it; the classifier will be worse and it will not be obvious
+why. It earns its place only if the feature budget grows past ~64.
+
+**2. Feature selection is missing from the list, and it is where the qubit count comes
+from.** "VMD → encode into qubits" skips a step that is doing real work. VMD produces
+236 features; nothing encodes 236 features onto near-term hardware. `MRMRSelector` cuts
+that to 8, and that number *is* the qubit count under angle encoding. It also costs
+something measurable — 0.786 macro-F1 at 236 features against 0.705 at 8 — so it belongs
+in the diagram where the loss can be seen, not left implicit.
+
+**3. "Quantum state" is not a first step.** It is the output of step [6], not an input to
+anything. The chain starts at the signal.
+
+**4. Expectation values → classification is underspecified, and as written it only does
+two classes.** A single `<Z>` on one qubit is a scalar in [-1, 1]: one number, one
+decision boundary, two classes. This problem has three (ARR / CHF / NSR). The options,
+in order of preference:
+
+* measure `<Z>` on all eight qubits, feed the 8-vector to a small classical linear head,
+  softmax over 3 logits — one circuit per sample, trains stably, and it is the honest
+  hybrid model;
+* measure `<Z>` on three designated qubits and softmax those directly — fewer classical
+  parameters, but the three outputs are correlated in an uncontrolled way;
+* three one-vs-rest circuits — triples the cost, and the class imbalance (96/30/36
+  records) makes each binary problem badly skewed.
+
+Take the first. Also decide *analytic vs shot-based*: on a simulator, take exact
+expectation values. Sampling noise at 1024 shots is roughly +/-0.03 on each `<Z>`, which
+is the same order as the differences between the classifiers in the table above, and it
+will make every result unreadable.
+
+**5. The training loop is absent entirely.** "Trainable parameters" names the parameters
+but not what trains them. Needed: cross-entropy loss, parameter-shift-rule gradients (2
+circuit evaluations per parameter per step — budget for it), Adam at ~0.01, minibatches
+of 32, and a fixed seed for the initial parameters. A `RealAmplitudes`-style ansatz on 8
+qubits with linear entanglement and d=2 is ~24 parameters, which is small enough that
+barren plateaus are not yet the problem; full (all-to-all) entanglement at d=6 is where
+gradients start vanishing, so add depth only against measured validation gain.
+
+**6. The evaluation step is missing, and it is the point of the exercise.** Nothing in the
+list says how the model is scored. Two constraints are non-negotiable here:
+
+* **split on `groups`.** Record-wise, `StratifiedGroupKFold`, exactly as the classical
+  side does. A random split is worth ~+0.12 macro-F1 of pure illusion on this dataset.
+* **compare against `classical_baseline_f1_k` = 0.7243**, not `classical_baseline_f1` =
+  0.7861. The first is mRMR-12 selected in-fold — the same 12 features the circuit sees.
+  The second is all 236 features and is not the quantum model's competition.
+
+Also worth knowing before committing to path B: **the ZZ feature map has a well-known
+failure mode**. As feature dimension grows, kernel values concentrate — off-diagonal
+entries collapse toward zero, the Gram matrix approaches the identity, and the SVM
+memorises the training set. At 12 features it is usually still fine, but plot the Gram
+matrix before trusting the score. If it looks like an identity matrix, scale the data
+down (the standard trick is a multiplier on `phi`) rather than adding repetitions.
+
+### Two things to do before writing any circuit
+
+1. **A classical MLP on the same 12 features.** If a small `MLPClassifier` on
+   `quantum_*.npz` does not land near 0.724, the problem is in the encoding or the split,
+   not the quantum layer — and it is enormously easier to find now.
+2. **Path A before path B.** A quantum kernel plus `SVC(kernel="precomputed")` has no
+   trainable quantum parameters, no optimiser, and no barren plateaus. It answers "does
+   this feature map separate the classes at all" in one afternoon. Only if it does is a
+   variational circuit worth building.
+
+### The handoff file
+
+Notebook 3 writes `features/quantum_<signature>_q12.npz`. That file is the interface; the
+quantum model reads it and never reaches back into VMD.
 
 | array | shape | meaning |
 |---|---|---|
-| `X` | (n, q) | features scaled to [0, π], ready for angle encoding |
+| `X` | (n, q) | features scaled to [0, pi], ready for angle encoding |
 | `X_raw` | (n, q) | the same features unscaled |
 | `y` | (n,) | ARR / CHF / NSR |
 | `groups` | (n,) | record id — **split on this** |
 | `feature_names` | (q,) | which descriptors were chosen |
 | `enc_lo`, `enc_hi` | (q,) | the min/max limits used for the angle scaling |
-| `classical_baseline_f1` | scalar | all 236 features, honest CV |
-| `classical_baseline_f1_k` | scalar | mRMR-8 selected **in-fold** — the fair comparison |
+| `encoding` | scalar | `"angle"` — the limits above are specific to it |
+| `n_qubits` | scalar | 8 |
+| `classical_baseline_f1` | scalar | 0.7861 — all 236 features, honest CV |
+| `classical_baseline_f1_k` | scalar | 0.7243 — mRMR-12 in-fold — **the fair comparison** |
 | `full_feature_file` | str | path to the full feature `.npz` |
 
-**One caveat that matters.** The mRMR selection and the min/max scaling in that file are
-fitted on the whole dataset. That is a small transductive leak, accepted so the file is a
-fixed, inspectable artefact. Cross-validating a model *on this file* therefore gives an
-optimistic number. To stay honest, point the quantum stage at `full_feature_file` and wrap
-the model as `make_pipeline(MRMRSelector(k=8), quantum_model)` — selection then happens
-inside each training fold, and `classical_baseline_f1_k` is the number to compare against.
+The twelve features currently selected are `u5_tkeo`, `u6_shannon`, `u8_spec_entropy`,
+`u5_spec_entropy`, `u6_tkeo`, `u4_spec_entropy`, `u5_wave_len`, `u8_spec_bandwidth`,
+`u6_wave_len`, `u6_spec_entropy`, `u8_shannon`, `recon_norm_ratio`. Two things to note.
+**Three of the twelve come from `u8`** — the mode the ablation says may be recording
+hardware rather than physiology — so a quarter of the register may be encoding which
+database a recording came from. And `recon_norm_ratio` is not a physiological descriptor
+at all: it measures how much signal energy VMD failed to reconstruct on that window. It
+is a decomposition-quality number, and it is plausibly another device fingerprint. Watch
+both when interpreting any result.
 
-Before adding a variational circuit, run a small classical MLP on the same 8 features and
-confirm it lands near the mRMR-8 row in notebook 3. If it doesn't, the problem is in the
-encoding, not the quantum layer — much easier to find now than later.
+mRMR is greedy, so the first eight entries are exactly the previous `q8` set; the last
+four are what widening the register bought.
+
+**Two caveats that matter.**
+
+*The file is transductively leaky.* Both the mRMR selection and the min/max scaling in it
+are fitted on the whole dataset. That is accepted so the file is a fixed, inspectable
+artefact — but cross-validating a model *on this file* therefore gives an optimistic
+number. To stay honest, point the quantum stage at `full_feature_file` and wrap the model
+as `make_pipeline(MRMRSelector(k=12), quantum_model)`; selection then happens inside each
+training fold.
+
+*The [0, pi] range is angle-specific.* `enc_lo`/`enc_hi` were chosen for RY rotations. The
+ZZ feature map conventionally takes data on a different range and applies its own
+`phi(x_i) = x_i`, `phi(x_i, x_j) = (pi - x_i)(pi - x_j)`; feeding it [0, pi] data without
+thinking gives a degenerate second-order term wherever a feature sits near pi. Re-scale
+from `X_raw` for any map other than angle.
 
 ---
 
