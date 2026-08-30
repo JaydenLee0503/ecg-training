@@ -27,6 +27,8 @@ from .features import (FeatureBundle, extract_features, mode_features, rr_featur
 from .evaluate import (evaluate, group_cv, naive_cv, record_vote, leakage_gap, rf,
                        default_models, compare_blocks, report)
 from .select import rank_anova, mrmr_select, MRMRSelector, quantum_ready
+from .quantum import (TanhAngleScaler, angle_kernel_qnode, gram_matrix,
+                      QuantumKernelSVC)
 
 __version__ = "0.1.0"
 
@@ -42,4 +44,5 @@ __all__ = [
     "evaluate", "group_cv", "naive_cv", "record_vote", "leakage_gap", "rf",
     "default_models", "compare_blocks", "report",
     "rank_anova", "mrmr_select", "MRMRSelector", "quantum_ready",
+    "TanhAngleScaler", "angle_kernel_qnode", "gram_matrix", "QuantumKernelSVC",
 ]
