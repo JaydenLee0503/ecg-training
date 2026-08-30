@@ -317,9 +317,27 @@ class VQCClassifier(BaseEstimator, ClassifierMixin):
     features directly, so it is the only thing that can explain a difference.
 
     Depth 2 on 12 qubits is 72 quantum parameters plus 39 classical: small enough that
-    barren plateaus are not yet the problem. Measured cost on `lightning.qubit`, batch
-    128: 0.37 s per gradient step at depth 2, 5.7 s at depth 4. Buy depth only against
-    measured validation gain.
+    barren plateaus are not yet the problem. Buy depth only against measured validation
+    gain.
+
+    **Set `OMP_NUM_THREADS=4`.** The statevector is 2**12 * 16 B = 64 KB and fits in L2,
+    so there is not enough work per gate to feed many threads. Leaving the variable unset
+    lets OpenMP take all cores and costs 2-4x. Measured on `lightning.qubit`, depth 2,
+    s per Adam step (16-core WSL2 box):
+
+        OMP_NUM_THREADS     batch 32    batch 128
+        1                   0.444       1.059
+        4                   0.369       0.728      <- use this
+        16                  1.164       3.396
+        unset (= 16 here)   0.750       2.907
+
+    Depth 4 at OMP=4 is 0.681 (batch 32) / 1.992 (batch 128), i.e. 2.7x depth 2 - not the
+    15x an earlier note claimed. Prefer small batches when steps are the scarce resource:
+    batch 32 costs more per sample but delivers 2.7x more steps per second.
+
+    For the five-fold run invert this - parallelise folds, not gates:
+    `cross_val_predict(..., n_jobs=5)` with `OMP_NUM_THREADS=1`. Do not combine n_jobs=5
+    with OMP=4; 20 threads on 16 cores puts you back in the thrash regime.
 
     Two things this class learned the hard way, both about the training budget rather
     than the circuit:

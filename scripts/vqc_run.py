@@ -81,6 +81,10 @@ def main():
     ap.add_argument("--curve", action="store_true",
                     help="one fold with periodic evaluation, to choose --epochs")
     ap.add_argument("--eval-every", type=int, default=5)
+    ap.add_argument("--n-jobs", type=int, default=1,
+                    help="folds in parallel. Pair n_jobs=5 with OMP_NUM_THREADS=1: "
+                         "the 64 KB statevector does not parallelise across gates, "
+                         "so parallelise across folds instead. Do not oversubscribe.")
     ap.add_argument("--out", default="results/vqc_run.csv")
     args = ap.parse_args()
 
@@ -123,7 +127,7 @@ def main():
 
     def score(name, est, note=""):
         t = time.time()
-        p = cross_val_predict(est, X, y, cv=cv, groups=g)
+        p = cross_val_predict(est, X, y, cv=cv, groups=g, n_jobs=args.n_jobs)
         f1 = f1_score(y, p, average="macro")
         dt = time.time() - t
         print(f"  {name:<44s} {f1:.4f}  ({dt:5.0f}s) {note}", flush=True)

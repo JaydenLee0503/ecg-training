@@ -323,11 +323,12 @@ whether the model *can* fit.
 |---|---:|
 | linear head alone, no circuit | 0.8636 |
 | **depth 2, 600 steps** (loss 1.1112 → 0.1695) | **0.9792** |
-| depth 4 | *not reached — see below* |
+| **depth 4, 600 steps** (loss 1.0999 → 0.0426) | **1.0000** |
 
 **Verdict — this reverses the E16/E17 reading.** The depth-2 circuit memorises 96
-samples almost perfectly (0.9792) and *beats* the linear head on the same data (0.8636).
-**There is no expressivity ceiling.** 72 parameters are ample.
+samples almost perfectly (0.9792) and *beats* the linear head on the same data (0.8636);
+depth 4 fits them exactly (1.0000). **There is no expressivity ceiling at either
+depth.** 72 parameters are ample.
 
 So E16's train F1 of 0.7062 was **undertrained, not capacity-limited**: it ran only 330
 Adam steps at batch 128 before the timeout, while this probe used 600 steps at batch 32
@@ -345,10 +346,22 @@ records — not that it cannot represent the task.
 * **Nothing about stage 4 is concluded.** The full-scale run needs a step budget of the
   right order — hundreds of epochs, not 30 — before any VQC number is reportable.
 
-### E18b — Depth 4 · **NOT RUN**
+### E18b — Depth 4 · **DID RUN** — logged as NOT RUN in error, corrected 2026-08-30
 
-Killed by the shutdown before the depth-4 arm started. Rerun both arms together; depth 4
-costs ~15x depth 2 per step (E13), so budget ~45 min.
+The entry here read "NOT RUN — killed by the shutdown before the depth-4 arm started".
+That was wrong. `results/e18_capacity_probe.txt` has the line, written at 00:10:40:
+
+```
+depth 4,  600 steps: loss 1.0999 -> 0.0426 | TRAIN F1 1.0000  (520s)
+```
+
+The E18 entry above is stamped 00:10:39 — the log was written one second before the
+depth-4 line landed, and never re-read. Depth 4 reaches **train F1 1.0000** in 520 s,
+1.7x depth 2's 307 s, not the ~15x that E13 predicted. It is folded into the table above.
+
+**Process note.** Reading a run's output while it is still writing, and not re-reading it
+after the process exits, is how this happened. Both E16 and E18 were logged from partial
+output. Log from the finished file, not from the terminal mid-run.
 
 **Two runs of E18 were lost to operator error before this one produced anything**: the
 first (300 epochs, 2400 s timeout) was sized below the ~36 min the workload needed, and
@@ -358,12 +371,160 @@ destroyed. **Do not pipe a long run through `grep`; write to a file with `python
 
 ---
 
+### E19 — The step budget, done properly · 2026-08-30 12:26–12:51 · 1475 s — **reverses E17**
+
+n=1620, one fold (train 1290 / test 330), depth 2, batch 32, lr 0.05, 100 epochs =
+**4100 Adam steps** — 12.4x E16's 330. `OMP_NUM_THREADS=4`, `python -u` to a file.
+
+| epoch | steps | loss | train F1 | val F1 | gap |
+|---:|---:|---:|---:|---:|---:|
+| 10 | 410 | 0.6559 | 0.7150 | 0.6691 | +0.0459 |
+| 20 | 820 | 0.6154 | 0.7173 | 0.6476 | +0.0697 |
+| 30 | 1230 | 0.5836 | 0.7417 | 0.6500 | +0.0917 |
+| 40 | 1640 | 0.5614 | 0.7157 | 0.6491 | +0.0666 |
+| 50 | 2050 | 0.5558 | 0.7455 | 0.6606 | +0.0849 |
+| 60 | 2460 | 0.5518 | 0.7444 | 0.6334 | +0.1110 |
+| 70 | 2870 | 0.5582 | 0.7583 | 0.6535 | +0.1048 |
+| **80** | **3280** | 0.5435 | 0.7687 | **0.6733** | +0.0954 |
+| 90 | 3690 | 0.5528 | 0.7622 | 0.6663 | +0.0959 |
+| 100 | 4100 | 0.5557 | 0.7156 | 0.6099 | +0.1058 |
+
+**Val F1 is 0.6691 by step 410 and 0.6733 at its best.** E16 measured 0.55 flat and
+concluded the circuit was broken. It was measuring its own step budget.
+
+### Matched controls, identical fold, identical rows and scaler
+
+E17 compared a *single-fold* VQC against rivals; on this fold `LogisticRegression`
+scores 0.6343, not the 0.6771 E17 reports, so **E17's rivals were not computed on the
+VQC's fold**. Recomputed here on the same 1290/330 split:
+
+| model | val F1 (same fold) |
+|---|---:|
+| LogisticRegression — the VQC's own head, circuit removed | 0.6343 |
+| **VQC depth 2, 410 steps** | **0.6691** |
+| **VQC depth 2, 3280 steps** | **0.6733** |
+| MLP 32 hidden, no circuit | 0.7008 |
+| RandomForest 400 | 0.7198 |
+
+**Verdict — E17 is retracted on two independent grounds.** Its VQC number came from a
+run at 8% of the needed step budget, *and* its baselines came from different folds.
+Holding both fixed, **the circuit is additive, not subtractive: +0.039 over the same
+linear head without it.** The claim "the circuit is discarding class-relevant
+information" was an artefact of both errors and must not be repeated.
+
+**What stands.** The VQC still loses to the MLP (0.7008) and the RF (0.7198) on the same
+twelve features. The honest reading is the one path A reached by another route: the
+quantum model attains parity with a comparable classical model and does not beat a good
+one.
+
+**The curve is flat after step 410.** Best-at-3280 beats step-410 by +0.0042 — one sixth
+of E12's 0.0271 noise floor — for 8x the compute, and epoch 100 falls to 0.6099. The
+argmax at epoch 80 is noise, not a peak. **Do not spend 3280 steps on the five-fold.**
+Epoch 30–40 (1230–1640 steps) sits in the flat region with the smaller train/val gap and
+is the defensible budget.
+
+### E20 — Stage 4, the five-fold · 2026-08-30 16:15-16:52 · 2218 s — **concludes path B**
+
+The budget came from E19 (40 epochs = 1640 steps, inside the flat region, *not* E19's
+argmax at 80 — see E19 on why that argmax is noise). Three seeds, because E19's single
+fold wandered 0.6099-0.6733. n=1620, depth 2, batch 32, lr 0.05, `n_jobs=5` /
+`OMP_NUM_THREADS=1`. Rivals share the rows and folds exactly.
+
+| model | macro-F1 |
+|---|---:|
+| product-cosine kernel, bw=0.35 | 0.7246 |
+| *(E21, nested bandwidth — the defensible kernel number)* | *0.7286* |
+| MLP, mRMR-12 in-fold | 0.7148 |
+| RF, mRMR-12 in-fold | 0.7130 |
+| **VQCClassifier, 3 seeds** | **0.6428**  sd 0.0166, range [0.6271, 0.6602] |
+
+**Verdict — the VQC does not reach parity, and this one is not noise.** The gap to the RF
+is **0.0702**: 2.6x E12's 0.0271 noise floor and 4.2x the VQC's own across-seed sd of
+0.0166. Every seed lands below every classical rival. Path B is concluded.
+
+**This does not reinstate E17.** Two separate claims, both now measured:
+
+* *The circuit is subtractive relative to its own head* — **false** (E19: +0.039 over the
+  same linear head, identical fold). E17 stays retracted.
+* *The VQC as an architecture beats classical baselines on these features* — **false**
+  (this run). It loses to a random forest by 2.6 noise floors.
+
+A circuit that helps the head bolted to it, inside a model that loses to a random forest,
+is exactly the shape of the result the reference paper reports and the shape path A
+reached independently. **Both paths now agree: quantum reaches parity with a comparable
+classical model and does not beat a good one.**
+
+Cost note: 735 s per seed against E16's 2773 s for a *tenth* the steps — the
+`OMP_NUM_THREADS` fix (see `ecgvmd/quantum.py`) and `--n-jobs 5` together, worth ~12x.
+
+### E21 — Bandwidth nested in-fold · 2026-08-30 16:33 · 26 s — **closes open item 3**
+
+Open item 3 in this file and in QUANTUM_STAGE.md: every kernel number was scored with a
+bandwidth chosen from Gram statistics over the *whole* sample, then cross-validated. Same
+class of error as fitting `MRMRSelector` outside the fold. `scripts/kernel_nested_bw.py`
+picks the bandwidth by an inner record-wise CV on the training records only, refits on the
+full training fold, and predicts the held-out fold. The test fold chooses nothing.
+
+Full 1620, k=12, outer 5-fold / inner 4-fold, both `StratifiedGroupKFold` on record id.
+
+| bandwidth | transductive macro-F1 (the published protocol) |
+|---:|---:|
+| 0.15 | 0.7023 |
+| 0.25 | 0.7129 |
+| **0.35** | **0.7246**  <- the published headline |
+| **0.50** | **0.7356**  <- actually the best |
+| 0.75 | 0.7321 |
+| 1.00 | 0.7233 |
+
+| protocol | macro-F1 |
+|---|---:|
+| **nested, leak-free — the reportable number** | **0.7286** |
+| transductive best (bw=0.50) | 0.7356 |
+| transductive at the published bw=0.35 | 0.7246 |
+
+Per-fold bandwidths chosen: `[0.75, 0.50, 0.75, 0.50, 0.25]`.
+
+**Three findings.**
+
+**1. The leak was real but small.** Choosing bandwidth on the test folds is worth
+**+0.0070**, about a quarter of E12's 0.0271 noise floor. It never explained the result.
+
+**2. The honest number is *higher* than the published one, not lower — 0.7286 against
+0.7246.** Because bw=0.35 was never the best setting. It came from E6's Gram geometry at
+n=324, and was carried to n=1620 without re-checking: at full scale bw=0.50 scores 0.7356
+and 0.75 scores 0.7321. The published headline was scored at a suboptimal bandwidth, which
+happens to have cancelled most of the transductive optimism. Two errors pointing opposite
+ways is not a defence of either.
+
+**3. Bandwidth is genuinely fold-dependent** — three distinct values across five folds —
+which is why nesting costs so little. A single global bandwidth is the wrong model of the
+hyperparameter.
+
+**Consequences.** `QUANTUM_STAGE.md`'s headline becomes **0.7286, nested**, and the
+comparison is against RF 0.7130 (see E20) rather than the unreproducible 0.7243: a margin
+of **+0.0156**, still inside the noise floor, so **the parity conclusion is unchanged and
+is now defensible**. Open item 3 is closed for the angle kernel. It remains open for IQP,
+which has its own band around 0.4-0.6 and has never been run nested — do that as part of
+the full-scale IQP run, not after it.
+
+---
+
 ## Open items
 
-1. **IQP at the full n=1620** — ~7.5 h. The E11 comparison is suggestive, not conclusive.
-2. **Stage 4 full five-fold**, once E15 shows a fold that trains cleanly.
-3. **Bandwidth is selected transductively.** Chosen from Gram statistics over the whole
-   subsample. Fine for a probe; a published number needs it nested in-fold or fixed a
-   priori and declared.
+1. **IQP at the full n=1620** — **no longer ~7.5 h; measured at 5.5 s.** `iqp_kernel_qnode`
+   uses the adjoint trick, one circuit *per pair* (1,311,390 of them). On a simulator the
+   statevectors can be taken directly and the whole Gram is one matmul: prepare each
+   `|phi(x)>` once (1620 circuits, 4.67 s, 106 MB), then `G = |conj(PSI) @ PSI.T|**2`
+   (0.81 s). Verified against the pairwise path at n=60 to **7.1e-15**, unit diagonal,
+   symmetric, PSD. Exact, like `product_angle_kernel` — but this one applies to the
+   *entangled* map, so it costs nothing scientifically.
+   **Consequence:** nested-bandwidth IQP at full scale is ~10 min rather than ~43 h, so
+   IQP can be held to E21's standard instead of the "fixed a priori" fallback.
+   To do: move `gram_matrix` onto the statevector path, keeping the pairwise version as
+   the correctness oracle, then run IQP nested. This is the last open question that could
+   still change a conclusion.
+2. ~~**Stage 4 full five-fold.**~~ **Closed by E20** — VQC 0.6428 vs RF 0.7130.
+3. ~~**Bandwidth is selected transductively.**~~ **Closed for the angle kernel by E21**
+   (nested = 0.7286). Still open for IQP — nest it *inside* the full-scale run, not after.
 4. **CNN falsification test** — see QUANTUM_STAGE.md.
 5. **Quantum genetic feature selector** (paper method 1) — untouched.
