@@ -507,24 +507,223 @@ is now defensible**. Open item 3 is closed for the angle kernel. It remains open
 which has its own band around 0.4-0.6 and has never been run nested — do that as part of
 the full-scale IQP run, not after it.
 
+### E22 — IQP nested at full scale · 2026-08-30 18:14-18:33 · 1108 s — **answers the entanglement question**
+
+Open item 1, and the last question that could still change a conclusion. Made affordable
+by `state_gram` (see below): the whole nested run — 5 outer x 4 inner x 6 bandwidths plus
+a 30-fit transductive sweep, 150 kernel fits at n=1620 — took **18 minutes**. Pairwise, at
+one circuit per pair, the same workload is roughly **43 hours**.
+
+| bandwidth | IQP transductive macro-F1 |
+|---:|---:|
+| 0.15 | 0.6977 |
+| 0.25 | 0.7238 |
+| 0.35 | 0.7241 |
+| **0.50** | **0.7355** <- best |
+| 0.75 | 0.7340 |
+| 1.00 | 0.6794 |
+
+Per-fold chosen bandwidths: `[0.35, 0.35, 0.35, 0.35, 0.15]`.
+
+### The comparison that matters — both maps, both protocols, identical folds
+
+| map | nested (leak-free) | transductive best |
+|---|---:|---:|
+| **angle / product-cosine** (E21) | **0.7286** | 0.7356 |
+| **IQP (entangled)** | **0.7127** | 0.7355 |
+| optimism from the leak | +0.0070 vs **+0.0227** | |
+
+**Verdict — entanglement buys nothing detectable, and the transductive protocol was
+hiding that.** Scored the published way the two maps are indistinguishable (0.7356 vs
+0.7355, a difference of 0.0001). Scored honestly, **the entangled map is 0.0159 *below*
+the classically-tractable one**. The sign is opposite to E11's +0.0028 at n=324. The
+margin is 0.59x E12's noise floor, so the correct statement is not "angle wins" but
+**"entanglement provides no measurable benefit on these features, at n=1620, leak-free"**.
+
+**Second finding, methodological: the entangled map is 3.2x more sensitive to the
+bandwidth leak** (+0.0227 against +0.0070). Its inner folds settled on bw=0.35 while the
+transductive sweep preferred 0.50 — the richer map has more capacity to exploit a
+hyperparameter tuned on the test folds. Any future comparison of feature maps that tunes
+transductively will systematically flatter the more expressive map. That is probably the
+single most transferable result in this file.
+
+**Where this leaves every leak-free number at k=12:**
+
+| model | macro-F1 |
+|---|---:|
+| product-cosine kernel, nested | 0.7286 |
+| MLP, mRMR-12 in-fold | 0.7148 |
+| RF, mRMR-12 in-fold | 0.7130 |
+| IQP kernel, nested | 0.7127 |
+| VQCClassifier, 3 seeds | 0.6428 |
+
+The entangled kernel lands on the random forest to three decimals (0.7127 vs 0.7130).
+**Both quantum paths now conclude the same way, and so does the entangled map that was
+supposed to be the interesting one: parity, not advantage.**
+
+**Caveat that survives all of this.** `state_gram` is a *simulator* speedup, not a
+statement about tractability — unlike `product_angle_kernel`, which proved the angle map
+factorises. The IQP map remains genuinely entangled; on hardware you would still pay
+per-pair overlap estimation. Do not report E22 as evidence that IQP is classically
+simulable in the complexity-theoretic sense. It is evidence that it does not help here.
+
+### E23 — Register width: what widening actually costs · 2026-08-30 17:00-18:10
+
+Prompted by the question "should we train on GPU?". The answer turns on how simulation
+cost scales with qubit count, which had never been measured here. Depth 2, batch 32,
+`OMP_NUM_THREADS=4`, `lightning.qubit`, adjoint gradients.
+
+| qubits | statevector | s/Adam step | vs 12q | an E20-equivalent run* |
+|---:|---:|---:|---:|---:|
+| 12 | 64 KB | 0.301 | 1.0x | 37 min *(measured, E20)* |
+| 14 | 256 KB | 0.615 | 2.0x | ~1.3 h |
+| 16 | 1 MB | 2.663 | 8.9x | ~5.5 h |
+| 18 | 4 MB | 22.478 | 74.8x | ~46 h |
+| 20 | 16 MB | 120.038 | 399.4x | ~10 days |
+
+\* 1640 steps x 5 folds x 3 seeds = 24,600 gradient steps.
+
+**1. There is a cache cliff between 16 and 18 qubits.** The state grows 4x; the step cost
+grows 8.4x. Below ~1 MB the statevector lives in cache and the simulation is compute-bound;
+past it the workload turns memory-bandwidth-bound and scaling goes superlinear.
+
+**2. This contradicts a claim in README.md.** The mRMR ablation section reads: "It beats 8
+by 0.019 for four more qubits, which cost nothing on a simulator... if the register ever
+gets cheaper, keep widening it." Qubits cost nothing at 12. By 18 they cost 75x and by 20
+a run is measured in days. **16 qubits is the practical CPU ceiling** — 5.5 h is an
+overnight, 46 h is not.
+
+**3. On GPU — no at 12 qubits, and the case for a wider register is weaker than it looks.**
+A 64 KB statevector does not saturate four CPU cores, let alone thousands of GPU cores;
+measured, the workload runs 3x *slower* at 16 threads than at 4 (see `ecgvmd/quantum.py`).
+A GPU only pays from ~18 qubits, where the problem becomes bandwidth-bound. But the
+ablation's interesting width is k=24 (0.740 against 0.724 at k=12), and 24 qubits is out
+of reach on either device for a training workload. Two further walls:
+
+* `state_gram`'s state matrix is n x 2**n_qubits complex128 — 1.7 GB at 16 qubits, 27 GB at
+  20, **434 GB at 24**. The kernel speedup that made E22 possible dies before 24 qubits.
+* the k=24 gain itself is **0.016, inside E12's 0.0271 noise floor**. Before spending a GPU
+  on it, rerun the mRMR-k sweep with more seeds — minutes on a random forest — and find out
+  whether there is anything there at all.
+
+**Recommendation.** Do not port the 12-qubit VQC to GPU; it would run slower. If register
+width is ever revisited, the prior question is whether k=24's advantage survives reseeding.
+
+**Process note.** The first attempt at this benchmark wrote nothing for ten minutes because
+it was not run with `python -u` — the same block-buffering trap E18 documents. The lesson
+was in this file and got walked into anyway. Also recorded: `default.qubit` with parameter
+broadcasting (the batched path a GPU port would need) **fails in this build** with
+`ValueError: shape-mismatch for sum` inside `apply_ry`. Anyone planning a jax/torch port
+should know that before starting.
+
+### E24 — Where the VQC's deficit actually comes from · 2026-08-30 19:32-19:52 · 545 s + probe
+
+E20 established that the VQC loses. It did not establish *why*. The hypothesis tested
+here: `VQCClassifier` measures `<Z_i>` on each of 12 qubits — but the state has 4096
+amplitudes, and single-qubit marginals are exactly the observables that **cannot see
+inter-qubit correlation**. Entanglement lives in `<Z_i Z_j>` and above, none of which is
+measured. So the ansatz spends 24 CNOTs building correlations and reads out through a
+channel blind to them.
+
+Train the VQC once, then read the **same trained circuit** three ways.
+`scripts/readout_probe.py`, one fold (train 1290 / test 330), depth 2, 40 epochs.
+
+| representation | RF | LogReg |
+|---|---:|---:|
+| raw 12 angle-scaled features — the ceiling | **0.7358** | 0.6805 |
+| the circuit's 12 `<Z_i>` — *what `VQCClassifier` uses* | 0.6892 | 0.6702 |
+| the 66 `<Z_i Z_j>` correlations | **0.7229** | — |
+| all 78 observables | **0.7320** | 0.7001 |
+| *(the VQC itself, same fold/seed)* | *0.6491* | |
+
+**Verdict — the bottleneck is the readout, not the circuit.**
+
+**1. The discarded observables are better than the kept ones.** The 66 correlations score
+0.7229 against 0.6892 for the 12 marginals. The entangling layers are doing real work; the
+measurement throws it away.
+
+**2. The circuit destroys almost nothing.** Read out fully it reaches 0.7320 against the
+raw features' 0.7358 — a gap of 0.0038, far inside the noise floor. So neither the angle
+encoding nor `tanh` saturation is the culprit; the information survives the circuit and
+dies at the measurement.
+
+**3. The recoverable gain is +0.043**, which clears E12's 0.0271 noise floor. That is a
+real effect. `<Z>` -> `<Z> + <ZZ>` also lifts the *linear* head from 0.6702 to 0.7001,
+so it is not an artefact of the random forest.
+
+**What this does and does not change.**
+
+* **Does not change E20's conclusion.** Even fully read out, 0.7320 only reaches the raw
+  features' 0.7358 — parity, not advantage. And `<Z_i Z_j>` expansion is functionally a
+  nonlinear feature expansion, which classical methods do more cheaply.
+* **Does change the attribution.** The VQC's deficit is mostly a **design choice inherited
+  from the reference paper** (measure one `<Z>` per qubit, feed a linear head), not a
+  property of quantum models. **E20's 0.6428 understates this architecture family by
+  roughly 0.05.** Any writeup should say so, or it blames the wrong thing.
+* **The diagnosis is specific to path B.** The *kernel* uses fidelity
+  `|<phi(x)|phi(y)>|**2`, which sees the entire state including all correlations — it
+  discards nothing, and entanglement still did not help (E22). Two different failure
+  modes: the VQC has a lossy readout; the kernel has a feature map whose inductive bias
+  does not match these features.
+
+**Caveats.** One fold, one seed. This fold runs high — RF on raw features scores 0.7358
+here against 0.7130 across five folds — so these are **within-fold comparisons only** and
+must not be placed beside the E20 table. The +0.043 readout gain is the one figure here
+that clears the noise floor; the 0.0038 residual does not.
+
+**If stage 4 is ever reopened**, the first change is the readout: measure `<Z_i Z_j>`
+alongside `<Z_i>` and widen the head to match. That is cheap on a simulator (one circuit,
+more observables) and is worth about +0.05 on the evidence here. It would move the VQC to
+roughly classical parity — which is where everything else in this project already landed.
+
 ---
+
+## Superseded numbers — the audit trail
+
+Every figure this project reported that has since moved, what replaced it, and why. Kept
+because several of these appeared in `README.md` and `QUANTUM_STAGE.md` for weeks, and a
+reader who saw the old number needs to be able to find out what happened to it.
+
+| # | was | is now | why it moved |
+|---|---:|---:|---|
+| quantum-kernel headline | 0.7246 | **0.7286** | E21 — bandwidth was tuned transductively, *and* the published bw=0.35 was never optimal. Two errors in opposite directions. |
+| classical baseline, RF mRMR-12 | 0.7243 | **0.7130** | E20 — 0.7243 does not reproduce at n=1620 on seed-0 folds, and no artefact of the original run survives. See "unresolved" below. |
+| VQC, full scale | 0.5532 | **0.6428** | E19/E20 — the 0.5532 run had 330 Adam steps; the model needs ~410 to leave its initial plateau. |
+| IQP vs classical margin | +0.0028 (n=324) | **−0.0159** (n=1620) | E22 — sign flips once both maps are scored leak-free at full scale. Both magnitudes are inside the noise floor. |
+| IQP full-scale cost | ~7.5 h | **5.5 s** (Gram), 18 min (nested) | `state_gram` — statevectors and one matmul instead of one circuit per pair. |
+| depth-4 circuit cost | ~15x depth 2 | **2.7x** | E18b/E23 — the 15x figure had been inflating depth-4 budgets since E13. |
+| VQC throughput | 0.37 s/step @ batch 128 | **0.728** (OMP=4), 2.907 (unset) | The published figure carried no thread count, and the default thread count is the worst one. |
+| qubit cost | "cost nothing on a simulator" | **75x at 18q, 399x at 20q** | E23 — true at 12 qubits, badly false past 16. |
+
+### Retracted claims
+
+| claim | status |
+|---|---|
+| "The circuit is a net negative… discarding class-relevant information" (E17) | **Retracted.** E19: the circuit is +0.039 over the same linear head, identical fold. E17 compared a 330-step VQC against rivals computed on *different folds*. |
+| "E18b depth 4 — NOT RUN, killed by the shutdown" | **Retracted.** It ran, reaching train F1 1.0000. The log was written one second before the result landed. |
+| "capacity or optimisation, not generalisation" (E16) | **Retracted.** E18 showed capacity is ample; the run was undertrained. |
+| "the quantum kernel lands *exactly* on the classical baseline" | **Withdrawn.** The exactness (0.7246 vs 0.7243) was coincidence between a leaky number and an unreproducible one. Parity survives; the precision does not. |
+
+### Still unresolved
+
+**The RF baseline discrepancy.** `QUANTUM_STAGE.md` reported RF mRMR-12 at 0.7243 on the
+full 1620. Re-run today with identical folds it gives 0.7130, while the product-cosine
+kernel on the same run reproduces its 0.7246 to four decimals. Both saved probe CSVs
+(`results/quantum_kernel_probe.csv`, `quantum_kernel_bw.csv`) are from an **n=486**
+subsample, so nothing on disk records the original n=1620 run. The conclusion is unaffected
+— parity holds against either value — but the provenance of 0.7243 is lost and it should
+not be cited again until someone reproduces it.
+
 
 ## Open items
 
-1. **IQP at the full n=1620** — **no longer ~7.5 h; measured at 5.5 s.** `iqp_kernel_qnode`
-   uses the adjoint trick, one circuit *per pair* (1,311,390 of them). On a simulator the
-   statevectors can be taken directly and the whole Gram is one matmul: prepare each
-   `|phi(x)>` once (1620 circuits, 4.67 s, 106 MB), then `G = |conj(PSI) @ PSI.T|**2`
-   (0.81 s). Verified against the pairwise path at n=60 to **7.1e-15**, unit diagonal,
-   symmetric, PSD. Exact, like `product_angle_kernel` — but this one applies to the
-   *entangled* map, so it costs nothing scientifically.
-   **Consequence:** nested-bandwidth IQP at full scale is ~10 min rather than ~43 h, so
-   IQP can be held to E21's standard instead of the "fixed a priori" fallback.
-   To do: move `gram_matrix` onto the statevector path, keeping the pairwise version as
-   the correctness oracle, then run IQP nested. This is the last open question that could
-   still change a conclusion.
+1. ~~**IQP at the full n=1620.**~~ **Closed by E22** — nested 0.7127 against the angle
+   kernel's 0.7286. Entanglement provides no measurable benefit. Made affordable by
+   `state_gram` in `ecgvmd/quantum.py`: 18 min for the full nested run against ~43 h
+   pairwise.
 2. ~~**Stage 4 full five-fold.**~~ **Closed by E20** — VQC 0.6428 vs RF 0.7130.
-3. ~~**Bandwidth is selected transductively.**~~ **Closed for the angle kernel by E21**
-   (nested = 0.7286). Still open for IQP — nest it *inside* the full-scale run, not after.
+3. ~~**Bandwidth is selected transductively.**~~ **Closed for both maps** — angle by E21
+   (0.7286), IQP by E22 (0.7127). E22 also showed the entangled map is 3.2x more
+   sensitive to this leak, so it was never a neutral shortcut.
 4. **CNN falsification test** — see QUANTUM_STAGE.md.
 5. **Quantum genetic feature selector** (paper method 1) — untouched.

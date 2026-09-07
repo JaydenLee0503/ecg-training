@@ -1,22 +1,50 @@
 # The quantum stage — what was built, what was measured, what it means
 
-Companion to [README.md](README.md#the-quantum-stage), which describes the *plan*. This
-file records what happened when the plan met the data. Written 2026-08-29.
+Companion to [README.md](README.md#the-quantum-stage--the-original-design), which
+describes the *plan*. This
+file records what happened when the plan met the data. Written 2026-08-29,
+**concluded 2026-08-30**.
 
-Everything here is "path A" — the quantum kernel. No variational circuit has been built
-yet. Every number came out of `scripts/quantum_kernel_probe.py` or the module it
-imports, and reproduces.
+Both paths are now finished: the quantum kernel (path A, with and without entanglement)
+and the variational classifier (path B). Every number below is leak-free — feature
+selection, angle scaling *and* kernel bandwidth are all fitted inside the training fold —
+and reproduces from the commands in [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md).
+
+**Several numbers in earlier versions of this file have been superseded**, including the
+headline. The full audit trail is in
+[EXPERIMENT_LOG.md § Superseded numbers](EXPERIMENT_LOG.md#superseded-numbers--the-audit-trail).
 
 ---
 
 ## The one-line result
 
-**A quantum kernel on these features reaches parity with a classical one, and the
-feature map that scores best is provably classical.** The measured differences between
-quantum and classical models are roughly a tenth of the noise floor.
+**Every quantum model tried here reaches parity with a comparable classical one and
+beats none of them. The feature map that scores best is provably classical, and adding
+entanglement makes it worse, not better.**
+
+Three independent routes reached that conclusion: a product-state kernel, an entangled
+IQP kernel, and a trainable variational circuit. All measured differences against
+classical rivals are inside the noise floor, except the variational classifier's, which
+is outside it in the *wrong* direction.
 
 That is a real result, not a failure. It is also what the literature predicts — see
 [Prior art](#prior-art).
+
+### Every leak-free number, one table
+
+Full 1620 windows, 162 records, record-wise 5-fold, k=12 selected in-fold.
+
+| model | macro-F1 | quantum? |
+|---|---:|---|
+| **product-cosine kernel** (angle map, nested bandwidth) | **0.7286** | no — provably a product state |
+| MLP, 32 hidden | 0.7148 | no |
+| RandomForest 400 | 0.7130 | no |
+| **IQP kernel** (entangled, nested bandwidth) | **0.7127** | yes |
+| **VQCClassifier** (12 qubits, depth 2, 3 seeds) | **0.6428** ± 0.0166 | yes |
+| *(reference: RF on all 236 features)* | *0.7861* | no |
+
+The noise floor on this dataset is **0.0271** (E12), measured by reseeding one model.
+Everything in the top four is inside it of everything else. The VQC is not.
 
 ---
 
@@ -32,7 +60,11 @@ That is a real result, not a failure. It is also what the literature predicts �
 | `iqp_kernel_qnode` | second-order Pauli-Z (ZZ / IQP) map — the entangled one |
 | `product_angle_kernel` | closed form of the angle kernel (see below) |
 | `gram_matrix` | Gram, symmetric case exploits the triangle and the unit diagonal |
-| `QuantumKernelSVC` | `SVC(kernel="precomputed")` on either map |
+| `QuantumKernelSVC` | `SVC(kernel="precomputed")` on any of the three maps |
+| `iqp_state_qnode` | the IQP map returning `qml.state()` rather than a pair overlap |
+| `state_gram` | the whole Gram as one matmul — 5.5 s at n=1620 against ~1.5 h pairwise |
+| `vqc_qnode` | angle embed → `StronglyEntanglingLayers` → one `<Z>` per qubit |
+| `VQCClassifier` | the variational classifier, with a linear read-out head |
 
 Verified: Gram matches brute force to 1e-15, symmetric, unit diagonal, PSD; closed form
 matches the statevector simulator to 2.8e-16 with identical predictions; the scaler
@@ -45,29 +77,78 @@ against the existing pins — no numpy/scipy/sklearn downgrade.
 
 ## Measured results
 
-### Full 1620 windows, record-wise 5-fold CV, mRMR-12 selected in-fold
+### Path A — the kernels, nested (the reportable protocol)
 
-| model | macro-F1 | wall clock |
-|---|---:|---:|
-| **product-cosine kernel** (angle map, bw=0.35) | **0.7246** | 1 s |
-| RF, mRMR-12 in-fold — the project's stated baseline | 0.7243 | 3 s |
-| product-cosine kernel, bw=0.25 | 0.7129 | 1 s |
-| product-cosine kernel, bw=0.15 | 0.7023 | 1 s |
-| *(reference: RF on all 236 features)* | *0.7861* | |
+Bandwidth is chosen by an inner record-wise CV on training records only; the test fold
+chooses nothing. `scripts/kernel_nested_bw.py`.
 
-The 12-feature quantum-derived kernel lands exactly on the 12-feature random forest.
-Both are ~0.06 below the all-features ceiling, which is the documented cost of reducing
-to a qubit-sized register.
+| map | nested (leak-free) | transductive best | optimism from the leak |
+|---|---:|---:|---:|
+| **angle / product-cosine** | **0.7286** | 0.7356 | +0.0070 |
+| **IQP (entangled)** | **0.7127** | 0.7355 | **+0.0227** |
 
-### 324 windows (2/record, all 162 records), identical rows and folds
+**Entanglement provides no measurable benefit, and the transductive protocol was hiding
+that.** Scored the old way the two maps are indistinguishable — 0.7356 against 0.7355, a
+gap of 0.0001. Scored honestly the entangled map lands **0.0159 below** the classically
+tractable one. That is the opposite sign to the n=324 probe's +0.0028, and at 0.59x the
+noise floor the correct statement is not "angle wins" but "entanglement buys nothing
+detectable here".
 
-| model | macro-F1 | wall clock |
-|---|---:|---:|
-| IQP (entangled) kernel, bw=0.50 | 0.7032 | 906 s |
-| product-cosine kernel, bw=0.35 | 0.7004 | 0 s |
-| SVC-rbf, standardised, untuned | 0.6971 | 0 s |
-| IQP (entangled) kernel, bw=0.40 | 0.6911 | 918 s |
-| SVC-rbf, `gamma`/`C` tuned in-fold | 0.6784 | 2 s |
+**The entangled map is 3.2x more sensitive to the bandwidth leak** (+0.0227 against
++0.0070): its inner folds settled on bw=0.35 while the transductive sweep preferred 0.50.
+The richer map has more capacity to exploit a hyperparameter tuned on the test folds.
+**Any feature-map comparison that tunes transductively will systematically flatter the
+more expressive map.** That is probably the most transferable result in this project.
+
+### Path B — the variational classifier
+
+40 epochs = 1640 Adam steps, batch 32, lr 0.05, depth 2, three seeds. The budget comes
+from a single-fold training curve (E19), not from running the five-fold at several budgets
+and keeping the best.
+
+| model | macro-F1 |
+|---|---:|
+| RF, mRMR-12 in-fold | 0.7130 |
+| **VQCClassifier, 3 seeds** | **0.6428**  sd 0.0166, range [0.6271, 0.6602] |
+
+**The VQC does not reach parity, and this gap is not noise** — 0.0702 is 2.6x the noise
+floor and 4.2x the model's own across-seed spread. Every seed lost to every classical
+rival.
+
+Two distinct claims, both measured, because they are easy to conflate:
+
+* *the circuit is subtractive relative to its own head* — **false**. On an identical fold
+  the VQC scores 0.6733 against 0.6343 for the same linear head with the circuit removed:
+  **+0.039**. An earlier claim to the contrary is retracted.
+* *the VQC beats classical baselines on these features* — **false**, by 2.6 noise floors.
+
+A circuit that helps the head bolted to it, inside a model that loses to a random forest.
+
+**Why it loses — and it is not what you would guess.** `VQCClassifier` measures `<Z_i>` on
+each of 12 qubits, but the state has 4096 amplitudes and single-qubit marginals are exactly
+the observables blind to inter-qubit correlation. The ansatz spends 24 CNOTs building
+correlations and reads out through a channel that cannot see them. Reading the *same
+trained circuit* three ways, one fold (E24):
+
+| representation | RF macro-F1 |
+|---|---:|
+| raw 12 features — the ceiling | 0.7358 |
+| the 12 `<Z_i>` the VQC actually uses | 0.6892 |
+| the 66 discarded `<Z_i Z_j>` correlations | **0.7229** |
+| all 78 observables | **0.7320** |
+
+The discarded observables score *better* than the kept ones, and a full readout recovers to
+within 0.0038 of the raw features. **The bottleneck is the readout, not the circuit** — the
+information survives the encoding and dies at the measurement. The recoverable gain, +0.043,
+clears the noise floor.
+
+This does not change the conclusion: 0.7320 still only reaches the raw features' 0.7358, so
+a fully-read-out VQC would land at parity, not advantage — and `<Z_i Z_j>` expansion is
+functionally a nonlinear feature expansion, which classical models do more cheaply. What it
+changes is the **attribution**. The deficit is a design choice inherited from the reference
+paper, not a property of quantum models, and **the 0.6428 above understates this
+architecture family by roughly 0.05**. Numbers from E24 are single-fold and must not be
+placed beside the five-fold table.
 
 ### The noise floor, which is the point
 
@@ -78,17 +159,9 @@ Running the **same** product-cosine model across 8 different subsample/CV seeds:
 | product-cosine | 0.6860 | 0.0271 | 0.6298 – 0.7308 |
 | SVC-rbf | 0.6940 | 0.0320 | 0.6468 – 0.7659 |
 
-**The entangled kernel's margin over the classical one is +0.0028.** The same model
-reseeded moves by up to 0.101. The margin is one tenth of a standard deviation and one
-thirty-sixth of the observed range. At this sample size the models are indistinguishable,
-and any ranking among them is noise.
+**0.0271 is the number every margin above has to clear.** Only the VQC's deficit does.
 
-Do not report a winner at n=324. A definitive IQP comparison needs the full 1620, which
-is ~7.5 hours (1.3M pairs × 4.11 ms × 5 folds).
-
----
-
-## Three findings worth carrying forward
+## Five findings worth carrying forward
 
 ### 1. Plain angle encoding is not quantum
 
@@ -106,9 +179,9 @@ operations. This is exact, not an approximation.
 The consequence: a quantum kernel built on plain angle encoding is classically tractable
 *by construction*. It is a shift-invariant product-cosine kernel, a close cousin of the
 RBF. No amount of tuning will make it exhibit quantum structure, and reporting it as a
-quantum result would be wrong. It remains a perfectly good classical kernel — 0.7246 in
-one second is the best 12-feature number this project has — it is simply not evidence
-about quantum machine learning.
+quantum result would be wrong. It remains a perfectly good classical kernel — **0.7286
+nested**, in about a second, is still the best 12-feature number this project has — it
+is simply not evidence about quantum machine learning.
 
 **Entanglement in the feature map is the only thing that makes a quantum kernel
 quantum.** `IQPEmbedding`'s `ZZ(φ(xᵢ,xⱼ))` phases are what break the factorisation;
@@ -140,6 +213,11 @@ be made independently.** The IQP map has its own band, around 0.4–0.6.
 The score curve follows the geometry: 0.6460 at bw=1.0, rising to a peak near 0.25–0.35,
 then collapsing to 0.4694 at 0.10 and 0.2481 at 0.05. It does not degrade gracefully.
 
+**Superseded in part.** Those figures come from an n=324 probe. At the full 1620 the peak
+sits at **bw=0.50**, not 0.35 — the shipped default was carried over from the smaller
+sample and never re-checked, which cost the published headline about 0.011. Bandwidth is
+now chosen per fold (findings 4 and 5); do not hard-code it again.
+
 ### 3. Min/max angle scaling has a silent wrap-around bug
 
 With `MinMaxScaler` fitted inside the training fold, **0.31% of test-fold values land
@@ -152,6 +230,47 @@ on the outlier samples — the ones most likely to be diagnostically interesting
 (2020): standardise, `tanh`, scale by `π/2`. Bounded for *any* input, so there is no
 train/test range coupling at all. This is the one component of the reference paper's
 method 2 that transferred directly.
+
+### 4. Entanglement does not help, and the leaky protocol was concealing it
+
+The whole point of the IQP map is that `ZZ(phi(x_i,x_j))` phases break the product-state
+factorisation — it is the only genuinely quantum kernel here. Measured leak-free at the
+full 1620 it scores **0.7127**, against **0.7286** for the classically-tractable angle
+map. Entanglement costs 0.0159 rather than buying anything.
+
+The reason this went unnoticed is worth stating separately, because it generalises: under
+the *transductive* protocol the two maps look identical (0.7356 vs 0.7355). The entangled
+map's advantage was entirely an artefact of tuning its bandwidth on the test folds, which
+benefits it 3.2x more than it benefits the simpler map. **A more expressive model gains
+more from a leaked hyperparameter, so any leaky comparison is biased toward
+expressiveness — precisely the axis such comparisons are usually trying to measure.**
+
+### 5. The pairwise Gram is the wrong algorithm on a simulator
+
+`iqp_kernel_qnode` answers "what is `<phi(x)|phi(y)>`?" one pair at a time — 1,311,390
+circuit evaluations at n=1620, about 1.5 h per fold and ~43 h for a nested run. But on a
+simulator the state is available directly: prepare each `|phi(x)>` once and the entire
+Gram is a single matrix product.
+
+```
+PSI = stack([state(x) for x in X])      # (n, 2**n_qubits) complex
+G   = |conj(PSI) @ PSI.T|**2            # the whole Gram, one matmul
+```
+
+Measured at n=1620, 12 qubits: **4.67 s** for the state preparations plus **0.81 s** for
+the product — **5.48 s** against ~1.5 h. The full nested IQP run (150 kernel fits) took
+18 minutes instead of ~43 hours. Verified against the pairwise path to **3.1e-17** with
+identical predictions, unit diagonal, symmetry and PSD preserved. `state_gram`.
+
+**Two caveats, and the first one matters.** This is *not* a tractability result. Unlike
+`product_angle_kernel`, which proved the angle map prepares a product state and is
+therefore classical by construction, this is a simulator implementation detail: the IQP
+map remains genuinely entangled, and on hardware you would still pay per-pair overlap
+estimation. Do not report it as evidence that IQP is classically simulable.
+
+Second, it dies on memory before it dies on time. The state matrix is
+`n x 2**n_qubits` complex128: 1.7 GB at 16 qubits, 27 GB at 20, **434 GB at 24**. Past
+~18 qubits the pairwise path — slow but O(1) in memory — is the only option.
 
 ---
 
@@ -195,22 +314,46 @@ magnitude as the +0.12 macro-F1 illusion documented in the README.
 
 ## Status and next steps
 
-**Answered.** Path A. The angle map separates the classes about as well as an RBF; it is
-classically tractable; the entangled map gains nothing detectable at n=324.
+**Concluded.** Everything this file was opened to answer.
 
-**Open.**
+| question | answer |
+|---|---|
+| Does the angle map separate the classes? | Yes, about as well as an RBF — 0.7286 nested. |
+| Is it quantum? | **No.** It prepares a product state and has an exact closed form (finding 1). |
+| Does entanglement help? | **No.** IQP nested scores 0.7127, *below* the angle map (finding 4). |
+| Does a trainable circuit help? | **No.** 0.6428, losing to a random forest by 2.6 noise floors. |
+| Does the circuit help the head it is attached to? | **Yes**, +0.039 — but the whole model still loses. |
+| *Why* does it lose? | Mostly a lossy readout, not the circuit: 12 marginals out of a 4096-amplitude state, with the entanglement-sensitive observables never measured (E24). Fixing it is worth ~+0.05 — to parity, not advantage. |
 
-1. **IQP at the full 1620** (~7.5 h). The n=324 comparison is suggestive, not conclusive.
-   Worth one overnight run before any claim about entanglement is published.
-2. **The variational classifier (stage 4).** Still worth building — a trainable model is
-   a different class from a fixed kernel, and it is the project's stated goal — but
-   calibrate the expectation to ~0.70–0.72. `AngleEmbedding` → `StronglyEntanglingLayers`
-   *is* entangled, so the stage-4 circuit does not inherit finding 1.
-3. **Bandwidth is currently selected transductively.** It was chosen from Gram statistics
-   over the whole subsample. Acceptable for a probe; for a published number it must be
-   nested inside the fold or fixed a priori and declared as such.
-4. **The CNN falsification test** (method 2's front end) — see below.
-5. **The quantum genetic feature selector** (method 1) is untouched.
+**The project's question is answered three independent ways, and they agree.** No further
+quantum experiment on these features is likely to change it.
+
+**Open, in priority order.**
+
+1. **If stage 4 is ever reopened, fix the readout first.** Measure `<Z_i Z_j>` alongside
+   `<Z_i>` and widen the head to match — one circuit, more observables, cheap on a
+   simulator, and worth about +0.05 on E24's evidence. It would move the VQC to roughly
+   classical parity. Do this before anything else in stage 4; every other tuning knob is
+   smaller than the readout.
+2. **The CNN falsification test** (method 2's front end) — see below. Tests whether
+   *learned* features beat the 236 hand-crafted ones; it is a question about the classical
+   half and would not change any conclusion above.
+3. **The quantum genetic feature selector** (method 1) is untouched. If it is built, its
+   fitness call must live inside the training fold, or it reintroduces exactly the
+   selection leak this project is built to avoid.
+4. **Reproduce or retire the RF baseline of 0.7243.** It does not reproduce at n=1620
+   (0.7130 today, identical folds) and no artefact of the original run survives. Do not
+   cite it again until someone traces it.
+5. **Register width.** The mRMR ablation says k=24 scores 0.740 against 0.724 at k=12 —
+   but that gain is 0.016, *inside* the 0.0271 noise floor, and 24 qubits is out of reach
+   for training on this hardware (E23: 20 qubits is 399x the cost of 12, and `state_gram`
+   needs 434 GB at 24). Before anyone buys a GPU for this: rerun the mRMR-k sweep with
+   more seeds and find out whether k=24's advantage is real. That costs minutes.
+
+**Not open.** Bandwidth nesting (done, both maps), the full-scale IQP run (done, 18 min),
+and stage 4 (done). See
+[EXPERIMENT_LOG.md § Superseded numbers](EXPERIMENT_LOG.md#superseded-numbers--the-audit-trail)
+for what these replaced.
 
 ### The CNN falsification test
 

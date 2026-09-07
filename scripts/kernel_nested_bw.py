@@ -63,9 +63,9 @@ def subsample(y, g, n_per_record, seed=0):
                     replace=False) for r in np.unique(g)]))
 
 
-def pipe(k, bw):
+def pipe(k, bw, embedding="angle"):
     return make_pipeline(E.MRMRSelector(k=k), TanhAngleScaler(scale=bw),
-                         QuantumKernelSVC())
+                         QuantumKernelSVC(embedding=embedding))
 
 
 def main():
@@ -76,6 +76,10 @@ def main():
     ap.add_argument("--k", type=int, default=12)
     ap.add_argument("--inner-folds", type=int, default=4)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--embedding", default="angle",
+                    choices=["angle", "iqp", "iqp-state"],
+                    help="'iqp-state' is the same map as 'iqp' via statevectors, ~1000x "
+                         "faster; 'iqp' is the pairwise oracle and is hours at n=1620")
     ap.add_argument("--out", default="results/kernel_nested_bw.csv")
     args = ap.parse_args()
 
@@ -84,7 +88,7 @@ def main():
     X, y, g = X[idx], y[idx], g[idx]
     print(f"[{datetime.now():%Y-%m-%d %H:%M:%S}] {path}")
     print(f"block {args.block!r}: {X.shape}, {len(np.unique(g))} records")
-    print(f"bandwidth grid: {list(BANDWIDTHS)}\n", flush=True)
+    print(f"embedding: {args.embedding}\nbandwidth grid: {list(BANDWIDTHS)}\n", flush=True)
 
     outer = StratifiedGroupKFold(5, shuffle=True, random_state=args.seed)
     t0 = time.time()
@@ -99,12 +103,12 @@ def main():
         for bw in BANDWIDTHS:
             ip = np.empty(len(tr), dtype=object)
             for itr, ite in inner.split(X[tr], y[tr], g[tr]):
-                m = pipe(args.k, bw).fit(X[tr][itr], y[tr][itr])
+                m = pipe(args.k, bw, args.embedding).fit(X[tr][itr], y[tr][itr])
                 ip[ite] = m.predict(X[tr][ite])
             scores[bw] = f1_score(y[tr], ip.astype(str), average="macro")
         best = max(scores, key=scores.get)
         picked.append(best)
-        m = pipe(args.k, best).fit(X[tr], y[tr])
+        m = pipe(args.k, best, args.embedding).fit(X[tr], y[tr])
         pred[te] = m.predict(X[te])
         print(f"  fold {fold}: chose bw={best:.2f}  "
               + "  ".join(f"{b:.2f}={scores[b]:.4f}" for b in BANDWIDTHS), flush=True)
@@ -117,7 +121,7 @@ def main():
     for bw in BANDWIDTHS:
         p = np.empty(len(y), dtype=object)
         for tr, te in outer.split(X, y, g):
-            p[te] = pipe(args.k, bw).fit(X[tr], y[tr]).predict(X[te])
+            p[te] = pipe(args.k, bw, args.embedding).fit(X[tr], y[tr]).predict(X[te])
         trans[bw] = f1_score(y, p.astype(str), average="macro")
     best_trans = max(trans, key=trans.get)
 

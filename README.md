@@ -21,16 +21,30 @@ bookkeeping, the 28-descriptor IMF feature extraction, record-wise cross-validat
 VMD-vs-control ablation, the alpha sweep, and mRMR reduction to 12 features. Every number
 in this README came out of that code and reproduces.
 
-**In progress.** The quantum stage. `ecgvmd/quantum.py` holds the feature maps, the
-kernel estimator and the variational classifier; `requirements.txt` pins PennyLane.
-Results so far are in [QUANTUM_STAGE.md](QUANTUM_STAGE.md), the run-by-run chronology in
-[EXPERIMENT_LOG.md](EXPERIMENT_LOG.md). Headline: the quantum kernel reaches parity with
-classical, and plain angle encoding turns out to be classically tractable by
-construction. The classical→quantum handoff is unchanged:
-`ecgvmd/select.py::quantum_ready` scales features into rotation angles and notebook 3
-writes `features/quantum_<signature>_q12.npz`, though the estimators in
-`ecgvmd/quantum.py` read the *full* feature file and select in-fold instead, which is the
-honest path. See [The quantum stage](#the-quantum-stage) for the original plan.
+**Finished and measured.** The quantum stage, both paths. `ecgvmd/quantum.py` holds the
+feature maps, the kernel estimators and the variational classifier; `requirements.txt`
+pins PennyLane. Results are in [QUANTUM_STAGE.md](QUANTUM_STAGE.md), the run-by-run
+chronology in [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md).
+
+**Headline: every quantum model reaches parity with a comparable classical one and beats
+none of them.** Three independent routes agree — a product-state kernel (0.7286), an
+entangled IQP kernel (0.7127), and a trainable variational circuit (0.6428) — against a
+random forest at 0.7130 on the same twelve features. Plain angle encoding turns out to be
+classically tractable by construction, and adding entanglement makes the score *worse*,
+not better.
+
+The classical→quantum handoff is unchanged: `ecgvmd/select.py::quantum_ready` scales
+features into rotation angles and notebook 3 writes
+`features/quantum_<signature>_q12.npz`, though the estimators in `ecgvmd/quantum.py` read
+the *full* feature file and select in-fold instead, which is the honest path. See
+[The quantum stage — the original design](#the-quantum-stage--the-original-design)
+for the original plan and how it changed.
+
+**Numbers that moved.** Several figures published in earlier versions of this file have
+been superseded, including the quantum headline and the classical baseline it was compared
+against. Every one is recorded with its replacement and the reason in
+[EXPERIMENT_LOG.md § Superseded numbers](EXPERIMENT_LOG.md#superseded-numbers--the-audit-trail).
+If you are holding an old number, look it up there.
 
 **Current artefacts** (both on disk, both gitignored):
 
@@ -49,6 +63,15 @@ honest path. See [The quantum stage](#the-quantum-stage) for the original plan.
 | **reproduce the tables below** | `$V run_pipeline.py --n-per-record 10` | 1 min 17 s |
 | every window (21222 of them) | `$V run_pipeline.py` | 8 min 47 s |
 | the convergence experiment | `$V scripts/alpha_sweep.py` | ~40 min |
+| the kernel numbers, leak-free | `$V scripts/kernel_nested_bw.py` | 26 s |
+| the entangled kernel, leak-free | `$V scripts/kernel_nested_bw.py --embedding iqp-state` | 18 min |
+| the variational classifier | `OMP_NUM_THREADS=1 $V scripts/vqc_run.py --epochs 40 --batch-size 32 --seeds 3 --n-jobs 5` | 37 min |
+
+**Set `OMP_NUM_THREADS` before any quantum run.** A 12-qubit statevector is 64 KB and
+fits in cache, so there is not enough work per gate to feed many threads; left unset,
+OpenMP takes every core and costs 2–4x. Use `OMP_NUM_THREADS=4` for single-fold work, and
+`OMP_NUM_THREADS=1` with `--n-jobs 5` for anything cross-validated — parallelise folds,
+not gates, and never both at once. Measured table in `ecgvmd/quantum.py`.
 
 Two things about that table are easy to get wrong.
 
@@ -87,6 +110,9 @@ ecgvmd/                 the library — import this, don't copy-paste from noteb
 run_pipeline.py         command-line extraction, for when you don't want a notebook
 scripts/alpha_sweep.py  the convergence/alpha experiment
 scripts/quantum_kernel_probe.py   the quantum-kernel gate, with Gram diagnostics
+scripts/kernel_nested_bw.py       leak-free nested bandwidth selection  [the honest one]
+scripts/vqc_run.py                the variational classifier, five-fold vs matched rivals
+scripts/readout_probe.py          why the VQC underperforms: circuit vs readout
 
 QUANTUM_STAGE.md        what the quantum stage measured, and what it means
 EXPERIMENT_LOG.md       run-by-run chronology, failures included
@@ -219,7 +245,7 @@ ECGData.mat  ──load_ecgdata──▶  162 x 65536 float64, labels, record_id
              ──extract_features─▶  VMD each window into K IMFs, 28 descriptors each
              ──evaluate─────▶  record-wise cross-validated macro-F1
              ──MRMRSelector─▶  12 features, qubit-sized
-             ──quantum_ready▶  scaled to [0, pi]  ──▶  the quantum stage (not built)
+             ──quantum_ready▶  scaled to [0, pi]  ──▶  the quantum stage (concluded)
 ```
 
 **Feature blocks produced** (K=8):
@@ -327,16 +353,84 @@ Reducing to a qubit-sized set (mRMR, selected **inside** each training fold):
 |---|---:|---:|---:|---:|---:|---:|
 | segment macro-F1 | 0.661 | 0.705 | 0.724 | 0.722 | 0.740 | 0.786 |
 
-**12 is the shipped operating point.** It beats 8 by 0.019 for four more qubits, which
-cost nothing on a simulator. The dip at 16 is noise, not a ceiling — 24 is better again,
-so if the register ever gets cheaper, keep widening it.
+**12 is the shipped operating point.** It beats 8 by 0.019 for four more qubits, which at
+this width really do cost almost nothing on a simulator.
+
+**But qubits stop being cheap fast, and an earlier version of this section was wrong to
+imply otherwise.** Measured (E23), one Adam step at depth 2, batch 32:
+
+| qubits | statevector | s/step | vs 12q |
+|---:|---:|---:|---:|
+| 12 | 64 KB | 0.301 | 1.0x |
+| 16 | 1 MB | 2.663 | 8.9x |
+| 18 | 4 MB | 22.478 | 74.8x |
+| 20 | 16 MB | 120.038 | **399x** |
+
+There is a cache cliff between 16 and 18 qubits: the state grows 4x and the cost grows
+8.4x, because past ~1 MB the simulation stops fitting in cache and turns
+memory-bandwidth-bound. **16 qubits is the practical CPU ceiling** — a full five-fold,
+three-seed run is 5.5 h at 16 qubits and ~46 h at 18.
+
+So "keep widening the register" is not free advice. And before acting on the k=24 number
+above, note that **0.740 vs 0.724 is 0.016, inside the 0.0271 noise floor**: rerun the
+sweep with more seeds first and find out whether the gain is real. A GPU does not rescue
+this either — see [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) E23.
+
+### The quantum stage, measured
+
+Same 1620 windows, same record-wise folds, k=12 selected in-fold. Bandwidth for the
+kernels is chosen by an inner CV on training records only, so nothing here is tuned on a
+test fold.
+
+| model | macro-F1 | quantum? |
+|---|---:|---|
+| **product-cosine kernel** (angle map, nested bandwidth) | **0.7286** | no — provably a product state |
+| MLP, 32 hidden | 0.7148 | no |
+| RandomForest 400 | 0.7130 | no |
+| **IQP kernel** (entangled, nested bandwidth) | **0.7127** | yes |
+| **VQCClassifier** (12 qubits, depth 2, 3 seeds) | **0.6428** ± 0.0166 | yes |
+
+**The noise floor is 0.0271**, measured by reseeding one model across eight
+subsample/CV seeds. Every gap in the top four is inside it. The VQC's deficit is not:
+0.0702 is 2.6x the floor.
+
+Three things follow, and they are the project's quantum result.
+
+**Plain angle encoding is not quantum.** `AngleEmbedding` with RY and no entangling gates
+prepares a product state, so the fidelity kernel factorises into an exact closed form,
+`Π cos²((xᵢ − yᵢ)/2)` — verified against the simulator to 1.7e-16 and 1634x faster. It is
+a perfectly good classical kernel and the best 12-feature number here; it is simply not
+evidence about quantum machine learning.
+
+**Entanglement makes it worse, not better.** The IQP map is the genuinely quantum one, and
+nested it scores 0.7127 against the angle map's 0.7286. Under the older transductive
+protocol the two looked identical (0.7356 vs 0.7355) — because the entangled map benefits
+**3.2x more** from a bandwidth tuned on the test folds. A more expressive model gains more
+from a leaked hyperparameter, so a leaky comparison is biased toward expressiveness.
+
+**The trainable circuit loses outright.** 0.6428 against a random forest's 0.7130. The
+circuit does help the linear head it is attached to (+0.039 over the same head with the
+circuit removed, identical fold) — but the assembled model is still worse than a forest.
+
+**And the reason is the readout, not the circuit.** `VQCClassifier` measures `<Z_i>` on
+each of 12 qubits — 12 numbers out of a 4096-amplitude state, and precisely the ones blind
+to inter-qubit correlation. Reading the same trained circuit fully (adding the 66
+`<Z_i Z_j>` terms) recovers to within 0.004 of the raw features, and the *discarded*
+observables score better than the kept ones. The deficit is a design choice inherited from
+the reference paper, worth about **+0.05** if fixed — which would reach parity, not
+advantage. See [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) E24.
+
+All three agree with the reference paper's own finding, which was also parity.
 
 ---
 
-## The quantum stage
+## The quantum stage — the original design
 
-Not built yet. This section is the design: the full chain, then the corrections to the
-step list it was drafted from.
+**Built, and concluded — see [QUANTUM_STAGE.md](QUANTUM_STAGE.md) for what it measured.**
+This section is kept as the *design*: the full chain, then the corrections to the step
+list it was drafted from. It is preserved because the critique below is still the useful
+part, and because it records what was expected before anything was run. Where the design
+turned out wrong, the results say so.
 
 ### The chain, end to end
 
@@ -368,15 +462,16 @@ step list it was drafted from.
                                         [10] cross-entropy -> parameter-shift -> Adam
      |
  [11] evaluate              StratifiedGroupKFold on `groups`, macro-F1
-                            target to beat: 0.7243 (in-fold mRMR-12)
+                            target to beat: 0.7130 (in-fold mRMR-12, measured)
 ```
 
 Steps 1–5 exist and run. Step 5 exists in two forms: `quantum_ready` (correct, refits
 per call) and the `X` array baked into `quantum_*.npz` (fitted on all data — see the
-caveat below). Steps 6–11 are **partly built** — see
+caveat below). Steps 6–11 are **built and concluded** — see
 [QUANTUM_STAGE.md](QUANTUM_STAGE.md) for what was measured and
-[EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) for the chronology. Path A (the quantum kernel)
-is concluded; path B (the variational circuit) is in progress.
+[EXPERIMENT_LOG.md](EXPERIMENT_LOG.md) for the chronology. Both paths finished: the
+quantum kernel (angle *and* entangled IQP) and the variational circuit. All three reach
+parity with classical rivals and none beats one.
 
 ### Critique of the drafted step list
 
@@ -454,9 +549,11 @@ list says how the model is scored. Two constraints are non-negotiable here:
 
 * **split on `groups`.** Record-wise, `StratifiedGroupKFold`, exactly as the classical
   side does. A random split is worth ~+0.12 macro-F1 of pure illusion on this dataset.
-* **compare against `classical_baseline_f1_k` = 0.7243**, not `classical_baseline_f1` =
-  0.7861. The first is mRMR-12 selected in-fold — the same 12 features the circuit sees.
-  The second is all 236 features and is not the quantum model's competition.
+* **compare against the in-fold mRMR-12 baseline, not the all-features one** (0.7861).
+  The first is the same 12 features the circuit sees; the second is not the quantum
+  model's competition. **The value to use is 0.7130** — measured today with identical
+  folds. The 0.7243 stored in the handoff file does *not* reproduce and its provenance is
+  lost; see [EXPERIMENT_LOG.md § Superseded numbers](EXPERIMENT_LOG.md#superseded-numbers--the-audit-trail).
 
 Also worth knowing before committing to path B: **the ZZ feature map has a well-known
 failure mode**. As feature dimension grows, kernel values concentrate — off-diagonal
@@ -496,7 +593,7 @@ quantum model reads it and never reaches back into VMD.
 | `encoding` | scalar | `"angle"` — the limits above are specific to it |
 | `n_qubits` | scalar | 12 |
 | `classical_baseline_f1` | scalar | 0.7861 — all 236 features, honest CV |
-| `classical_baseline_f1_k` | scalar | 0.7243 — mRMR-12 in-fold — **the fair comparison** |
+| `classical_baseline_f1_k` | scalar | 0.7243 — mRMR-12 in-fold — **stale, does not reproduce; use 0.7130** |
 | `full_feature_file` | str | path to the full feature `.npz` |
 
 The twelve features currently selected are `u5_tkeo`, `u6_shannon`, `u8_spec_entropy`,
