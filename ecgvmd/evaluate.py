@@ -25,7 +25,8 @@ from sklearn.preprocessing import StandardScaler
 from .config import CFG, CLASS_ORDER, Config
 
 __all__ = ["group_cv", "naive_cv", "record_vote", "evaluate", "leakage_gap", "rf",
-           "default_models", "compare_blocks"]
+           "default_models", "compare_blocks", "report", "per_class_metrics",
+           "full_metrics", "metrics_row", "metrics_report", "cm_string"]
 
 
 def group_cv(cfg: Config | None = None):
@@ -78,16 +79,24 @@ def default_models(cfg: Config | None = None) -> dict:
 
 
 def evaluate(model, X, y, groups, cfg: Config | None = None, cv=None,
-             use_groups: bool = True, return_pred: bool = False):
+             use_groups: bool = True, return_pred: bool = False,
+             full: bool = False):
     """Cross-validated segment metrics plus the record-level majority vote.
 
     Set `use_groups=False` only to demonstrate leakage; the numbers it produces are
     not valid estimates of anything.
+
+    `full=True` returns `full_metrics` instead of the four-number summary — accuracy,
+    sensitivity, specificity, F1 and confusion matrices at both levels. The compact form
+    stays the default because `compare_blocks` tabulates it one row per feature block.
     """
     cfg = cfg or CFG
     cv = cv if cv is not None else (group_cv(cfg) if use_groups else naive_cv(cfg))
     pred = cross_val_predict(model, X, y, groups=groups if use_groups else None,
                              cv=cv, n_jobs=1)
+    if full:
+        m = full_metrics(y, pred, groups)
+        return (m, pred) if return_pred else m
     ry, rp = record_vote(pred, groups, y)
     scores = {
         "segment acc": accuracy_score(y, pred),
@@ -126,12 +135,182 @@ def compare_blocks(bundle, cfg: Config | None = None, model=None, blocks=None):
     return rows
 
 
+# --------------------------------------------------------------------------------
+# The full metric panel: accuracy, sensitivity, specificity, F1, confusion matrix
+# --------------------------------------------------------------------------------
+#
+# Until now every quantum run in this project reported macro-F1 and nothing else, which
+# is enough to rank models and not enough to say what a model does. A 59% ARR / 19% CHF
+# / 22% NSR prior makes the omission expensive: the failure mode here is a model that
+# quietly abandons CHF, and macro-F1 shows that only as a number that is lower than you
+# hoped. Sensitivity and specificity per class name the class it abandoned.
+#
+# Both are one-vs-rest. For CHF, "negative" means ARR *or* NSR:
+#
+#     sensitivity  TP / (TP + FN)   how much of this class the model finds
+#     specificity  TN / (TN + FP)   how much of everything else it keeps out
+#
+# The pair has to be read together. "Always predict ARR" scores specificity 1.000 on CHF
+# and NSR while finding none of either, so a high specificity alone is not evidence of
+# anything on a skewed prior.
+
+
+def _ovr_counts(y, pred, labels):
+    """One-vs-rest TP/FP/FN/TN per class, from the multiclass confusion matrix."""
+    C = confusion_matrix(y, pred, labels=labels)
+    tp = np.diag(C).astype(float)
+    fn = C.sum(1) - tp
+    fp = C.sum(0) - tp
+    tn = C.sum() - tp - fn - fp
+    return C, tp, fp, fn, tn
+
+
+def per_class_metrics(y, pred, labels=None):
+    """Per-class sensitivity, specificity, precision, F1 and support.
+
+    Returns `{class: {metric: value}}` in `CLASS_ORDER`, which both prints readably and
+    flattens into a CSV row. A class with no support gets `nan` sensitivity rather than
+    a silent zero — absent is not the same as missed.
+    """
+    labels = list(labels if labels is not None else CLASS_ORDER)
+    C, tp, fp, fn, tn = _ovr_counts(y, pred, labels)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        sens = np.where(tp + fn > 0, tp / (tp + fn), np.nan)
+        spec = np.where(tn + fp > 0, tn / (tn + fp), np.nan)
+        prec = np.where(tp + fp > 0, tp / (tp + fp), np.nan)
+        f1 = np.where(np.nan_to_num(prec) + np.nan_to_num(sens) > 0,
+                      2 * prec * sens / (prec + sens), 0.0)
+    return {c: {"sensitivity": float(sens[i]), "specificity": float(spec[i]),
+                "precision": float(prec[i]), "f1": float(f1[i]),
+                "support": int(tp[i] + fn[i]),
+                "tp": int(tp[i]), "fp": int(fp[i]),
+                "fn": int(fn[i]), "tn": int(tn[i])}
+            for i, c in enumerate(labels)}
+
+
+def full_metrics(y, pred, groups=None, labels=None):
+    """Every metric the project reports, at segment and (with `groups`) record level.
+
+    `balanced_accuracy` and `macro_sensitivity` are the same quantity — macro-averaged
+    recall — computed two ways and kept both because the two names appear in different
+    halves of the literature. If they ever disagree, something is wrong upstream.
+
+    Pass the out-of-fold predictions from `cross_val_predict`, not in-sample ones.
+    """
+    labels = list(labels if labels is not None else CLASS_ORDER)
+    y, pred = np.asarray(y).astype(str), np.asarray(pred).astype(str)
+    pc = per_class_metrics(y, pred, labels)
+    out = {
+        "accuracy": accuracy_score(y, pred),
+        "balanced_accuracy": balanced_accuracy_score(y, pred),
+        "macro_f1": f1_score(y, pred, average="macro", labels=labels),
+        "weighted_f1": f1_score(y, pred, average="weighted", labels=labels),
+        "macro_sensitivity": float(np.nanmean([v["sensitivity"] for v in pc.values()])),
+        "macro_specificity": float(np.nanmean([v["specificity"] for v in pc.values()])),
+        "n": int(len(y)),
+        "labels": labels,
+        "per_class": pc,
+        "confusion": confusion_matrix(y, pred, labels=labels),
+    }
+    if groups is not None:
+        ry, rp = record_vote(pred, groups, y)
+        rpc = per_class_metrics(ry, rp, labels)
+        out["record"] = {
+            "accuracy": accuracy_score(ry, rp),
+            "balanced_accuracy": balanced_accuracy_score(ry, rp),
+            "macro_f1": f1_score(ry, rp, average="macro", labels=labels),
+            "weighted_f1": f1_score(ry, rp, average="weighted", labels=labels),
+            "macro_sensitivity": float(np.nanmean([v["sensitivity"] for v in rpc.values()])),
+            "macro_specificity": float(np.nanmean([v["specificity"] for v in rpc.values()])),
+            "n": int(len(ry)),
+            "per_class": rpc,
+            "confusion": confusion_matrix(ry, rp, labels=labels),
+        }
+    return out
+
+
+def cm_string(C) -> str:
+    """Confusion matrix as one CSV-safe field: rows `;`-separated, cells `,`-separated."""
+    return ";".join(",".join(str(int(v)) for v in row) for row in np.asarray(C))
+
+
+def metrics_row(name, y, pred, groups=None, labels=None, **extra):
+    """`full_metrics` flattened into one row, for appending to a results CSV.
+
+    Keeps the confusion matrices as `cm` / `record_cm` strings (see `cm_string`) so a
+    saved row reconstructs every count without a second artefact. Scripts that used to
+    write `{"model": name, "macro_f1": f1}` can write this instead; `macro_f1` keeps its
+    name and meaning, so old columns still line up.
+    """
+    labels = list(labels if labels is not None else CLASS_ORDER)
+    m = full_metrics(y, pred, groups, labels)
+    row = {"model": name}
+    row.update({k: m[k] for k in ("accuracy", "balanced_accuracy", "macro_f1",
+                                  "weighted_f1", "macro_sensitivity",
+                                  "macro_specificity")})
+    for c in labels:
+        for k in ("sensitivity", "specificity", "precision", "f1"):
+            row[f"{k[:4]}_{c}"] = m["per_class"][c][k]
+        row[f"support_{c}"] = m["per_class"][c]["support"]
+    row["cm"] = cm_string(m["confusion"])
+    if "record" in m:
+        r = m["record"]
+        row.update({f"record_{k}": r[k] for k in ("accuracy", "balanced_accuracy",
+                                                  "macro_f1", "macro_sensitivity",
+                                                  "macro_specificity")})
+        row["record_cm"] = cm_string(r["confusion"])
+    row["n_windows"] = m["n"]
+    row.update(extra)
+    return row
+
+
+def _panel(m, labels) -> list[str]:
+    """The per-class table plus the confusion matrix, for one level of aggregation."""
+    w = max(len(c) for c in labels) + 1
+    out = [f"  {'':<{w}}  {'sens':>6} {'spec':>6} {'prec':>6} {'F1':>6} {'n':>6}"]
+    for c in labels:
+        v = m["per_class"][c]
+        out.append(f"  {c:<{w}}  {v['sensitivity']:6.3f} {v['specificity']:6.3f} "
+                   f"{v['precision']:6.3f} {v['f1']:6.3f} {v['support']:6d}")
+    out.append(f"  {'macro':<{w}}  {m['macro_sensitivity']:6.3f} "
+               f"{m['macro_specificity']:6.3f} {'':>6} {m['macro_f1']:6.3f} "
+               f"{m['n']:6d}")
+    out.append(f"  accuracy {m['accuracy']:.4f}   balanced accuracy "
+               f"{m['balanced_accuracy']:.4f}   macro-F1 {m['macro_f1']:.4f}")
+    out.append("  confusion (rows = true, cols = predicted, order "
+               + ", ".join(labels) + "):")
+    C = np.asarray(m["confusion"])
+    for c, row in zip(labels, C):
+        out.append(f"    {c:<4} " + " ".join(f"{int(v):6d}" for v in row))
+    return out
+
+
+def metrics_report(y, pred, groups=None, title: str = "", labels=None) -> str:
+    """The printable panel: accuracy, sensitivity, specificity, F1, confusion matrix.
+
+    Segment level always; record level too when `groups` is given, which is the metric
+    that corresponds to the clinical task — a recording is diagnosed, not a 3.9 s window.
+    """
+    labels = list(labels if labels is not None else CLASS_ORDER)
+    m = full_metrics(y, pred, groups, labels)
+    out = [f"=== {title} ===" if title else "", "segment level:"]
+    out += _panel(m, labels)
+    if "record" in m:
+        out += ["", f"record level (majority vote, {m['record']['n']} records):"]
+        out += _panel(m["record"], labels)
+    return "\n".join(x for x in out if x != "")
+
+
 def report(y, pred, groups, title: str = ""):
-    """Printed classification report at both segment and record level."""
+    """sklearn's classification report at both levels, then the full metric panel.
+
+    Kept as the notebooks call it; `metrics_report` is the same panel without the
+    sklearn text, and `full_metrics` is the same numbers as a dict.
+    """
     ry, rp = record_vote(pred, groups, y)
     out = [f"=== {title} ===" if title else "",
            "segment level:", classification_report(y, pred, digits=3),
            "record level (majority vote):", classification_report(ry, rp, digits=3),
-           "record confusion matrix (rows=true, order " + ",".join(CLASS_ORDER) + "):",
-           str(confusion_matrix(ry, rp, labels=CLASS_ORDER))]
+           metrics_report(y, pred, groups,
+                          title="sensitivity / specificity / confusion")]
     return "\n".join(x for x in out if x)

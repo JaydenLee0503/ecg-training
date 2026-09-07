@@ -25,7 +25,8 @@ from .features import (FeatureBundle, extract_features, mode_features, rr_featur
                        global_features, raw_features, perm_entropy, higuchi_fd,
                        MODE_FEATS, RR_NAMES, GLOBAL_NAMES)
 from .evaluate import (evaluate, group_cv, naive_cv, record_vote, leakage_gap, rf,
-                       default_models, compare_blocks, report)
+                       default_models, compare_blocks, report, per_class_metrics,
+                       full_metrics, metrics_row, metrics_report, cm_string)
 from .select import rank_anova, mrmr_select, MRMRSelector, quantum_ready
 from .quantum import (TanhAngleScaler, angle_kernel_qnode, iqp_kernel_qnode,
                       product_angle_kernel, gram_matrix, QuantumKernelSVC,
@@ -43,7 +44,8 @@ __all__ = [
     "global_features", "raw_features", "perm_entropy", "higuchi_fd",
     "MODE_FEATS", "RR_NAMES", "GLOBAL_NAMES",
     "evaluate", "group_cv", "naive_cv", "record_vote", "leakage_gap", "rf",
-    "default_models", "compare_blocks", "report",
+    "default_models", "compare_blocks", "report", "per_class_metrics",
+    "full_metrics", "metrics_row", "metrics_report", "cm_string",
     "rank_anova", "mrmr_select", "MRMRSelector", "quantum_ready",
     "TanhAngleScaler", "angle_kernel_qnode", "iqp_kernel_qnode",
     "product_angle_kernel", "gram_matrix", "QuantumKernelSVC",

@@ -17,6 +17,10 @@ The comparison that matters is `nested` against `transductive`. If nested comes 
 materially lower, the published 0.7246 was partly an artefact of choosing the
 hyperparameter on the test folds, and the headline has to move.
 
+The nested predictions are scored with the full panel — accuracy, per-class sensitivity
+and specificity, F1 and the confusion matrix, at segment and record level — and saved
+beside the CSV so any further metric can be recomputed without re-running the kernel.
+
     python scripts/kernel_nested_bw.py                    # the full 1620
     python scripts/kernel_nested_bw.py --n-per-record 2   # quick, n=324
 """
@@ -114,15 +118,17 @@ def main():
               + "  ".join(f"{b:.2f}={scores[b]:.4f}" for b in BANDWIDTHS), flush=True)
         rows.append({"fold": fold, "chosen_bw": best,
                      **{f"inner_f1_bw{b:.2f}": scores[b] for b in BANDWIDTHS}})
-    nested = f1_score(y, pred.astype(str), average="macro")
+    nested_pred = pred.astype(str)
+    nested = f1_score(y, nested_pred, average="macro")
 
     # ---- transductive: the published protocol, for the comparison ----------------
-    trans = {}
+    trans, trans_pred = {}, {}
     for bw in BANDWIDTHS:
         p = np.empty(len(y), dtype=object)
         for tr, te in outer.split(X, y, g):
             p[te] = pipe(args.k, bw, args.embedding).fit(X[tr], y[tr]).predict(X[te])
         trans[bw] = f1_score(y, p.astype(str), average="macro")
+        trans_pred[bw] = p.astype(str)
     best_trans = max(trans, key=trans.get)
 
     dt = time.time() - t0
@@ -137,6 +143,11 @@ def main():
     print(f"  bandwidths chosen per fold: {picked}")
     print(f"\n[{datetime.now():%Y-%m-%d %H:%M:%S}] done in {dt:.0f}s")
 
+    # ---- the full panel on the nested (leak-free) predictions --------------------
+    name = f"{args.embedding} kernel, nested bw"
+    print()
+    print(E.metrics_report(y, nested_pred, g, title=name))
+
     os.makedirs("results", exist_ok=True)
     df = pd.DataFrame(rows)
     df["nested_overall_f1"] = nested
@@ -145,7 +156,25 @@ def main():
     df["n_windows"] = len(X)
     df["recorded"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     df.to_csv(args.out, index=False)
-    print(f"wrote {args.out}")
+    print(f"\nwrote {args.out}")
+
+    metrics_path = args.out.replace(".csv", "_metrics.csv")
+    pd.DataFrame([
+        E.metrics_row(name, y, nested_pred, groups=g, protocol="nested",
+                      embedding=args.embedding, k=args.k, seconds=round(dt, 1),
+                      recorded=datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+        E.metrics_row(f"{args.embedding} kernel, transductive bw={best_trans:.2f}",
+                      y, trans_pred[best_trans], groups=g, protocol="transductive",
+                      embedding=args.embedding, k=args.k, seconds=round(dt, 1),
+                      recorded=datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+    ]).to_csv(metrics_path, index=False)
+    print(f"wrote {metrics_path} — accuracy, sensitivity, specificity, F1, confusion")
+
+    pred_path = args.out.replace(".csv", "_preds.npz")
+    np.savez_compressed(pred_path, __y=np.asarray(y).astype(str),
+                        __groups=np.asarray(g), nested=nested_pred,
+                        **{f"transductive_bw{b:.2f}": trans_pred[b] for b in BANDWIDTHS})
+    print(f"wrote {pred_path} — out-of-fold predictions")
 
 
 if __name__ == "__main__":

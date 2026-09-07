@@ -678,6 +678,115 @@ roughly classical parity — which is where everything else in this project alre
 
 ---
 
+## 2026-09-06
+
+### E25 — The full metric panel, and a paired bootstrap · 22:09–23:10 · 26 s + 18 min + 37 min
+
+Every number in this log up to E24 is a macro-F1. That is enough to rank models and not
+enough to say what one *does*, and on a 59/19/22 prior the thing you most need to know —
+which class a model quietly abandoned — is exactly what macro-F1 averages away. This
+experiment adds accuracy, per-class sensitivity and specificity, and the confusion matrix
+at both segment and record level, then re-runs every finished model to fill them in.
+
+**Built** (`ecgvmd/evaluate.py`): `per_class_metrics`, `full_metrics`, `metrics_report`,
+`metrics_row`, `cm_string`; `report()` now appends the panel and `evaluate(..., full=True)`
+returns it. Sensitivity and specificity are one-vs-rest — for CHF, "negative" means ARR or
+NSR. Wired into `vqc_run.py`, `kernel_nested_bw.py` and `quantum_kernel_probe.py`, all of
+which now also save their out-of-fold predictions.
+
+**Also built** (`scripts/metrics_table.py`): reads every `results/*_preds.npz`, checks the
+rows align, and writes `results/all_metrics.{csv,md}` — the panel for every model plus a
+paired bootstrap. Seconds to run, because it reads predictions rather than refitting.
+
+    OMP_NUM_THREADS=4 $V scripts/kernel_nested_bw.py                          #  26 s
+    OMP_NUM_THREADS=4 $V scripts/kernel_nested_bw.py --embedding iqp-state \
+        --out results/e25_iqp_nested.csv                                      #  18 min
+    OMP_NUM_THREADS=1 $V scripts/vqc_run.py --epochs 40 --batch-size 32 \
+        --seeds 3 --n-jobs 5 --out results/e25_vqc_fivefold.csv               #  37 min
+    OMP_NUM_THREADS=1 $V scripts/metrics_table.py --n-boot 5000               #   6 min
+
+**Every headline number reproduced exactly** — angle 0.7286, IQP 0.7127, VQC seeds 0.6412
+/ 0.6271 / 0.6602, RF 0.7130, MLP 0.7148 — to four decimals, including every inner-fold
+bandwidth score. E21, E22 and E20 all replicate.
+
+#### Segment level, n=1620
+
+| model | acc | bal-acc | macro-F1 | macro-sens | macro-spec | CHF sens / prec |
+|---|---:|---:|---:|---:|---:|---:|
+| angle kernel, nested bw | 0.7747 | 0.7193 | **0.7286** | 0.7193 | 0.8603 | 0.583 / 0.697 |
+| product-cosine, bw=0.35 | 0.7759 | 0.7075 | 0.7246 | 0.7075 | 0.8557 | 0.557 / 0.720 |
+| MLP, mRMR-12 | 0.7568 | 0.7105 | 0.7148 | 0.7105 | 0.8522 | 0.627 / 0.667 |
+| RF, mRMR-12 | 0.7586 | 0.6988 | 0.7130 | 0.6988 | 0.8455 | 0.573 / 0.708 |
+| IQP kernel, nested bw | 0.7673 | 0.6962 | 0.7127 | 0.6962 | 0.8496 | **0.513** / 0.703 |
+| VQC seed 2 | 0.6883 | 0.6906 | 0.6602 | 0.6906 | 0.8350 | 0.670 / 0.513 |
+| VQC seed 0 | 0.6660 | 0.6787 | 0.6412 | 0.6787 | 0.8276 | **0.723** / **0.468** |
+| VQC seed 1 | 0.6574 | 0.6577 | 0.6271 | 0.6577 | 0.8207 | 0.630 / 0.443 |
+
+Record level (majority vote) is in `results/all_metrics.md`; the ordering is the same, and
+record accuracy runs 0.72–0.83.
+
+#### The paired bootstrap — 5000 resamples of the 162 records, vs RF
+
+Resampled over **records**, not windows: windows from one recording are near-duplicates,
+so resampling them would understate the spread by about the factor a random split inflates
+the score by. Each draw uses the same records for every model, so the interval is on the
+*difference*.
+
+| model | Δ macro-F1 vs RF | 95% CI | P(beats RF) |
+|---|---:|---|---:|
+| angle kernel, nested bw | +0.0156 | [−0.0158, +0.0463] | 0.835 |
+| product-cosine, bw=0.35 | +0.0115 | [−0.0266, +0.0492] | 0.726 |
+| MLP, mRMR-12 | +0.0016 | [−0.0261, +0.0309] | 0.542 |
+| **IQP kernel, nested bw** | **−0.0003** | **[−0.0333, +0.0302]** | **0.509** |
+| VQC seed 2 | −0.0528 | [−0.0971, −0.0092] | 0.010 |
+| VQC seed 0 | −0.0720 | [−0.1175, −0.0285] | 0.001 |
+| VQC seed 1 | −0.0860 | [−0.1280, −0.0441] | 0.000 |
+
+This is a stronger instrument than the E12 noise floor and it agrees with it. The IQP
+interval is centred on zero and straddles it almost symmetrically — **the entangled kernel
+is a coin flip against a random forest**. All three VQC intervals lie entirely below zero,
+which is the first *interval-based* confirmation that the VQC deficit is real rather than
+seed noise. Every classical-vs-classical and kernel-vs-classical comparison in this project
+is inside its own CI, so no ranking among the top five is supportable.
+
+#### What the panel shows that macro-F1 could not
+
+**The entangled map's whole deficit is CHF.** IQP beats RF on raw accuracy (0.7673 vs
+0.7586) while losing on balanced accuracy, macro-F1 and macro-sensitivity, because it buys
+accuracy by leaning on the 59% majority: CHF sensitivity 0.513 against RF's 0.573, and 126
+of 300 CHF windows go to ARR. Its CHF *precision* is fine (0.703, 0.941 at record level) —
+when it says CHF it is right, it just says it too rarely. Going from the product map to the
+entangled one costs 0.583 → 0.513 in CHF sensitivity, which is the concrete form of
+"entanglement does not help here".
+
+**The VQC is not uniformly worse — it is differently calibrated, and that is new.** It has
+the *highest* CHF sensitivity of any model tried (0.630–0.723 against RF's 0.573) and the
+*lowest* CHF precision (0.443–0.513 against 0.708). It over-calls the minority class:
+`class_weight="balanced"` plus a decision surface that is less sharp than the rivals'
+pushes it past the point where the trade pays. Its macro-*sensitivity* (0.658–0.691) is
+nearly RF's (0.699) while its macro-F1 is 0.05–0.09 below — the gap is precision, not
+recall. **A reader with only the macro-F1 would conclude the VQC finds less; it finds
+more, and is wrong more often when it does.**
+
+**Nothing here overturns a conclusion.** Parity for the kernels, a real deficit for the
+VQC, and no quantum model ahead of a classical one on any aggregate metric. The panel
+explains the results rather than revising them.
+
+#### Also fixed: trained weights were being thrown away
+
+`cross_val_predict` discards every fitted estimator, so a 37-minute VQC run left no weights
+behind and every follow-up question meant retraining. `VQCClassifier` gained `save`/`load`
+(the 111 parameters as a plain .npz, no unpickling) and a `__getstate__` that drops the
+QNode so a fitted pipeline survives `joblib.dump`; `vqc_run.py` now fits folds in an
+explicit loop and writes each one to `<out>_models/`. Round-trip verified: reloaded weights
+reproduce the saved out-of-fold predictions exactly.
+
+A saved `.npz` is **not** a classifier on raw features — mRMR picks different features per
+fold and the scaler limits are fold-specific, so weights only mean anything paired with
+their own fold's front end. The `.joblib` carries all three stages together.
+
+---
+
 ## Superseded numbers — the audit trail
 
 Every figure this project reported that has since moved, what replaced it, and why. Kept
@@ -725,5 +834,9 @@ not be cited again until someone reproduces it.
 3. ~~**Bandwidth is selected transductively.**~~ **Closed for both maps** — angle by E21
    (0.7286), IQP by E22 (0.7127). E22 also showed the entangled map is 3.2x more
    sensitive to this leak, so it was never a neutral shortcut.
-4. **CNN falsification test** — see QUANTUM_STAGE.md.
-5. **Quantum genetic feature selector** (paper method 1) — untouched.
+4. ~~**Only macro-F1 is reported.**~~ **Closed by E25** — accuracy, per-class sensitivity
+   and specificity and the confusion matrix, at segment and record level, for every model,
+   plus a paired bootstrap. `results/all_metrics.{csv,md}`, regenerated by
+   `scripts/metrics_table.py`.
+5. **CNN falsification test** — see QUANTUM_STAGE.md.
+6. **Quantum genetic feature selector** (paper method 1) — untouched.

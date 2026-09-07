@@ -502,16 +502,74 @@ class VQCClassifier(BaseEstimator, ClassifierMixin):
         self._circuit = circuit
         return self
 
+    def _qnode(self):
+        """The circuit, rebuilt on demand.
+
+        A QNode holds a device handle and does not pickle, so `__getstate__` drops it and
+        this puts it back. Rebuilding is free — `vqc_qnode` only wires up a device — and
+        it is what lets a fitted model survive `joblib.dump` or `save`/`load`.
+        """
+        c = getattr(self, "_circuit", None)
+        if c is None:
+            c = self._circuit = vqc_qnode(self.n_qubits_, self.n_layers)
+        return c
+
+    def __getstate__(self):
+        return {k: v for k, v in self.__dict__.items() if k != "_circuit"}
+
     def decision_function(self, X):
         from pennylane import numpy as pnp
         check_is_fitted(self, "w_")
         X = np.asarray(X, dtype=float)
+        circuit = self._qnode()
         out = []
         for s in range(0, len(X), 512):
             xb = pnp.array(X[s:s + 512], requires_grad=False)
-            z = np.asarray(pnp.stack(self._circuit(xb, self.w_)).T, dtype=float)
+            z = np.asarray(pnp.stack(circuit(xb, self.w_)).T, dtype=float)
             out.append(self._logits(z, np.asarray(self.W_), np.asarray(self.b_)))
         return np.vstack(out)
 
     def predict(self, X):
         return self.classes_[np.argmax(self.decision_function(X), axis=1)]
+
+    # -- persistence -------------------------------------------------------------
+    #
+    # 111 trained numbers — 72 circuit parameters, 36 head weights, 3 biases — are the
+    # entire product of a 12-minute fit, and until now they were discarded the moment
+    # `cross_val_predict` finished. `save` writes them as a plain .npz that reloads
+    # without PennyLane present and without unpickling anything.
+    #
+    # A saved model is *not* a classifier on raw features. It expects input that has
+    # already been through the fold's fitted `MRMRSelector` and `TanhAngleScaler`, so
+    # save the whole pipeline (`joblib.dump`) when you want end-to-end inference, and
+    # this when you want the weights themselves.
+
+    def save(self, path):
+        """Write the trained parameters, the label order and the fit metadata to .npz."""
+        check_is_fitted(self, "w_")
+        np.savez_compressed(
+            path,
+            w=np.asarray(self.w_, dtype=float),
+            W=np.asarray(self.W_, dtype=float),
+            b=np.asarray(self.b_, dtype=float),
+            classes=np.asarray(self.classes_).astype(str),
+            class_weight=np.asarray(getattr(self, "class_weight_", []), dtype=float),
+            loss=np.asarray(self.loss_, dtype=float),
+            n_qubits=self.n_qubits_, n_layers=self.n_layers, epochs=self.epochs,
+            batch_size=self.batch_size, lr=self.lr, seed=self.seed,
+            n_steps=getattr(self, "n_steps_", 0))
+        return path
+
+    @classmethod
+    def load(cls, path):
+        """Rebuild a ready-to-`predict` classifier from `save`. No training, no gradient."""
+        f = np.load(path, allow_pickle=False)
+        m = cls(n_layers=int(f["n_layers"]), epochs=int(f["epochs"]),
+                batch_size=int(f["batch_size"]), lr=float(f["lr"]), seed=int(f["seed"]))
+        m.w_, m.W_, m.b_ = f["w"], f["W"], f["b"]
+        m.classes_ = f["classes"]
+        m.n_qubits_ = int(f["n_qubits"])
+        m.class_weight_ = f["class_weight"]
+        m.loss_ = list(f["loss"])
+        m.n_steps_ = int(f["n_steps"])
+        return m

@@ -46,6 +46,56 @@ Full 1620 windows, 162 records, record-wise 5-fold, k=12 selected in-fold.
 The noise floor on this dataset is **0.0271** (E12), measured by reseeding one model.
 Everything in the top four is inside it of everything else. The VQC is not.
 
+### Every metric, not just macro-F1
+
+Added 2026-09-06 (E25). Macro-F1 ranks models; it does not say what one *does*, and on a
+59/19/22 prior the thing you most need to know is which class a model quietly abandoned.
+Full panel, segment level, same folds:
+
+| model | acc | bal-acc | macro-F1 | macro-sens | macro-spec | CHF sens / prec |
+|---|---:|---:|---:|---:|---:|---:|
+| angle kernel, nested bw | 0.7747 | 0.7193 | **0.7286** | 0.7193 | 0.8603 | 0.583 / 0.697 |
+| MLP, 32 hidden | 0.7568 | 0.7105 | 0.7148 | 0.7105 | 0.8522 | 0.627 / 0.667 |
+| RandomForest 400 | 0.7586 | 0.6988 | 0.7130 | 0.6988 | 0.8455 | 0.573 / 0.708 |
+| IQP kernel, nested bw | 0.7673 | 0.6962 | 0.7127 | 0.6962 | 0.8496 | **0.513** / 0.703 |
+| VQC, 3 seeds | 0.657–0.688 | 0.658–0.691 | 0.627–0.660 | 0.658–0.691 | 0.821–0.835 | 0.630–0.723 / **0.443–0.513** |
+
+Record level and every confusion matrix: `results/all_metrics.md`, regenerated in seconds
+from saved predictions by `scripts/metrics_table.py`.
+
+**A paired bootstrap over the 162 records** (5000 resamples, same records drawn for every
+model, so the interval is on the difference) is a sharper instrument than the noise floor
+and agrees with it:
+
+| vs RandomForest | Δ macro-F1 | 95% CI | P(beats RF) |
+|---|---:|---|---:|
+| angle kernel | +0.0156 | [−0.0158, +0.0463] | 0.835 |
+| **IQP kernel** | **−0.0003** | **[−0.0333, +0.0302]** | **0.509** |
+| VQC (worst → best seed) | −0.0860 → −0.0528 | all three entirely below 0 | ≤ 0.010 |
+
+**The entangled kernel is a coin flip against a random forest.** All three VQC intervals
+lie wholly below zero — the first interval-based confirmation that its deficit is real
+rather than seed noise.
+
+Two things the panel shows that macro-F1 could not:
+
+**IQP's entire deficit is CHF.** It beats RF on raw accuracy (0.7673 vs 0.7586) while
+losing on balanced accuracy and macro-F1, because it buys that accuracy by leaning on the
+59% majority: CHF sensitivity 0.513 against RF's 0.573, with 126 of 300 CHF windows going
+to ARR. Its CHF precision is fine — when it says CHF it is right, it just says it too
+rarely. Going from the product map to the entangled one costs 0.583 → 0.513 in CHF
+sensitivity. That is what "entanglement does not help here" looks like concretely.
+
+**The VQC is not uniformly worse — it is differently calibrated.** It has the *highest*
+CHF sensitivity of any model tried (0.630–0.723 vs RF's 0.573) and the *lowest* CHF
+precision (0.443–0.513 vs 0.708). Its macro-*sensitivity* nearly matches RF's while its
+macro-F1 sits 0.05–0.09 below: the gap is precision, not recall. It over-calls the
+minority class. A reader with only the macro-F1 would conclude the VQC finds less; it
+finds more, and is wrong more often when it does.
+
+Neither revises a conclusion. Parity for the kernels, a real deficit for the VQC, no
+quantum model ahead of a classical one on any aggregate metric.
+
 ---
 
 ## What was built

@@ -39,7 +39,6 @@ import ecgvmd as E
 from ecgvmd.quantum import QuantumKernelSVC, TanhAngleScaler, gram_matrix
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import f1_score
 from sklearn.model_selection import StratifiedGroupKFold, cross_val_predict
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
@@ -96,12 +95,15 @@ def main():
     def score(name, est, note=""):
         t = time.time()
         pred = cross_val_predict(est, X, y, cv=cv, groups=g)
-        f1 = f1_score(y, pred, average="macro")
         dt = time.time() - t
-        print(f"  {name:<44s} macro-F1 {f1:.4f}   ({dt:6.1f}s) {note}")
-        rows.append({"model": name, "macro_f1": f1, "seconds": dt,
-                     "n_windows": len(X), "k": args.k, "note": note})
-        return f1
+        row = E.metrics_row(name, y, pred, groups=g, seconds=round(dt, 1), k=args.k,
+                            note=note)
+        print(f"  {name:<44s} macro-F1 {row['macro_f1']:.4f}   ({dt:6.1f}s) {note}")
+        print(f"    acc {row['accuracy']:.4f}  macro-sens {row['macro_sensitivity']:.4f}"
+              f"  macro-spec {row['macro_specificity']:.4f}  "
+              + "  ".join(f"{c} sens {row[f'sens_{c}']:.3f}" for c in E.CLASS_ORDER))
+        rows.append(row)
+        return row["macro_f1"]
 
     print("\nclassical controls (identical rows, identical folds):")
     score("RF (all features, no selection)",

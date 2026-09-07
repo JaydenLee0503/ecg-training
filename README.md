@@ -33,6 +33,16 @@ random forest at 0.7130 on the same twelve features. Plain angle encoding turns 
 classically tractable by construction, and adding entanglement makes the score *worse*,
 not better.
 
+**Every metric, not just macro-F1** (E25). Accuracy, per-class sensitivity and
+specificity, and the confusion matrix, at segment and record level, for every model —
+`results/all_metrics.md`, regenerated in seconds from saved predictions by
+`scripts/metrics_table.py`. A paired bootstrap over the 162 records puts the entangled
+IQP kernel at Δ macro-F1 **−0.0003, 95% CI [−0.0333, +0.0302]** against the random forest:
+a coin flip. All three VQC intervals lie entirely below zero. The panel also names the
+failure the average was hiding — IQP's whole deficit is CHF sensitivity (0.513 vs RF's
+0.573), and the VQC has the *highest* CHF sensitivity of any model with the *lowest* CHF
+precision, so it over-calls the minority class rather than missing it.
+
 The classical→quantum handoff is unchanged: `ecgvmd/select.py::quantum_ready` scales
 features into rotation angles and notebook 3 writes
 `features/quantum_<signature>_q12.npz`, though the estimators in `ecgvmd/quantum.py` read
@@ -66,6 +76,7 @@ If you are holding an old number, look it up there.
 | the kernel numbers, leak-free | `$V scripts/kernel_nested_bw.py` | 26 s |
 | the entangled kernel, leak-free | `$V scripts/kernel_nested_bw.py --embedding iqp-state` | 18 min |
 | the variational classifier | `OMP_NUM_THREADS=1 $V scripts/vqc_run.py --epochs 40 --batch-size 32 --seeds 3 --n-jobs 5` | 37 min |
+| the metric panel, every model | `$V scripts/metrics_table.py` | 6 min |
 
 **Set `OMP_NUM_THREADS` before any quantum run.** A 12-qubit statevector is 64 KB and
 fits in cache, so there is not enough work per gate to feed many threads; left unset,
