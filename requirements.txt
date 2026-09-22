@@ -16,6 +16,12 @@ jupyterlab==4.6.3
 ipykernel==7.3.0
 ipywidgets==8.1.9
 
+# --- scattering front end (ecgvmd/scatter.py) -----------------------------
+# Imported lazily and ONLY by `scatter_kymatio`, the reference backend. `scatter_batch`
+# is pure numpy/scipy and needs nothing here; kymatio is what `scatter_check` compares
+# it against, so keep the pin if you ever intend to re-run that cross-check.
+kymatio==0.3.0
+
 # --- quantum stage (ecgvmd/quantum.py) ------------------------------------
 # Imported lazily, so the classical pipeline runs without these installed.
 # lightning.qubit is the C++ statevector simulator; 12 qubits is trivial for it.

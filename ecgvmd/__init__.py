@@ -8,6 +8,12 @@ The pipeline, in order:
     evaluate()          features               -> record-wise cross-validated scores
     MRMRSelector        ~250 features          -> a qubit-sized subset
 
+`scatter_batch` + `scatter_features` is the alternative front end: it replaces the middle
+two lines of that table (VMD and the 28-descriptors-per-mode reduction) with one wavelet
+scattering transform whose coefficients are already the features. Everything downstream -
+selection, splitting, the quantum stage - is shared, which is what makes the two
+comparable. See `scatter.py` and `architects/`.
+
 Typical use:
 
     from ecgvmd import load_ecgdata, segment, extract_features, evaluate, CFG
@@ -31,6 +37,8 @@ from .select import rank_anova, mrmr_select, MRMRSelector, quantum_ready
 from .quantum import (TanhAngleScaler, angle_kernel_qnode, iqp_kernel_qnode,
                       product_angle_kernel, gram_matrix, QuantumKernelSVC,
                       vqc_qnode, VQCClassifier)
+from .scatter import (ScatterResult, scatter_batch, scatter_kymatio, scatter_features,
+                      scatter_check, morlet_bank_table, order1_envelopes)
 
 __version__ = "0.1.0"
 
@@ -50,4 +58,6 @@ __all__ = [
     "TanhAngleScaler", "angle_kernel_qnode", "iqp_kernel_qnode",
     "product_angle_kernel", "gram_matrix", "QuantumKernelSVC",
     "vqc_qnode", "VQCClassifier",
+    "ScatterResult", "scatter_batch", "scatter_kymatio", "scatter_features",
+    "scatter_check", "morlet_bank_table", "order1_envelopes",
 ]
