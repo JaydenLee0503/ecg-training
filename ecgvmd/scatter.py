@@ -123,7 +123,12 @@ class ScatterResult:
 
     @property
     def bin_seconds(self) -> float:
-        """Seconds of signal per output time bin - i.e. the invariance scale."""
+        """Output time-bin spacing in seconds (dyadic subsampling stride)."""
+        return 2 ** int(math.floor(math.log2(self.T))) / self.fs
+
+    @property
+    def invariance_seconds(self) -> float:
+        """Low-pass averaging scale in seconds; can differ from bin spacing."""
         return self.T / self.fs
 
     def meta(self):

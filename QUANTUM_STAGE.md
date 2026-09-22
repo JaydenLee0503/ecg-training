@@ -1,14 +1,20 @@
 # The quantum stage — what was built, what was measured, what it means
 
+**Patient-grouping correction (2026-09-21).** These are historical row-grouped
+results. Different leads and repeat recordings from the same patient crossed folds,
+so these scores and model rankings do not establish patient-independent performance.
+See [the corrected VMD/WST comparison](architects/patient_vmd_wst_vqc.md).
+
 Companion to [README.md](README.md#the-quantum-stage--the-original-design), which
 describes the *plan*. This
 file records what happened when the plan met the data. Written 2026-08-29,
 **concluded 2026-08-30**.
 
 Both paths are now finished: the quantum kernel (path A, with and without entanglement)
-and the variational classifier (path B). Every number below is leak-free — feature
-selection, angle scaling *and* kernel bandwidth are all fitted inside the training fold —
-and reproduces from the commands in [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md).
+and the variational classifier (path B). Feature selection, angle scaling, and kernel
+bandwidth were fitted inside each training fold, but the grouping issue above still
+allowed patient overlap. Historical commands and configurations are recorded in
+[EXPERIMENT_LOG.md](EXPERIMENT_LOG.md); current defaults use verified patient groups.
 
 **Several numbers in earlier versions of this file have been superseded**, including the
 headline. The full audit trail is in

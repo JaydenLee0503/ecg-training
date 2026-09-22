@@ -1,5 +1,10 @@
 # Wavelet scattering vs VMD as the front end to the quantum classifier
 
+**Historical protocol:** the results below grouped separated ECG leads by row,
+not by verified patient. Do not use them as patient-independent performance estimates
+or as a definitive method ranking. See [the corrected comparison](patient_vmd_wst_vqc.md)
+for the verified source mapping and matched patient-grouped rerun.
+
 *Run 2026-09-21. Code: `ecgvmd/scatter.py`, `scripts/wst_vs_vmd_vqc.py`. Artefacts:
 `results/wst_vs_vmd_vqc.{csv,log}`, `results/wst_vs_vmd_vqc_preds.npz`,
 `architects/scatter_check.csv`, `architects/morlet_bank_J6_Q8.csv`,

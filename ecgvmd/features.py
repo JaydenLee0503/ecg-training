@@ -315,7 +315,7 @@ class FeatureBundle:
         return float((self.iters >= self.cfg.max_iter).mean())
 
     def describe(self) -> str:
-        lines = [f"{len(self.y)} segments from {len(np.unique(self.groups))} records",
+        lines = [f"{len(self.y)} segments from {len(np.unique(self.groups))} groups",
                  f"config: {self.cfg.summary()}"]
         if self.iters is not None:
             lines.append(f"VMD capped fraction: {100 * self.capped_fraction:.1f}%")

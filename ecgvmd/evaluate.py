@@ -1,13 +1,10 @@
 """Evaluation protocol.
 
-One rule dominates everything else here: **split by record, never by segment.**
-Segments from the same recording are near-duplicates. A random split puts some of a
-patient's segments in train and the rest in test, and the model recognises the patient
-rather than the pathology. Measured on this dataset that is worth about +0.12 macro-F1
-of pure illusion.
+Split by verified patient ID, keeping both leads and any repeat recordings together.
+Row-level groups are insufficient for ECGData, whose rows contain separated leads.
 
-`StratifiedGroupKFold` on the record id is therefore the default and `evaluate` refuses
-to run without groups unless you explicitly ask for the leaky variant.
+`StratifiedGroupKFold` is the default. Its caller must supply the right identities;
+`segment()` supplies verified patient IDs by default.
 """
 from __future__ import annotations
 
@@ -41,10 +38,10 @@ def naive_cv(cfg: Config | None = None):
 
 
 def record_vote(pred, groups, truth):
-    """Majority vote of segment predictions within each record.
+    """Majority vote within the supplied groups (patients in the corrected pipeline).
 
-    A clinician diagnoses a recording, not a 3.9-second window, so this is the metric
-    that corresponds to the actual task.
+    The historical function/metric names use "record" for API compatibility.
+    Callers reporting patient-level results should label the aggregation accordingly.
     """
     pred, groups, truth = np.asarray(pred), np.asarray(groups), np.asarray(truth)
     recs = np.unique(groups)

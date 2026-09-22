@@ -49,7 +49,7 @@ def build_parser():
     g.add_argument("--tau", type=float, default=0.0)
     g.add_argument("--no-dc", action="store_true", help="do not pin mode 0 at 0 Hz")
     g.add_argument("--tol", type=float, default=1e-7)
-    g.add_argument("--max-iter", type=int, default=500)
+    g.add_argument("--max-iter", type=int, default=2000)
     g.add_argument("--chunk", type=int, default=64)
 
     g = p.add_argument_group("output")
@@ -82,7 +82,7 @@ def main():
 
     W, y, g = E.segment(ds, cfg)
     print(f"\nsegmented: {W.shape[0]} windows x {W.shape[1]} samples from "
-          f"{len(np.unique(g))} records")
+          f"{len(np.unique(g))} patients")
     print("  class balance:", dict(zip(*np.unique(y, return_counts=True))))
 
     fb = E.extract_features(W, y, g, cfg, with_control=not args.no_control,
@@ -96,7 +96,7 @@ def main():
 
     if not args.no_eval:
         import pandas as pd
-        print("\ncross-validating (record-wise splits)...")
+        print("\ncross-validating (patient-wise splits)...")
         rows = E.compare_blocks(fb, cfg)
         df = pd.DataFrame(rows).set_index("feature set")
         print(df.round(4).to_string())

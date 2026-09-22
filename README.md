@@ -1,12 +1,41 @@
 # ECG arrhythmia classification with Variational Mode Decomposition
 
+**Patient-grouping correction (2026-09-21).** ECGData's 162 rows are separated leads
+from 81 source recordings and 80 patients. The older result tables below used row
+groups and are historical exploratory results, not patient-independent estimates.
+`load_ecgdata()` now verifies the checked-in source mapping against each waveform;
+`segment()` groups by patient by default. Explicit `grouping="row"` is available only
+for reproducing the old protocol. Source matching and the repeat subject in MIT-BIH
+records 201/202 are documented in [the corrected comparison](architects/patient_vmd_wst_vqc.md).
+
+For the corrected VMD + VQC versus standard WST + VQC comparison, run from the root:
+
+```bash
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python run_pipeline.py --n-per-record 10 --max-iter 2000 --no-eval --no-control --keep-imfs --out features/fixed_K8_a2000_L500_it2000_comparison.npz
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python scripts/matched_vqc.py --vmd-features features/fixed_K8_a2000_L500_it2000_comparison.npz --n-jobs 5
+OPENBLAS_NUM_THREADS=1 python scripts/summarize_patient_vqc.py
+```
+
+The final command computes paired patient-bootstrap intervals after all folds finish.
+The comparison retries any capped VMD windows, uses 224 VMD mode descriptors versus
+882 standard log-scattering features, selects 12 inside each training fold, and fits
+the same VQC with three seeds on identical patient folds. Outputs and resumable fold
+checkpoints go to `results/patient_vmd_wst_vqc/`. The source excerpts are only needed
+to reverify the mapping; training uses the existing `ECGData.mat` exclusively.
+
+The completed three-seed run gives **67.98% window accuracy for VMD + VQC** and
+**64.79% for WST + VQC**; patient-vote accuracy is 80.00% and 78.33%, respectively.
+The paired patient-bootstrap intervals include zero difference. Full metrics,
+uncertainty, and limitations are in [the corrected comparison](architects/patient_vmd_wst_vqc.md).
+
 Three exploratory notebooks merged into one pipeline. The classical signal-processing
 half is finished and measured; the quantum deep-learning half plugs in at a documented
 interface (`features/quantum_*.npz`).
 
-**Task.** 162 ECG recordings (8.5 min each, 128 Hz) in three classes — **ARR**
-(arrhythmia, 96 records), **CHF** (congestive heart failure, 30), **NSR** (normal sinus
-rhythm, 36). Predict the class from the signal.
+**Task.** 162 ECG lead rows (8.5 min each, 128 Hz) in three classes — **ARR**
+(arrhythmia, 96 rows from 47 patients), **CHF** (congestive heart failure, 30 rows
+from 15 patients), **NSR** (normal sinus rhythm, 36 rows from 18 patients).
+Predict the class from the signal of a held-out patient.
 
 **Approach.** Cut each recording into short windows, decompose each window into `K`
 intrinsic mode functions with VMD, reduce each IMF to 28 descriptors, select a
@@ -15,6 +44,11 @@ qubit-sized subset, and classify.
 ---
 
 ## Status — what is done, and what to run
+
+The numerical results and runtimes in the sections below describe the historical
+row-grouped experiments. Current commands use patient groups and a higher VMD
+iteration limit, so they will not reproduce those historical tables. Use the
+corrected comparison above for the current two-pipeline experiment.
 
 **Finished and measured.** Loading, segmentation, the VMD solver and its convergence
 bookkeeping, the 28-descriptor IMF feature extraction, record-wise cross-validation, the
@@ -70,7 +104,7 @@ If you are holding an old number, look it up there.
 | what | command | time |
 |---|---|---|
 | wiring check, 3 windows/record | `$V run_pipeline.py --smoke` | 35 s |
-| **reproduce the tables below** | `$V run_pipeline.py --n-per-record 10` | 1 min 17 s |
+| extraction and evaluation, 10 windows/row | `$V run_pipeline.py --n-per-record 10` | historical: 1 min 17 s |
 | every window (21222 of them) | `$V run_pipeline.py` | 8 min 47 s |
 | the convergence experiment | `$V scripts/alpha_sweep.py` | ~40 min |
 | the kernel numbers, leak-free | `$V scripts/kernel_nested_bw.py` | 26 s |
@@ -184,7 +218,7 @@ cd /mnt/d/Projects/test-ecg-training
 V=~/venvs/test-ecg-training/bin/python
 
 $V run_pipeline.py --smoke                    # 35 s, checks the wiring
-$V run_pipeline.py --n-per-record 10          # 1 min, reproduces the published tables
+$V run_pipeline.py --n-per-record 10          # current patient-grouped evaluation
 $V run_pipeline.py                            # every window (21222), 9 min
 $V run_pipeline.py --seg-mode beat --n-per-record 25 --keep-imfs
 $V scripts/alpha_sweep.py                     # the convergence experiment, ~40 min

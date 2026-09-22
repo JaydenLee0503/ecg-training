@@ -1,0 +1,16 @@
+{
+  "dataset_sha256": "031ccc6b3fc905742e70a44d810377ba655dd58b346c84485e9e7beab03d140a",
+  "rows": 162,
+  "sources": 81,
+  "patients": 80,
+  "minimum_correlation": 0.9999923821353883,
+  "minimum_margin": 0.0020552836353489035,
+  "excerpt_seconds": 12,
+  "excerpt_start_seconds": [
+    0,
+    256
+  ],
+  "validation": "Both 10-second interiors independently identify the same source channel",
+  "repeat_subject_source": "https://physionet.org/physiobank/database/html/mitdbdir/intro.htm",
+  "signal_format_source": "https://physionet.org/physiotools/wag/signal-5.htm"
+}

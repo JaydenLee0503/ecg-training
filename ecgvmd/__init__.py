@@ -2,10 +2,10 @@
 
 The pipeline, in order:
 
-    load_ecgdata()      ECGData.mat            -> 162 records x 65536 samples
+    load_ecgdata()      ECGData.mat            -> 162 lead rows, 80 verified patients
     segment()           records                -> (B, 500) windows + labels + GROUPS
     extract_features()  windows                -> IMF feature blocks (FeatureBundle)
-    evaluate()          features               -> record-wise cross-validated scores
+    evaluate()          features               -> patient-wise cross-validated scores
     MRMRSelector        ~250 features          -> a qubit-sized subset
 
 `scatter_batch` + `scatter_features` is the alternative front end: it replaces the middle

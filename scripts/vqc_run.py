@@ -62,12 +62,19 @@ from sklearn.preprocessing import StandardScaler
 
 
 def load(path, block):
+    import json
     if path is None:
         c = [p for p in glob.glob("features/*.npz") if "quantum" not in p]
         if not c:
             sys.exit("no feature .npz found — run run_pipeline.py first")
         path = max(c, key=os.path.getmtime)
     f = np.load(path, allow_pickle=True)
+    cfg = E.Config(**json.loads(str(f['__config'])))
+    _, expected_y, expected_groups = E.segment(E.load_ecgdata(), cfg)
+    if not (np.array_equal(f['__y'].astype(str), expected_y.astype(str))
+            and np.array_equal(f['__groups'], expected_groups)):
+        raise ValueError('Feature archive does not use verified patient groups. Rebuild it with '
+                         'run_pipeline.py, or use scripts/matched_vqc.py for the corrected comparison.')
     return path, f[f"X::{block}"], f["__y"], f["__groups"]
 
 
@@ -84,7 +91,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--features", default=None)
     ap.add_argument("--block", default="VMD modes + rhythm")
-    ap.add_argument("--n-per-record", type=int, default=0, help="0 = all windows")
+    ap.add_argument("--n-per-record", type=int, default=0,
+                    help="legacy option name: windows per patient group; 0 = all windows")
     ap.add_argument("--k", type=int, default=12, help="qubits = selected features")
     ap.add_argument("--layers", type=int, default=2)
     ap.add_argument("--epochs", type=int, default=60)
@@ -108,7 +116,7 @@ def main():
     X, y, g = X[idx], y[idx], g[idx]
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{stamp}] {path}")
-    print(f"block {args.block!r}: {X.shape}, {len(np.unique(g))} records, "
+    print(f"block {args.block!r}: {X.shape}, {len(np.unique(g))} patients, "
           f"classes {dict(zip(*np.unique(y, return_counts=True)))}")
 
     cv = StratifiedGroupKFold(5, shuffle=True, random_state=0)

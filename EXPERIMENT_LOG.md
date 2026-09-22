@@ -1,5 +1,11 @@
 # Experiment log — the quantum stage
 
+**Patient-grouping correction (2026-09-21).** The historical experiments below used
+ECGData row IDs. Those rows include different leads and repeat recordings from the
+same patient, so the scores do not establish performance on independent patients.
+See [the corrected VMD/WST comparison](architects/patient_vmd_wst_vqc.md) for verified
+patient groups and the new protocol. The original entries are retained as history.
+
 A running lab notebook. Newest entries at the bottom. Every row is something that was
 actually run; failures and bugs are recorded alongside results, because a number that
 came from a broken configuration is the most dangerous kind.
@@ -840,3 +846,17 @@ not be cited again until someone reproduces it.
    `scripts/metrics_table.py`.
 5. **CNN falsification test** — see QUANTUM_STAGE.md.
 6. **Quantum genetic feature selector** (paper method 1) — untouched.
+
+## 2026-09-21 22:45 EDT — corrected patient-grouped VMD/WST comparison
+
+Verified ECGData's 162 lead rows against original source excerpts: 81 recordings,
+80 patients, with MIT-BIH 201/202 merged. The existing training data was unchanged.
+Both pipelines used the same 1,620 windows and five patient folds, in-fold mRMR-12
+and scaling, and a 40-epoch VQC with three initialization seeds. All 30 fits finished;
+adaptive VMD retries left zero iteration-capped windows.
+
+Mean window accuracy / macro-F1: VMD **0.6798 / 0.6489**, standard WST
+**0.6479 / 0.6192**. Patient-vote accuracy: **0.8000 / 0.7833**.
+Paired patient-bootstrap intervals include zero difference. The earlier row-grouped
+results are historical, not independent-patient estimates. Protocol, validation,
+saved artifacts, and intervals: [corrected comparison](architects/patient_vmd_wst_vqc.md).

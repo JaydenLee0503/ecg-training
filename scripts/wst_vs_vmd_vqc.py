@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 """Wavelet scattering vs VMD as the front end to the same quantum classifier.
 
+This is the historical exploratory runner, including asymmetric rhythm features and
+the separate Morlet-envelope descriptor arm. Use scripts/matched_vqc.py for the
+corrected two-arm, patient-grouped comparison with converged VMD.
+
 The question is about the FRONT END, not about the classifier. So everything after the
 front end is held fixed and identical: the same 1620 windows in the same order, the same
 `StratifiedGroupKFold(5, random_state=0)` splits, the same in-fold `MRMRSelector(k=12)`,
@@ -88,24 +92,26 @@ def build_blocks(args):
 
     ds = E.load_ecgdata(args.mat)
     W, y, g = E.segment(ds, cfg)
-    print(f"segmented: {W.shape} from {len(np.unique(g))} records")
+    print(f"segmented: {W.shape} from {len(np.unique(g))} patients")
 
     # The whole comparison rests on this.
     if W.shape[0] != len(y_v):
         sys.exit(f"row count differs: {W.shape[0]} segmented vs {len(y_v)} in the .npz, "
                  f"under the .npz's own config. Something other than segmentation "
                  f"changed - do not paper over this.")
-    assert np.array_equal(np.asarray(y).astype(str), np.asarray(y_v).astype(str)), \
-        "labels differ between segment() and the .npz - rows are not aligned"
-    assert np.array_equal(np.asarray(g), np.asarray(g_v)), \
-        "groups differ between segment() and the .npz - rows are not aligned"
+    if not np.array_equal(np.asarray(y).astype(str), np.asarray(y_v).astype(str)):
+        raise ValueError("Labels differ between segment() and the .npz; rows are not aligned")
+    if not np.array_equal(np.asarray(g), np.asarray(g_v)):
+        raise ValueError("Feature archive does not use verified patient groups. "
+                         "Use scripts/matched_vqc.py for the corrected comparison.")
     print("row alignment: labels and groups match the .npz elementwise")
 
     t = time.time()
     res = E.scatter_batch(W, J=args.J, Q=(args.Q1, args.Q2), T=args.T,
                           max_order=args.max_order, fs=cfg.fs)
     print(f"\n{res!r}\n  {time.time() - t:.1f}s for {W.shape[0]} windows "
-          f"({res.bin_seconds:.2f} s invariance per bin)")
+          f"({res.bin_seconds:.2f} s bin spacing, "
+          f"{res.invariance_seconds:.2f} s averaging scale)")
 
     blocks = {VMD_BLOCK: Xv}
     blocks[PRIMARY] = E.scatter_features(res, log=True)[0]

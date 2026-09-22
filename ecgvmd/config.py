@@ -34,7 +34,7 @@ class Config:
     dc: bool = True          # pin mode 0 at omega=0 so it absorbs baseline wander
     init: int = 1            # 1 = uniform omega spread (deterministic)
     tol: float = 1e-7
-    max_iter: int = 500      # see notebooks/01 - at low alpha this cap BINDS
+    max_iter: int = 2000     # check capped_fraction; matched VQC runner retries capped windows
     chunk: int = 64          # batch rows per vmd_batch call (cache-friendly)
 
     # ---- evaluation ---------------------------------------------------------

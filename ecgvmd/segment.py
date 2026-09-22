@@ -7,9 +7,9 @@ Two strategies, both producing the same three arrays (windows, labels, groups):
 * **beat**   - windows centred on detected R-peaks, so morphology is aligned across
                samples. Costs an R-peak detector and throws away the inter-beat gaps.
 
-`groups` is the record id and must be carried everywhere: splitting without it inflates
-every score by ~12 macro-F1 points on this dataset (segments of one patient land on
-both sides of the split).
+`groups` defaults to the verified patient id, keeping all leads, recordings, and
+windows from one person together. Row identifiers are available explicitly for
+reproducing older experiments, but do not establish patient independence.
 """
 from __future__ import annotations
 
@@ -102,7 +102,7 @@ def beat_windows(data: np.ndarray, labels: np.ndarray, record_ids: np.ndarray,
         pk = detect_r_peaks(sig, fs)
         pk = pk[(pk > half) & (pk < len(sig) - half)]
         if len(pk) < min_beats:
-            skipped.append(int(record_ids[i]))
+            skipped.append(str(record_ids[i]))
             continue
         take = min(n_per_record, len(pk)) if n_per_record else len(pk)
         sel = np.sort(rng.choice(len(pk), take, replace=False))
@@ -131,17 +131,20 @@ def standardise(W: np.ndarray) -> np.ndarray:
     return (W - mu) / (sd + EPS)
 
 
-def segment(ds, cfg: Config | None = None, zscore: bool = True):
+def segment(ds, cfg: Config | None = None, zscore: bool = True,
+            grouping: str = "patient"):
     """Dispatch on `cfg.seg_mode` and return `(windows, labels, groups)`.
 
-    `windows` is z-scored per window unless `zscore=False`.
+    `windows` is z-scored per window unless `zscore=False`. `grouping="patient"`
+    is the default. `grouping="row"` is only for row identities or legacy runs.
     """
     cfg = cfg or CFG
     kw = dict(seg_len=cfg.seg_len, n_per_record=cfg.n_per_record,
               stride=cfg.seg_stride, seed=cfg.seed)
+    ids = ds.group_ids(grouping)
     if cfg.seg_mode == "fixed":
-        W, y, g = fixed_windows(ds.data, ds.labels, ds.record_ids, **kw)
+        W, y, g = fixed_windows(ds.data, ds.labels, ids, **kw)
     else:
         kw["n_per_record"] = cfg.n_per_record or 25
-        W, y, g = beat_windows(ds.data, ds.labels, ds.record_ids, fs=cfg.fs, **kw)
+        W, y, g = beat_windows(ds.data, ds.labels, ids, fs=cfg.fs, **kw)
     return (standardise(W) if zscore else W), y, g
