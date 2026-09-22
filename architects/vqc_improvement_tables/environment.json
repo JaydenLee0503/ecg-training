@@ -1,0 +1,38 @@
+{
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "logical_cpus": 16,
+  "git_base": "6646760711f5380c032a586a3e103ad237ce0b8d",
+  "packages": {
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.0",
+    "pennylane": "0.45.1",
+    "pennylane-lightning": "0.45.0",
+    "autograd": "1.8.0",
+    "joblib": "1.5.3",
+    "pandas": "3.0.5"
+  },
+  "training_threads": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "n_jobs": 10
+  },
+  "snapshots": {
+    "ecgvmd/config.py": "0e5ae80c6c91bee38b3e8ec522f4a552d9d3a0e1d5729f1ee617ea1ac52fa9f0",
+    "ecgvmd/data.py": "ee16e893508110b733750fc8f9643a079952705e0ff61a279689f56fc330e5b5",
+    "ecgvmd/vmd.py": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00",
+    "ecgvmd/segment.py": "bf104ea1b5054499359ce8e72fda8092eb223db939b3318ec464a368441d9a3e",
+    "ecgvmd/features.py": "f4335fcaef9123bee0d6f0845c6a26466562d7576a96cb7ff15f0289898e1fe2",
+    "ecgvmd/select.py": "35e34bf562b0fed1c9d415f47186e3c163f21af5af3b05ec57ffa5c1c3384c9c",
+    "ecgvmd/evaluate.py": "cb4454b384336dbdba9630ffd41bc1e1e345cf1b9e9794b3a98ca80824833ed1",
+    "ecgvmd/__init__.py": "3cce8d98353320d56897fc2cdef0dbb531c033edcf7b8a33db83fb434cc31443",
+    "ecgvmd/quantum.py": "089b70ca430a7aaf1ef49058b2f663c96c54fc99f3d7ec0761de123040e24af3",
+    "ecgvmd/scatter.py": "5a4a25203df37abf74afb7768337775da36bbe26516f1ca9cf1741c03fa44a14",
+    "ecgvmd/reupload.py": "b1adea7570aa4a890daa3b40116d3a2e2db2f16fe180ef6b271a4928c764fef9",
+    "scripts/improve_vqc.py": "ecab7688770e293aebbaeefa898cec51f5b307780f2a60028f5c005ed3db6264",
+    "scripts/report_vqc_improvement.py": "a463ab128f63d0f299f4541549f0aa73d76b8378726b21be92fd05b20157af8c",
+    "requirements.txt": "39959fb456c77da89a5b8f327fc891686baeb80f1805b8a68a328c2b3c7bcebb",
+    "architects/vqc_improvement_protocol.md": "cfc09befff39afa54b859e03988124f24fe423cadf783e9e31bccb48ea963d46"
+  }
+}

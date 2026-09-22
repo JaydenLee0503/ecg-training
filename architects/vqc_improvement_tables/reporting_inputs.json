@@ -1,0 +1,7 @@
+{
+  "results/patient_vmd_wst_vqc/predictions.npz": "6b17e1030fe6610725203f739f0002026c004d4cb1fa0a4c617afa56dccc5421",
+  "results/patient_vmd_wst_vqc/manifest.json": "6c19f63e694f428a20c537e460267f01d690202b25aca2dbabd92f3a29e0dc41",
+  "results/patient_knn_diagnostic/predictions.npz": "4b47ea14b2c1f0b4cb4b99b44fe5bd62afac9dc63e2deba08186dea3d778a2a6",
+  "scripts/report_vqc_improvement.py": "4197062875a497d153bddd3c7ecdb2dc8d776ce2f4099ac50e26f2ca495178cb",
+  "tests/test_reupload_vqc.py": "6ea1e0ece389872baa93427ab1a007d7e74f79bd45aeffb48e2689275b98ed96"
+}

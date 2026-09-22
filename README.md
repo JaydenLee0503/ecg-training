@@ -1,5 +1,15 @@
 # ECG arrhythmia classification with Variational Mode Decomposition
 
+**VQC improvement study (completed 2026-09-22).** A nested, 120-fit experiment with
+compact circuits, repeated encoding, richer measurements, and epoch selection did
+not establish an improvement. Mean window accuracy was **67.94% for VMD** and
+**63.05% for WST**, versus the original 67.98% and 64.79%. Macro-F1 was 0.6552 and
+0.6011; both paired intervals for change from the originals include zero. All trials,
+8,280 epoch records, figures, uncertainty, checks, and reproduction commands are in
+the [experiment record](architects/vqc_improvement_results.md). The
+[declared protocol](architects/vqc_improvement_protocol.md) was fixed before candidate
+scoring. Original results below remain the reference comparison.
+
 **Patient-grouping correction (2026-09-21).** ECGData's 162 rows are separated leads
 from 81 source recordings and 80 patients. The older result tables below used row
 groups and are historical exploratory results, not patient-independent estimates.

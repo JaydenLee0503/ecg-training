@@ -1,0 +1,102 @@
+{
+  "vmd/fold0": {
+    "arm": "vmd",
+    "outer_fold": 0,
+    "candidate": "reupload_2",
+    "candidate_order": 1,
+    "n_layers": 2,
+    "epochs": 20,
+    "macro_f1": 0.5981541577304103,
+    "accuracy": 0.62109375
+  },
+  "vmd/fold1": {
+    "arm": "vmd",
+    "outer_fold": 1,
+    "candidate": "compact_once",
+    "candidate_order": 0,
+    "n_layers": 2,
+    "epochs": 60,
+    "macro_f1": 0.6311016535478311,
+    "accuracy": 0.6661538461538462
+  },
+  "vmd/fold2": {
+    "arm": "vmd",
+    "outer_fold": 2,
+    "candidate": "compact_once",
+    "candidate_order": 0,
+    "n_layers": 2,
+    "epochs": 40,
+    "macro_f1": 0.6725166290629856,
+    "accuracy": 0.6976923076923077
+  },
+  "vmd/fold3": {
+    "arm": "vmd",
+    "outer_fold": 3,
+    "candidate": "compact_once",
+    "candidate_order": 0,
+    "n_layers": 2,
+    "epochs": 20,
+    "macro_f1": 0.6371195710519255,
+    "accuracy": 0.6707692307692308
+  },
+  "vmd/fold4": {
+    "arm": "vmd",
+    "outer_fold": 4,
+    "candidate": "compact_once",
+    "candidate_order": 0,
+    "n_layers": 2,
+    "epochs": 40,
+    "macro_f1": 0.6299745690086015,
+    "accuracy": 0.6684615384615384
+  },
+  "wst/fold0": {
+    "arm": "wst",
+    "outer_fold": 0,
+    "candidate": "reupload_3",
+    "candidate_order": 2,
+    "n_layers": 3,
+    "epochs": 80,
+    "macro_f1": 0.5632971493260182,
+    "accuracy": 0.60703125
+  },
+  "wst/fold1": {
+    "arm": "wst",
+    "outer_fold": 1,
+    "candidate": "compact_once",
+    "candidate_order": 0,
+    "n_layers": 2,
+    "epochs": 20,
+    "macro_f1": 0.6051342579970459,
+    "accuracy": 0.6361538461538462
+  },
+  "wst/fold2": {
+    "arm": "wst",
+    "outer_fold": 2,
+    "candidate": "reupload_2",
+    "candidate_order": 1,
+    "n_layers": 2,
+    "epochs": 20,
+    "macro_f1": 0.6460679860362532,
+    "accuracy": 0.6876923076923077
+  },
+  "wst/fold3": {
+    "arm": "wst",
+    "outer_fold": 3,
+    "candidate": "compact_once",
+    "candidate_order": 0,
+    "n_layers": 2,
+    "epochs": 20,
+    "macro_f1": 0.6598046899595624,
+    "accuracy": 0.6815384615384615
+  },
+  "wst/fold4": {
+    "arm": "wst",
+    "outer_fold": 4,
+    "candidate": "reupload_2",
+    "candidate_order": 1,
+    "n_layers": 2,
+    "epochs": 40,
+    "macro_f1": 0.5783668085467916,
+    "accuracy": 0.6246153846153846
+  }
+}

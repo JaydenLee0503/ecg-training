@@ -1,0 +1,154 @@
+{
+  "n_patients": 80,
+  "n_boot": 5000,
+  "bootstrap_seed": 0,
+  "scope": "Paired patient bootstrap conditional on saved predictions; no retraining or nested reselection",
+  "comparisons": {
+    "vmd": {
+      "original_vqc/window_accuracy": {
+        "new_minus_control": -0.0004115226337447764,
+        "ci95": [
+          -0.025311342592592746,
+          0.02520833333333328
+        ]
+      },
+      "original_vqc/window_macro_f1": {
+        "new_minus_control": 0.006250428164355171,
+        "ci95": [
+          -0.017810837094417095,
+          0.03266066042135859
+        ]
+      },
+      "original_vqc/patient_accuracy": {
+        "new_minus_control": -0.02499999999999991,
+        "ci95": [
+          -0.07916666666666661,
+          0.025000000000000133
+        ]
+      },
+      "original_vqc/patient_macro_f1": {
+        "new_minus_control": -0.01858478006302222,
+        "ci95": [
+          -0.0756769223371006,
+          0.03966863126739766
+        ]
+      },
+      "weighted_knn/window_accuracy": {
+        "new_minus_control": -0.06440329218106988,
+        "ci95": [
+          -0.10520833333333335,
+          -0.022762830284552924
+        ]
+      },
+      "weighted_knn/window_macro_f1": {
+        "new_minus_control": -0.04556970833548535,
+        "ci95": [
+          -0.08770450662382834,
+          -0.0028698613075931545
+        ]
+      },
+      "weighted_knn/patient_accuracy": {
+        "new_minus_control": -0.012499999999999956,
+        "ci95": [
+          -0.09999999999999998,
+          0.07499999999999996
+        ]
+      },
+      "weighted_knn/patient_macro_f1": {
+        "new_minus_control": 0.0190576981884516,
+        "ci95": [
+          -0.08030094813563961,
+          0.12472772920586761
+        ]
+      }
+    },
+    "wst": {
+      "original_vqc/window_accuracy": {
+        "new_minus_control": -0.017489711934156604,
+        "ci95": [
+          -0.04297269324210407,
+          0.007291666666666585
+        ]
+      },
+      "original_vqc/window_macro_f1": {
+        "new_minus_control": -0.018136866155483156,
+        "ci95": [
+          -0.04174378037410306,
+          0.005169980631052686
+        ]
+      },
+      "original_vqc/patient_accuracy": {
+        "new_minus_control": -0.025000000000000022,
+        "ci95": [
+          -0.08333333333333337,
+          0.033333333333333326
+        ]
+      },
+      "original_vqc/patient_macro_f1": {
+        "new_minus_control": -0.034162936137629885,
+        "ci95": [
+          -0.09710826691157154,
+          0.02716005273682419
+        ]
+      },
+      "weighted_knn/window_accuracy": {
+        "new_minus_control": -0.07818930041152272,
+        "ci95": [
+          -0.11520878343621402,
+          -0.040000000000000036
+        ]
+      },
+      "weighted_knn/window_macro_f1": {
+        "new_minus_control": -0.04830088020019807,
+        "ci95": [
+          -0.0830815041100836,
+          -0.014850412277195867
+        ]
+      },
+      "weighted_knn/patient_accuracy": {
+        "new_minus_control": -0.06666666666666665,
+        "ci95": [
+          -0.1416666666666666,
+          0.004166666666666763
+        ]
+      },
+      "weighted_knn/patient_macro_f1": {
+        "new_minus_control": -0.06026780656501485,
+        "ci95": [
+          -0.13307583966771247,
+          0.012439608830081113
+        ]
+      }
+    }
+  },
+  "wst_minus_vmd": {
+    "vmd/window_accuracy": {
+      "new_minus_control": -0.04897119341563805,
+      "ci95": [
+        -0.1072945601851853,
+        0.012551440329218067
+      ]
+    },
+    "vmd/window_macro_f1": {
+      "new_minus_control": -0.05409776999726068,
+      "ci95": [
+        -0.11207932601356958,
+        0.004219810282983
+      ]
+    },
+    "vmd/patient_accuracy": {
+      "new_minus_control": -0.01666666666666672,
+      "ci95": [
+        -0.11250000000000004,
+        0.08333333333333315
+      ]
+    },
+    "vmd/patient_macro_f1": {
+      "new_minus_control": -0.03200574802194511,
+      "ci95": [
+        -0.13642992873931784,
+        0.07052313470146745
+      ]
+    }
+  }
+}

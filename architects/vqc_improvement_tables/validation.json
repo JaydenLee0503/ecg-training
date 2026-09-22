@@ -1,0 +1,23 @@
+{
+  "inner_models_checked": 90,
+  "inner_checkpoints_checked": 360,
+  "outer_models_checked": 30,
+  "patients": 80,
+  "windows": 1620,
+  "status": "passed",
+  "checks": [
+    "code/input hashes",
+    "patient separation",
+    "training-only selection/scaling",
+    "all candidate histories",
+    "checkpoint prediction spot checks",
+    "recomputed inner scores",
+    "selected inner maxima",
+    "identical outer features/scaling to original VQC",
+    "finite training states",
+    "selected epoch counts",
+    "no outer eval_set",
+    "outer saved-model prediction spot checks",
+    "exact prediction coverage"
+  ]
+}

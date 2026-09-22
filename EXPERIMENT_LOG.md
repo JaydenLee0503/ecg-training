@@ -860,3 +860,27 @@ Mean window accuracy / macro-F1: VMD **0.6798 / 0.6489**, standard WST
 Paired patient-bootstrap intervals include zero difference. The earlier row-grouped
 results are historical, not independent-patient estimates. Protocol, validation,
 saved artifacts, and intervals: [corrected comparison](architects/patient_vmd_wst_vqc.md).
+
+## 2026-09-22 00:20 EDT — nested VQC improvement experiment, negative result
+
+Tested three six-qubit circuit configurations on the existing 12 selected angle
+features, with richer observable readout, a decaying learning rate, and nested
+patient selection of architecture and training duration. The candidate protocol
+was fixed before ECG scoring. Reused the exact VMD/WST features, windows, patient
+groups, and outer folds from the corrected baseline; no new dataset was downloaded.
+
+All 90 inner and 30 outer fits completed without failures. The fit phase lasted
+29.0 minutes. Saved all 8,280 epoch records, 360 inner checkpoints, fitted pipelines,
+predictions, selections, code/environment snapshots, and artifact hashes. All 13
+regression tests passed before launch; post-run validation checked all 120 models,
+patient separation, identical outer preprocessing to the original baseline,
+recomputed selection scores, and saved predictions.
+
+Mean window accuracy / macro-F1: VMD **0.6794 / 0.6552**, WST **0.6305 / 0.6011**,
+versus original **0.6798 / 0.6489** and **0.6479 / 0.6192**. Patient-vote accuracy
+was **0.7750 / 0.7583**. All paired intervals for changes from the original VQC
+cross zero. This experiment did not establish an improvement; original models
+remain the reference, and the unsuccessful candidates are retained.
+
+Full protocol, every result, learning curves, interpretation, limitations, and
+reproduction commands: [VQC improvement record](architects/vqc_improvement_results.md).

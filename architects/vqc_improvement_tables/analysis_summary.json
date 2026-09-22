@@ -1,0 +1,38 @@
+{
+  "validation": {
+    "inner_models_checked": 90,
+    "inner_checkpoints_checked": 360,
+    "outer_models_checked": 30,
+    "patients": 80,
+    "windows": 1620,
+    "status": "passed",
+    "checks": [
+      "code/input hashes",
+      "patient separation",
+      "training-only selection/scaling",
+      "all candidate histories",
+      "checkpoint prediction spot checks",
+      "recomputed inner scores",
+      "selected inner maxima",
+      "identical outer features/scaling to original VQC",
+      "finite training states",
+      "selected epoch counts",
+      "no outer eval_set",
+      "outer saved-model prediction spot checks",
+      "exact prediction coverage"
+    ]
+  },
+  "fit_phase_wall_seconds": 1742.849532,
+  "inner_fits": 90,
+  "outer_fits": 30,
+  "training_means": {
+    "vmd": {
+      "accuracy": 0.7851939102564103,
+      "macro_f1": 0.7678660985244982
+    },
+    "wst": {
+      "accuracy": 0.7523365384615385,
+      "macro_f1": 0.7364833084058802
+    }
+  }
+}
