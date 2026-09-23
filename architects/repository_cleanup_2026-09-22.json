@@ -1,0 +1,268 @@
+{
+  "date": "2026-09-22",
+  "started_utc": "2026-09-23T01:19:47.888834+00:00",
+  "status": "complete",
+  "moves": [
+    {
+      "path": "scratch/windows.npz",
+      "bytes": 3908164,
+      "sha256": "cb04f55597f7aa56ed7cf4f760bb7ce167c6462632a37607d85fe720b1979254",
+      "destination": "legacy/scratch/windows.npz"
+    },
+    {
+      "path": "scratch/wst_dev.py",
+      "bytes": 1278,
+      "sha256": "c3a6d5106100fb8cb9eca16b7a88279c618c6951cbfcdc75e7c69a795dfed62c",
+      "destination": "legacy/scratch/wst_dev.py"
+    }
+  ],
+  "deletes": [
+    {
+      "path": "ecgvmd/__pycache__/__init__.cpython-312.opt-1.pyc",
+      "bytes": 3409,
+      "sha256": "0744a8ac2a15f6689cec185a0e508bd96e5d85f2750bcf85625d6df8060c0945",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 3409,
+      "sha256": "0744a8ac2a15f6689cec185a0e508bd96e5d85f2750bcf85625d6df8060c0945",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/config.cpython-312.opt-1.pyc",
+      "bytes": 4785,
+      "sha256": "80f7a4d72fa0a36c0a5b6082c75b481a35a08b81bf02182c8844a8d7677ac56a",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/config.cpython-312.pyc",
+      "bytes": 4785,
+      "sha256": "80f7a4d72fa0a36c0a5b6082c75b481a35a08b81bf02182c8844a8d7677ac56a",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/data.cpython-312.opt-1.pyc",
+      "bytes": 10666,
+      "sha256": "3aac2531210795029a3211cc0ecef0a0f813bf65cd21ab5f826e3de251fc8142",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/data.cpython-312.pyc",
+      "bytes": 10666,
+      "sha256": "3aac2531210795029a3211cc0ecef0a0f813bf65cd21ab5f826e3de251fc8142",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/evaluate.cpython-312.opt-1.pyc",
+      "bytes": 18769,
+      "sha256": "6cef1429d07acae4eddd36fb915af75ac2eda81f349ac72099039d4ee41061ae",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/evaluate.cpython-312.pyc",
+      "bytes": 18769,
+      "sha256": "6cef1429d07acae4eddd36fb915af75ac2eda81f349ac72099039d4ee41061ae",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/features.cpython-312.opt-1.pyc",
+      "bytes": 29210,
+      "sha256": "77b286b1d555d6941c35581af7897825255f3df2b5105e280aebc5c011a47311",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/features.cpython-312.pyc",
+      "bytes": 29176,
+      "sha256": "5f187d9e6869910f9350277471e540b87c27d0112ad45b5bb7e20e111f5beea6",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/quantum.cpython-312.opt-1.pyc",
+      "bytes": 36950,
+      "sha256": "e9b83ef33e2b9249320ef877172c7a3ab62849004c6546c4b850cac7d46ea13d",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/quantum.cpython-312.pyc",
+      "bytes": 36950,
+      "sha256": "e9b83ef33e2b9249320ef877172c7a3ab62849004c6546c4b850cac7d46ea13d",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/reupload.cpython-312.pyc",
+      "bytes": 17676,
+      "sha256": "c42ff198d931516f1189d1789bcf00f0370f627e1a35ce0e76b87b878a92f590",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/scatter.cpython-312.opt-1.pyc",
+      "bytes": 42451,
+      "sha256": "aff6b4478ce55252a7b4e670c1a1db8ab670a03842828f33059544f71c6d000b",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/scatter.cpython-312.pyc",
+      "bytes": 43224,
+      "sha256": "b07d0415564abd30237bd2ff75530a6eefa1bd7c54b2d0588c29e96b21096bc8",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/segment.cpython-312.opt-1.pyc",
+      "bytes": 9879,
+      "sha256": "b96a61a6845b748ed884d13b44377a2553d3bdcb7afe09c4ec3e1b53b6f55527",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/segment.cpython-312.pyc",
+      "bytes": 9845,
+      "sha256": "7e45c444fac22e25e5feb6fbe2a4f04dd728db74d0280f49ec4fc03f02e5b41d",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/select.cpython-312.opt-1.pyc",
+      "bytes": 7039,
+      "sha256": "2d385b5635c80d03b31d368b3465339dd45f846a482943ceee42d845fa69b77a",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/select.cpython-312.pyc",
+      "bytes": 7039,
+      "sha256": "2d385b5635c80d03b31d368b3465339dd45f846a482943ceee42d845fa69b77a",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/vmd.cpython-312.opt-1.pyc",
+      "bytes": 20285,
+      "sha256": "9fceb1ff98fb0c2a24e9e27b8458df541591c6a782157786b7d5e67cbdbf93af",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd/__pycache__/vmd.cpython-312.pyc",
+      "bytes": 20285,
+      "sha256": "9fceb1ff98fb0c2a24e9e27b8458df541591c6a782157786b7d5e67cbdbf93af",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/archive_vqc_improvement.cpython-312.pyc",
+      "bytes": 11127,
+      "sha256": "30835da69e056aac662038848409a0e2115f5637626c7432b5f9b3cb206e6246",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/improve_vqc.cpython-312.pyc",
+      "bytes": 28790,
+      "sha256": "9acaeb29ec6d7918dc6b5f9ad1db10a90958920758e5d714ee49a9d37515820b",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/matched_vqc.cpython-312.pyc",
+      "bytes": 21713,
+      "sha256": "a34a1b17ff4733cbede3bad82c72061c2566f71c02cfee04dc4bd088a3f104cf",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/report_vqc_improvement.cpython-312.pyc",
+      "bytes": 31812,
+      "sha256": "35a29ea15eb1c3927e0d0d03cff161b19b359f427d4daa2090bc3af6873104af",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/summarize_patient_vqc.cpython-312.pyc",
+      "bytes": 8187,
+      "sha256": "01fd058b9d2f67f1cd4de6bdc5c2251c0567791203beab7e571ab28cbc280dcb",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/verify_ecg_sources.cpython-312.pyc",
+      "bytes": 12177,
+      "sha256": "cace826809c54b2d0cd5c85b3de1de4eeea09f808cdf8e8782eb2e82ce433a11",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/vqc_knn_diagnostic.cpython-312.pyc",
+      "bytes": 8002,
+      "sha256": "17ac8238df0213bed76873b46cb5537a1f0e1b3c9affc1f63d7662e2dc9814d0",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/vqc_run.cpython-312.pyc",
+      "bytes": 19549,
+      "sha256": "764c7b909527bfd1c1fc2c45a6fd5355f11a7ea2ef98703b8e31353533498cd2",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/wst_vs_vmd_vqc.cpython-312.opt-1.pyc",
+      "bytes": 24225,
+      "sha256": "e8085ab2bb951a9cd8269823b574b6882cda53d52cac4d79d348d370600ddcf0",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "scripts/__pycache__/wst_vs_vmd_vqc.cpython-312.pyc",
+      "bytes": 24191,
+      "sha256": "daaf8370a5e343933a396f20b8de6596bdce897824180caae8acb51f80e9b9c7",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "tests/__pycache__/test_patient_comparison.cpython-312.pyc",
+      "bytes": 10135,
+      "sha256": "231584ace1d0f42645d29f72c2b6266dcbd7d6f6e02b9ccdb2838a162ac6d729",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "tests/__pycache__/test_reupload_vqc.cpython-312.pyc",
+      "bytes": 10150,
+      "sha256": "0a5bdd973af00878ea4f2e863ea37d1e0b472626b7ebe9f5052fe0f5bc2a0dcf",
+      "reason": "Rebuildable Python bytecode cache"
+    },
+    {
+      "path": "ecgvmd_bundle.zip",
+      "bytes": 26622,
+      "sha256": "43123c1b96fe2f85ddb32f98d439e40ee82e24bb8e604b1517ba8f1aa76a2e38",
+      "reason": "Generated Colab archive; eight members differ from current source; rebuild with make_colab_bundle.py"
+    }
+  ],
+  "edits_before_sha256": {
+    ".gitignore": "941ec43975762ca593e6ead5c19a0afc3c9482d3f0ffcb73d3f8716431bfea9d",
+    "README.md": "18c81132e8dbd40f27ba2511915aa72ed0736b37251f8aa5dc604abc16cd3842",
+    "legacy/README.md": "a988e55d2746cc3d1667be1c81289384cc3b30e0cb73b21a0cc9b1dd3dad2ead",
+    "architects/SESSION_HANDOFF.md": "6c3725289f2e40de4a66bba0f4ae8ececda97ddb9a24657a344be16dab0e441f",
+    "EXPERIMENT_LOG.md": "915eeb35732e14c617cd8aadc1fabc57e2d43209b13f4b72d017ad97f7bc001b"
+  },
+  "deleted_file_count": 34,
+  "deleted_bytes": 621947,
+  "removed_empty_directories": [
+    "scratch",
+    "ecgvmd/__pycache__",
+    "scripts/__pycache__",
+    "tests/__pycache__"
+  ],
+  "new_documentation": [
+    "legacy/scratch/README.md",
+    "architects/repository_cleanup_2026-09-22.md"
+  ],
+  "saved_experiment_files_checked_before": 930,
+  "protected_tree_before": {
+    "files": 1474,
+    "bytes": 235648772,
+    "sha256": "4c9fa1cbabbe779ac9dbfab5203603364fca2c7d732d25f0db3c28d7bd0e8710"
+  },
+  "finished_utc": "2026-09-23T01:20:03.754464+00:00",
+  "saved_experiment_files_checked_after": 930,
+  "protected_tree_after": {
+    "files": 1474,
+    "bytes": 235648772,
+    "sha256": "4c9fa1cbabbe779ac9dbfab5203603364fca2c7d732d25f0db3c28d7bd0e8710"
+  },
+  "documents_after_sha256": {
+    ".gitignore": "1f4957d987a369eb33ff4d5a046b5b83af5326511610ce2d3eed81c0d44aa323",
+    "README.md": "6b5328ade402a1681e241bc389b9b3a0b9e86322ea2f09e5e23273cc266a4751",
+    "legacy/README.md": "0d5523eab1c58b388a1ede36cdfe16cb2a8876cfcc8e9166cba710d9f6b7d6f4",
+    "architects/SESSION_HANDOFF.md": "3656b52a40a6ee755624558fc805db8b7a7692d07d55a4b2b4761bb6d610ac4a",
+    "EXPERIMENT_LOG.md": "11431e004f812bdee7a714e91c50739dc5a3d345f76080c420c24729c95820cc"
+  },
+  "new_documentation_sha256": {
+    "legacy/scratch/README.md": "061ab7e2a76f29c384e6cac4f22943c4467f70287357aef43e502047ece7f30a",
+    "architects/repository_cleanup_2026-09-22.md": "612a658f256862539680ea4ad91df5821c3d21c7d3fa38c22a941a676e9a679c"
+  }
+}

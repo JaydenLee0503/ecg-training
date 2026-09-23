@@ -20,4 +20,14 @@ venv/
 .DS_Store
 *.swp
 
-scratch/
+# Local experiments; archived source under legacy/scratch is versioned.
+/scratch/
+/legacy/scratch/*.npz
+
+# Rebuildable development-tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.data
+
+/data/

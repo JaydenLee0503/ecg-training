@@ -1,7 +1,7 @@
 # legacy
 
-The three original exploratory notebooks, plus the `.bak` copies made before they were
-patched. **Nothing in the active pipeline imports from here.**
+The three original exploratory notebooks, their pre-patch `.bak` copies, and retired
+scratch work. **Nothing in the active pipeline imports from here.**
 
 | file | what it was |
 |---|---|
@@ -9,6 +9,10 @@ patched. **Nothing in the active pipeline imports from here.**
 | `Arrythmia_v2.ipynb` | the strongest science — beat alignment, the alpha question, the chirplet negative result. Its R-peak detector and beat windowing are now `ecgvmd/segment.py`. |
 | `Arrythmia_VMD.ipynb` | the weakest, and the only one with genuine correctness bugs (class-sorted sampling, one row per mode). Superseded entirely. |
 | `*.ipynb.bak` | pre-patch snapshots, kept so the fixes stay auditable. |
+| [`scratch/`](scratch/README.md) | retired interactive WST exploration and its original local window cache, moved here on 2026-09-22. |
 
-Kept for provenance: every number in the merged pipeline can be traced back to the
-notebook it came from. Delete the whole folder if you do not care about that.
+These files preserve the development history; they are not the current evaluation
+protocol. The notebook backups differ from their later versions and are retained.
+Use the corrected patient-grouped reports in `architects/` for current results.
+See the [cleanup record](../architects/repository_cleanup_2026-09-22.md) for the
+archive moves, removed generated files, and integrity checks.

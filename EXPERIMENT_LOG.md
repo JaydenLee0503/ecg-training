@@ -884,3 +884,17 @@ remain the reference, and the unsuccessful candidates are retained.
 
 Full protocol, every result, learning curves, interpretation, limitations, and
 reproduction commands: [VQC improvement record](architects/vqc_improvement_results.md).
+
+## 2026-09-22 — repository cleanup and scratch archive
+
+Archived `scratch/wst_dev.py` and `scratch/windows.npz` under `legacy/scratch/`
+without changing their contents. Removed 33 rebuildable Python bytecode files and
+the outdated generated Colab ZIP (34 files, 621,947 bytes). The bundling script is
+retained for on-demand regeneration. Updated the archive index, ignore rules,
+README, and shared agent handoff.
+
+All saved datasets, features, experiments, source-verification excerpts, distinct
+notebook backups, and reference material were retained. No model training was
+started. The complete 930-file VQC improvement inventory and the preserved project
+files passed post-cleanup checksum checks. File-level operations, reasons, and
+hashes: [cleanup record](architects/repository_cleanup_2026-09-22.md).

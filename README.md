@@ -172,16 +172,20 @@ scripts/readout_probe.py          why the VQC underperforms: circuit vs readout
 QUANTUM_STAGE.md        what the quantum stage measured, and what it means
 EXPERIMENT_LOG.md       run-by-run chronology, failures included
 make_colab_bundle.py    zips the package for upload to Colab
-legacy/                 the three original notebooks, superseded, kept for provenance
+legacy/                 original notebooks and archived scratch work, kept for provenance
 
 ECGData.mat             the data (70 MB, gitignored - distribute out of band)
 features/               generated .npz artefacts  (gitignored)
 results/                generated .csv results    (gitignored)
 ```
 
-The three original notebooks and their pre-patch `.bak` copies now live in `legacy/`,
-kept for provenance. Nothing in the active pipeline imports from there — see
-`legacy/README.md` for what each one contributed.
+The original notebooks, their pre-patch `.bak` copies, and the retired WST scratch
+work live in `legacy/`, kept for provenance. Nothing in the active pipeline imports
+from there — see [the archive index](legacy/README.md). The scratch script is in
+`legacy/scratch/wst_dev.py`; its window cache remains local and gitignored.
+The [cleanup record](architects/repository_cleanup_2026-09-22.md) lists the archived
+files and removed generated files. Rebuild `ecgvmd_bundle.zip` with
+`python make_colab_bundle.py` when needed; an old ZIP is not the current source.
 
 ---
 
