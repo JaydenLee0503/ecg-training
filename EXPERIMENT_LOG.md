@@ -898,3 +898,12 @@ notebook backups, and reference material were retained. No model training was
 started. The complete 930-file VQC improvement inventory and the preserved project
 files passed post-cleanup checksum checks. File-level operations, reasons, and
 hashes: [cleanup record](architects/repository_cleanup_2026-09-22.md).
+
+## 2026-09-25 — ACS work separated from the original ECGData experiments
+
+The new ACS / OMI study now lives in `experiments/acs/`, including its loader,
+feature runner, tests, data, results, protocols, reports, and experiment log.
+The September 23–24 ACS entries were moved intact in substance, with updated
+paths, to the [ACS experiment log](experiments/acs/EXPERIMENT_LOG.md).
+Original ECGData code, frozen protocols, models, and results remain in place.
+See the [ACS workspace guide](experiments/acs/README.md) for current commands.

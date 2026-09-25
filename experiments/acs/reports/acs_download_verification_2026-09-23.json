@@ -1,0 +1,712 @@
+{
+  "status": "issues_found",
+  "download_integrity": "passed",
+  "verified_at_utc": "2026-09-23T04:16:45.237316+00:00",
+  "duration_seconds": 37.497,
+  "source_api": "https://api.figshare.com/v2/articles/29925314",
+  "source_snapshot": "architects/acs_download_verification_2026-09-23_source.json",
+  "source_snapshot_sha256": "0b36534c6d7aed7178fdc74364828c36ee63414b80b3dddd949a66a981463f76",
+  "source_version": 1,
+  "dataset_doi": "10.6084/m9.figshare.29925314.v1",
+  "script_sha256": "25f3b80db0c6f5bf10349e03d4b5f62b259d365c2ad45ad1e95f593256c1932e",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "numpy": "2.5.2",
+  "archives": {
+    "CSV.zip": {
+      "path": "data/CSV.zip",
+      "bytes": 296769,
+      "md5": "1cb46279c0e68e6512bd39214fc56528",
+      "sha256": "675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005",
+      "official_bytes": 296769,
+      "official_md5": "1cb46279c0e68e6512bd39214fc56528"
+    },
+    "ECG_row_data.zip": {
+      "path": "data/ECG_row_data.zip",
+      "bytes": 1277577332,
+      "md5": "acea6ca86a2d0b937ecfe7d1df6d30a2",
+      "sha256": "9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4",
+      "official_bytes": 1277577332,
+      "official_md5": "acea6ca86a2d0b937ecfe7d1df6d30a2",
+      "members": 39910,
+      "uncompressed_bytes": 2405897669
+    }
+  },
+  "checks": {
+    "CSV.zip_size_matches": true,
+    "CSV.zip_md5_matches": true,
+    "ECG_row_data.zip_size_matches": true,
+    "ECG_row_data.zip_md5_matches": true,
+    "csv_archive_crc": true,
+    "metadata_expected_record_count": true,
+    "metadata_expected_patient_count": true,
+    "metadata_records_unique": true,
+    "metadata_no_empty_cells": true,
+    "patient_disjoint_official_splits": true,
+    "official_test_labels_withheld": true,
+    "waveform_zip_member_names_unique": true,
+    "waveform_zip_safe_paths": true,
+    "waveform_expected_member_count": true,
+    "waveform_pairs_complete": true,
+    "metadata_waveform_bijection": true,
+    "waveform_archive_crc": true,
+    "all_waveforms_decoded": true,
+    "waveform_header_lengths": false,
+    "waveform_header_checksums": false,
+    "waveform_header_initial_values": false,
+    "no_identical_raw_waveforms_across_splits": true
+  },
+  "metadata": {
+    "rows": 19955,
+    "unique_patients": 18909,
+    "split_rows": {
+      "train": 17960,
+      "test": 1995
+    },
+    "split_patients": {
+      "train": 17018,
+      "test": 1891
+    },
+    "patient_overlap": [],
+    "columns": {
+      "train": [
+        "Patient_id",
+        "ecg_row_record",
+        "ecg_med_record",
+        "gender",
+        "age",
+        "Time_Interval",
+        "AMI",
+        "OMI",
+        "CTO",
+        "PCI",
+        "NSTEMI",
+        "STEMI",
+        "UA",
+        "LM",
+        "PLAD",
+        "MLAD",
+        "DLAD",
+        "DB",
+        "PLCX",
+        "MLCX",
+        "DLCX",
+        "OM",
+        "PRCA",
+        "MRCA",
+        "DRCA",
+        "VF_VT",
+        "Paced",
+        "Prior_PCI"
+      ],
+      "test": [
+        "Patient_id",
+        "ecg_row_record",
+        "ecg_med_record",
+        "gender",
+        "age",
+        "Time_Interval"
+      ]
+    },
+    "duplicate_record_references": {},
+    "empty_cell_counts": {
+      "train": {
+        "Patient_id": 0,
+        "ecg_row_record": 0,
+        "ecg_med_record": 0,
+        "gender": 0,
+        "age": 0,
+        "Time_Interval": 0,
+        "AMI": 0,
+        "OMI": 0,
+        "CTO": 0,
+        "PCI": 0,
+        "NSTEMI": 0,
+        "STEMI": 0,
+        "UA": 0,
+        "LM": 0,
+        "PLAD": 0,
+        "MLAD": 0,
+        "DLAD": 0,
+        "DB": 0,
+        "PLCX": 0,
+        "MLCX": 0,
+        "DLCX": 0,
+        "OM": 0,
+        "PRCA": 0,
+        "MRCA": 0,
+        "DRCA": 0,
+        "VF_VT": 0,
+        "Paced": 0,
+        "Prior_PCI": 0
+      },
+      "test": {
+        "Patient_id": 0,
+        "ecg_row_record": 0,
+        "ecg_med_record": 0,
+        "gender": 0,
+        "age": 0,
+        "Time_Interval": 0
+      }
+    },
+    "training_label_counts": {
+      "AMI": {
+        "0": 15281,
+        "1": 2679
+      },
+      "OMI": {
+        "0": 16809,
+        "1": 1151
+      },
+      "CTO": {
+        "0": 17003,
+        "1": 957
+      },
+      "NSTEMI": {
+        "0": 16725,
+        "1": 1235
+      },
+      "STEMI": {
+        "0": 16518,
+        "1": 1442
+      },
+      "UA": {
+        "0": 11747,
+        "1": 6213
+      },
+      "VF_VT": {
+        "0": 17091,
+        "1": 869
+      },
+      "Paced": {
+        "0": 17622,
+        "1": 338
+      },
+      "Prior_PCI": {
+        "0": 16637,
+        "1": 1323
+      }
+    }
+  },
+  "waveforms": {
+    "decoded_records": 19955,
+    "crc_checked_members": 39910,
+    "scalar_samples_checked": 1197264000,
+    "schemas": {
+      "(12, 500.0, 5000, ('I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6'))": 19955
+    },
+    "gain_counts": {
+      "1000.0": 239460
+    },
+    "unit_counts": {
+      "mV": 239460
+    },
+    "structural_errors": [],
+    "header_length_mismatches": [
+      {
+        "record": "03228",
+        "split": "train",
+        "patient": "P15456",
+        "actual_bytes": 84000,
+        "expected_bytes": 120000,
+        "declared_samples_per_lead": 5000,
+        "actual_complete_frames": 3500,
+        "actual_duration_seconds": 7.0
+      },
+      {
+        "record": "14262",
+        "split": "train",
+        "patient": "P08823",
+        "actual_bytes": 84000,
+        "expected_bytes": 120000,
+        "declared_samples_per_lead": 5000,
+        "actual_complete_frames": 3500,
+        "actual_duration_seconds": 7.0
+      }
+    ],
+    "header_checksum_mismatches": {
+      "count": 19955,
+      "first_examples": [
+        "00001",
+        "00002",
+        "00003",
+        "00004",
+        "00005",
+        "00006",
+        "00007",
+        "00008",
+        "00009",
+        "00010"
+      ]
+    },
+    "header_initial_value_mismatches": {
+      "count": 19955,
+      "first_examples": [
+        "00001",
+        "00002",
+        "00003",
+        "00004",
+        "00005",
+        "00006",
+        "00007",
+        "00008",
+        "00009",
+        "00010"
+      ]
+    },
+    "header_initial_values_equal_signal_max_records": 19955,
+    "header_checksums_equal_signal_min_records": 19955,
+    "flat_lead_records": [
+      {
+        "record": "00147",
+        "split": "train",
+        "patient": "P04976",
+        "leads": [
+          "V3"
+        ]
+      },
+      {
+        "record": "00184",
+        "split": "train",
+        "patient": "P01333",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "00340",
+        "split": "train",
+        "patient": "P11057",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "00559",
+        "split": "train",
+        "patient": "P12749",
+        "leads": [
+          "II"
+        ]
+      },
+      {
+        "record": "00688",
+        "split": "train",
+        "patient": "P02081",
+        "leads": [
+          "V1"
+        ]
+      },
+      {
+        "record": "01004",
+        "split": "train",
+        "patient": "P09964",
+        "leads": [
+          "V4",
+          "V5"
+        ]
+      },
+      {
+        "record": "01984",
+        "split": "train",
+        "patient": "P00315",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "02101",
+        "split": "train",
+        "patient": "P00538",
+        "leads": [
+          "V1"
+        ]
+      },
+      {
+        "record": "02220",
+        "split": "train",
+        "patient": "P12869",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "02360",
+        "split": "train",
+        "patient": "P14476",
+        "leads": [
+          "II"
+        ]
+      },
+      {
+        "record": "02801",
+        "split": "train",
+        "patient": "P10056",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "03364",
+        "split": "train",
+        "patient": "P06233",
+        "leads": [
+          "II"
+        ]
+      },
+      {
+        "record": "04115",
+        "split": "train",
+        "patient": "P14976",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "04408",
+        "split": "test",
+        "patient": "P16922",
+        "leads": [
+          "V4"
+        ]
+      },
+      {
+        "record": "04580",
+        "split": "train",
+        "patient": "P04540",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "05265",
+        "split": "train",
+        "patient": "P06750",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "05868",
+        "split": "train",
+        "patient": "P07671",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "05939",
+        "split": "train",
+        "patient": "P08716",
+        "leads": [
+          "V4",
+          "V6"
+        ]
+      },
+      {
+        "record": "06267",
+        "split": "train",
+        "patient": "P04481",
+        "leads": [
+          "V1"
+        ]
+      },
+      {
+        "record": "07463",
+        "split": "train",
+        "patient": "P11743",
+        "leads": [
+          "V4"
+        ]
+      },
+      {
+        "record": "07484",
+        "split": "train",
+        "patient": "P04507",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "08240",
+        "split": "test",
+        "patient": "P17413",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "08244",
+        "split": "train",
+        "patient": "P18895",
+        "leads": [
+          "V1"
+        ]
+      },
+      {
+        "record": "08329",
+        "split": "train",
+        "patient": "P18094",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "08378",
+        "split": "train",
+        "patient": "P06941",
+        "leads": [
+          "V2"
+        ]
+      },
+      {
+        "record": "08542",
+        "split": "train",
+        "patient": "P17851",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "09032",
+        "split": "train",
+        "patient": "P18240",
+        "leads": [
+          "V2",
+          "V3"
+        ]
+      },
+      {
+        "record": "09194",
+        "split": "train",
+        "patient": "P04549",
+        "leads": [
+          "V4"
+        ]
+      },
+      {
+        "record": "09684",
+        "split": "train",
+        "patient": "P04037",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "09893",
+        "split": "train",
+        "patient": "P06809",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "09959",
+        "split": "train",
+        "patient": "P04091",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "10226",
+        "split": "train",
+        "patient": "P01879",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "11263",
+        "split": "train",
+        "patient": "P17834",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "11358",
+        "split": "train",
+        "patient": "P03867",
+        "leads": [
+          "II"
+        ]
+      },
+      {
+        "record": "11676",
+        "split": "train",
+        "patient": "P03673",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "12872",
+        "split": "train",
+        "patient": "P11210",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "13193",
+        "split": "train",
+        "patient": "P07295",
+        "leads": [
+          "V2"
+        ]
+      },
+      {
+        "record": "13248",
+        "split": "train",
+        "patient": "P09419",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "13378",
+        "split": "train",
+        "patient": "P18523",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "13464",
+        "split": "train",
+        "patient": "P13439",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "13645",
+        "split": "train",
+        "patient": "P15973",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "13732",
+        "split": "train",
+        "patient": "P15116",
+        "leads": [
+          "V3"
+        ]
+      },
+      {
+        "record": "14793",
+        "split": "train",
+        "patient": "P11344",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "15429",
+        "split": "train",
+        "patient": "P00474",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "15589",
+        "split": "train",
+        "patient": "P00174",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "15867",
+        "split": "train",
+        "patient": "P08778",
+        "leads": [
+          "V6"
+        ]
+      },
+      {
+        "record": "17246",
+        "split": "train",
+        "patient": "P01797",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "17552",
+        "split": "train",
+        "patient": "P02169",
+        "leads": [
+          "II"
+        ]
+      },
+      {
+        "record": "17741",
+        "split": "train",
+        "patient": "P05117",
+        "leads": [
+          "V4"
+        ]
+      },
+      {
+        "record": "18147",
+        "split": "train",
+        "patient": "P11348",
+        "leads": [
+          "V3"
+        ]
+      },
+      {
+        "record": "19220",
+        "split": "train",
+        "patient": "P05432",
+        "leads": [
+          "V5"
+        ]
+      },
+      {
+        "record": "19804",
+        "split": "train",
+        "patient": "P01184",
+        "leads": [
+          "II"
+        ]
+      }
+    ],
+    "missing_sample_records": [
+      {
+        "record": "02008",
+        "split": "train",
+        "patient": "P13321",
+        "samples": 1
+      },
+      {
+        "record": "03054",
+        "split": "train",
+        "patient": "P12344",
+        "samples": 1
+      },
+      {
+        "record": "16558",
+        "split": "train",
+        "patient": "P02230",
+        "samples": 1
+      }
+    ],
+    "raw_scaled_range_mV_including_missing_sentinel": [
+      -32.768,
+      32.766
+    ],
+    "identical_raw_waveform_groups": [],
+    "identical_raw_waveform_groups_across_splits": 0
+  },
+  "scope": "Read archives in place. No extraction, preprocessing, feature selection, model training, label inference, or evaluation-server submission.",
+  "limitations": [
+    "Archive and structural checks do not establish clinical label correctness or diagnostic signal quality.",
+    "Only the supplied training labels were summarized; test labels are absent.",
+    "Basic flatline and missing-sample checks are not a complete signal-quality assessment."
+  ]
+}

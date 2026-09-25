@@ -1,0 +1,1171 @@
+{
+  "policy": {
+    "version": "acs-v1-strict-selected-leads-1",
+    "leads": [
+      "I",
+      "II",
+      "III",
+      "aVR",
+      "aVL",
+      "aVF",
+      "V1",
+      "V2",
+      "V3",
+      "V4",
+      "V5",
+      "V6"
+    ],
+    "target": "OMI",
+    "fs": 500,
+    "samples": 5000,
+    "units": "mV",
+    "short_records": "exclude",
+    "flat_requested_lead": "exclude",
+    "missing_requested_sample": "exclude",
+    "header_extrema": "validate_and_log",
+    "imputation": null,
+    "normalization": null,
+    "resampling": null
+  },
+  "source_manifest": {
+    "CSV.zip": {
+      "bytes": 296769,
+      "sha256": "675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005"
+    },
+    "ECG_row_data.zip": {
+      "bytes": 1277577332,
+      "sha256": "9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4"
+    }
+  },
+  "splits": {
+    "train": {
+      "records": 17960,
+      "patients": 17018,
+      "inspected": 17960,
+      "eligible_records": 17905,
+      "eligible_patients": 16967,
+      "excluded_records": 55,
+      "exclusion_reason_counts": {
+        "flat_requested_lead": 50,
+        "missing_requested_sample": 3,
+        "non_10_second_record": 2
+      },
+      "eligible_label_counts": {
+        "0": 16759,
+        "1": 1146
+      },
+      "test_labels_withheld": false
+    },
+    "test": {
+      "records": 1995,
+      "patients": 1891,
+      "inspected": 1995,
+      "eligible_records": 1993,
+      "eligible_patients": 1889,
+      "excluded_records": 2,
+      "exclusion_reason_counts": {
+        "flat_requested_lead": 2
+      },
+      "eligible_label_counts": null,
+      "test_labels_withheld": true
+    }
+  },
+  "header_conventions": {
+    "acs_extrema_in_initial_and_checksum_fields": 19955
+  },
+  "exclusions": [
+    {
+      "record_id": "15589",
+      "patient_id": "P00174",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "8313d9f9f1bb70a60090d057db31667c1a116590e08966e16b95c3520b1422bd"
+    },
+    {
+      "record_id": "01984",
+      "patient_id": "P00315",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "c814175d693073ab7cb280c375ab831f5c46a0ff6f2aaab1163107a9d62add25"
+    },
+    {
+      "record_id": "15429",
+      "patient_id": "P00474",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "b60c47ec4ba23b52e04fac31154d1a4627ee4abef7eaa240f7641875107100cd"
+    },
+    {
+      "record_id": "02101",
+      "patient_id": "P00538",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V1"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "dc45085ef2e29708b1f389c7b9e2547c794183a2bf1210772046bfb74dafa594"
+    },
+    {
+      "record_id": "19804",
+      "patient_id": "P01184",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "II"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "df41891d9e80a19bc7a51ddc0aab79625ca7147b690021b19a84d09f1bf261a5"
+    },
+    {
+      "record_id": "00184",
+      "patient_id": "P01333",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "25b2022077598008997eedbede0ff220682ce3a35e11c147197495a19862c85c"
+    },
+    {
+      "record_id": "17246",
+      "patient_id": "P01797",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "1d5b55b0b8663ee7a4e7f41460e9390424b798fa0adac7cc8f3613ce777404c1"
+    },
+    {
+      "record_id": "10226",
+      "patient_id": "P01879",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "c810fd3e43ea72c04049ff6fe66dd243e1d5257600b0db11a828b615daa768a4"
+    },
+    {
+      "record_id": "00688",
+      "patient_id": "P02081",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V1"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "46da0a8282dda6796f0e4f5fbec60a78491482b94d8f3292851e41e7b749bf84"
+    },
+    {
+      "record_id": "17552",
+      "patient_id": "P02169",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "II"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "8a2be4be6e79f99dd97b8192f6e028aaf3a0db63a3c8f30a03b2d2d1e4127144"
+    },
+    {
+      "record_id": "16558",
+      "patient_id": "P02230",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [],
+      "missing_leads": [
+        "aVF"
+      ],
+      "missing_samples": 1,
+      "exclusion_reasons": [
+        "missing_requested_sample"
+      ],
+      "waveform_sha256": "bcbee9ab4174317ad07f41572dd3e48756396b7382fdc977f956429a088f0759"
+    },
+    {
+      "record_id": "11676",
+      "patient_id": "P03673",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "b28e89b31677ec249ab57390cadc14d54d44c426cc4dbb45ad58796974028ea5"
+    },
+    {
+      "record_id": "11358",
+      "patient_id": "P03867",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "II"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "3aaa93add3e098557c72de36d4958ee205fd98a24215ed3061fe30bde4f3d94a"
+    },
+    {
+      "record_id": "09684",
+      "patient_id": "P04037",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "7697b47790e5367e12df38842c3b735aee41a1ce76957385cb29b1592c8fb20b"
+    },
+    {
+      "record_id": "09959",
+      "patient_id": "P04091",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "55e402991281daaba11154aa3634087af2464699fb5233bef3fe37e25f9d1ec6"
+    },
+    {
+      "record_id": "06267",
+      "patient_id": "P04481",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V1"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "947332721443baf4229c57bd500280327d8817775dd83860b003bea115a486aa"
+    },
+    {
+      "record_id": "07484",
+      "patient_id": "P04507",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "fcbf42a9116ff55f1c49b3868cdada381f43b037c751b20c3a1d095d60bf20dd"
+    },
+    {
+      "record_id": "04580",
+      "patient_id": "P04540",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "db56b81710de9eacdcda1f566c19bb73629440d90822ec625c4bd0a65897a050"
+    },
+    {
+      "record_id": "09194",
+      "patient_id": "P04549",
+      "split": "train",
+      "label": 1,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V4"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "8520e3055525076c52a42c78ed21d7ef197118f10ec42a0414f590f292e80fc1"
+    },
+    {
+      "record_id": "00147",
+      "patient_id": "P04976",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V3"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "d53081ec8031c026f9eedf18ac3b66f0bb1f137730eb8fd7cb9e4d579a3ef252"
+    },
+    {
+      "record_id": "17741",
+      "patient_id": "P05117",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V4"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "c15586c826558adbed1e9fd854e54010cf2c2d3cc304614d7913c2f46f435262"
+    },
+    {
+      "record_id": "19220",
+      "patient_id": "P05432",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "41d50eea8f207545a73b908f94c960693451ec888b8784ac86ffc68495b2ed68"
+    },
+    {
+      "record_id": "03364",
+      "patient_id": "P06233",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "II"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "f17f0a7fb209e4256c77f151811b390df325ee8c0386f7f8ff1862431a04935e"
+    },
+    {
+      "record_id": "05265",
+      "patient_id": "P06750",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "52b0118917f00ebb6d73d5aadf1c6391772e4cbb909b8e2119701394ee4480eb"
+    },
+    {
+      "record_id": "09893",
+      "patient_id": "P06809",
+      "split": "train",
+      "label": 1,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "f42cf306698f3123606574313d5bc7b9238827144552ebf55d9339ea230bf28b"
+    },
+    {
+      "record_id": "08378",
+      "patient_id": "P06941",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V2"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "70caf6e183961882a7d530bc85455aa0052fde2ab2dcbadeaf1254658c4c7465"
+    },
+    {
+      "record_id": "13193",
+      "patient_id": "P07295",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V2"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "3dd6cf6b65c058b505c1049e185d9f9efeaa217c07442d812082c1313e0cd649"
+    },
+    {
+      "record_id": "05868",
+      "patient_id": "P07671",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "e07f2e14d7d955c9b341554802e80399c65819c2f92f3a92aedf7cb3e883af44"
+    },
+    {
+      "record_id": "05939",
+      "patient_id": "P08716",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V4",
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "1dd1853cc927c9195ba47dbaf8685553bfea02f13d0f8c445fbd797361010d13"
+    },
+    {
+      "record_id": "15867",
+      "patient_id": "P08778",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "dc8340be3e7068bf65776e687bbb451eb6817034f018f43ce58ffe4a3c4c1793"
+    },
+    {
+      "record_id": "14262",
+      "patient_id": "P08823",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 3500,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "non_10_second_record"
+      ],
+      "waveform_sha256": "319d2063767e864f8556ed76ef0fe72e09ddb3bfc5edd9fb2572a0f045cf71ef"
+    },
+    {
+      "record_id": "13248",
+      "patient_id": "P09419",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "b459b67cfe672a30b8c3c21f740a6ff86d0553265462b0e1fa79a1c85f8bb38d"
+    },
+    {
+      "record_id": "01004",
+      "patient_id": "P09964",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V4",
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "02b85ad0f404011406bbbd03075d819901ee6aeedfda60fccfc8187d06297545"
+    },
+    {
+      "record_id": "02801",
+      "patient_id": "P10056",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "7730477b612318525d875ea91aa9bed6780b3a73ff0033ca115cbc2fbf8ebe72"
+    },
+    {
+      "record_id": "00340",
+      "patient_id": "P11057",
+      "split": "train",
+      "label": 1,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "19a2b4a547d2f12873c1aae5aede8f167bc2f1402302c85691fd883c497038a8"
+    },
+    {
+      "record_id": "12872",
+      "patient_id": "P11210",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "fa6bcb1fabdc91100ec0f41a475277b786eb11415736efc89a69491fc55b42bc"
+    },
+    {
+      "record_id": "14793",
+      "patient_id": "P11344",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "2c3676258460e7fed3454d7422836e87854a8453e06f16ba790adfe376f9b709"
+    },
+    {
+      "record_id": "18147",
+      "patient_id": "P11348",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V3"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "b0469ae2d85fa85285f923451564ff17cfa10557192e5d95702ffde2f2cd05e0"
+    },
+    {
+      "record_id": "07463",
+      "patient_id": "P11743",
+      "split": "train",
+      "label": 1,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V4"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "d0a387162499d7502c46b72648dd275b27f8eb38092852bb4be75cba78e6ca4c"
+    },
+    {
+      "record_id": "03054",
+      "patient_id": "P12344",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [],
+      "missing_leads": [
+        "aVR"
+      ],
+      "missing_samples": 1,
+      "exclusion_reasons": [
+        "missing_requested_sample"
+      ],
+      "waveform_sha256": "dca37d5d5a9d7e7b624f44b13c76521a3a408e39a4e2c240a942a3cc299416b8"
+    },
+    {
+      "record_id": "00559",
+      "patient_id": "P12749",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "II"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "5cfa59a30613cdf21f182c57a4d095bb652c50361221f11b0459b25d9ce63d1d"
+    },
+    {
+      "record_id": "02220",
+      "patient_id": "P12869",
+      "split": "train",
+      "label": 1,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "05746d61a53cac6ced790660a44a46101b73284b28f30b3eb9210091add47b6b"
+    },
+    {
+      "record_id": "02008",
+      "patient_id": "P13321",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [],
+      "missing_leads": [
+        "V1"
+      ],
+      "missing_samples": 1,
+      "exclusion_reasons": [
+        "missing_requested_sample"
+      ],
+      "waveform_sha256": "d9d27a03673bf79910d2df38604649d7e7664413148476a26a789357d91d8483"
+    },
+    {
+      "record_id": "13464",
+      "patient_id": "P13439",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "873b6edf19be0d2d3fe57e0de98b97ec0d8ce62429fafbf549c4c2526be22a42"
+    },
+    {
+      "record_id": "02360",
+      "patient_id": "P14476",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "II"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "68b4c155ab8d61488374031988ed296017c0148e2adc7c58628b5d3cde5e4de3"
+    },
+    {
+      "record_id": "04115",
+      "patient_id": "P14976",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "21f099b72795aa8bebb51ac0173968fbacc9d7f64347c70933aea04f84faf51b"
+    },
+    {
+      "record_id": "13732",
+      "patient_id": "P15116",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V3"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "ba01c26a257d723a1c242970e21deb398c3e87d7d49f97655e5c817e5f8d9eb7"
+    },
+    {
+      "record_id": "03228",
+      "patient_id": "P15456",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 3500,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "non_10_second_record"
+      ],
+      "waveform_sha256": "6a90fc51c1481451bf35f2b6311fa257500cd8bbc80b87c055eb612aa28dc6ca"
+    },
+    {
+      "record_id": "13645",
+      "patient_id": "P15973",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "65f3c4ab4b3a2a426276e3738d521c98bcead80d6dbe68b8956c1015104f5300"
+    },
+    {
+      "record_id": "11263",
+      "patient_id": "P17834",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "6ae4336c192fed850f818fef38953d88d6b7386306efa9a3900bf2dfbcbd8d34"
+    },
+    {
+      "record_id": "08542",
+      "patient_id": "P17851",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "b4926ab638ee134acd282ac6c5867c20bb2bbe5abbe21441daef3e1d971e292b"
+    },
+    {
+      "record_id": "08329",
+      "patient_id": "P18094",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "7b1b8afebee7935f896541b3018ee459491d5b28a9dd4614499e10497d16049e"
+    },
+    {
+      "record_id": "09032",
+      "patient_id": "P18240",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V2",
+        "V3"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "7a40e2180b15f04c6135b28e5240f9513e5b6f78532d7a3a3f5435858a241b33"
+    },
+    {
+      "record_id": "13378",
+      "patient_id": "P18523",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V6"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "39fda88a0d4a9095ce6640962ccbf214a49a184a95a2f95173c0bd84768936e4"
+    },
+    {
+      "record_id": "08244",
+      "patient_id": "P18895",
+      "split": "train",
+      "label": 0,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V1"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "26a80eded2d8e838872a2e4d4da93533f920232ffbf3aed5b4b456962844632a"
+    },
+    {
+      "record_id": "04408",
+      "patient_id": "P16922",
+      "split": "test",
+      "label": null,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V4"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "8e703e01682556bf9bcda24613eadfbef41e69acbc2b5dd78aa7f9c6f68f73ab"
+    },
+    {
+      "record_id": "08240",
+      "patient_id": "P17413",
+      "split": "test",
+      "label": null,
+      "eligible": false,
+      "actual_samples": 5000,
+      "declared_samples": 5000,
+      "source_header_convention": "acs_extrema_in_initial_and_checksum_fields",
+      "flat_leads": [
+        "V5"
+      ],
+      "missing_leads": [],
+      "missing_samples": 0,
+      "exclusion_reasons": [
+        "flat_requested_lead"
+      ],
+      "waveform_sha256": "526477719c58938fbd29ab67a4e5d5013c169de05583cf3b078fade70b5f3be5"
+    }
+  ],
+  "status": "complete",
+  "completed_at_utc": "2026-09-25T02:24:28.414068+00:00",
+  "duration_seconds": 43.703,
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "numpy": "2.5.2",
+  "scope": "Loader and quality-policy validation only. No extraction, feature computation, fitting, or test-label evaluation.",
+  "source_code_sha256": {
+    "ecgvmd/acs.py": "c2398f59f7ee5793b5843ed2daff87b56894d1ac59d10f31fbcf3e57955010b9",
+    "scripts/prepare_acs.py": "b0f1d99b874464f051f4cc5ade1dc070a9ef4a153a9407ae6cf52a3754d82a15"
+  },
+  "records_csv_sha256": "2b9763ca7cee01418385fd29d979e890e911238572d6f38244edcb5eae78e908"
+}

@@ -1,0 +1,18 @@
+{
+  "completed_at_utc": "2026-09-25T04:42:31.336319+00:00",
+  "moved_files": 36,
+  "unchanged_data_results_json": 25,
+  "preserved_original_source_report_files": 68,
+  "original_vqc_artifacts_verified": 930,
+  "frozen_source_snapshots_verified": 5,
+  "old_acs_paths_absent": true,
+  "document_link_problems": [],
+  "syntax": "passed",
+  "acs_tests_passed": 23,
+  "acs_tests_seconds": 1.977,
+  "checkpoint_resume_from_different_working_directory": "passed; no recomputation",
+  "new_data_and_result_paths_gitignored": true,
+  "scientific_protocol_changed": false,
+  "training_started": false,
+  "commit_created": false
+}

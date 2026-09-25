@@ -1,4 +1,4 @@
-# Session handoff — 2026-09-22
+# Session handoff — 2026-09-25
 
 ## Current state
 
@@ -8,7 +8,11 @@ The improvement experiment finished at **2026-09-22 04:19:52 UTC** (00:19:52 EDT
 
 There is no unfinished training job from that experiment to resume. Process/session IDs from earlier chats are not durable checkpoints.
 
-The user intends to test the approach on another dataset. **PTB-XL was recommended, but no PTB-XL download or training was started in this conversation.** The user has not finalized the new label/task specification. This handoff request is documentation work, not the start of that experiment.
+The active ACS / OMI study has its own workspace at `experiments/acs/`.
+Read its [session handoff](../experiments/acs/SESSION_HANDOFF.md) and
+[workspace guide](../experiments/acs/README.md) before ACS work. It contains
+its own code, tests, data, results, protocols, reports, and experiment log.
+The original ECGData experiments described below remain in their existing locations.
 
 ## Read these reports first
 
@@ -137,7 +141,16 @@ PY
 
 If files differ, inspect why before overwriting anything: an intentional later edit and corruption are different explanations. A missing completion marker requires inspection of trial sidecars and logs; the existence of some checkpoints alone does not mean a run completed.
 
-## Proposed next experiment — not yet started
+## Current ACS work
+
+Continue in [experiments/acs](../experiments/acs/README.md). The
+[ACS handoff](../experiments/acs/SESSION_HANDOFF.md) records completed patient
+splits, the two-record feature check, and remaining full extraction/training work.
+No completed experiment needs retraining because its files were reorganized.
+The relocation preserved saved ACS manifests and all result bytes; the new runner
+verifies the recorded import/path migration before resuming the original run.
+
+## Earlier PTB-XL proposal — superseded by ACS preparation
 
 The recommendation was **PTB-XL v1.0.3**, with 21,799 ten-second ECGs from 18,869 patients, using its official patient-separated folds: 1–8 training, 9 validation, 10 final test.
 
@@ -153,4 +166,5 @@ Sources checked on 2026-09-22:
 - [PTB-XL label definitions](https://physionet.org/content/ptb-xl/1.0.3/scp_statements.csv)
 - [Original Chapman–Shaoxing paper](https://www.nature.com/articles/s41597-020-0386-x)
 
-Continue from the user's current request. This proposal does not mean a dataset has already been selected, downloaded, or trained.
+These were earlier options. Continue from the verified ACS preparation described
+above and the user's current request, without automatically starting training.

@@ -31,3 +31,6 @@ venv/
 .data
 
 /data/
+
+# Dataset-specific workspaces keep raw downloads local too.
+/experiments/*/data/

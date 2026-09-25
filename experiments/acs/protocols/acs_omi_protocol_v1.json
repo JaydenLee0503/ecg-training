@@ -1,0 +1,94 @@
+{
+  "id": "acs-omi-v1",
+  "target": "OMI",
+  "positive_label": 1,
+  "negative_label": 0,
+  "input": {
+    "leads": ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+    "fs": 500,
+    "samples": 5000,
+    "units": "mV",
+    "filtering": null,
+    "normalization": null,
+    "resampling": null,
+    "record_policy": "acs-v1-strict-selected-leads-1",
+    "unit": "one full 10-second 12-lead ECG per feature row"
+  },
+  "split": {
+    "method": "StratifiedGroupKFold",
+    "n_splits": 5,
+    "seed": 20260924,
+    "validation_fold": 0,
+    "group": "patient_id",
+    "source_partition": "official train only",
+    "official_test": "reserved; no feature extraction or predictions in this runner"
+  },
+  "vmd": {
+    "K": 8,
+    "alpha": 2000.0,
+    "tau": 0.0,
+    "dc": true,
+    "init": 1,
+    "tol": 1e-7,
+    "iteration_limits": [2000, 4000, 8000, 16000, 32000],
+    "features": "28 mode descriptors per mode per lead; concatenate leads",
+    "unconverged": "stop and log; do not exclude or silently accept"
+  },
+  "wst": {
+    "J": 8,
+    "Q": [8, 1],
+    "T": 256,
+    "max_order": 2,
+    "log": true,
+    "eps": 1e-12,
+    "reduce": "mean",
+    "pooling": "mean of log coefficients over time for orders 1/2; signed linear order 0"
+  },
+  "preprocessing": {
+    "selector": "mRMR",
+    "k": 12,
+    "scaler": "training StandardScaler then tanh times pi/2",
+    "fit_partition": "fit only",
+    "shared_between_classifiers": true
+  },
+  "vqc": {
+    "class": "ReuploadVQC",
+    "n_qubits": 6,
+    "n_layers": 2,
+    "reupload": false,
+    "epochs": 40,
+    "schedule_epochs": 40,
+    "batch_size": 32,
+    "lr": 0.02,
+    "min_lr": 0.002,
+    "class_weight": "balanced",
+    "device": "default.qubit",
+    "diff_method": "backprop",
+    "seeds": [0, 1, 2]
+  },
+  "controls": {
+    "logistic": {"C": 1.0, "class_weight": "balanced", "max_iter": 2000, "solver": "lbfgs"},
+    "weighted_knn": {"n_neighbors": 10, "weights": "distance", "metric": "euclidean"},
+    "dummy": "always-negative predictions and constant fit-partition prevalence scores"
+  },
+  "evaluation": {
+    "primary": "ECG-level average precision (non-interpolated precision-recall summary)",
+    "secondary": ["ROC AUC", "balanced accuracy", "sensitivity", "specificity", "precision", "F1", "accuracy", "confusion matrix"],
+    "threshold": 0.5,
+    "hyperparameter_search": false,
+    "early_stopping": false,
+    "uncertainty": "paired patient-cluster bootstrap of validation ECG predictions; average differences across all three VQC seeds",
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 20260925,
+    "patient_label_aggregation": null,
+    "interpretation": "internal validation only; no quantum advantage or clinical deployment claim"
+  },
+  "engineering_check": {
+    "records": 2,
+    "selection": "smallest SHA-256 of protocol id plus record id among fit records; labels unused",
+    "kymatio_reference": "all leads of each engineering-check record at the same settings",
+    "reference_atol": 1e-12,
+    "reference_rtol": 1e-10,
+    "model_scoring": false
+  }
+}

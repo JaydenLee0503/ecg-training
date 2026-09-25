@@ -4,6 +4,7 @@ Read [architects/SESSION_HANDOFF.md](architects/SESSION_HANDOFF.md) at the start
 
 ## Working rules
 
+- ACS / OMI work belongs in `experiments/acs/`. Read its `SESSION_HANDOFF.md` and keep its code, tests, protocols, reports, log, data and results there. Original ECGData experiments retain their current layout; shared numerical methods remain in `ecgvmd/`.
 - The project compares VMD + VQC with standard WST + VQC for ECG classification. The user wants every experiment documented, including negative results, exclusions, splits, seeds, settings, runtimes, predictions, and uncertainty.
 - Check saved completion markers and artifacts before starting expensive computation. A new chat or PC restart is not a reason to retrain a completed experiment.
 - Keep existing results and frozen protocols intact. Use a separate output directory and a new documented protocol for a changed experiment.
@@ -18,4 +19,4 @@ Read [architects/SESSION_HANDOFF.md](architects/SESSION_HANDOFF.md) at the start
 
 The existing Python environment is at `/home/jaydenlee/venvs/test-ecg-training/bin/python`. After a restart, `python` may not be on PATH. Check the interpreter before installing anything. `python3` is sufficient for the standard-library artifact checksum check in the handoff.
 
-Large generated files in `results/` and `features/` are gitignored. Documentation in Git does not mean a fresh clone contains the saved models or feature archives.
+Large generated files in `results/` and `features/`, including experiment-local directories, are gitignored. Raw ACS archives in `experiments/acs/data/` are also gitignored. Documentation in Git does not mean a fresh clone contains the saved models, data or feature archives.

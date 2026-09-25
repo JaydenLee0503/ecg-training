@@ -1,5 +1,11 @@
 # ECG arrhythmia classification with Variational Mode Decomposition
 
+**Two separate studies:** the original ECGData ARR/CHF/NSR experiments are
+documented below. The new **ACS / OMI experiment** has its own
+[workspace in experiments/acs/](experiments/acs/README.md), with its code, tests,
+data, results, protocol, reports and log. Read its
+[session handoff](experiments/acs/SESSION_HANDOFF.md) for current progress.
+
 **VQC improvement study (completed 2026-09-22).** A nested, 120-fit experiment with
 compact circuits, repeated encoding, richer measurements, and epoch selection did
 not establish an improvement. Mean window accuracy was **67.94% for VMD** and

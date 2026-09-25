@@ -1,0 +1,330 @@
+"""Read the verified ACS Figshare v1 ZIPs without extracting or altering them.
+
+Signals are (samples, requested leads) float64 in mV, at their native 500 Hz.
+The source's extrema-in-header convention is checked explicitly. Short signals,
+missing samples, and flat requested leads are rejected, with an audit decision
+for each read. There is no filtering, imputation, resampling, or normalization.
+"""
+from __future__ import annotations
+
+from collections import Counter
+import csv
+from dataclasses import asdict, dataclass
+import hashlib
+import io
+from pathlib import Path
+import re
+from types import MappingProxyType
+from zipfile import ZipFile
+
+import numpy as np
+
+LEADS = ('I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6')
+TARGETS = ('AMI', 'OMI', 'CTO', 'NSTEMI', 'STEMI', 'UA')
+ARCHIVE_SHA256 = {
+    'CSV.zip': '675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005',
+    'ECG_row_data.zip': '9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4',
+}
+POLICY_VERSION = 'acs-v1-strict-selected-leads-1'
+DEFAULT_DATA_DIR = Path(__file__).resolve().parent / 'data'
+_BASE_COLUMNS = ('Patient_id', 'ecg_row_record', 'ecg_med_record', 'gender', 'age', 'Time_Interval')
+_ANNOTATIONS = ('AMI', 'OMI', 'CTO', 'PCI', 'NSTEMI', 'STEMI', 'UA', 'LM', 'PLAD',
+                'MLAD', 'DLAD', 'DB', 'PLCX', 'MLCX', 'DLCX', 'OM', 'PRCA', 'MRCA',
+                'DRCA', 'VF_VT', 'Paced', 'Prior_PCI')
+_GAIN = re.compile(r'([^()/]+)\((-?\d+)\)/mV')
+
+
+class ACSError(ValueError):
+    """Source identity, metadata, or unsupported waveform format error."""
+
+
+class ACSExcluded(ACSError):
+    """A valid source record fails the declared quality policy."""
+
+    def __init__(self, decision):
+        self.decision = decision
+        super().__init__(f'{decision.record_id}: {", ".join(decision.exclusion_reasons)}')
+
+
+@dataclass(frozen=True)
+class ACSInfo:
+    record_id: str
+    patient_id: str
+    split: str
+    label: int | None
+
+
+@dataclass(frozen=True)
+class ACSDecision:
+    record_id: str
+    patient_id: str
+    split: str
+    label: int | None
+    eligible: bool
+    actual_samples: int
+    declared_samples: int
+    source_header_convention: str
+    flat_leads: tuple[str, ...]
+    missing_leads: tuple[str, ...]
+    missing_samples: int
+    exclusion_reasons: tuple[str, ...]
+    waveform_sha256: str
+
+    def to_dict(self):
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class ACSRecord:
+    info: ACSInfo
+    signal_mV: np.ndarray | None
+    leads: tuple[str, ...]
+    decision: ACSDecision
+    fs: float = 500.0
+
+    def lead(self, name: str) -> np.ndarray:
+        """Return a 1-D waveform suitable for the existing VMD/WST front ends."""
+        if self.signal_mV is None:
+            raise ACSExcluded(self.decision)
+        try:
+            return self.signal_mV[:, self.leads.index(name)]
+        except ValueError as exc:
+            raise KeyError(f'Lead {name!r} was not requested') from exc
+
+
+def _sha256(path: Path) -> str:
+    with path.open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def _unique_members(archive: ZipFile) -> set[str]:
+    names = [x.filename for x in archive.infolist() if not x.is_dir()]
+    if len(names) != len(set(names)):
+        raise ACSError('Duplicate archive member names')
+    return set(names)
+
+
+class ACSDataset:
+    """Verified, bounded-memory ACS reader with patient and quality bookkeeping.
+
+    ``target`` must be specified to obtain training labels. Test labels are always
+    None. ``leads`` is explicit and ordered; exclusions depend on those leads.
+    ``expected_sha256`` is an explicit source-manifest override for fixtures or
+    separately audited versions; the default pins the verified public v1 files.
+    A reader is intended for one process; create a separate instance per worker.
+    """
+
+    def __init__(self, data_dir=DEFAULT_DATA_DIR, *, target=None, leads=LEADS, expected_sha256=None):
+        if target is not None and target not in TARGETS:
+            raise ValueError(f'target must be None or one of {TARGETS}')
+        if isinstance(leads, str):
+            raise ValueError('Pass leads as a sequence, e.g. leads=("II",)')
+        leads = tuple(leads)
+        if not leads or len(set(leads)) != len(leads) or not set(leads) <= set(LEADS):
+            raise ValueError(f'leads must be a nonempty unique selection from {LEADS}')
+        self._target, self._leads = target, leads
+        self._decisions = {}
+        self._archive = None
+        root = Path(data_dir)
+        expected = dict(ARCHIVE_SHA256 if expected_sha256 is None else expected_sha256)
+        if set(expected) != set(ARCHIVE_SHA256):
+            raise ValueError('Source manifest must identify both required archives')
+        self._source = {}
+        for name, digest in expected.items():
+            path = root / name
+            actual = _sha256(path)
+            if actual != digest:
+                raise ACSError(f'{name}: SHA-256 differs from the supplied source manifest')
+            self._source[name] = {'bytes': path.stat().st_size, 'sha256': actual}
+        self._infos, self._ids = {}, {}
+        patients = {}
+        with ZipFile(root / 'CSV.zip') as archive:
+            if _unique_members(archive) != {'CSV/train.csv', 'CSV/test.csv'}:
+                raise ACSError('Unexpected CSV archive layout')
+            for split in ('train', 'test'):
+                reader = csv.DictReader(io.StringIO(archive.read(f'CSV/{split}.csv').decode('utf-8-sig')))
+                columns = _BASE_COLUMNS + (_ANNOTATIONS if split == 'train' else ())
+                if reader.fieldnames != list(columns):
+                    raise ACSError(f'{split}: unexpected metadata columns, including possible test-label exposure')
+                ids, subjects = [], set()
+                for row in reader:
+                    if set(row) != set(columns) or any(v is None or not v.strip() for v in row.values()):
+                        raise ACSError(f'{split}: malformed or empty metadata cell')
+                    match = re.fullmatch(r'(\d{5})\.dat', row['ecg_row_record'])
+                    if match is None or not re.fullmatch(r'P\d+', row['Patient_id']):
+                        raise ACSError(f'{split}: invalid record or patient identifier')
+                    record_id = match[1]
+                    if row['ecg_med_record'] != record_id + '.med':
+                        raise ACSError(f'{record_id}: median/raw record identifiers disagree')
+                    if record_id in self._infos:
+                        raise ACSError(f'Duplicate record identifier: {record_id}')
+                    # Vessel annotations include category 2; they are neither
+                    # binary diagnosis targets nor inputs returned by this loader.
+                    if split == 'train' and any(row[k] not in ('0', '1') for k in TARGETS):
+                        raise ACSError(f'{record_id}: missing or nonbinary diagnosis target')
+                    label = int(row[target]) if target is not None and split == 'train' else None
+                    self._infos[record_id] = ACSInfo(record_id, row['Patient_id'], split, label)
+                    ids.append(record_id)
+                    subjects.add(row['Patient_id'])
+                if not ids:
+                    raise ACSError(f'{split}: empty metadata partition')
+                self._ids[split] = tuple(ids)
+                patients[split] = subjects
+        if patients['train'] & patients['test']:
+            raise ACSError('A patient appears in both official train and test partitions')
+        archive = ZipFile(root / 'ECG_row_data.zip')
+        try:
+            wanted = {f'row_data/{r}.{suffix}' for r in self._infos for suffix in ('dat', 'hea')}
+            if _unique_members(archive) != wanted:
+                raise ACSError('Waveform files and metadata do not match one-to-one')
+        except Exception:
+            archive.close()
+            raise
+        self._archive = archive
+
+    @property
+    def target(self):
+        return self._target
+
+    @property
+    def leads(self):
+        return self._leads
+
+    @property
+    def decisions(self):
+        """One immutable decision per attempted quality inspection, keyed by ID."""
+        return MappingProxyType(self._decisions)
+
+    @property
+    def source_manifest(self):
+        return {k: dict(v) for k, v in self._source.items()}
+
+    @property
+    def policy(self):
+        return {'version': POLICY_VERSION, 'leads': list(self.leads), 'target': self.target,
+                'fs': 500, 'samples': 5000, 'units': 'mV',
+                'short_records': 'exclude', 'flat_requested_lead': 'exclude',
+                'missing_requested_sample': 'exclude', 'header_extrema': 'validate_and_log',
+                'imputation': None, 'normalization': None, 'resampling': None}
+
+    def record_ids(self, split='train'):
+        if split not in self._ids:
+            raise ValueError('split must be train or test')
+        return self._ids[split]
+
+    def info(self, record_id):
+        return self._infos[record_id]
+
+    def close(self):
+        if self._archive is not None:
+            self._archive.close()
+            self._archive = None
+
+    def __enter__(self):
+        if self._archive is None:
+            raise ACSError('Dataset is closed')
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
+    def inspect(self, record_id: str) -> ACSRecord:
+        """Read and assess a record; excluded signals are returned as None.
+
+        Source/format errors raise immediately. Expected quality exclusions are
+        logged and returned as decisions; they are never replaced with zeros.
+        """
+        if self._archive is None:
+            raise ACSError('Dataset is closed')
+        info = self.info(record_id)
+        header = self._archive.read(f'row_data/{record_id}.hea').decode('ascii')
+        raw = self._archive.read(f'row_data/{record_id}.dat')  # ZIP CRC is checked here.
+        lines = [line.split() for line in header.splitlines()
+                 if line.strip() and not line.lstrip().startswith('#')]
+        if len(lines) != 13 or lines[0] != [record_id, '12', '500', '5000']:
+            raise ACSError(f'{record_id}: unsupported record header')
+        specs = lines[1:]
+        if any(len(s) != 9 or s[0] != record_id + '.dat' or s[1] != '16'
+               or s[3] != '16' or s[7] != '0' for s in specs):
+            raise ACSError(f'{record_id}: unsupported signal layout; require multiplexed format 16')
+        names = tuple(s[8] for s in specs)
+        if len(set(names)) != 12 or set(names) != set(LEADS):
+            raise ACSError(f'{record_id}: missing or duplicate ECG lead')
+        calibration = [_GAIN.fullmatch(s[2]) for s in specs]
+        if any(m is None for m in calibration):
+            raise ACSError(f'{record_id}: invalid mV gain/baseline specification')
+        gain = np.array([float(m[1]) for m in calibration])
+        baseline = np.array([int(m[2]) for m in calibration])
+        if not np.isfinite(gain).all() or np.any(gain <= 0):
+            raise ACSError(f'{record_id}: gain must be positive and finite')
+        if not raw or len(raw) % 24:
+            raise ACSError(f'{record_id}: incomplete 12-lead sample frame')
+        digital = np.frombuffer(raw, dtype='<i2').reshape(-1, 12)
+        initial = np.array([int(s[5]) for s in specs])
+        checksum = np.array([int(s[6]) for s in specs])
+        low, high = digital.min(axis=0), digital.max(axis=0)
+        if np.array_equal(initial, digital[0]) and np.array_equal(checksum % 65536, digital.sum(axis=0, dtype=np.int64) % 65536):
+            convention = 'wfdb_standard'
+        elif np.array_equal(initial, high) and np.array_equal(checksum, low):
+            convention = 'acs_extrema_in_initial_and_checksum_fields'
+        else:
+            raise ACSError(f'{record_id}: unrecognized header initial/checksum values')
+        missing = digital == -32768
+        missing_names = tuple(names[i] for i in np.flatnonzero(missing.any(axis=0)))
+        # For leads containing missing markers, assess constancy only on valid samples.
+        flat = low == high
+        for i in np.flatnonzero(missing.any(axis=0)):
+            valid = digital[~missing[:, i], i]
+            flat[i] = valid.size > 0 and valid.min() == valid.max()
+        flat_names = tuple(names[i] for i in np.flatnonzero(flat))
+        reasons = []
+        if digital.shape[0] != 5000:
+            reasons.append('non_10_second_record')
+        if set(flat_names) & set(self.leads):
+            reasons.append('flat_requested_lead')
+        if set(missing_names) & set(self.leads):
+            reasons.append('missing_requested_sample')
+        decision = ACSDecision(info.record_id, info.patient_id, info.split, info.label,
+                               not reasons, len(digital), 5000, convention, flat_names,
+                               missing_names, int(missing.sum()), tuple(reasons),
+                               hashlib.sha256(raw).hexdigest())
+        self._decisions[record_id] = decision
+        signal = None
+        if decision.eligible:
+            indices = [names.index(name) for name in self.leads]
+            signal = (digital[:, indices].astype(np.float64) - baseline[indices]) / gain[indices]
+            if not np.isfinite(signal).all():
+                raise ACSError(f'{record_id}: nonfinite physical samples')
+            signal.setflags(write=False)
+        return ACSRecord(info, signal, self.leads, decision)
+
+    def load_record(self, record_id: str) -> ACSRecord:
+        record = self.inspect(record_id)
+        if not record.decision.eligible:
+            raise ACSExcluded(record.decision)
+        return record
+
+    def iter_records(self, split='train'):
+        """Stream eligible records in CSV order; all exclusions stay in decisions."""
+        for record_id in self.record_ids(split):
+            record = self.inspect(record_id)
+            if record.decision.eligible:
+                yield record
+
+    def summary(self):
+        """Metadata counts and quality results for records inspected so far."""
+        result = {'policy': self.policy, 'source_manifest': self.source_manifest, 'splits': {}}
+        for split, ids in self._ids.items():
+            decisions = [self._decisions[r] for r in ids if r in self._decisions]
+            accepted = [d for d in decisions if d.eligible]
+            excluded = [d for d in decisions if not d.eligible]
+            result['splits'][split] = {
+                'records': len(ids), 'patients': len({self._infos[r].patient_id for r in ids}),
+                'inspected': len(decisions), 'eligible_records': len(accepted),
+                'eligible_patients': len({d.patient_id for d in accepted}),
+                'excluded_records': len(excluded),
+                'exclusion_reason_counts': dict(Counter(reason for d in excluded for reason in d.exclusion_reasons)),
+                'eligible_label_counts': dict(Counter(str(d.label) for d in accepted)) if self.target and split == 'train' else None,
+                'test_labels_withheld': split == 'test',
+            }
+        return result

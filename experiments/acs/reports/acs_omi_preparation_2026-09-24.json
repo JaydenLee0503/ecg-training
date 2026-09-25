@@ -1,0 +1,612 @@
+{
+  "manifest": {
+    "protocol": {
+      "id": "acs-omi-v1",
+      "target": "OMI",
+      "positive_label": 1,
+      "negative_label": 0,
+      "input": {
+        "leads": [
+          "I",
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "fs": 500,
+        "samples": 5000,
+        "units": "mV",
+        "filtering": null,
+        "normalization": null,
+        "resampling": null,
+        "record_policy": "acs-v1-strict-selected-leads-1",
+        "unit": "one full 10-second 12-lead ECG per feature row"
+      },
+      "split": {
+        "method": "StratifiedGroupKFold",
+        "n_splits": 5,
+        "seed": 20260924,
+        "validation_fold": 0,
+        "group": "patient_id",
+        "source_partition": "official train only",
+        "official_test": "reserved; no feature extraction or predictions in this runner"
+      },
+      "vmd": {
+        "K": 8,
+        "alpha": 2000,
+        "tau": 0,
+        "dc": true,
+        "init": 1,
+        "tol": 1e-7,
+        "iteration_limits": [
+          2000,
+          4000,
+          8000,
+          16000,
+          32000
+        ],
+        "features": "28 mode descriptors per mode per lead; concatenate leads",
+        "unconverged": "stop and log; do not exclude or silently accept"
+      },
+      "wst": {
+        "J": 8,
+        "Q": [
+          8,
+          1
+        ],
+        "T": 256,
+        "max_order": 2,
+        "log": true,
+        "eps": 1e-12,
+        "reduce": "mean",
+        "pooling": "mean of log coefficients over time for orders 1/2; signed linear order 0"
+      },
+      "preprocessing": {
+        "selector": "mRMR",
+        "k": 12,
+        "scaler": "training StandardScaler then tanh times pi/2",
+        "fit_partition": "fit only",
+        "shared_between_classifiers": true
+      },
+      "vqc": {
+        "class": "ReuploadVQC",
+        "n_qubits": 6,
+        "n_layers": 2,
+        "reupload": false,
+        "epochs": 40,
+        "schedule_epochs": 40,
+        "batch_size": 32,
+        "lr": 0.02,
+        "min_lr": 0.002,
+        "class_weight": "balanced",
+        "device": "default.qubit",
+        "diff_method": "backprop",
+        "seeds": [
+          0,
+          1,
+          2
+        ]
+      },
+      "controls": {
+        "logistic": {
+          "C": 1,
+          "class_weight": "balanced",
+          "max_iter": 2000,
+          "solver": "lbfgs"
+        },
+        "weighted_knn": {
+          "n_neighbors": 10,
+          "weights": "distance",
+          "metric": "euclidean"
+        },
+        "dummy": "always-negative predictions and constant fit-partition prevalence scores"
+      },
+      "evaluation": {
+        "primary": "ECG-level average precision (non-interpolated precision-recall summary)",
+        "secondary": [
+          "ROC AUC",
+          "balanced accuracy",
+          "sensitivity",
+          "specificity",
+          "precision",
+          "F1",
+          "accuracy",
+          "confusion matrix"
+        ],
+        "threshold": 0.5,
+        "hyperparameter_search": false,
+        "early_stopping": false,
+        "uncertainty": "paired patient-cluster bootstrap of validation ECG predictions; average differences across all three VQC seeds",
+        "bootstrap_resamples": 2000,
+        "bootstrap_seed": 20260925,
+        "patient_label_aggregation": null,
+        "interpretation": "internal validation only; no quantum advantage or clinical deployment claim"
+      },
+      "engineering_check": {
+        "records": 2,
+        "selection": "smallest SHA-256 of protocol id plus record id among fit records; labels unused",
+        "kymatio_reference": "all leads of each engineering-check record at the same settings",
+        "reference_atol": 1e-12,
+        "reference_rtol": 1e-10,
+        "model_scoring": false
+      }
+    },
+    "protocol_sha256": "37ebedf1fa4774f3a7efd2a832fdba6a5a79c7ef8d95bd518b796173822b5eaa",
+    "source_manifest": {
+      "CSV.zip": {
+        "bytes": 296769,
+        "sha256": "675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005"
+      },
+      "ECG_row_data.zip": {
+        "bytes": 1277577332,
+        "sha256": "9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4"
+      }
+    },
+    "source_records_sha256": "2b9763ca7cee01418385fd29d979e890e911238572d6f38244edcb5eae78e908",
+    "splits_sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba",
+    "code_sha256": {
+      "ecgvmd/acs.py": "c2398f59f7ee5793b5843ed2daff87b56894d1ac59d10f31fbcf3e57955010b9",
+      "ecgvmd/acs_experiment.py": "7539378b910988d3eddab92212f7872ba1e04abc06e1b0a7925253b4bb2037b9",
+      "ecgvmd/vmd.py": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00",
+      "ecgvmd/features.py": "f4335fcaef9123bee0d6f0845c6a26466562d7576a96cb7ff15f0289898e1fe2",
+      "ecgvmd/scatter.py": "5a4a25203df37abf74afb7768337775da36bbe26516f1ca9cf1741c03fa44a14",
+      "ecgvmd/config.py": "0e5ae80c6c91bee38b3e8ec522f4a552d9d3a0e1d5729f1ee617ea1ac52fa9f0",
+      "ecgvmd/select.py": "35e34bf562b0fed1c9d415f47186e3c163f21af5af3b05ec57ffa5c1c3384c9c",
+      "ecgvmd/quantum.py": "089b70ca430a7aaf1ef49058b2f663c96c54fc99f3d7ec0761de123040e24af3",
+      "ecgvmd/reupload.py": "b1adea7570aa4a890daa3b40116d3a2e2db2f16fe180ef6b271a4928c764fef9",
+      "scripts/acs_experiment.py": "2caee2c29feb340ed775d4cab6a7a2ccd9634dc9a931fb2a5eb2fae095239ca4"
+    },
+    "environment": {
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "packages": {
+        "numpy": "2.5.2",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.0",
+        "kymatio": "0.3.0",
+        "pennylane": "0.45.1"
+      },
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      }
+    },
+    "created_at_utc": "2026-09-25T03:25:00.057312+00:00"
+  },
+  "preparation": {
+    "status": "complete",
+    "stage": "patient split preparation",
+    "protocol_id": "acs-omi-v1",
+    "counts": {
+      "fit": {
+        "records": 14324,
+        "patients": 13576,
+        "labels": {
+          "0": 13407,
+          "1": 917
+        }
+      },
+      "validation": {
+        "records": 3581,
+        "patients": 3391,
+        "labels": {
+          "0": 3352,
+          "1": 229
+        }
+      }
+    },
+    "excluded_training_records": 55,
+    "reserved_official_test_records": 1995,
+    "reserved_test_policy_exclusions": 2,
+    "engineering_record_ids": [
+      "17045",
+      "11678"
+    ],
+    "manifest_sha256": "ac3886997718235601183e537d7478b04dbdcd1970c9b0441b44777a28a51e16",
+    "splits_sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba",
+    "models_trained": 0,
+    "completed_at_utc": "2026-09-25T03:25:00.093242+00:00"
+  },
+  "engineering_check": {
+    "status": "complete",
+    "scope": "engineering check only",
+    "records": 2,
+    "record_ids": [
+      "11678",
+      "17045"
+    ],
+    "newly_extracted": 2,
+    "resumed": 0,
+    "elapsed_seconds": 60.10596758900101,
+    "summed_vmd_seconds": 53.27340921099858,
+    "summed_wst_seconds": 0.1767130919997726,
+    "max_vmd_iterations": 4988,
+    "retried_leads": 20,
+    "final_capped_leads": 0,
+    "feature_dimensions": {
+      "vmd": 2688,
+      "wst": 2808
+    },
+    "reference_max_abs_error": 0,
+    "manifest_sha256": "ac3886997718235601183e537d7478b04dbdcd1970c9b0441b44777a28a51e16",
+    "models_trained": 0,
+    "completed_at_utc": "2026-09-25T03:35:11.719180+00:00"
+  },
+  "engineering_records": [
+    {
+      "record_id": "11678",
+      "patient_id": "P17577",
+      "label": 0,
+      "waveform_sha256": "d5f296976633deeff2b1f4443836c33831549c336587588bb9c8eecbf11f4d64",
+      "physical_input_sha256": "dbf9aa7bebfa0bdfc4ce8def66944e1e248b3cd2a83c38532da07c0b35426834",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2072,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 3259,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 3122,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 4000,
+          "iterations": 3555,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "aVF",
+          "limit": 4000,
+          "iterations": 3352,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 3895,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3725,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 8000,
+          "iterations": 4693,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 2716,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2324,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 8000,
+          "iterations": 4988,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 8000,
+          "iterations": 4306,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2072,
+        3259,
+        3122,
+        3555,
+        4693,
+        3352,
+        3895,
+        3725,
+        2716,
+        2324,
+        4988,
+        4306
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        4000,
+        8000,
+        4000,
+        4000,
+        4000,
+        4000,
+        4000,
+        8000,
+        8000
+      ],
+      "vmd_seconds": 36.61096199699932,
+      "wst_seconds": 0.09572964499966474,
+      "reference_seconds": 0.12461068899938255,
+      "reference_max_abs_error": 0,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "status": "complete",
+      "manifest_sha256": "ac3886997718235601183e537d7478b04dbdcd1970c9b0441b44777a28a51e16",
+      "features_sha256": "faa151926c4713e0ef45b50e536535087cc2c22c3beea75615f20f8b0a275350",
+      "completed_at_utc": "2026-09-25T03:34:56.976371+00:00"
+    },
+    {
+      "record_id": "17045",
+      "patient_id": "P04328",
+      "label": 0,
+      "waveform_sha256": "e16869fbc14a8e41aef5775b3e7a7f7e87a2980916ba791f32d4941f269ff8b8",
+      "physical_input_sha256": "458218d45f16534e7a5ef23969bb893aa111b1df0d81cbb9026ea50f59b6afc7",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 1096,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1965,
+          "capped": false
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2038,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 2454,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1321,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 1519,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 2290,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3520,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1703,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1900,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1720,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2175,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2038,
+        2454,
+        1096,
+        1965,
+        1321,
+        1519,
+        2290,
+        3520,
+        1703,
+        2175,
+        1900,
+        1720
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        4000,
+        2000,
+        2000
+      ],
+      "vmd_seconds": 16.662447213999258,
+      "wst_seconds": 0.08098344700010784,
+      "reference_seconds": 0.08124878000126046,
+      "reference_max_abs_error": 0,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "status": "complete",
+      "manifest_sha256": "ac3886997718235601183e537d7478b04dbdcd1970c9b0441b44777a28a51e16",
+      "features_sha256": "be7efadc9217f440eb53de82b6136ffd58ec76f75bef176413a7a5ae0332e890",
+      "completed_at_utc": "2026-09-25T03:35:11.689872+00:00"
+    }
+  ],
+  "verification": {
+    "unit_tests_passed": 21,
+    "unit_test_seconds": 1.936,
+    "patient_overlap": 0,
+    "patients_with_mixed_omi_record_labels": 114,
+    "all_eligible_training_records_assigned_once": true,
+    "completed_restart_reused_checkpoints": true,
+    "acs_models_trained": 0,
+    "full_feature_extraction_started": false,
+    "official_test_feature_extraction_started": false
+  }
+}
