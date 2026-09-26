@@ -1,5 +1,30 @@
 # Session handoff — 2026-09-25
 
+## New attention method — implementation only
+
+Latest: the user approved **ECGData preparation, without training**, while keeping
+ACS intact. The separate [ECGData architecture record](ecgdata_attention_preparation.md)
+documents exact baseline window/fold reuse, the completed CPU LFCC cache, compact
+three-class Swin and prepared training/evaluation runner. Original ACS settings
+and data remain unchanged. No GPU work or classifier fitting was started.
+
+The consolidated [architecture record](attention_method_architecture.md) documents
+both implemented components, exact dimensions/settings, data safeguards, completed
+verification, environment setup and pending work. Added at the user's request;
+this documentation update did not start extraction or training.
+
+The user requested a separate `attention method` folder for cepstral features and
+a Swin Transformer, explicitly **without training**. See its
+[handoff](../attention%20method/SESSION_HANDOFF.md) and
+[implementation report](../attention%20method/reports/implementation.md).
+LFCC/MFCC extraction, a temporal Swin adaptation, read-only ACS integration and
+fit-only normalization are implemented. All 11 CPU checks passed; synthetic
+forward inference produced finite logits without changing weights. The existing
+ACS patient split hash/counts were checked read-only. No real-data extraction,
+training or performance evaluation has run for this new method. Original VMD/WST
+code/results remain unchanged. Temporary CPU PyTorch lives in
+`/tmp/ecg-attention-deps`; the original environment was not modified.
+
 ## Current state
 
 The completed VMD/WST experiments are saved and intact. After the user reported an accidental PC shutdown, all **930 files** listed in `results/vqc_improvement/artifact_inventory.csv` were checked against their saved SHA-256 hashes and sizes: **zero missing or changed files**. This check was repeated while creating this handoff. It describes that point in time; recheck if later changes or another interruption make integrity uncertain.
@@ -8,11 +33,20 @@ The improvement experiment finished at **2026-09-22 04:19:52 UTC** (00:19:52 EDT
 
 There is no unfinished training job from that experiment to resume. Process/session IDs from earlier chats are not durable checkpoints.
 
-The active ACS / OMI study has its own workspace at `experiments/acs/`.
-Read its [session handoff](../experiments/acs/SESSION_HANDOFF.md) and
-[workspace guide](../experiments/acs/README.md) before ACS work. It contains
+The active ACS / OMI study has its own workspace at `experiments/acs_omi_vmd_wst_vqc/`.
+Read its [session handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md) and
+[workspace guide](../experiments/acs_omi_vmd_wst_vqc/README.md) before ACS work. It contains
 its own code, tests, data, results, protocols, reports, and experiment log.
 The original ECGData experiments described below remain in their existing locations.
+
+Latest ACS update: GPU extraction **stopped at 2026-09-26 01:29:28 UTC** with
+1,795/17,905 ECGs saved. Record 01985/V5 exhausted the frozen 32,000-iteration
+limit. All 1,795 checkpoints passed integrity checks; a separate CPU reference
+attempt reproduced the capped result. No production settings changed and the
+run has not resumed. Read the [stop report](../experiments/acs_omi_vmd_wst_vqc/reports/gpu_extraction_stop_2026-09-25.md)
+before proceeding. Investigate convergence, then document any amended retry
+policy in a separate run that reuses verified checkpoints. No ACS model training
+has started; earlier running-status/ETA reports are historical.
 
 ## Read these reports first
 
@@ -143,9 +177,12 @@ If files differ, inspect why before overwriting anything: an intentional later e
 
 ## Current ACS work
 
-Continue in [experiments/acs](../experiments/acs/README.md). The
-[ACS handoff](../experiments/acs/SESSION_HANDOFF.md) records completed patient
-splits, the two-record feature check, and remaining full extraction/training work.
+Continue in [experiments/acs](../experiments/acs_omi_vmd_wst_vqc/README.md). The
+[ACS handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md) records completed patient
+splits, the two-record feature check, and the completed 16-record parallel pilot.
+Full eight-worker extraction started on 2026-09-25; check the ACS status files
+before resuming. The pilot suggests about three days for feature extraction
+alone; ACS VQC training time remains unmeasured and no ACS model is fitted.
 No completed experiment needs retraining because its files were reorganized.
 The relocation preserved saved ACS manifests and all result bytes; the new runner
 verifies the recorded import/path migration before resuming the original run.

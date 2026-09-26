@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""Verify ACS Figshare v1 archives in place; do not extract or train models.
+
+Requires NumPy. The decoder deliberately accepts only the simple multiplexed
+WFDB format 16 headers used by this release, not arbitrary WFDB records.
+Official archive hashes come from the saved Figshare API response.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter, defaultdict
+import csv
+from datetime import datetime, timezone
+import hashlib
+import io
+import json
+from pathlib import Path, PurePosixPath
+import re
+import sys
+import time
+from zipfile import BadZipFile, ZipFile
+
+import numpy as np
+
+EXPERIMENT = Path(__file__).resolve().parents[1]
+
+
+def digest_file(path):
+    md5, sha256 = hashlib.md5(), hashlib.sha256()
+    with path.open('rb') as stream:
+        for block in iter(lambda: stream.read(8 * 1024 * 1024), b''):
+            md5.update(block)
+            sha256.update(block)
+    return md5.hexdigest(), sha256.hexdigest()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--data-dir', type=Path, default=EXPERIMENT / 'data')
+    parser.add_argument('--source', type=Path,
+                        default=EXPERIMENT / 'reports/acs_download_verification_2026-09-23_source.json')
+    parser.add_argument('--output', type=Path, required=True, help='New audit file; existing outputs are refused')
+    args = parser.parse_args()
+    if args.output.exists():
+        raise ValueError('Existing audit refused; choose a new --output')
+    started = time.perf_counter()
+    source = json.loads(args.source.read_text())
+    expected = {f['name']: f for f in source['files']}
+    checks, archives = {}, {}
+    for name in ['CSV.zip', 'ECG_row_data.zip']:
+        path = args.data_dir / name
+        md5, sha = digest_file(path)
+        archives[name] = {'path': str(path), 'bytes': path.stat().st_size,
+                          'md5': md5, 'sha256': sha,
+                          'official_bytes': expected[name]['size'],
+                          'official_md5': expected[name]['computed_md5']}
+        checks[name + '_size_matches'] = path.stat().st_size == expected[name]['size']
+        checks[name + '_md5_matches'] = md5 == expected[name]['computed_md5']
+        print(f'{name}: official size/hash match = '
+              f'{checks[name + "_size_matches"] and checks[name + "_md5_matches"]}', flush=True)
+    # Stop on a changed archive rather than interpreting a different release.
+    if not all(checks.values()):
+        args.output.write_text(json.dumps({'status': 'archive_mismatch',
+                                          'archives': archives, 'checks': checks}, indent=2) + '\n')
+        return 1
+
+    splits = {}
+    with ZipFile(args.data_dir / 'CSV.zip') as archive:
+        checks['csv_archive_crc'] = archive.testzip() is None
+        for split in ['train', 'test']:
+            content = archive.read(f'CSV/{split}.csv').decode('utf-8-sig')
+            splits[split] = list(csv.DictReader(io.StringIO(content)))
+    patients = {s: {r['Patient_id'] for r in rows} for s, rows in splits.items()}
+    rows = splits['train'] + splits['test']
+    record_counts = Counter(r['ecg_row_record'] for r in rows)
+    metadata = {
+        'rows': len(rows), 'unique_patients': len(patients['train'] | patients['test']),
+        'split_rows': {s: len(r) for s, r in splits.items()},
+        'split_patients': {s: len(p) for s, p in patients.items()},
+        'patient_overlap': sorted(patients['train'] & patients['test']),
+        'columns': {s: list(r[0]) for s, r in splits.items()},
+        'duplicate_record_references': {k: v for k, v in record_counts.items() if v > 1},
+        'empty_cell_counts': {s: {k: sum(not str(r.get(k, '')).strip() for r in rs)
+                                  for k in rs[0]} for s, rs in splits.items()},
+        'training_label_counts': {k: dict(Counter(r[k] for r in splits['train']))
+                                  for k in ['AMI', 'OMI', 'CTO', 'NSTEMI', 'STEMI',
+                                            'UA', 'VF_VT', 'Paced', 'Prior_PCI']},
+    }
+    checks['metadata_expected_record_count'] = len(rows) == 19955
+    checks['metadata_expected_patient_count'] = metadata['unique_patients'] == 18909
+    checks['metadata_records_unique'] = not metadata['duplicate_record_references']
+    checks['metadata_no_empty_cells'] = not any(sum(c.values()) for c in metadata['empty_cell_counts'].values())
+    checks['patient_disjoint_official_splits'] = not metadata['patient_overlap']
+    checks['official_test_labels_withheld'] = not any(k in splits['test'][0] for k in ['AMI', 'OMI', 'STEMI', 'NSTEMI', 'UA'])
+    lookup = {r['ecg_row_record']: {'split': s, 'patient': r['Patient_id']}
+              for s, rs in splits.items() for r in rs}
+    errors, checksum_mismatches, initial_mismatches, length_mismatches = [], [], [], []
+    flat_leads, missing_samples, hashes = [], [], defaultdict(list)
+    schemas, gains, units = Counter(), Counter(), Counter()
+    expected_leads = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6']
+    gain_pattern = re.compile(r'([^()\/]+)\((-?\d+)\)/(\S+)')
+    samples_checked, decoded, crc_members_checked = 0, 0, 0
+    initial_equals_max, checksum_equals_min = 0, 0
+    global_min, global_max = float('inf'), float('-inf')
+    with ZipFile(args.data_dir / 'ECG_row_data.zip') as archive:
+        members = [x for x in archive.infolist() if not x.is_dir()]
+        names = [x.filename for x in members]
+        checks['waveform_zip_member_names_unique'] = len(names) == len(set(names))
+        checks['waveform_zip_safe_paths'] = all(not PurePosixPath(n).is_absolute() and '..' not in PurePosixPath(n).parts for n in names)
+        headers = {Path(n).stem: n for n in names if n.endswith('.hea')}
+        signals = {Path(n).stem: n for n in names if n.endswith('.dat')}
+        checks['waveform_expected_member_count'] = len(members) == 39910
+        checks['waveform_pairs_complete'] = set(headers) == set(signals) and len(headers) == 19955
+        checks['metadata_waveform_bijection'] = set(record_counts) == {k + '.dat' for k in signals}
+        archives['ECG_row_data.zip']['members'] = len(members)
+        archives['ECG_row_data.zip']['uncompressed_bytes'] = sum(x.file_size for x in members)
+        for index, record in enumerate(sorted(headers), 1):
+            try:
+                # ZipFile.read validates CRC after decompressing each complete member.
+                header_bytes = archive.read(headers[record])
+                crc_members_checked += 1
+                raw = archive.read(signals[record])
+                crc_members_checked += 1
+                hashes[hashlib.sha256(raw).hexdigest()].append(record + '.dat')
+                content = header_bytes.decode('ascii')
+                lines = [line.split() for line in content.splitlines()
+                         if line.strip() and not line.lstrip().startswith('#')]
+                record_name, channels, frequency, length = lines[0][:4]
+                channels, frequency, length = int(channels), float(frequency), int(length)
+                if record_name != record or len(lines) != channels + 1:
+                    raise ValueError('record name or signal count differs from header')
+                specs = lines[1:]
+                if any(len(s) != 9 or s[0] != record + '.dat' or s[1] != '16' or s[7] != '0' for s in specs):
+                    raise ValueError('unsupported header layout/format; only simple multiplexed format 16 is decoded')
+                lead_names = [s[8] for s in specs]
+                schemas[str((channels, frequency, length, tuple(lead_names)))] += 1
+                calibration = [gain_pattern.fullmatch(s[2]) for s in specs]
+                if any(m is None for m in calibration):
+                    raise ValueError('unsupported gain/baseline/unit specification')
+                gain = np.array([float(m[1]) for m in calibration])
+                baseline = np.array([int(m[2]) for m in calibration])
+                if not np.isfinite(gain).all() or (gain <= 0).any():
+                    raise ValueError('invalid ADC gain')
+                gains.update(str(x) for x in gain)
+                units.update(m[3] for m in calibration)
+                if (channels, frequency, length, lead_names) != (12, 500.0, 5000, expected_leads):
+                    raise ValueError('record does not match the published 12-lead / 500 Hz / 10 s configuration')
+                if len(raw) != channels * length * 2:
+                    length_mismatches.append({'record': record, **lookup.get(record + '.dat', {}),
+                                              'actual_bytes': len(raw), 'expected_bytes': channels * length * 2,
+                                              'declared_samples_per_lead': length,
+                                              'actual_complete_frames': len(raw) // (channels * 2),
+                                              'actual_duration_seconds': len(raw) / (channels * 2 * frequency)})
+                if len(raw) % (channels * 2) or not raw:
+                    raise ValueError('signal file contains incomplete frames or is empty')
+                # Decode stored frames for auditing only; never pad or change originals.
+                digital = np.frombuffer(raw, dtype='<i2').reshape(-1, channels)
+                samples_checked += digital.size
+                summed = digital.sum(axis=0, dtype=np.int64) % 65536
+                expected_sum = np.array([int(s[6]) for s in specs]) % 65536
+                if not np.array_equal(summed, expected_sum):
+                    checksum_mismatches.append(record)
+                if not np.array_equal(digital[0], [int(s[5]) for s in specs]):
+                    initial_mismatches.append(record)
+                low, high = digital.min(axis=0), digital.max(axis=0)
+                initial_equals_max += int(np.array_equal(high, [int(s[5]) for s in specs]))
+                checksum_equals_min += int(np.array_equal(low, [int(s[6]) for s in specs]))
+                flat = [lead_names[j] for j in np.flatnonzero(low == high)]
+                if flat:
+                    flat_leads.append({'record': record, **lookup.get(record + '.dat', {}), 'leads': flat})
+                missing = int(np.count_nonzero(digital == -32768))
+                if missing:
+                    missing_samples.append({'record': record, **lookup.get(record + '.dat', {}), 'samples': missing})
+                global_min = min(global_min, float(((low - baseline) / gain).min()))
+                global_max = max(global_max, float(((high - baseline) / gain).max()))
+                decoded += 1
+            except (BadZipFile, ValueError, KeyError, UnicodeError, OSError, RuntimeError) as error:
+                errors.append({'record': record, 'error': str(error)})
+            if index % 2500 == 0 or index == len(headers):
+                print(f'Checked {index}/{len(headers)} ECG records; structural errors={len(errors)}', flush=True)
+    checks['waveform_archive_crc'] = crc_members_checked == 39910
+    checks['all_waveforms_decoded'] = decoded == 19955 and not errors
+    checks['waveform_header_lengths'] = not length_mismatches
+    checks['waveform_header_checksums'] = not checksum_mismatches
+    checks['waveform_header_initial_values'] = not initial_mismatches
+    duplicates = [{'sha256': h, 'records': [{'record': r, **lookup.get(r, {})} for r in rs]}
+                  for h, rs in hashes.items() if len(rs) > 1]
+    cross_split = [g for g in duplicates if len({r.get('split') for r in g['records']}) > 1]
+    checks['no_identical_raw_waveforms_across_splits'] = not cross_split
+    waveform = {'decoded_records': decoded, 'crc_checked_members': crc_members_checked,
+                'scalar_samples_checked': samples_checked,
+                'schemas': dict(schemas), 'gain_counts': dict(gains), 'unit_counts': dict(units),
+                'structural_errors': errors, 'header_length_mismatches': length_mismatches,
+                'header_checksum_mismatches': {'count': len(checksum_mismatches), 'first_examples': checksum_mismatches[:10]},
+                'header_initial_value_mismatches': {'count': len(initial_mismatches), 'first_examples': initial_mismatches[:10]},
+                'header_initial_values_equal_signal_max_records': initial_equals_max,
+                'header_checksums_equal_signal_min_records': checksum_equals_min,
+                'flat_lead_records': flat_leads, 'missing_sample_records': missing_samples,
+                'raw_scaled_range_mV_including_missing_sentinel': [global_min, global_max] if decoded else None,
+                'identical_raw_waveform_groups': duplicates,
+                'identical_raw_waveform_groups_across_splits': len(cross_split)}
+    integrity_keys = ['CSV.zip_size_matches', 'CSV.zip_md5_matches',
+                      'ECG_row_data.zip_size_matches', 'ECG_row_data.zip_md5_matches',
+                      'csv_archive_crc', 'waveform_archive_crc']
+    result = {'status': 'passed' if all(checks.values()) else 'issues_found',
+              'download_integrity': 'passed' if all(checks[k] for k in integrity_keys) else 'failed',
+              'verified_at_utc': datetime.now(timezone.utc).isoformat(),
+              'duration_seconds': round(time.perf_counter() - started, 3),
+              'source_api': 'https://api.figshare.com/v2/articles/29925314',
+              'source_snapshot': str(args.source), 'source_snapshot_sha256': hashlib.sha256(args.source.read_bytes()).hexdigest(),
+              'source_version': source['version'], 'dataset_doi': source['doi'],
+              'script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+              'python': sys.version, 'numpy': np.__version__,
+              'archives': archives, 'checks': checks, 'metadata': metadata, 'waveforms': waveform,
+              'scope': 'Read archives in place. No extraction, preprocessing, feature selection, model training, label inference, or evaluation-server submission.',
+              'limitations': ['Archive and structural checks do not establish clinical label correctness or diagnostic signal quality.',
+                              'Only the supplied training labels were summarized; test labels are absent.',
+                              'Basic flatline and missing-sample checks are not a complete signal-quality assessment.']}
+    args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
+    print(json.dumps({'status': result['status'], 'failed_checks': [k for k, v in checks.items() if not v],
+                      'flat_lead_records': len(flat_leads), 'missing_sample_records': len(missing_samples),
+                      'duplicate_waveform_groups': len(duplicates), 'seconds': result['duration_seconds'],
+                      'report': str(args.output)}, indent=2), flush=True)
+    return 0 if all(checks.values()) else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

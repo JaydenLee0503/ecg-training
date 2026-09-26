@@ -1,0 +1,101 @@
+{
+  "status": "failed_extraction_checkpoints_verified",
+  "checked_at_utc": "2026-09-26T01:38:32.291184+00:00",
+  "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+  "records_verified": 1795,
+  "records_pending": 16110,
+  "origins": {
+    "imported_cpu_checkpoint": 115,
+    "gpu_fp64_vmd_cpu_wst": 1680
+  },
+  "extraction_status": {
+    "status": "failed",
+    "stage": "extract",
+    "pid": 192389,
+    "started_at_utc": "2026-09-26T00:57:48.594680+00:00",
+    "updated_at_utc": "2026-09-26T01:29:28.619891+00:00",
+    "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+    "records_total": 17905,
+    "records_complete": 1795,
+    "records_resumed": 131,
+    "records_new": 1664,
+    "elapsed_seconds": 1900.0252094179996,
+    "records_per_hour": 3152.800273547387,
+    "active_record_ids": [
+      "01981",
+      "01982",
+      "01983",
+      "01985",
+      "01986",
+      "01987",
+      "01988",
+      "01989",
+      "01990",
+      "01991",
+      "01992",
+      "01993",
+      "01994",
+      "01995",
+      "01996",
+      "01997"
+    ],
+    "models_trained": 0,
+    "official_test_processed": false,
+    "error_type": "RuntimeError",
+    "error": "Unconverged leads after 32000: [('01985', 'V5')]",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/d/projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/extract_gpu.py\", line 311, in run\n    for row, (vectors, details) in zip(selected, results, strict=True):\n  File \"/mnt/d/projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/gpu_extraction.py\", line 57, in extract_records\n    raise RuntimeError(f'Unconverged leads after {limit}: {failed}')\nRuntimeError: Unconverged leads after 32000: [('01985', 'V5')]\n"
+  },
+  "final_capped_leads_in_failed_batch": [
+    {
+      "record_id": "01985",
+      "partition": "fit",
+      "lead": "V5",
+      "attempts": [
+        {
+          "time_utc": "2026-09-26T01:29:04.630440+00:00",
+          "batch_id": "192389-1790386140976699173",
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "time_utc": "2026-09-26T01:29:08.365735+00:00",
+          "batch_id": "192389-1790386140976699173",
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "time_utc": "2026-09-26T01:29:11.484496+00:00",
+          "batch_id": "192389-1790386140976699173",
+          "lead": "V5",
+          "limit": 8000,
+          "iterations": 8000,
+          "capped": true
+        },
+        {
+          "time_utc": "2026-09-26T01:29:17.328844+00:00",
+          "batch_id": "192389-1790386140976699173",
+          "lead": "V5",
+          "limit": 16000,
+          "iterations": 16000,
+          "capped": true
+        },
+        {
+          "time_utc": "2026-09-26T01:29:28.598825+00:00",
+          "batch_id": "192389-1790386140976699173",
+          "lead": "V5",
+          "limit": 32000,
+          "iterations": 32000,
+          "capped": true
+        }
+      ]
+    }
+  ],
+  "failed_batch_completed_checkpoints": [],
+  "feature_hashes_and_attempt_logs_passed": true,
+  "models_trained": 0,
+  "official_test_processed": false
+}

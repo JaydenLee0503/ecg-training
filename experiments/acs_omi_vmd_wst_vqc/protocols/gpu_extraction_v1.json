@@ -1,0 +1,18 @@
+{
+  "id": "acs-omi-v1-gpu-extraction-1",
+  "scientific_protocol_sha256": "37ebedf1fa4774f3a7efd2a832fdba6a5a79c7ef8d95bd518b796173822b5eaa",
+  "parent_parallel_manifest_sha256": "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c",
+  "benchmark_manifest_sha256": "2d2df54dc5926ccf1bdf416eebfbae26e26673f0b693a14d2cb7a0ddd6f2ec59",
+  "benchmark_summary_sha256": "1364614a77314ba8e275970f3d538cd9c8b8670d883b4e9639cf546fa4d2793f",
+  "records_per_gpu_batch": 16,
+  "device": 0,
+  "precision": "float64 / complex128; validated CUDA kernel unchanged; --fmad=false",
+  "cpu_threads": 1,
+  "wst": "Frozen standard CPU WST, unchanged inputs, settings, path order and descriptors",
+  "retries": "Restart each capped lead from initialization at the frozen iteration limits; append all attempts before retry/failure; final nonconvergence stops the run, never excludes a record",
+  "reuse": "Copy all verified completed CPU feature checkpoints, byte-identical NPZ files, with original metadata and attempt-log hashes in the new manifest; record CPU origin per ECG",
+  "pilot": "Recompute the same 16 label-independent fit ECGs with the integrated runner; VMD features atol=1e-6 rtol=1e-5; WST and names exact; physical input, iterations, limits and all retry attempts exact; Kymatio reference on the original two engineering ECGs",
+  "resume": "Per-record NPZ and completion metadata committed atomically; verify all completed records before skipping; SIGINT/SIGTERM finishes the current batch then stops; an abrupt crash repeats at most the unfinished part of one batch",
+  "failure": "Retain traceback, batch identities, all attempt logs and completed checkpoints; do not proceed automatically after numerical failure",
+  "scope": "17,905 eligible fit/validation ECGs; no official-test waveform access, model fitting, feature selection or accuracy-based decisions"
+}

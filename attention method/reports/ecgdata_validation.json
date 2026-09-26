@@ -1,0 +1,64 @@
+{
+  "status": "prepared_not_trained",
+  "training_started": false,
+  "gpu_used": false,
+  "cache_path": "features/ecgdata_lfcc_v1",
+  "shape": [
+    1620,
+    13,
+    1,
+    16
+  ],
+  "class_window_counts": {
+    "ARR": 960,
+    "CHF": 300,
+    "NSR": 360
+  },
+  "patient_count": 80,
+  "rows": 162,
+  "initial_extraction_seconds": 5.980511347999709,
+  "tests": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 0.318
+  },
+  "dry_run": {
+    "device": "cpu",
+    "parameters": 33607,
+    "logits_shape": [
+      2,
+      3
+    ],
+    "weights_unchanged": true
+  },
+  "cache_checks": {
+    "completed_reuse": "reused",
+    "partial_resume": {
+      "reused_shards": 1,
+      "new_windows": 1610
+    },
+    "corruption_rejected": true
+  },
+  "preservation": {
+    "protected_files": 134,
+    "changed_files": [],
+    "details": "ecgdata_preservation.json"
+  },
+  "feature_manifest_sha256": "f30917149fcf318a3d6cf31315c75b504b73608b4acd420c42e633dc8449a2fc",
+  "feature_completion_sha256": "79746add065e661eba9e6d2123eaf0a44fa9114811679c4e6e5fc742866c0d10",
+  "protocol_sha256": "397dac613b711510ce7aadc74363b2a410a355de55217fed541473246a815741",
+  "execution_sources": {
+    "ecgdata.py": "8230b49c0a1b778428b89c3b1de6814673ae029b94355f5b75c1e637b3254296",
+    "attention_ecg/ecgdata.py": "732b449cdf3332e704eff0d7d803e84903b37330ba0295e09f9fbfdc5ab2fd1a",
+    "attention_ecg/ecgdata_training.py": "db917c268ae38f229a202650211cdea1940652cab5f64d8e4c8d2cdecd7ab8df",
+    "attention_ecg/ecgdata_report.py": "9935973e427d6421cbed2a7e37613cb83e77bcd9de54a70bd0b879afec8c6ea3",
+    "tests/test_ecgdata.py": "c0ed1b6399ce688f9f7eb29ff33ec880751fbfecf7ff9b8c8c28b949366fe0d5"
+  },
+  "limits": [
+    "No classifier was fitted, including logistic regression",
+    "Optimizer execution and trained end-to-end reporting not exercised",
+    "CUDA execution not tested",
+    "No predictive performance available"
+  ]
+}

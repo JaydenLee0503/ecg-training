@@ -1,0 +1,14 @@
+{
+  "id": "acs-omi-vmd-retry-extension-diagnostic-1",
+  "parent_manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+  "record_id": "01985",
+  "required_partition": "fit",
+  "scientific_protocol": "acs_omi_protocol_v1_retry128k.json",
+  "purpose": "Reproduce the failing full ECG with appended 64000/128000 restart limits; keep tolerance and all other numerical settings fixed; validate CPU/GPU feature and convergence agreement before production use",
+  "cpu_reference": "Frozen extract_record with full 12 leads and Kymatio reference",
+  "gpu_candidate": "Frozen extract_records and CUDA kernel; full 12 leads; same capped-lead retry initialization",
+  "checks": "VMD feature atol=1e-6 rtol=1e-5; WST/names exact; physical inputs, final iterations/retry limits and all attempts exact after ordering; finite outputs; Kymatio at frozen tolerances",
+  "failure": "Stop at 128000; retain failed attempts; no automatic tolerance relaxation, exclusion or production restart",
+  "models_trained": 0,
+  "official_test_processed": false
+}

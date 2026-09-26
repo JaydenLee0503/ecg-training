@@ -1,0 +1,1938 @@
+{
+  "status": "complete",
+  "completed_at_utc": "2026-09-25T22:12:38.416965+00:00",
+  "run": "experiments/acs/results/gpu_vmd_benchmark_v1",
+  "manifest": {
+    "protocol": {
+      "id": "acs-omi-v1-gpu-vmd-benchmark-1",
+      "purpose": "Engineering speed and numerical equivalence only; no model fitting or official test access",
+      "parent_parallel_manifest_sha256": "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c",
+      "records": "Same 16 fit ECGs selected without labels for the completed parallel pilot",
+      "precision": "float64 / complex128; no fast math; CUDA FMA disabled",
+      "algorithm": "Frozen VMD settings and restart-from-initialization retry limits; CPU FFT and descriptors, GPU iterative updates",
+      "gpu_kernel": "One 256-thread block per lead; at most 64 iterations per kernel launch",
+      "variants": [
+        "CPU serial reference on first two pilot records, four leads per batch",
+        "GPU four-lead batches on first two records",
+        "CPU eight-worker baseline on all 16 records, four leads per batch",
+        "GPU all 192 leads batched together on all 16 records"
+      ],
+      "gpu_warm_repetitions": 3,
+      "cpu_full_repetitions": 1,
+      "timing": "Synchronized wall time includes VMD retries, transfers, reconstruction and CPU descriptors; source loading, reference checks and artifact writes excluded; CPU pool startup included and reported",
+      "startup": "Record GPU context initialization and synthetic compilation/warmup separately",
+      "checks": {
+        "features_atol": 0.000001,
+        "features_rtol": 0.00001,
+        "modes_atol": 1e-8,
+        "modes_rtol": 1e-7,
+        "omega_hz_atol": 0.000001,
+        "omega_hz_rtol": 1e-7,
+        "iterations": "Require exact per-lead final iteration counts and retry limits; log every attempt",
+        "feature_names": "Require exact names and record/lead ordering",
+        "mismatch_policy": "Retain mismatch diagnostics, report failure, do not promote GPU output into the production run"
+      },
+      "full_extraction": "Keep existing CPU extraction stopped during timings; no automatic backend switch or full GPU launch",
+      "output": "Separate directory with status, manifest, timings, per-record diagnostics, predictions_available=false and retained failure traces"
+    },
+    "scientific_protocol": {
+      "id": "acs-omi-v1",
+      "target": "OMI",
+      "positive_label": 1,
+      "negative_label": 0,
+      "input": {
+        "leads": [
+          "I",
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "fs": 500,
+        "samples": 5000,
+        "units": "mV",
+        "filtering": null,
+        "normalization": null,
+        "resampling": null,
+        "record_policy": "acs-v1-strict-selected-leads-1",
+        "unit": "one full 10-second 12-lead ECG per feature row"
+      },
+      "split": {
+        "method": "StratifiedGroupKFold",
+        "n_splits": 5,
+        "seed": 20260924,
+        "validation_fold": 0,
+        "group": "patient_id",
+        "source_partition": "official train only",
+        "official_test": "reserved; no feature extraction or predictions in this runner"
+      },
+      "vmd": {
+        "K": 8,
+        "alpha": 2000,
+        "tau": 0,
+        "dc": true,
+        "init": 1,
+        "tol": 1e-7,
+        "iteration_limits": [
+          2000,
+          4000,
+          8000,
+          16000,
+          32000
+        ],
+        "features": "28 mode descriptors per mode per lead; concatenate leads",
+        "unconverged": "stop and log; do not exclude or silently accept"
+      },
+      "wst": {
+        "J": 8,
+        "Q": [
+          8,
+          1
+        ],
+        "T": 256,
+        "max_order": 2,
+        "log": true,
+        "eps": 1e-12,
+        "reduce": "mean",
+        "pooling": "mean of log coefficients over time for orders 1/2; signed linear order 0"
+      },
+      "preprocessing": {
+        "selector": "mRMR",
+        "k": 12,
+        "scaler": "training StandardScaler then tanh times pi/2",
+        "fit_partition": "fit only",
+        "shared_between_classifiers": true
+      },
+      "vqc": {
+        "class": "ReuploadVQC",
+        "n_qubits": 6,
+        "n_layers": 2,
+        "reupload": false,
+        "epochs": 40,
+        "schedule_epochs": 40,
+        "batch_size": 32,
+        "lr": 0.02,
+        "min_lr": 0.002,
+        "class_weight": "balanced",
+        "device": "default.qubit",
+        "diff_method": "backprop",
+        "seeds": [
+          0,
+          1,
+          2
+        ]
+      },
+      "controls": {
+        "logistic": {
+          "C": 1,
+          "class_weight": "balanced",
+          "max_iter": 2000,
+          "solver": "lbfgs"
+        },
+        "weighted_knn": {
+          "n_neighbors": 10,
+          "weights": "distance",
+          "metric": "euclidean"
+        },
+        "dummy": "always-negative predictions and constant fit-partition prevalence scores"
+      },
+      "evaluation": {
+        "primary": "ECG-level average precision (non-interpolated precision-recall summary)",
+        "secondary": [
+          "ROC AUC",
+          "balanced accuracy",
+          "sensitivity",
+          "specificity",
+          "precision",
+          "F1",
+          "accuracy",
+          "confusion matrix"
+        ],
+        "threshold": 0.5,
+        "hyperparameter_search": false,
+        "early_stopping": false,
+        "uncertainty": "paired patient-cluster bootstrap of validation ECG predictions; average differences across all three VQC seeds",
+        "bootstrap_resamples": 2000,
+        "bootstrap_seed": 20260925,
+        "patient_label_aggregation": null,
+        "interpretation": "internal validation only; no quantum advantage or clinical deployment claim"
+      },
+      "engineering_check": {
+        "records": 2,
+        "selection": "smallest SHA-256 of protocol id plus record id among fit records; labels unused",
+        "kymatio_reference": "all leads of each engineering-check record at the same settings",
+        "reference_atol": 1e-12,
+        "reference_rtol": 1e-10,
+        "model_scoring": false
+      }
+    },
+    "record_ids": [
+      "17045",
+      "11678",
+      "19330",
+      "15014",
+      "14525",
+      "08564",
+      "06496",
+      "07202",
+      "00407",
+      "18957",
+      "19703",
+      "16283",
+      "05554",
+      "17903",
+      "07316",
+      "13784"
+    ],
+    "parent_manifest_sha256": "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c",
+    "code_sha256": {
+      "experiments/acs/gpu_vmd.py": "c77b534e60c64fe80c87fefbc40411e12143d736ae4b6eb64c1447c358290369",
+      "experiments/acs/scripts/benchmark_gpu.py": "07f0f1517eea240fc7e5e5f00ab3f9005903409becb975ce8b3dc006b667affc",
+      "experiments/acs/tests/test_gpu_vmd.py": "7781ea1973239df7374d0d560dcb189c59d9e876ffcfc5da749096d496447e19",
+      "experiments/acs/protocols/gpu_vmd_benchmark_v1.json": "378c268a38792ec4f3d6d0bfd086b854762559a63bc4237ef4f760401d259a98"
+    },
+    "environment": {
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "packages": {
+        "numpy": "2.5.2",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.0",
+        "kymatio": "0.3.0",
+        "pennylane": "0.45.1"
+      },
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      }
+    },
+    "started_at_utc": "2026-09-25T22:07:00.905518+00:00",
+    "dependencies": {
+      "cupy-cuda12x": "14.2.0",
+      "cuda-pathfinder": "1.8.2"
+    },
+    "source_manifest": {
+      "CSV.zip": {
+        "bytes": 296769,
+        "sha256": "675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005"
+      },
+      "ECG_row_data.zip": {
+        "bytes": 1277577332,
+        "sha256": "9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4"
+      }
+    },
+    "official_test_processed": false
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 5070, 12227 MiB, 610.88, P1, 4 %",
+    "compute_capability": "120",
+    "driver_version": 13030,
+    "runtime_version": 12090,
+    "context_seconds": 0.38723400899834814
+  },
+  "cupy_configuration": "OS                           : Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39\nPython Version               : 3.12.3\nCuPy Version                 : 14.2.0\nCuPy Platform                : NVIDIA CUDA\nNumPy Version                : 2.5.2\nSciPy Version                : 1.18.1\nCython Build Version         : 3.2.4\nCython Runtime Version       : None\nCUDA Root                    : /usr/local/cuda-12.8/targets/x86_64-linux\nNVCC PATH                    : /usr/local/cuda/bin/nvcc\nCUDA Build Version           : 12090\nCUDA Driver Version          : 13030\nCUDA Runtime Version         : 12090 (linked to CuPy) / 12080 (locally installed)\nCUDA Extra Include Dirs      : ['/usr/local/cuda/include']\ncuBLAS Version               : (available)\ncuFFT Version                : 11303\ncuRAND Version               : 10309\ncuSOLVER Version             : (11, 7, 3)\ncuSPARSE Version             : (available)\nNVRTC Version                : (12, 8)\nThrust Version               : 300102\nCUB Build Version            : 300102\nJitify Build Version         : <unknown>\nNCCL Build Version           : (not loaded; try `import cupy.cuda.nccl` first)\nNCCL Runtime Version         : (not loaded; try `import cupy.cuda.nccl` first)\ncuTENSOR Version             : None\ncuSPARSELt Build Version     : None\nDevice 0 Name                : NVIDIA GeForce RTX 5070\nDevice 0 Compute Capability  : 120\nDevice 0 PCI Bus ID          : 0000:01:00.0\n",
+  "timings": {
+    "cpu_two_records_seconds": 54.4116373300003,
+    "gpu_two_records_seconds": 16.813641638000263,
+    "cpu_eight_workers_16_records_seconds": 222.4163035269994,
+    "gpu_16_records_seconds": [
+      11.998149963999822,
+      11.670207039998786,
+      11.655580634998842
+    ],
+    "gpu_median_seconds": 11.670207039998786,
+    "speedup_vs_eight_workers": 19.058471093501915,
+    "gpu_records_per_hour": 4935.645083465974,
+    "extrapolated_17905_records_hours": 3.627691962694067,
+    "includes_wst": false,
+    "includes_source_loading": false,
+    "includes_artifact_writes": false,
+    "cpu_repetitions": 1,
+    "gpu_repetitions": 3
+  },
+  "startup": {
+    "context_seconds": 0.38723400899834814,
+    "warmup_seconds": 0.247581944000558,
+    "load_seconds": 38.38646946599874
+  },
+  "numerical_checks_passed": true,
+  "two_record_comparison": {
+    "cpu": [
+      {
+        "record_id": "17045",
+        "features": {
+          "passed": true,
+          "exact": true,
+          "max_abs_error": 0,
+          "violations": 0,
+          "atol": 0.000001,
+          "rtol": 0.00001
+        },
+        "names_equal": true,
+        "iterations_equal": true,
+        "limits_equal": true,
+        "passed": true
+      },
+      {
+        "record_id": "11678",
+        "features": {
+          "passed": true,
+          "exact": true,
+          "max_abs_error": 0,
+          "violations": 0,
+          "atol": 0.000001,
+          "rtol": 0.00001
+        },
+        "names_equal": true,
+        "iterations_equal": true,
+        "limits_equal": true,
+        "passed": true
+      }
+    ],
+    "gpu": [
+      {
+        "record_id": "17045",
+        "features": {
+          "passed": true,
+          "exact": true,
+          "max_abs_error": 0,
+          "violations": 0,
+          "atol": 0.000001,
+          "rtol": 0.00001
+        },
+        "names_equal": true,
+        "iterations_equal": true,
+        "limits_equal": true,
+        "passed": true
+      },
+      {
+        "record_id": "11678",
+        "features": {
+          "passed": true,
+          "exact": true,
+          "max_abs_error": 0,
+          "violations": 0,
+          "atol": 0.000001,
+          "rtol": 0.00001
+        },
+        "names_equal": true,
+        "iterations_equal": true,
+        "limits_equal": true,
+        "passed": true
+      }
+    ],
+    "modes": {
+      "passed": true,
+      "exact": false,
+      "max_abs_error": 6.000408503403776e-15,
+      "violations": 0,
+      "atol": 1e-8,
+      "rtol": 1e-7
+    },
+    "omega_hz": {
+      "passed": true,
+      "exact": false,
+      "max_abs_error": 1.1013412404281553e-13,
+      "violations": 0,
+      "atol": 0.000001,
+      "rtol": 1e-7
+    }
+  },
+  "records": [
+    {
+      "record_id": "17045",
+      "patient_id": "P04328",
+      "label": 0,
+      "physical_input_sha256": "458218d45f16534e7a5ef23969bb893aa111b1df0d81cbb9026ea50f59b6afc7",
+      "cpu_worker_seconds": 99.10295019700061,
+      "cpu_solver_seconds": 98.82176484800038,
+      "vmd_iterations": [
+        2038,
+        2454,
+        1096,
+        1965,
+        1321,
+        1519,
+        2290,
+        3520,
+        1703,
+        2175,
+        1900,
+        1720
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        4000,
+        2000,
+        2000
+      ],
+      "capped_attempts": 5,
+      "gpu_checks": [
+        {
+          "record_id": "17045",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "17045",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "17045",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "11678",
+      "patient_id": "P17577",
+      "label": 0,
+      "physical_input_sha256": "dbf9aa7bebfa0bdfc4ce8def66944e1e248b3cd2a83c38532da07c0b35426834",
+      "cpu_worker_seconds": 208.5363921950011,
+      "cpu_solver_seconds": 208.38117178100038,
+      "vmd_iterations": [
+        2072,
+        3259,
+        3122,
+        3555,
+        4693,
+        3352,
+        3895,
+        3725,
+        2716,
+        2324,
+        4988,
+        4306
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        4000,
+        8000,
+        4000,
+        4000,
+        4000,
+        4000,
+        4000,
+        8000,
+        8000
+      ],
+      "capped_attempts": 15,
+      "gpu_checks": [
+        {
+          "record_id": "11678",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "11678",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "11678",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "19330",
+      "patient_id": "P01698",
+      "label": 1,
+      "physical_input_sha256": "794935db02f3bba93ec9e24867e353f9471f29574a0f86307b2eca14df0cb397",
+      "cpu_worker_seconds": 113.64501969599951,
+      "cpu_solver_seconds": 113.34498629900008,
+      "vmd_iterations": [
+        1062,
+        1234,
+        872,
+        746,
+        817,
+        623,
+        929,
+        4575,
+        4123,
+        2112,
+        2307,
+        2411
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        8000,
+        8000,
+        4000,
+        4000,
+        4000
+      ],
+      "capped_attempts": 7,
+      "gpu_checks": [
+        {
+          "record_id": "19330",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "19330",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "19330",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "15014",
+      "patient_id": "P13540",
+      "label": 0,
+      "physical_input_sha256": "6d1bbcc85e24ca4ea430da3348d49f1e915930f5c7be58307c00547715aedafd",
+      "cpu_worker_seconds": 188.38050570400083,
+      "cpu_solver_seconds": 188.1543522840002,
+      "vmd_iterations": [
+        3016,
+        2277,
+        2456,
+        2551,
+        1583,
+        2220,
+        1522,
+        2260,
+        3369,
+        3706,
+        4035,
+        3581
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        4000,
+        2000,
+        4000,
+        2000,
+        4000,
+        4000,
+        4000,
+        8000,
+        4000
+      ],
+      "capped_attempts": 11,
+      "gpu_checks": [
+        {
+          "record_id": "15014",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "15014",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "15014",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "14525",
+      "patient_id": "P00576",
+      "label": 0,
+      "physical_input_sha256": "d6101be53b5202b4667776fc99fe956cf1eea5ccd48b94dda442c6d4c24f9dcd",
+      "cpu_worker_seconds": 101.35499426000024,
+      "cpu_solver_seconds": 101.0614788870007,
+      "vmd_iterations": [
+        1471,
+        1601,
+        1480,
+        1244,
+        1205,
+        908,
+        2387,
+        3142,
+        3481,
+        2613,
+        1980,
+        1716
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        4000,
+        4000,
+        2000,
+        2000
+      ],
+      "capped_attempts": 4,
+      "gpu_checks": [
+        {
+          "record_id": "14525",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "14525",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "14525",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "08564",
+      "patient_id": "P15883",
+      "label": 0,
+      "physical_input_sha256": "aa3ca80ceaafd647d5f9a4ed43b3c70af69bf6ed527f65f0e91a04f74c76340f",
+      "cpu_worker_seconds": 116.36895469099909,
+      "cpu_solver_seconds": 116.01052388300013,
+      "vmd_iterations": [
+        1399,
+        1610,
+        999,
+        1750,
+        795,
+        1006,
+        2437,
+        2160,
+        4050,
+        1539,
+        3646,
+        2099
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        8000,
+        2000,
+        4000,
+        4000
+      ],
+      "capped_attempts": 6,
+      "gpu_checks": [
+        {
+          "record_id": "08564",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "08564",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "08564",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "06496",
+      "patient_id": "P14811",
+      "label": 0,
+      "physical_input_sha256": "f005735d916b0b2a326af80c428016ab505126bebc9ea8d20595ec5cb8979b72",
+      "cpu_worker_seconds": 55.18230859199866,
+      "cpu_solver_seconds": 54.85752432999834,
+      "vmd_iterations": [
+        1157,
+        1288,
+        592,
+        943,
+        1089,
+        969,
+        1976,
+        2012,
+        1269,
+        1276,
+        1156,
+        965
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "capped_attempts": 1,
+      "gpu_checks": [
+        {
+          "record_id": "06496",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "06496",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "06496",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "07202",
+      "patient_id": "P00246",
+      "label": 0,
+      "physical_input_sha256": "da47611c7d788c91277d1b0fc984ae592aef086541bae16005904c7887a08ef6",
+      "cpu_worker_seconds": 120.93001609199928,
+      "cpu_solver_seconds": 120.55989613999918,
+      "vmd_iterations": [
+        2060,
+        2957,
+        2119,
+        813,
+        1936,
+        1784,
+        1969,
+        3584,
+        2113,
+        1740,
+        1592,
+        2011
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        2000,
+        4000
+      ],
+      "capped_attempts": 6,
+      "gpu_checks": [
+        {
+          "record_id": "07202",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "07202",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "07202",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "00407",
+      "patient_id": "P02939",
+      "label": 0,
+      "physical_input_sha256": "dc8b335a3e0a10f5a4ebe21791f00c6489d06dce71ff54bd820e696b75d863d7",
+      "cpu_worker_seconds": 85.996448676,
+      "cpu_solver_seconds": 85.64992135200009,
+      "vmd_iterations": [
+        2168,
+        1173,
+        3046,
+        1413,
+        1211,
+        869,
+        3014,
+        2051,
+        1757,
+        1517,
+        1387,
+        1333
+      ],
+      "vmd_limits": [
+        4000,
+        2000,
+        4000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "capped_attempts": 4,
+      "gpu_checks": [
+        {
+          "record_id": "00407",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "00407",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "00407",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "18957",
+      "patient_id": "P16916",
+      "label": 0,
+      "physical_input_sha256": "9539160afff51acc756ef0011c657f13db9b3a3d782131418214aa31330266df",
+      "cpu_worker_seconds": 75.6334581709998,
+      "cpu_solver_seconds": 75.34157910300019,
+      "vmd_iterations": [
+        1345,
+        1409,
+        1076,
+        1136,
+        1154,
+        333,
+        3806,
+        1580,
+        1985,
+        2232,
+        2250,
+        1603
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000
+      ],
+      "capped_attempts": 3,
+      "gpu_checks": [
+        {
+          "record_id": "18957",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "18957",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "18957",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "19703",
+      "patient_id": "P06352",
+      "label": 0,
+      "physical_input_sha256": "c6b8889380f09499b424fa5b9c93b6b67d05065eef6943858aaaf5d737bb1bd0",
+      "cpu_worker_seconds": 61.44420962799995,
+      "cpu_solver_seconds": 61.1389365569994,
+      "vmd_iterations": [
+        1182,
+        1074,
+        917,
+        1152,
+        1218,
+        627,
+        2326,
+        2551,
+        1369,
+        1251,
+        675,
+        1076
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "capped_attempts": 2,
+      "gpu_checks": [
+        {
+          "record_id": "19703",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "19703",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "19703",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "16283",
+      "patient_id": "P05855",
+      "label": 0,
+      "physical_input_sha256": "eac4f0e490efa6a969b330c6a97359134dd485386eb6bfab98eb23c2259d7238",
+      "cpu_worker_seconds": 96.56278265799847,
+      "cpu_solver_seconds": 96.43347603499933,
+      "vmd_iterations": [
+        2180,
+        1536,
+        996,
+        1690,
+        1351,
+        2236,
+        7583,
+        2259,
+        4049,
+        3292,
+        2373,
+        1762
+      ],
+      "vmd_limits": [
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        8000,
+        4000,
+        8000,
+        4000,
+        4000,
+        2000
+      ],
+      "capped_attempts": 9,
+      "gpu_checks": [
+        {
+          "record_id": "16283",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "16283",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "16283",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "05554",
+      "patient_id": "P05143",
+      "label": 0,
+      "physical_input_sha256": "8f8ef9b816fd8fee6c37fe932fd0f2f03c496de0508fbcc7b39ed03845f9b844",
+      "cpu_worker_seconds": 104.10523423300037,
+      "cpu_solver_seconds": 103.98159011899952,
+      "vmd_iterations": [
+        2485,
+        2536,
+        2036,
+        5243,
+        5492,
+        1474,
+        6092,
+        3361,
+        3838,
+        1147,
+        3414,
+        3524
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        8000,
+        8000,
+        2000,
+        8000,
+        4000,
+        4000,
+        2000,
+        4000,
+        4000
+      ],
+      "capped_attempts": 13,
+      "gpu_checks": [
+        {
+          "record_id": "05554",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "05554",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "05554",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "17903",
+      "patient_id": "P00450",
+      "label": 0,
+      "physical_input_sha256": "3575b0bcf4f105fa2313354c5aebac21d1f5ec4e1d77a8e1aef6f12844d4de61",
+      "cpu_worker_seconds": 59.36246486699929,
+      "cpu_solver_seconds": 59.117629981999926,
+      "vmd_iterations": [
+        1004,
+        743,
+        490,
+        774,
+        264,
+        763,
+        1118,
+        1331,
+        1298,
+        1322,
+        3847,
+        3389
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000
+      ],
+      "capped_attempts": 2,
+      "gpu_checks": [
+        {
+          "record_id": "17903",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "17903",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "17903",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "07316",
+      "patient_id": "P15354",
+      "label": 0,
+      "physical_input_sha256": "57363863f21311c7bbc66c93a64974d44c2bea2dcae19235d29d11ab734add2c",
+      "cpu_worker_seconds": 69.76775731900125,
+      "cpu_solver_seconds": 69.64513943600105,
+      "vmd_iterations": [
+        1576,
+        3811,
+        2494,
+        3202,
+        2601,
+        1994,
+        2125,
+        2353,
+        1378,
+        3059,
+        2990,
+        1965
+      ],
+      "vmd_limits": [
+        2000,
+        4000,
+        4000,
+        4000,
+        4000,
+        2000,
+        4000,
+        4000,
+        2000,
+        4000,
+        4000,
+        2000
+      ],
+      "capped_attempts": 8,
+      "gpu_checks": [
+        {
+          "record_id": "07316",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "07316",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "07316",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "record_id": "13784",
+      "patient_id": "P04703",
+      "label": 0,
+      "physical_input_sha256": "d545a0082f8f02dbd9d24859ee27308b087e6c23206ef3c48aff104b21925562",
+      "cpu_worker_seconds": 27.23258852300023,
+      "cpu_solver_seconds": 27.072571100999994,
+      "vmd_iterations": [
+        665,
+        787,
+        836,
+        1177,
+        1181,
+        904,
+        532,
+        952,
+        1159,
+        1634,
+        1307,
+        1335
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "capped_attempts": 0,
+      "gpu_checks": [
+        {
+          "record_id": "13784",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "13784",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        },
+        {
+          "record_id": "13784",
+          "features": {
+            "passed": true,
+            "exact": true,
+            "max_abs_error": 0,
+            "violations": 0,
+            "atol": 0.000001,
+            "rtol": 0.00001
+          },
+          "names_equal": true,
+          "iterations_equal": true,
+          "limits_equal": true,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "cpu_00407.json",
+      "sha256": "f641a825f359780b6b94b23fd417dc8ae48b199a3729fe88bc237aca7e2489ac"
+    },
+    {
+      "path": "cpu_00407.npz",
+      "sha256": "b8e083a2632165e338f782f02b5d6d2d95c4677d30b056cb9ff826c106a44f9e"
+    },
+    {
+      "path": "cpu_05554.json",
+      "sha256": "7ad0b26a632eea9f50a630e4ed9876155016d9eeb5e8f40672a32125b6401d7e"
+    },
+    {
+      "path": "cpu_05554.npz",
+      "sha256": "5fb188163ce149759d66eaa7681a4cf9f81160a5e95ae39560077134bc357339"
+    },
+    {
+      "path": "cpu_06496.json",
+      "sha256": "4486c87b4a4c26edfd19076e23e3028122ce919bf6951ea5b29b77f80eb64e47"
+    },
+    {
+      "path": "cpu_06496.npz",
+      "sha256": "8d19f08a89327a1a5243aca55e968947ed456d748dc54c8b9494dabeac58e101"
+    },
+    {
+      "path": "cpu_07202.json",
+      "sha256": "ee26b076298a5a3579bbe0fbfd929f1273ff1969edb0b1e9d5bba63e52d45319"
+    },
+    {
+      "path": "cpu_07202.npz",
+      "sha256": "69612ca03c710d0ffb8af4d863ff45a3f261b22a79503f00f6ed2e8c23a1c8ed"
+    },
+    {
+      "path": "cpu_07316.json",
+      "sha256": "10aa92e6c42a8397afd6fd0e711212cc062338127daab2e7f241d04666bec99e"
+    },
+    {
+      "path": "cpu_07316.npz",
+      "sha256": "673e3f4b4d387ae2f8d523ee04a819d1d7ded041a26323738e07f0d56b04957d"
+    },
+    {
+      "path": "cpu_08564.json",
+      "sha256": "8237f217b6eaabbecd9c66409970297785853798f48d2f532fe4daf9fc67b091"
+    },
+    {
+      "path": "cpu_08564.npz",
+      "sha256": "d7ed26f0ec01a1682156788b41ccb7e43afa2c5035cc993f8f94be178750e868"
+    },
+    {
+      "path": "cpu_11678.json",
+      "sha256": "d7603eab3c50dc380524a6f3eb4f0e1e21fce4be3428315ebea6c592d6616899"
+    },
+    {
+      "path": "cpu_11678.npz",
+      "sha256": "340d04d5620051ef5c42a3bee15fc88cba7c03e02211204bc6a9a7eed2e61eab"
+    },
+    {
+      "path": "cpu_13784.json",
+      "sha256": "eff36739ffd86217632f8d02c2a8d7fd6a856a9d841fb1df3f9f5ad7cccc7dfc"
+    },
+    {
+      "path": "cpu_13784.npz",
+      "sha256": "9aeab4a7793c293e56654b99f96d12a00d345de6976564460ea0fc34024a55af"
+    },
+    {
+      "path": "cpu_14525.json",
+      "sha256": "faed44fd6b840315a3dc47b6b62fc863998802f23ed8eeb524eb6c1c41139119"
+    },
+    {
+      "path": "cpu_14525.npz",
+      "sha256": "f17a2529f075c3eb4fa357c81d376655005c8e51a76fe446df5b122af7703c96"
+    },
+    {
+      "path": "cpu_15014.json",
+      "sha256": "dcaf11d856541c288e4edda2bd9ef94f1efc896a1a84a90204d8d2789531b277"
+    },
+    {
+      "path": "cpu_15014.npz",
+      "sha256": "6cb7a872169c13f74e99548797783c003cf4259b591ef9a3a3d6540d970b5cca"
+    },
+    {
+      "path": "cpu_16283.json",
+      "sha256": "178c01fe26b22c6ecdc429bcbc389ddbdf15c55dc31d6866b647013971d0f6ad"
+    },
+    {
+      "path": "cpu_16283.npz",
+      "sha256": "b8f7c4525c6f24cd8aa7eb04d1b82d55f0cad204607b769d5022e186f53cdc90"
+    },
+    {
+      "path": "cpu_17045.json",
+      "sha256": "a9fd1a378fbcb4204462725196137f31a4bdc749dfcb2a572cf1cf5e35f68576"
+    },
+    {
+      "path": "cpu_17045.npz",
+      "sha256": "bc1ed0a6f0a9348da90da4d02f8beb9403780808c8b911f71aa90af5a4128408"
+    },
+    {
+      "path": "cpu_17903.json",
+      "sha256": "45bcbb919eb4e5f714da59d812071d91a5fa6ec280a1ee525e1fda0d90f3a0d9"
+    },
+    {
+      "path": "cpu_17903.npz",
+      "sha256": "02d71b1a79c51a30656a6313d0cf12e59aa1d305fa06b508a494f23c0d7470cd"
+    },
+    {
+      "path": "cpu_18957.json",
+      "sha256": "a98c531e4413bb84fc6b58f82d0497fabbc6849b78806f13900e002c2d85a1a1"
+    },
+    {
+      "path": "cpu_18957.npz",
+      "sha256": "e5ec8c50fabb0f7b981f7f62aad20e9e57f69d5b4063ea141e2df700e1cddb63"
+    },
+    {
+      "path": "cpu_19330.json",
+      "sha256": "4c6f836160c123344d54ff35ca979726d33611dfa3837067196e89185cfbda94"
+    },
+    {
+      "path": "cpu_19330.npz",
+      "sha256": "63774b5fd354eb2361e99ae127c6a4f3c8c5f544df750ade7ec3fa70af274278"
+    },
+    {
+      "path": "cpu_19703.json",
+      "sha256": "fff4722ca298ea10c0d82aa36bcf7f39fad475bdf80ed13c5f780d3ee711d11e"
+    },
+    {
+      "path": "cpu_19703.npz",
+      "sha256": "44d623e9157283a9a183d3106a5c1c8613e5e02bfa2cf05f3624b2370272e476"
+    },
+    {
+      "path": "cpu_two_records.json",
+      "sha256": "7dc6056a2c936e958c685beb4588aca9001f4fe4d7858a5b87dea268fa174919"
+    },
+    {
+      "path": "cpu_two_records.npz",
+      "sha256": "e90514a339ca40cd86992b3a3a8996dce0b41aee8225c17913bf36e7484f6590"
+    },
+    {
+      "path": "cupy_config.txt",
+      "sha256": "4531dd8398f3b8977b2910251f6629af2aab2c7027c0fa7a7d3e74dc3b6216cb"
+    },
+    {
+      "path": "dependency_install.json",
+      "sha256": "e25b5137ab75edd74626321d025b506bd74e62192586b1dadf1a4775680105d8"
+    },
+    {
+      "path": "gpu_batch_0.json",
+      "sha256": "f4d1fe2b455ae3f5121cd88f8399de0186b1105bb7d2f0e6c611063b10960dbc"
+    },
+    {
+      "path": "gpu_batch_0.npz",
+      "sha256": "510bf65e09db5e9c5c3084bc970c8b01f63eb29bcb4894f3776a5e95a427341a"
+    },
+    {
+      "path": "gpu_batch_1.json",
+      "sha256": "3c578a6bfec575bfa56588cbceab0c0a95c78b281787cbcfb50ffe3b013578c8"
+    },
+    {
+      "path": "gpu_batch_1.npz",
+      "sha256": "510bf65e09db5e9c5c3084bc970c8b01f63eb29bcb4894f3776a5e95a427341a"
+    },
+    {
+      "path": "gpu_batch_2.json",
+      "sha256": "86056566bd11cfeda755be386edede5e1c4922b369abaf723a29ad002467f99a"
+    },
+    {
+      "path": "gpu_batch_2.npz",
+      "sha256": "510bf65e09db5e9c5c3084bc970c8b01f63eb29bcb4894f3776a5e95a427341a"
+    },
+    {
+      "path": "gpu_two_records.json",
+      "sha256": "11739dda25c136799cb8d069a538fae25388da66b571659a47c1255d2665d150"
+    },
+    {
+      "path": "gpu_two_records.npz",
+      "sha256": "56bae96f5aa4d056c8fdaecd9be851a753fa742e64840a785ecaa08f3c8e1f57"
+    },
+    {
+      "path": "hardware.json",
+      "sha256": "5d36bd342e305505eecb1ce0eeb370e178b77a2498ca9a5a411ffcd74b43b220"
+    },
+    {
+      "path": "inputs.json",
+      "sha256": "dab17f20800ee1733271f9d2e9621af983da0bee40f9fc38f3a06ec396700468"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "2d2df54dc5926ccf1bdf416eebfbae26e26673f0b693a14d2cb7a0ddd6f2ec59"
+    },
+    {
+      "path": "two_record_comparison.json",
+      "sha256": "d9a30e594f9fe685c87456145228cb0c85618fc6284d4f9f251d569c3e2a931b"
+    }
+  ],
+  "limitations": [
+    "16 fit ECGs only; no model accuracy comparison",
+    "CPU baseline measured once; GPU trials share one process and warm cache",
+    "Speedup compares CPU VMD/descriptors on eight workers with hybrid GPU VMD/descriptors; WST and disk/source I/O excluded",
+    "No full GPU extraction or VQC training performed"
+  ],
+  "tests": {
+    "gpu_tests_passed": 4,
+    "gpu_tests_seconds": 1.802,
+    "existing_acs_tests_passed": 31,
+    "existing_acs_tests_seconds": 4.872
+  },
+  "models_trained": 0,
+  "predictions_available": false,
+  "official_test_processed": false,
+  "production_extraction_launched": false,
+  "full_gpu_extraction_launched": false,
+  "failures": [
+    "First isolated dependency install failed on sandbox DNS/network access; approved retry succeeded. No numerical test or benchmark failure."
+  ],
+  "final_integrity_check": {
+    "checked_at_utc": "2026-09-25T22:13:54.561246+00:00",
+    "production_completed_records_verified": 115,
+    "production_status": "interrupted",
+    "production_manifest_sha256": "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c",
+    "attempt_comparisons": [
+      {
+        "repeat": 0,
+        "attempts_equal": true,
+        "attempt_count": 288,
+        "capped_attempts": 96
+      },
+      {
+        "repeat": 1,
+        "attempts_equal": true,
+        "attempt_count": 288,
+        "capped_attempts": 96
+      },
+      {
+        "repeat": 2,
+        "attempts_equal": true,
+        "attempt_count": 288,
+        "capped_attempts": 96
+      }
+    ],
+    "gpu_manifest_sha256": "2d2df54dc5926ccf1bdf416eebfbae26e26673f0b693a14d2cb7a0ddd6f2ec59",
+    "summary_sha256": "1364614a77314ba8e275970f3d538cd9c8b8670d883b4e9639cf546fa4d2793f",
+    "artifact_count": 48,
+    "problems": []
+  },
+  "completed_resume_check": "Runner re-invocation verified 48 saved artifact checksums and returned without recomputing"
+}

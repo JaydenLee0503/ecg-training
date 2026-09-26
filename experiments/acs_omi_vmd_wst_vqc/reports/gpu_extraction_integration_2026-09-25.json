@@ -1,0 +1,35 @@
+{
+  "recorded_at_utc": "2026-09-25T23:48:01+00:00",
+  "status": "implemented_pending_gpu_validation",
+  "rename_complete": true,
+  "protected_files_verified": 476,
+  "protected_files_changed": 0,
+  "cpu_checkpoints_verified": 115,
+  "benchmark_artifacts_verified": 48,
+  "unit_tests": {
+    "discovered": 41,
+    "passed": 37,
+    "skipped_gpu": 4,
+    "seconds": 5.129
+  },
+  "sandbox_gpu_tests": {
+    "errors": 4,
+    "error": "cudaErrorInsufficientDriver",
+    "device_dxg_visible": false,
+    "numerical_comparisons_executed": false
+  },
+  "outside_sandbox_test_request": "interrupted before execution",
+  "integrated_pilot_complete": false,
+  "gpu_run_created": false,
+  "full_gpu_extraction_started": false,
+  "models_trained": 0,
+  "official_test_processed": false,
+  "code_sha256": {
+    "gpu_extraction.py": "0188b01e40333083522a00c3eb7b46d6057798a1c3f50d66e1af6bbbfdc82836",
+    "scripts/extract_gpu.py": "bfd333377ce3d772b67166a1695c7c8a28955d0b1ff7f782dbc7395a28f1f3ce",
+    "tests/test_gpu_extraction.py": "574a1d8fa75ca1ed7db90c9ab6ed44e1395fe75c86367de230f7c3798cd94a37",
+    "protocols/gpu_extraction_v1.json": "eec68b7746d1fbcb849a09c1bbc936c947bb958cd4b5f4f0aa1a0b47e544594a",
+    "layout.py": "02d08b06a4ccab589ed943937fbe47e1372629ba6666d33104dd0135ea15c84c",
+    "provenance/descriptive_rename_v1.json": "881c8ee987ac502022a36fcdf1fdd0fa1cce2eae9d5a22381c0e2c60413ee76b"
+  }
+}

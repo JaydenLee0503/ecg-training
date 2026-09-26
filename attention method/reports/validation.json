@@ -1,0 +1,43 @@
+{
+  "scope": "synthetic and metadata verification only",
+  "training_started": false,
+  "real_ecg_extraction_started": false,
+  "split_counts": {
+    "fit": 14324,
+    "validation": 3581
+  },
+  "split_sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba",
+  "patient_overlap": 0,
+  "tests": {
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 0.392
+  },
+  "synthetic_shape": [
+    37,
+    12,
+    20
+  ],
+  "logit_shape": [
+    1,
+    2
+  ],
+  "weights_unchanged": true,
+  "parameters": 2175718,
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "torch": "2.6.0+cpu"
+  },
+  "sources": {
+    "attention_ecg/__init__.py": "4499efe9b691b861f0b4b18ba7951497e44455194e7662e03a61e8479b133c5c",
+    "attention_ecg/cepstral.py": "7dd2f45dd1f8e7f21fbf8ef58fe0e2ce83f4b6416b0edee70141e267536a3c0f",
+    "attention_ecg/data.py": "f9b6ed97dd0b988634de52ec7efd9938534c5f1bfd7e7b696485e97e1b125877",
+    "attention_ecg/model.py": "df3cc984adce7ddc9a07ab7529343f79a5c0e3e7365b949163a635e335645115",
+    "check.py": "8686c383434c12bc099dc099ca52ad052a67bc7429f4a800da162d6824150c1f",
+    "tests/test_attention.py": "26098022d803ffc1193eb725944eb8a7586997f434ad59cee2329801c4d28d8d"
+  },
+  "protocol_sha256": "ccc51942883ed863ce32fe23ab9b4b1fa33130d109218e4182d8eb3af49e7fd4"
+}

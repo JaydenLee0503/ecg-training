@@ -1,0 +1,42 @@
+"""Opt-in device tests; ordinary ACS tests do not require CUDA/CuPy."""
+import os
+import unittest
+import numpy as np
+
+from ecgvmd.vmd import vmd_batch
+from experiments.acs.gpu_vmd import vmd_gpu_batch
+
+
+@unittest.skipUnless(os.environ.get('ACS_GPU_TESTS') == '1', 'GPU tests are opt-in')
+class GPUVMDTests(unittest.TestCase):
+    def compare(self, x, **kwargs):
+        cpu = vmd_batch(x, **kwargs)
+        gpu = vmd_gpu_batch(x, **kwargs)
+        np.testing.assert_array_equal(cpu.iters, gpu.iters)
+        np.testing.assert_array_equal(cpu.capped, gpu.capped)
+        np.testing.assert_allclose(gpu.modes, cpu.modes, atol=1e-8, rtol=1e-7)
+        np.testing.assert_allclose(gpu.omega, cpu.omega, atol=1e-9, rtol=1e-7)
+
+    def test_multitone_dc_and_lead_order(self):
+        t = np.arange(512)/500
+        x = np.stack([0.2+np.sin(2*np.pi*f*t)+0.1*np.cos(2*np.pi*80*t)
+                      for f in (5, 11, 17, 23)])
+        self.compare(x, K=4, alpha=1000., dc=True, max_iter=1500, fs=500.)
+
+    def test_dual_update(self):
+        x = np.random.default_rng(23).normal(size=(2, 128))
+        self.compare(x, K=3, alpha=500., tau=0.1, dc=False, max_iter=100)
+
+    def test_zero_constant_and_iteration_boundary(self):
+        self.compare(np.vstack([np.zeros(128), np.ones(128)]),
+                     K=4, dc=True, max_iter=1)
+        self.compare(np.vstack([np.zeros(128), np.ones(128)]),
+                     K=4, dc=True, max_iter=4)
+
+    def test_odd_trimming_zero_initialization_and_cap(self):
+        x = np.random.default_rng(19).normal(size=(3, 513))
+        self.compare(x, K=3, init=0, dc=False, max_iter=7, tol=1e-15)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,4628 @@
+{
+  "recorded_at_utc": "2026-09-26T01:01:08.559236+00:00",
+  "status": "full_extraction_running",
+  "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+  "manifest": {
+    "execution_protocol": {
+      "id": "acs-omi-v1-gpu-extraction-1",
+      "scientific_protocol_sha256": "37ebedf1fa4774f3a7efd2a832fdba6a5a79c7ef8d95bd518b796173822b5eaa",
+      "parent_parallel_manifest_sha256": "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c",
+      "benchmark_manifest_sha256": "2d2df54dc5926ccf1bdf416eebfbae26e26673f0b693a14d2cb7a0ddd6f2ec59",
+      "benchmark_summary_sha256": "1364614a77314ba8e275970f3d538cd9c8b8670d883b4e9639cf546fa4d2793f",
+      "records_per_gpu_batch": 16,
+      "device": 0,
+      "precision": "float64 / complex128; validated CUDA kernel unchanged; --fmad=false",
+      "cpu_threads": 1,
+      "wst": "Frozen standard CPU WST, unchanged inputs, settings, path order and descriptors",
+      "retries": "Restart each capped lead from initialization at the frozen iteration limits; append all attempts before retry/failure; final nonconvergence stops the run, never excludes a record",
+      "reuse": "Copy all verified completed CPU feature checkpoints, byte-identical NPZ files, with original metadata and attempt-log hashes in the new manifest; record CPU origin per ECG",
+      "pilot": "Recompute the same 16 label-independent fit ECGs with the integrated runner; VMD features atol=1e-6 rtol=1e-5; WST and names exact; physical input, iterations, limits and all retry attempts exact; Kymatio reference on the original two engineering ECGs",
+      "resume": "Per-record NPZ and completion metadata committed atomically; verify all completed records before skipping; SIGINT/SIGTERM finishes the current batch then stops; an abrupt crash repeats at most the unfinished part of one batch",
+      "failure": "Retain traceback, batch identities, all attempt logs and completed checkpoints; do not proceed automatically after numerical failure",
+      "scope": "17,905 eligible fit/validation ECGs; no official-test waveform access, model fitting, feature selection or accuracy-based decisions"
+    },
+    "scientific_protocol": {
+      "id": "acs-omi-v1",
+      "target": "OMI",
+      "positive_label": 1,
+      "negative_label": 0,
+      "input": {
+        "leads": [
+          "I",
+          "II",
+          "III",
+          "aVR",
+          "aVL",
+          "aVF",
+          "V1",
+          "V2",
+          "V3",
+          "V4",
+          "V5",
+          "V6"
+        ],
+        "fs": 500,
+        "samples": 5000,
+        "units": "mV",
+        "filtering": null,
+        "normalization": null,
+        "resampling": null,
+        "record_policy": "acs-v1-strict-selected-leads-1",
+        "unit": "one full 10-second 12-lead ECG per feature row"
+      },
+      "split": {
+        "method": "StratifiedGroupKFold",
+        "n_splits": 5,
+        "seed": 20260924,
+        "validation_fold": 0,
+        "group": "patient_id",
+        "source_partition": "official train only",
+        "official_test": "reserved; no feature extraction or predictions in this runner"
+      },
+      "vmd": {
+        "K": 8,
+        "alpha": 2000.0,
+        "tau": 0.0,
+        "dc": true,
+        "init": 1,
+        "tol": 1e-07,
+        "iteration_limits": [
+          2000,
+          4000,
+          8000,
+          16000,
+          32000
+        ],
+        "features": "28 mode descriptors per mode per lead; concatenate leads",
+        "unconverged": "stop and log; do not exclude or silently accept"
+      },
+      "wst": {
+        "J": 8,
+        "Q": [
+          8,
+          1
+        ],
+        "T": 256,
+        "max_order": 2,
+        "log": true,
+        "eps": 1e-12,
+        "reduce": "mean",
+        "pooling": "mean of log coefficients over time for orders 1/2; signed linear order 0"
+      },
+      "preprocessing": {
+        "selector": "mRMR",
+        "k": 12,
+        "scaler": "training StandardScaler then tanh times pi/2",
+        "fit_partition": "fit only",
+        "shared_between_classifiers": true
+      },
+      "vqc": {
+        "class": "ReuploadVQC",
+        "n_qubits": 6,
+        "n_layers": 2,
+        "reupload": false,
+        "epochs": 40,
+        "schedule_epochs": 40,
+        "batch_size": 32,
+        "lr": 0.02,
+        "min_lr": 0.002,
+        "class_weight": "balanced",
+        "device": "default.qubit",
+        "diff_method": "backprop",
+        "seeds": [
+          0,
+          1,
+          2
+        ]
+      },
+      "controls": {
+        "logistic": {
+          "C": 1.0,
+          "class_weight": "balanced",
+          "max_iter": 2000,
+          "solver": "lbfgs"
+        },
+        "weighted_knn": {
+          "n_neighbors": 10,
+          "weights": "distance",
+          "metric": "euclidean"
+        },
+        "dummy": "always-negative predictions and constant fit-partition prevalence scores"
+      },
+      "evaluation": {
+        "primary": "ECG-level average precision (non-interpolated precision-recall summary)",
+        "secondary": [
+          "ROC AUC",
+          "balanced accuracy",
+          "sensitivity",
+          "specificity",
+          "precision",
+          "F1",
+          "accuracy",
+          "confusion matrix"
+        ],
+        "threshold": 0.5,
+        "hyperparameter_search": false,
+        "early_stopping": false,
+        "uncertainty": "paired patient-cluster bootstrap of validation ECG predictions; average differences across all three VQC seeds",
+        "bootstrap_resamples": 2000,
+        "bootstrap_seed": 20260925,
+        "patient_label_aggregation": null,
+        "interpretation": "internal validation only; no quantum advantage or clinical deployment claim"
+      },
+      "engineering_check": {
+        "records": 2,
+        "selection": "smallest SHA-256 of protocol id plus record id among fit records; labels unused",
+        "kymatio_reference": "all leads of each engineering-check record at the same settings",
+        "reference_atol": 1e-12,
+        "reference_rtol": 1e-10,
+        "model_scoring": false
+      }
+    },
+    "source_manifest": {
+      "CSV.zip": {
+        "bytes": 296769,
+        "sha256": "675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005"
+      },
+      "ECG_row_data.zip": {
+        "bytes": 1277577332,
+        "sha256": "9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4"
+      }
+    },
+    "splits_sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba",
+    "source_records_sha256": "2b9763ca7cee01418385fd29d979e890e911238572d6f38244edcb5eae78e908",
+    "environment": {
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "packages": {
+        "numpy": "2.5.2",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.0",
+        "kymatio": "0.3.0",
+        "pennylane": "0.45.1"
+      },
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "gpu_packages": {
+        "cupy-cuda12x": "14.2.0",
+        "cuda-pathfinder": "1.8.2"
+      }
+    },
+    "hardware": {
+      "device": 0,
+      "name": "NVIDIA GeForce RTX 5070",
+      "total_memory": 12820480000,
+      "compute_capability": "120",
+      "runtime_version": 12090,
+      "driver_version": 13030
+    },
+    "code_sha256": {
+      "ecgvmd/config.py": "0e5ae80c6c91bee38b3e8ec522f4a552d9d3a0e1d5729f1ee617ea1ac52fa9f0",
+      "ecgvmd/features.py": "f4335fcaef9123bee0d6f0845c6a26466562d7576a96cb7ff15f0289898e1fe2",
+      "ecgvmd/quantum.py": "089b70ca430a7aaf1ef49058b2f663c96c54fc99f3d7ec0761de123040e24af3",
+      "ecgvmd/reupload.py": "b1adea7570aa4a890daa3b40116d3a2e2db2f16fe180ef6b271a4928c764fef9",
+      "ecgvmd/scatter.py": "5a4a25203df37abf74afb7768337775da36bbe26516f1ca9cf1741c03fa44a14",
+      "ecgvmd/select.py": "35e34bf562b0fed1c9d415f47186e3c163f21af5af3b05ec57ffa5c1c3384c9c",
+      "ecgvmd/vmd.py": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00",
+      "experiments/acs_omi_vmd_wst_vqc/gpu_extraction.py": "0188b01e40333083522a00c3eb7b46d6057798a1c3f50d66e1af6bbbfdc82836",
+      "experiments/acs_omi_vmd_wst_vqc/gpu_vmd.py": "c77b534e60c64fe80c87fefbc40411e12143d736ae4b6eb64c1447c358290369",
+      "experiments/acs_omi_vmd_wst_vqc/layout.py": "02d08b06a4ccab589ed943937fbe47e1372629ba6666d33104dd0135ea15c84c",
+      "experiments/acs_omi_vmd_wst_vqc/loader.py": "c22d144d43780769eafe8c225c9bf197b050b5183db4297200d685cb3ab6ce01",
+      "experiments/acs_omi_vmd_wst_vqc/parallel.py": "b320ef0b6be2948268b9d85a65466917f1352e88587fefd3a978db6a73984e9b",
+      "experiments/acs_omi_vmd_wst_vqc/pipeline.py": "feecc73e9c58b57702851e444844a6d204a86620c897a9254cd9673bd0a09f0b",
+      "experiments/acs_omi_vmd_wst_vqc/protocols/gpu_extraction_v1.json": "eec68b7746d1fbcb849a09c1bbc936c947bb958cd4b5f4f0aa1a0b47e544594a",
+      "experiments/acs_omi_vmd_wst_vqc/protocols/parallel_extraction_v1.json": "a78e3d67ca3a2faf12236972adfa2fac998677661caf81b2ee5966aa089d6064",
+      "experiments/acs_omi_vmd_wst_vqc/provenance/descriptive_rename_v1.json": "881c8ee987ac502022a36fcdf1fdd0fa1cce2eae9d5a22381c0e2c60413ee76b",
+      "experiments/acs_omi_vmd_wst_vqc/provenance/layout_2026-09-24.json": "7926ccf530084f99c5c4dcaae2239fa3d8d3b65d2aec810c7a6bfa17ec4e82ba",
+      "experiments/acs_omi_vmd_wst_vqc/scripts/experiment.py": "61b9eb62218b56d11e22b24ec666321fea9c055c3c59c640754c012fd2d9f195",
+      "experiments/acs_omi_vmd_wst_vqc/scripts/extract_gpu.py": "bfd333377ce3d772b67166a1695c7c8a28955d0b1ff7f782dbc7395a28f1f3ce",
+      "experiments/acs_omi_vmd_wst_vqc/scripts/extract_parallel.py": "6aa1b207140dc0cf53da26fe76984c55139adde6244aed3d23a26ca315716388",
+      "experiments/acs_omi_vmd_wst_vqc/tests/test_gpu_extraction.py": "574a1d8fa75ca1ed7db90c9ab6ed44e1395fe75c86367de230f7c3798cd94a37",
+      "experiments/acs_omi_vmd_wst_vqc/tests/test_gpu_vmd.py": "81196e97dee7f870f4bb18725254819a0bf4965627ed12ba5e7d9a829e40208b"
+    },
+    "pilot_record_ids": [
+      "17045",
+      "11678",
+      "19330",
+      "15014",
+      "14525",
+      "08564",
+      "06496",
+      "07202",
+      "00407",
+      "18957",
+      "19703",
+      "16283",
+      "05554",
+      "17903",
+      "07316",
+      "13784"
+    ],
+    "imported_cpu_checkpoints": {
+      "00001": {
+        "00001.npz": "103c0328461a027e66b3e4318285309431eb5d4f3bfaaeef47101d0836f65a43",
+        "00001.json": "1e592059721a5e7186863e7d3750fb1c2b8d56634cefe9192634c05545fdac70",
+        "00001_attempts.jsonl": "8e777979d2ea41203560c78c30c05111b0129577a501e98f4b2b5a2c5b56ccb2"
+      },
+      "00002": {
+        "00002.npz": "153ebe6e2d88dabc6f6684f39244b0f2c822784b08df3bc2e9127026877d9dff",
+        "00002.json": "9f6d0dfca6fc50f089c0f84cbe25390397f6cab7386069c2b17fb6c5e6598dae",
+        "00002_attempts.jsonl": "a31d2f1039238baa2c774166eab4fd38c9696c23c695293e284b1daf70e56659"
+      },
+      "00003": {
+        "00003.npz": "21288f3a0c9676c90810561d122f63d23f90fca1c67bac0e4563bae9150523be",
+        "00003.json": "84f17f1fb0c9bbc28917d6e6ff3f616e80a29a2a48359c14bb66251426e6169b",
+        "00003_attempts.jsonl": "8b605902f33c98b97b1fbb8ca2f7e3738524440c083951fae6b889186f8c4bd7"
+      },
+      "00004": {
+        "00004.npz": "dcc72737c13fad852b8a408eca1944434d2bb86cc161830870ebbc5b23da5716",
+        "00004.json": "dc6beca5af034e77345d6b46d3084c1ab91b33f1cfe5f0fab60c79f7b8010c9b",
+        "00004_attempts.jsonl": "c331d3942e1046c9268b3e9c7cb2f425aa911c74f658b70e8ea5f763906734e6"
+      },
+      "00005": {
+        "00005.npz": "3a141a13c0a5c98d091c8b0d7cdc24be07de2ec6ef451fb6f2ee28866f78f827",
+        "00005.json": "d54dba7108445eabc4ce9e9320dfb9a09224a81c127a27950d4fca5f2fe5691b",
+        "00005_attempts.jsonl": "0fae58dbd1db6a5023bc630de401cb7de35c30d71e292ddda0b217258e06afbb"
+      },
+      "00006": {
+        "00006.npz": "e217e1268f10b3cbd099ece716ec9f19343e025f78c8f0ba3df7b17f5aed9834",
+        "00006.json": "3194692c19238f977595e7a219e4264bc95dcdd06a4e8b976ba00da2bd38e332",
+        "00006_attempts.jsonl": "d4c9849e278cbc976e647828352f3bf9b1ff2d2b366e1c6f5098d6b517a925e4"
+      },
+      "00007": {
+        "00007.npz": "881261b386af93642002910aebcbffbe613d5fdda23ca33b7c1c46abb1317949",
+        "00007.json": "21250c0b2472d5b2445ba66dbac1cf3f05ca9da56a9932516e156e6585260cf8",
+        "00007_attempts.jsonl": "5f9d5ab004a20b1f414a2b7ac25e1eb3bf53188ac73191d6b9c3351871a231d0"
+      },
+      "00009": {
+        "00009.npz": "466558707e5ac2ab4f0fc0024b65d0424877e254a2c1685a88414d5096a82f2d",
+        "00009.json": "55a0877858e0edffffc55881f8780444f228bdb889de0b044e3bcdf6b30ac5e3",
+        "00009_attempts.jsonl": "b0d1ae1bcad4643f5350f086ff2f8eafd47b2c4b914db07c095fd0c1a1296440"
+      },
+      "00010": {
+        "00010.npz": "35654f6e78115eadbfc3dcfcf06e77e74a296bf5bba731b0e48a4103bfae3714",
+        "00010.json": "09f6de76f96ac9442f37961a84d1f545c3a1f5e81f062ed86fd5a10ae0e05f97",
+        "00010_attempts.jsonl": "7e4a2162253d39ea5ea1f224ef56da3cf64da8d954113bc79faeeca9d1ca41d4"
+      },
+      "00011": {
+        "00011.npz": "ed489b8fa43df186a669e325120ffc1d5ae2aa90c71090b228ae4efd8cecf7a6",
+        "00011.json": "1a0d898cbc4e0e9527423b4fecb6e00a263ef231844c925c95a7e148b1f408c6",
+        "00011_attempts.jsonl": "899c6662024ef7c99cdc65b5f40e0f1a8563a8bd6aa9ef4f736e349768086ecc"
+      },
+      "00012": {
+        "00012.npz": "4d0dde48dac455b2e4e6472c40a4b5a644a7e9ddf95ac5bd4b94746ea40d0759",
+        "00012.json": "50e0ace1bb9b590fce227513c173c63294ec0c3c423607f74dc084cd0482a557",
+        "00012_attempts.jsonl": "90659dceb6059d6174c56748a27dfa2d8547e1088911f523cad5f19e021dc67e"
+      },
+      "00013": {
+        "00013.npz": "cb567192c5ee93ab1db8fd4d8ab089a26255f87ffeee4c9c69e9dd474a245148",
+        "00013.json": "4c7a55675ef628e5b7f5eeee9d2c496c7bd04050205c99ad56132475a39ebace",
+        "00013_attempts.jsonl": "ddbf8c752106162816882a0a1579d2bd970c50912eae8681cac0bba1f1acdd48"
+      },
+      "00014": {
+        "00014.npz": "0ff293f058fe5eb64d95cff418a9b089c915632e4bac771b6d0a21188e6c5f1b",
+        "00014.json": "4b2dc09cf06492ce65ae72edea938ad9afd9d424b52c47e2826ad94d5ea9cb1b",
+        "00014_attempts.jsonl": "a9935c78c790207ed2043cefa4fa9c5dfe128c5fca07a092a9665545427007ec"
+      },
+      "00016": {
+        "00016.npz": "110dd9f826020c0cbb5f1e1e39a9ec97a47c0d52fc04f27e840f1f5ed82bb37e",
+        "00016.json": "c677ae321c772a5a224e224f367c9b257ed75c698227fc5bef2d1b746035e31a",
+        "00016_attempts.jsonl": "dab17fe8acfe7a521202f09bc0f7e419579b15c08e053dd6307a4f3e0a57d9d7"
+      },
+      "00017": {
+        "00017.npz": "9d5eeceea63cb8c6f60d936673763ee3d38936e3d17ce8dfce69c462706a0488",
+        "00017.json": "1eef7787e4278c9e82ca961aad2002964dbb780996adab5ff4ce7c06766f644f",
+        "00017_attempts.jsonl": "11b5a901238be0312b3e925f4e8cb16448fff463a34b443d6aa377c42e41716a"
+      },
+      "00018": {
+        "00018.npz": "08888025f1e018ea235db3f67e00761bf8a973b441ac048e6d520fe8bf0ff26d",
+        "00018.json": "231dd7f8bbc2872857e2995254f984ec5bb540399cd05edfea2cc085cace5733",
+        "00018_attempts.jsonl": "7c351c03384b4223418561681c4a7a10fa640e86fcf79ae077b398ca63f679c8"
+      },
+      "00019": {
+        "00019.npz": "6eb730caa78ab115d5d183a32e009ee09c783a9510bf2fd888c020e90b9a2202",
+        "00019.json": "8b37363d80c1f1fa42b25745cc2db00c7e9ff92a1a3c9c3fead850b119438bea",
+        "00019_attempts.jsonl": "3c4836088c16da05683db7f478e28615217a6c92c80c895ff1e705ff550dcb12"
+      },
+      "00020": {
+        "00020.npz": "53b06b2bb437409109c44cf2f31f63dc1d1678c9c390fc3ac5b7dfcd043bf370",
+        "00020.json": "0b0b193b4dda4c1611bd1c18d86cea6d30c48112e7a278926fa1caa480497728",
+        "00020_attempts.jsonl": "edbb789a1f3861798e9b31f8744638975cec006e64b900cece96a1ae2a303251"
+      },
+      "00021": {
+        "00021.npz": "58604790fc9e6d613ce1340248fda5a5c956f711302f64d8e131445e744a1bf4",
+        "00021.json": "5bf8cc29c7c51702c664611f4a3c4373f0aa0cea2df6e78fb6bab5ae82f38198",
+        "00021_attempts.jsonl": "a8d5f0a3aa1236f611d823c5341abb1fa4010243188ddce44e451524e5f7de8d"
+      },
+      "00022": {
+        "00022.npz": "21fd0273576ba9c550444f030108fce082ff397270ccff0974542f8f821a10c9",
+        "00022.json": "9017000b8be351b303ab5c0bf39ea665d61bac50d3fc8174070e9e6a26a8c03c",
+        "00022_attempts.jsonl": "68d43c79f54325969a92ca646353d8ddbfc6eb4a3e3ca2d3e5d58dfef52d08df"
+      },
+      "00023": {
+        "00023.npz": "4b512b8c5dd40d278c5652a0d4a8fcce770ca3e5c3435c97ee7338bc2faa1f2d",
+        "00023.json": "fd6af66d34464a0d0a3c8df5987888d1fc83bf3f573e34bf4b26fb5cd3746b37",
+        "00023_attempts.jsonl": "4758a3fcd80550f14b2a2900d3ea8dccd8ab0587769836cac2cbd5e9b2fb9cfb"
+      },
+      "00024": {
+        "00024.npz": "9cda880a674bdee67b74e62a69f5c4e7715ee1cc6dedf2e97c2abdd017a31720",
+        "00024.json": "0abc07f1db2fa1161bdab61cb850e493454aae87bcc4610ce4ee409afebb2a3b",
+        "00024_attempts.jsonl": "ee5464538dc427e3ee1ef75ba1cd744539e7ffe267ba211799044fc2d4cc8e10"
+      },
+      "00025": {
+        "00025.npz": "9d2968f6c12b904edcb7bee607d2edf453e361320f356a2fad75d540d12e2009",
+        "00025.json": "f7f4d0ddc68533d3240a37b9b5582238730ebd3c8522c2e0c8beb3593a41f035",
+        "00025_attempts.jsonl": "a9bcc51600765b25b5bb0f3461e2c57fbbe62a7e78114d9b97c869214c4f95b1"
+      },
+      "00026": {
+        "00026.npz": "3ba78bad37eb092e8ee6a9de91f9513225a7fe0eacfd3f6c9dff8c6a93d0f199",
+        "00026.json": "a293ef262db1a88013e9119ced6ee0d828470be5cfcc423ee351602fa5e12570",
+        "00026_attempts.jsonl": "7b6d0fe2f8afd0a897440cdcb504bfcad5f4805ee806de45ab8b22050ea95280"
+      },
+      "00027": {
+        "00027.npz": "cd221d2590228a3066984ea9ccd6ba66bdf5fd04459c65ac749709d433b9c73c",
+        "00027.json": "329ca9d8a7b11cda1d59a375fff01a6892798a5b49497ca53db8932021657c07",
+        "00027_attempts.jsonl": "e874eee75b348d2b24bd32f5f61d904be25143fa122f8fa35b665e1366cd6798"
+      },
+      "00029": {
+        "00029.npz": "1fa58ce7d90bb7bd0d48b94e904bebcc4e1395802f11f3b41901e3b0ffe7e324",
+        "00029.json": "49cf4d440a260209f1311fff84a1119bd4467af09f1791cbdebd1d84e09442bc",
+        "00029_attempts.jsonl": "3a95b097abc253e28eaf9afb2312823e1cdb0d9718ecce5148c15c202500a2ca"
+      },
+      "00030": {
+        "00030.npz": "0f1269cdf91b3d50ae8c5d6b1752021b95942b43e9a5eae37514076d2f881f43",
+        "00030.json": "45be3a3750901e3e3d2e2f780d79b6548743bfbe04d787a2b8cb4436e418c60e",
+        "00030_attempts.jsonl": "f070308314bce3b5a7bb397600d9828c84b9ce32a0f9b68bda4a39e5db24cf5f"
+      },
+      "00031": {
+        "00031.npz": "6b5f70dd7fda2d0a12b2c12e7f15b256c981c7670580fcdedf8a6d8b4c743754",
+        "00031.json": "90828db1713a05d7414b4a5c0a1f85ae07c696db3a10ac85738ed7b7a683e8ad",
+        "00031_attempts.jsonl": "6bf48c48abc13454ea777113a146f6cfa9657068ff3a7841663c2aceb2b537a4"
+      },
+      "00032": {
+        "00032.npz": "cc0c496e06cb9e743f5fdefeb0778bb858cbc11123a7653d711a9c6bc05277dd",
+        "00032.json": "dc5c8cef991b9f5f00d596c7f2bce3f4c7c2359e35daf34ffba6e2828bfc2040",
+        "00032_attempts.jsonl": "e455279e873e28fa9612bdf88bff0d89cc6b9ef078fc09640b1c313ca16d35bc"
+      },
+      "00033": {
+        "00033.npz": "50c3bc43ec683aed7039b0651ce69bd39a911605276b86cfb1735b37d973d3fa",
+        "00033.json": "3bc219983d2495f4b0f0bbe6f21ffe9a3ccaf9f7767616b5decfd5ea5f71d98a",
+        "00033_attempts.jsonl": "80c1303014be85a36a302ee671e5c3f26530fd617a40cad71595225c20530293"
+      },
+      "00034": {
+        "00034.npz": "eb2d93c8a4268c877bc863e3adfc6501b36323658b95a5a73fb4e101749349d5",
+        "00034.json": "f9478bab914ae9c67c2f26a43262cb251ac51a12155875ba0ee78335efeba238",
+        "00034_attempts.jsonl": "2d75a7c7cde3f43c9b859bccf6444d9bff09c4daa9ba57f5397337f84795663a"
+      },
+      "00036": {
+        "00036.npz": "024012956436820fe6c07730c8a307dcdf4802d121cbaf5dc5fff4699874d5e1",
+        "00036.json": "ad4cbabbb3b25892004d6d84c018ada93aa89c2b0a2d2e73e16eaa230019687c",
+        "00036_attempts.jsonl": "3aca6bb8f36e2bf34b3983469b383dd76619d05c0c7eb3b0f54cf3745ba0be94"
+      },
+      "00037": {
+        "00037.npz": "726f85ecceca32a4c0f508e8bb5adf9b09d05e95583862625990cf61b4e0c389",
+        "00037.json": "b81d679abc646ec657bb3481e8cb1754913e59896a2705ac334aa63503a81fa6",
+        "00037_attempts.jsonl": "12c938ad03b67546056173231741a86b4c972e0b9544ece2e31ba241383d040a"
+      },
+      "00038": {
+        "00038.npz": "b3bf6782fcf54e7b821b2cccf8887a6ebe0ae53042d7f2ac802fa68494fa5cbe",
+        "00038.json": "662b4a81b9fe2a0a7285a5d91b889ac3f2c277e9f9b0223c09b6ce1a6562014f",
+        "00038_attempts.jsonl": "93afbc4dd7941d149dc72e2f3d3a7b16bf47fcf7d92953391e89bb9562b65a87"
+      },
+      "00039": {
+        "00039.npz": "f338e1bbe84fc38d2475fdf75d2fcf6f83a78ec671638b28438a42c7d367887a",
+        "00039.json": "91a0d4d9e0c65c20a108f6a27f3c5de58330be668f19f33a6117904d2f1b0343",
+        "00039_attempts.jsonl": "1ae397719397e407ac67ccf67c9fedd156e292ebbc9f1e8d626a6cc2833cb791"
+      },
+      "00040": {
+        "00040.npz": "2ae50a91c06f1a529fb0dbd30c0879cb18f7d050ee3e68da472beb1c3395c1cb",
+        "00040.json": "72c4e3e233a66ada6467ca17d01b656bb6a7a154b16f9cde956a6a14877de175",
+        "00040_attempts.jsonl": "ab10474f89d254e90409bc715290110de03a3d586f91269a307d4fd993c30ac0"
+      },
+      "00041": {
+        "00041.npz": "cc3c3796bb4f4d764ac752c8dfe6d60318c0b3d0080a7b63456830deca6b951d",
+        "00041.json": "e86176976ca8d9b4e3ef8399a4666d4dd794374bf03b9b16deaa9c854e84969c",
+        "00041_attempts.jsonl": "c80f85a7866d5945e683d069301f70d191ebb4c583a1bc483d52244f93d6385a"
+      },
+      "00042": {
+        "00042.npz": "443e2b08fa0a2aeddbcdd0ac496c36d011ef4fdaa14085bfd8001a719ec57f87",
+        "00042.json": "b92f5107d6e3d57367efacce2a7b11a5706ce4c4ae5ff798619d19ae6f929dc2",
+        "00042_attempts.jsonl": "26f234354ead4a74e3af3a18418d9b263815337ec1ac6e2836dd8eab79c37516"
+      },
+      "00044": {
+        "00044.npz": "ee566eae83989b9252393a0197ad93e061e6efb941615c998c22e42f917bf952",
+        "00044.json": "b10df9760c1d0bd05b823b9c8510d14c98a953069e8c275d61b725e994734896",
+        "00044_attempts.jsonl": "a0165556a988890b8aec504da303bfbd0af7c20ce7a35fe3a4aedeb71364765e"
+      },
+      "00045": {
+        "00045.npz": "f4e98e1a2d97cae9102839b2709163695f100b7579aa47b2a9d90725748e3f3f",
+        "00045.json": "ddd824c57021b23c87fa0e380aa764a4b64b42416a9642602fe69044eb51b2da",
+        "00045_attempts.jsonl": "7eb2b464b3cff6970f542cd97e2185a0a389aa8dc198155021635357e21cd82e"
+      },
+      "00046": {
+        "00046.npz": "8692628ec4af395a0ea77fe76447059bc856085c87af900b530264a65543ee67",
+        "00046.json": "4c95ced55c295afa7722b993ad7d432095a4bbd2b8d8b525cef309e6333d4f18",
+        "00046_attempts.jsonl": "ddf232c4a6f490ea332ed813b374994449f206506493a2c3067fc272d2a965ab"
+      },
+      "00047": {
+        "00047.npz": "ccdad5c06968e4232259c4a9236a5cce63a31ea2f9caedd637d719a815077dc0",
+        "00047.json": "4f62900533b9ea7df4580a9fafbb7a58d9ae68316df3a12c1091a0e8a1717fdc",
+        "00047_attempts.jsonl": "b063bce439aa46854828c5774e6357c1c318a4d596b58c44d85f48c2ca0a4144"
+      },
+      "00048": {
+        "00048.npz": "de34e43bb66ca0f2bd3833c1530e668d932635dad76425cff4fb737ac2ca5dbc",
+        "00048.json": "65951f4b66f361a2a3fc8e9ee73cd8539cf97c3058d51b470b914983b4c08781",
+        "00048_attempts.jsonl": "854449c07d2ac90b4308cde7d106ed5c49fb43d48bc3f6e00c21fe73cb25f6ab"
+      },
+      "00049": {
+        "00049.npz": "c6e347ac7e026690c7385f8cd4d8f4b9b60787e90732f2f7531a4ee1806f59e3",
+        "00049.json": "52dccc254219b0c086a68d74c9689fa160b5a0bf0d9de2f9213f9eedf1c90c4c",
+        "00049_attempts.jsonl": "84a0a8e196dec19eba0cb960b6ddc73cdbd940c3fdb730265b610afa22cb4f16"
+      },
+      "00050": {
+        "00050.npz": "fa0452709b11995018e69d13934cf7f543341d3e7892410938ce691acb3aedb7",
+        "00050.json": "462671948c0ea1c022d68b356cc39445a1bba234222ffd554be8ad3ae48a79b5",
+        "00050_attempts.jsonl": "18c20b80cb1292338e8b09afbc5156c3a98f6c62fc2295abd03bc251283ed89e"
+      },
+      "00051": {
+        "00051.npz": "1db1a08925770dcce565b9224b710ecaf2c0f3e8a265ea1d9a2eeaa15ee730d7",
+        "00051.json": "b7d42c4110d840bbacbf5f0e63ee613f01e4a4db79b279fcf65804a7662be435",
+        "00051_attempts.jsonl": "6f0eff54b66c5c8d03bf1f3fd3d09f888ca60589668a4f56400406a5afbb0a20"
+      },
+      "00052": {
+        "00052.npz": "4fd1f8dd66c8e6597face00db66a0395be0a45c3706870e117603b0a84912236",
+        "00052.json": "1b6a7accbe6c0525cbb6d018d9e11e67d8f7e363c5e9b00f4cf0c5fb971d189e",
+        "00052_attempts.jsonl": "94275f7aa5519c1390b225c3750f68daaf280459dc04930aa96f8e1c046a5fe1"
+      },
+      "00054": {
+        "00054.npz": "6640a950c82d1b2fb0ac2ab2c0148e16f040b7d2b1555d0cd02a34b749dcd0d7",
+        "00054.json": "fb7b4ecb2d8259daa3f8809361e178bd9f5c0e807f511d63dbc58e9b80d8ff52",
+        "00054_attempts.jsonl": "c0cb50a559641af99400146caeb3d895db1f0e6f36d31979228a2bf087c199fb"
+      },
+      "00056": {
+        "00056.npz": "67bae3d6416aea9d16c2e6293e161e1198667f61d98c7796b93096658c02bc08",
+        "00056.json": "c334fe6a9c8ae21235e0892fc7da047b0beea63924674d44c29657f4b08ccf92",
+        "00056_attempts.jsonl": "37ebc8f11bff28aee8dc6027e63ee192d4d42a58d3dbd513a853a3b6e3fe275b"
+      },
+      "00057": {
+        "00057.npz": "6ef7c7dd1235614402c3877e64cbd9f74095ed1327057ed34d99eaf7105b0331",
+        "00057.json": "31fa2476498927424b5f017d122762dc021b4ef245c105f3cefc5d2cbd1303c5",
+        "00057_attempts.jsonl": "908381b7ae4659967a44cbcf7f63dd90dffd1c3459c8919e24c7528b3f101ce9"
+      },
+      "00058": {
+        "00058.npz": "37be7dcc4ede0ab2d07199715ba3662d6b73c73a57e320c89c772731aa6c821b",
+        "00058.json": "da95383fab022a93bf2c9274a315c412eb26cfc46aa591e4f1092711ba335ad9",
+        "00058_attempts.jsonl": "5085712629c5d4acb310527929bd2446c0ede152fdff60013ee5214aad196424"
+      },
+      "00059": {
+        "00059.npz": "40ad6db0f04e4d9254fe21ba3c12b5dddb1275eb318799dff10b4d2db5e12a72",
+        "00059.json": "5722402ef074f4d045406c9e6bf486c6ca295918da880494a5fe3c3713a5655e",
+        "00059_attempts.jsonl": "e025c10d8687d3555381908cb34d5205b0383cbb718c727cc0777d4992922c4e"
+      },
+      "00060": {
+        "00060.npz": "fc1b6c5724b8215f002e0ecc00f0d09c82b2d4444200a8036f26405923e306f2",
+        "00060.json": "49e4ab2f9dec7e89b0f05c463cb2f4dd0755631bde9d1ab76be00f90fc877177",
+        "00060_attempts.jsonl": "0c725456349a3f1923e57ef9e7a746bc8ceff996e7f1ae75406502c16028ba8e"
+      },
+      "00061": {
+        "00061.npz": "5b4c1420f1bedc111359d888b025131607e67f2574ad0f1da2c27eea81c55942",
+        "00061.json": "66b949ff3b1abe66959a4ce5f4d307d1d42a07d397660d17a14f01ec85ddf14c",
+        "00061_attempts.jsonl": "d210ba695cf9803d5102ca951b6c9a55f6f6fd9550d0ba76198c910f623cedee"
+      },
+      "00062": {
+        "00062.npz": "4fb92fbf467744e7a2ebbb198ea0a98cad67048d7b1757bfedeb603b938d3481",
+        "00062.json": "ab9664d309de86479be6c60b382a399da1868142ec8157330ca6066bd6ba6e34",
+        "00062_attempts.jsonl": "4fc128a570e99d7588a997fb4fde947c3e16fd77cc46cb5c53d971c46d1a2e9f"
+      },
+      "00063": {
+        "00063.npz": "08c48793dfec4d1603e9ce0f4ba171d940d8bd2fab0221dd7b07d66577ebf5bb",
+        "00063.json": "e21b115bb486dad7c040a4a4101069700c2bb08c4978ec8ccdd5ce030b4437dc",
+        "00063_attempts.jsonl": "8ae8fe296278e46f9f12c19ba0db580da1eaa6ece2813d9c44f11e7679f16201"
+      },
+      "00064": {
+        "00064.npz": "d2237f1fd0767d89ec247d83baba21a80db4f1fe3b5d129c237eae253ded8bd1",
+        "00064.json": "aa7843f8154267406680ff2fd6ecc4000f38c2b08a816af28bd7c04fcde0e007",
+        "00064_attempts.jsonl": "569cdc41d0c8d4b3a43716bb5688e90fbb38089d209754263e35900c241e610b"
+      },
+      "00065": {
+        "00065.npz": "4ad13db77da1aefb70ff36d85d50eb9f36fb6829b6e893271b4f743007765f51",
+        "00065.json": "5fd96131bc5cc2422981d275751e45095e168307fe7b830cf3b5e8d0e95f5f8a",
+        "00065_attempts.jsonl": "7304617a3a3b9c6cb80e046a942f423b2c19a9e2509c2bd2ac2b533049dc545d"
+      },
+      "00066": {
+        "00066.npz": "6d6b57c948d3601e100e40792a6cab65a19a01afbe8983daea992c37b17416d0",
+        "00066.json": "2cebf7b23358dd5b9ab031d7b8943ef0caaa5e696f05b933199a656c0c4dc630",
+        "00066_attempts.jsonl": "af37ff58f00d10ce3aa246d2d89b83bece283b6ee777be88b8b5cd950d78ac79"
+      },
+      "00067": {
+        "00067.npz": "c3a791e1dc284ff829d69ab3a2e8a40292289c6685be21fc7ac29a52fc0342cc",
+        "00067.json": "e045136e470c6419e3a9616f892e67c4a5172d179fd113ee7d543ffa67b855f1",
+        "00067_attempts.jsonl": "9a7e29d85d9eab34ce637d2646d218d5a238130aa96c671aa9b6e1fd0f168abb"
+      },
+      "00068": {
+        "00068.npz": "e8f9cb71b516e4357409f9caa27ff95c68bc829b629c01af3eaa6a663fd88a7b",
+        "00068.json": "c54ab32b4201394548c7eea651fb16051efa582ab136526ec4935a42e3eee247",
+        "00068_attempts.jsonl": "180b015da37b25972159a0746f7693edc1c36709cfeba0dec3b74f81f8077e26"
+      },
+      "00069": {
+        "00069.npz": "7939c5471c82abaa01a915281b029284c3bc44a88774b9e49d853b534be7c6ed",
+        "00069.json": "73c2e0cebe958060789c3d9d8b6eeb53e92ddf81fc891c48e0a5bb1e6a2a31ad",
+        "00069_attempts.jsonl": "dafe2cdf53786012d424fbaabffee00e5dc9fb1be431439daeb022827c8d3390"
+      },
+      "00072": {
+        "00072.npz": "a033e8dafa3f20faca1eb1d9b5c1fa6c2ab90ba02aeea22d9f24b04e801ac8ab",
+        "00072.json": "1a925c478fbca3be318dc2b94d8750145919278df70de02a851cdd7c18fa7f92",
+        "00072_attempts.jsonl": "df44817f35161e886418fca71964b2785d5bfcc91a3f9ff30bbee191dc6b7f69"
+      },
+      "00073": {
+        "00073.npz": "ab66e42241fc8720f7e81194211b0b3f2744e84ad877563cc4bd95ff6cfc09b0",
+        "00073.json": "97dc7d932b27710c0437e1266536428a2c6fa0ce5c16f8e3285fae3cda3e5b4e",
+        "00073_attempts.jsonl": "641fc68f7ea84fa5e6a5c63f613b19b36f68cd77740dc7e5e78a2814dfba3ca2"
+      },
+      "00074": {
+        "00074.npz": "bc019834058954c241558e1fc7d0fd1fe5700012d9bfc097113013b784c82c54",
+        "00074.json": "1dc46b7ce9a2948a7c804f69a7720ec3322f6241e6e1aebf17547c6e9d059fee",
+        "00074_attempts.jsonl": "6aac8abea64d36907fbf5d0097fbf194a9d3dff25e592cdb468299e7976dceab"
+      },
+      "00075": {
+        "00075.npz": "0e176122a2a7ec730f01577ef608f1c9c22c44ca1ceb9df3674bef72737f8a3a",
+        "00075.json": "94e954735efc48b1fc5d7c1530bd15dd8b7b5cff99be5070ea5ba78dbb4b429b",
+        "00075_attempts.jsonl": "3b46aea089b7327e44b730851cd4ea3c9fb366af3af38ffd682eb30379f11728"
+      },
+      "00077": {
+        "00077.npz": "1b12de4ec4e8cc70e8433301c7fc709e5a8970e1acb846b442dc7bf291a1531b",
+        "00077.json": "009db55ac2951279bf688ce3707f21e8b3b1283bb651c6ecb6a4618a4ba089d8",
+        "00077_attempts.jsonl": "6859c6bd545a8a8028457ba2cdefa561feda83fe00474e15c569e7225253c305"
+      },
+      "00078": {
+        "00078.npz": "9ed66715ad0416b862e413a6454219f09745215073130cd4b277f391381dff3b",
+        "00078.json": "f6db5d1916bc531a6bf5ac6c32e3a2272a4510c72c3bb4c5f55cef4798f20efe",
+        "00078_attempts.jsonl": "07532fd01634a4055236ffe55cf14e6cd5957ec3bd68cd49205ef96f22596b00"
+      },
+      "00079": {
+        "00079.npz": "e45ab66ce894a4825b908d222907df807df99cb5b7f02e8da8267e2b6f1e47e6",
+        "00079.json": "05b15b0110a0a46d8bc74847c9b815e5ba822c60eda031e564519702348009e4",
+        "00079_attempts.jsonl": "8c94b75812c50d9cb0c1be413a4ac142455ef8612db48d587ee23f251825a9a9"
+      },
+      "00080": {
+        "00080.npz": "3ec78135992af557a15f9962e2044c8f672c9272ba42e9b4efd3b93d2a04636f",
+        "00080.json": "74fb26eb2ec923212eb866762c552b1899a8d745195369ead917dc6bbde5d1fc",
+        "00080_attempts.jsonl": "68c0be87cae6d629ca6e2d4c22d82726679f6d13ef1129fd26fdf5407497965a"
+      },
+      "00081": {
+        "00081.npz": "79649838377585904cc92233be290963347044388c20e0e5ded283bfbe60bf82",
+        "00081.json": "aed7219787a614fca08dd6e26b00f2f7e8d801297cc05924f10e69a696e15767",
+        "00081_attempts.jsonl": "5930bcdb252e977fc85c590c49d35165eefa6d6b74ee344bf9216de3ec6a13f9"
+      },
+      "00082": {
+        "00082.npz": "d5989524f57ef2092325cc095f15a3c34c4b3d5014816daa2b09a630a70426e4",
+        "00082.json": "fbda4c728b4d872c9aa1ef64cdeddb3ff68b9a49b2226ded3e83f59502d38acb",
+        "00082_attempts.jsonl": "7e1b8b1606869b0015d29692466fd4edac164a68fe6c7770992f581e3e47ccee"
+      },
+      "00083": {
+        "00083.npz": "68294922e66facddd422833a45217e684a1658d9ffd2a8736e6190cf8da58cb0",
+        "00083.json": "1a83ed101a4f430dab0f171329459531eb9d9c14a90cf83fe7abc48aebe5078a",
+        "00083_attempts.jsonl": "33c58d44a8a9a155eb76355bea61cbe8319c7a360337ed676a45fe0c3815cb9a"
+      },
+      "00085": {
+        "00085.npz": "6aba624df1423bcb8e42915687fcc442b79490c0a56b9b694ea90cbd081c812f",
+        "00085.json": "899ad5560ef34a513ac01a6688e452db342e461af2ad15e8d12ec228da81493c",
+        "00085_attempts.jsonl": "092aa05de6d1c3ab222052640e385d9a1f3b09e09cdf2ce23ec8d9364478596f"
+      },
+      "00086": {
+        "00086.npz": "80622e04a27e356417d5aaff636aa6414e873fdb1161beef5ff0ac3b5e2194e2",
+        "00086.json": "327a9fd741c2ed02b9ba1261a30aab353ee8519b3cdcaef3a57350e27cfde49d",
+        "00086_attempts.jsonl": "dbaa3d58f9f3fd7b1ab79c4ff5e7f973b94c9f6ea2cc66949b19d87f33982a6d"
+      },
+      "00087": {
+        "00087.npz": "636174550f520b1901b7c682fe953fb926f4d9dcb6b44554d3930b3f9a02be98",
+        "00087.json": "e7d5d9f9755c4f0928c656819390d474fdb7f9cdefef383c90dc6e95d4ae547e",
+        "00087_attempts.jsonl": "884820af55467f76d813275ad6a1704367ab3e4b30e545dab0ff1dd6eb7c3a65"
+      },
+      "00088": {
+        "00088.npz": "30654cb8bbbe485bd2dfb9625c61ec8a407ca91bdafe259755a0971a3c5af3ba",
+        "00088.json": "c4c5d350af026f8e33230ebe1423fa95b605a14ce193faa1c52250004dbd04ce",
+        "00088_attempts.jsonl": "7d657b78d6d7708416ced4ae377b7e4cf153b464ad96d03ea6e2a3b3d4b71add"
+      },
+      "00089": {
+        "00089.npz": "4ca1412817ebf8dda5fcfbb0a0a689db2126bf1854916216ba637f68605c3c0d",
+        "00089.json": "2609309b0658fe3c79e01373cef02493b55dc2e18617708924a51f88d5fc5e2b",
+        "00089_attempts.jsonl": "83858fc71d0e502b6eebf171c70db24d5732f53a3ae486258f4790ddcb850916"
+      },
+      "00090": {
+        "00090.npz": "640db6ffb3ac731d4a6a9dc238561a1ae7e7e7a807081c3f5944575cdc16d8a6",
+        "00090.json": "6ba881eb3c733b64a183b3c159f7093bdf5b1eb85e2e3877f2220ca4dfddc46d",
+        "00090_attempts.jsonl": "80f4d2329e26194c57f4845ec39df968647ab7cfe45ba097ec80cf61e57f901d"
+      },
+      "00091": {
+        "00091.npz": "94128e52f9f230ee6c25b11ab223896e1d6bba44039124bc4161d9635a744445",
+        "00091.json": "b804840481b05886456dd19b9be30dd7a6789f84a0343fa869abb5e86584e7e1",
+        "00091_attempts.jsonl": "370e1c6b3d757ef4eba40f3f5b69e8b74ff17d92af090c405103f4b323120a31"
+      },
+      "00092": {
+        "00092.npz": "d8c09bf3a413da2ebb06e09493987bf9b97243650196b082cb870575a400d857",
+        "00092.json": "315fd9055dbad0bb7db136ac1c26832cbdd68be7e49d62fca6332d6c10d0b0e7",
+        "00092_attempts.jsonl": "09f783a17acb2ad35598774ce1d7ac3c07e9e089239433a63efb0adc026d7e98"
+      },
+      "00093": {
+        "00093.npz": "67c3ed7d2951dc34f5d9a83a373b11880524e516c88ca966993c1a88ca05da73",
+        "00093.json": "4dfbd1e34b90d9b881fe6454515774e2a1f246c6770c7370ab865cfd6800e02b",
+        "00093_attempts.jsonl": "09e517f4b0aeb6e69cb3f4a25d049d4813d22026f25cfcdd0a26442f6ddbdc3c"
+      },
+      "00094": {
+        "00094.npz": "1c8e914d4b97bd08062a14209b6bc2e3cd10b2baa954fede2cc9f86a28e7ac7d",
+        "00094.json": "9f639299d016bf6347c9e4a633c68d65b0a51abe6d6e56f4f919bf50ae169541",
+        "00094_attempts.jsonl": "cb676c36af4fb284f543fdd9e024bc9a75edc6c82dd965ed2f96d3edd0628c6f"
+      },
+      "00095": {
+        "00095.npz": "947363cc312e3afe1fb9b5de88187b3f543e842e288031e0b68f3bbd9d70e7fe",
+        "00095.json": "8e0fb1ab4dac28ae678603ec5fc88b5b0c7a1450cb2218522091c303ac2be862",
+        "00095_attempts.jsonl": "0f6d8b6185b752d5b9af97c42bf998ff2114043611a9c7362cc065c79c0c7f55"
+      },
+      "00096": {
+        "00096.npz": "22f9044477b79abdbb7cc926845ba736fb8b86e12034c44fe9dc1d20cd258e16",
+        "00096.json": "91d31c41f6df13e7a44dfb53e5ba8953da7a443f63bf5efd79704a5bdd8ecf4c",
+        "00096_attempts.jsonl": "ac7a2418c2ca439d4e217e885f6acf711e24567992ac8c98e5a40517326f2d24"
+      },
+      "00097": {
+        "00097.npz": "f3ca0b71ffd5240d5e5a96aa469dbccee55d06c5b4f52ae67a3e91e71f293732",
+        "00097.json": "d5c84c5dae3b298096e24545b2ab5ddfc331789ab2b7fb5cd9d519fa9a78b956",
+        "00097_attempts.jsonl": "d297cc7750a819ea58993c4966d854f187e71f7b653e10b4873c7b98c8dd6fe8"
+      },
+      "00098": {
+        "00098.npz": "75639664f08a6ceb8c633ca18a9346f6d21b8fea04610a651e384aa39f322b1c",
+        "00098.json": "868f0e8a7c5bcf181ec8dee1d502d5613b2b0086f239b4c20273c702c23ba4c4",
+        "00098_attempts.jsonl": "292c49b6677770aec5ee2c8ebbe733a23559ae8fd7af4deebe1e9c54478e91a7"
+      },
+      "00099": {
+        "00099.npz": "538ea32631efcea7131da3a48f500fa3fff827477f74ae8cf7a3f5bb00277454",
+        "00099.json": "0d75e809cf7bfed506d6f87c0a84c6c70d55b84328ee334094e303bf1ab608a0",
+        "00099_attempts.jsonl": "ad3b45c6bd35b9c774dc283e415784dd2b0b7c781e72324c4ffd86864670aa89"
+      },
+      "00100": {
+        "00100.npz": "fe78a401b572ba250c02cf613d089b21950081f76552b82a6a9985001d05cf7c",
+        "00100.json": "286ee78e4d9bda22b814e9fffc67a6c1680aeb9b21deddb954937b9e3c0c3924",
+        "00100_attempts.jsonl": "24ced7955fa0f80e2c1ec44c340a954ec5df0fae0dbb2552031a5602acc7526e"
+      },
+      "00101": {
+        "00101.npz": "dc6f577872d26a109957280a6a62c37de30d6cdf28089807885dfeb7852ed522",
+        "00101.json": "960a091e881bc600a457941a231736a4ecff8520e0f1d7388eac530b70803fdf",
+        "00101_attempts.jsonl": "91a09dc61bd5d587d525277152c4c03f65c5b8fc3b290661cdfd562ae1b4590d"
+      },
+      "00102": {
+        "00102.npz": "a91a9746873ae02519da4d7640e56056199996bbbddafc89854cebbfa6199af5",
+        "00102.json": "8a5c01544f8017f092e2d7f2e6a3017da47d73c22886b2c5045e9d3d8671c3fe",
+        "00102_attempts.jsonl": "f293c070e2045aa217e4c2cfa4e15e00ee1c948f6be69827facca46ca655597a"
+      },
+      "00103": {
+        "00103.npz": "df4d6a3b3e833d4ec357a96964f564cb93e7eb504d55ebfb1631954878f54f76",
+        "00103.json": "e8520f835dd44ad2fc5103dc854577a45f9e5a0a1f162b7e79d6bb19c4227060",
+        "00103_attempts.jsonl": "f4093f870d2a58ca04a444a40e37630f9377a82d611174a58d17e22876fdb117"
+      },
+      "00105": {
+        "00105.npz": "79228fc8ee17fc4ee80c7861fcb5e352a71bcc0d403594588eec6a5235092cc3",
+        "00105.json": "8dce821690f0896392d01d23e05ab29b3dd1b0a75f0260ae94f54a4b752e5624",
+        "00105_attempts.jsonl": "657b78010d2cce080902d8e9ce2177a2bd204adf2b55134bc03858e8e56f4ccb"
+      },
+      "00106": {
+        "00106.npz": "32d5223fd174839dbee1568d4733d6a6d94f192c81cdfe26ae780d166d4408e2",
+        "00106.json": "88faa725b99121868f7f5b48e7cbccbf18c4aa5e1fbfa35acba753af18180d3b",
+        "00106_attempts.jsonl": "7b51bf3fc01355723345d79bbceb7ef280041e25687386b8d660d219e05e0305"
+      },
+      "00107": {
+        "00107.npz": "31e2588596560604497305e3cb55efe2804f21e4d9b2f9391d7c7ca24a791aa3",
+        "00107.json": "f42f64ef029ed85677155bf826e7bdee67a1e4bc4431bb217b3e23fe93436d8d",
+        "00107_attempts.jsonl": "211601d57a28b26fcd0eae5bab377a28a3fd2d24c6749a26b12a7b00f967360d"
+      },
+      "00108": {
+        "00108.npz": "1f67a9ee24e2e76074579716f3ddadb9a4a25c154f5ac282f5ea958e912da149",
+        "00108.json": "140c3e568cb4151a56b2c653a410fcbfc3c50ee4ec0e663ad3572224aae4995a",
+        "00108_attempts.jsonl": "bfe2246d7441551fde5e7b28f3b177003e97adb12249733f5a4045a6060035f0"
+      },
+      "00109": {
+        "00109.npz": "808275e799c14c1466fab05b54b10333e53b657d3d7c8a512091d858b11dd84a",
+        "00109.json": "9fb9dc2f45e7e8f1d1cf212267ff039a34ae07014a874aac93a901c41f75c312",
+        "00109_attempts.jsonl": "ff4e243ef3eeca236dde1be510b8b44be8dd6a28fe5cfc786da07001c292c31a"
+      },
+      "00112": {
+        "00112.npz": "820b95029f084a6925e287022b9d7a5e223321135253e510d998737f17719fe5",
+        "00112.json": "9574717caed220b4358587ac024198bf413aa2ea282f29e2aaf4c178616448a9",
+        "00112_attempts.jsonl": "5026f30b0f4649665a6c74c8f67c57379ca2f22c520c6213b2ea7a90f26a7d7c"
+      },
+      "00114": {
+        "00114.npz": "745a10ec16176772554c7a9641143eb275124c871a39af3ea0b8f47c7f33053e",
+        "00114.json": "533b9ffdc85e9258b9f68e00a4a583abe64ea2e1eae6dbe61a80c287aee46d18",
+        "00114_attempts.jsonl": "605a4a8b66453d7b9ba0b3eedad44471f0b3991d66c990a2a648b411570cf5d7"
+      },
+      "00407": {
+        "00407.npz": "e52c8bd377e8055021ea26a42d778271a84eaeafee64e41ccd5ccc93af1af718",
+        "00407.json": "350fcb5e0101f0318640e70750c8d10933e343224691a3b6bc66a6fd9a3b1b1b",
+        "00407_attempts.jsonl": "6e09df298e6dbb640799526625a4c6fddde36df8b3ee3ef3f50ea43b8a67a978"
+      },
+      "05554": {
+        "05554.npz": "d09bf3768d472276629d99efe0a10cea97ff664f2fb92396714930989b44713a",
+        "05554.json": "385664b52175c69dfac5bd8fa64fc1982ec0267a95aea47bc66ace628e207ad8",
+        "05554_attempts.jsonl": "408e93858be13e1f393e1d06645be0c4ff04fdd66ca29248778a8925b43e1cd6"
+      },
+      "06496": {
+        "06496.npz": "8b6afe9eb691b5833726cc903ae176750bc5fa8cc1fbf203435de6cb9a083855",
+        "06496.json": "d61d763ef805a3c7b97b0db003d6f498ddf4d067bd122b8fa627f0ea9ad30d2c",
+        "06496_attempts.jsonl": "738e308dd550ee5ffc3685682cbb3d7d8cd9baa04ac018d613c6bdae72d10f68"
+      },
+      "07202": {
+        "07202.npz": "9297b2e4fc4e3a7f702a1e88410fdcf91e9d11e0e3994e3b8acb316a6d963537",
+        "07202.json": "1ed8bef7ff329b94c6ff3d45494beac52600718a4161dcc93fd08ad51803f0ac",
+        "07202_attempts.jsonl": "a167c51266cef30eeb197fa1a7379d61e40c6926a439392e1db83e8825f3fd1e"
+      },
+      "07316": {
+        "07316.npz": "a3e09398738ea25a881c5db0f1ceff0aef6fb6221ec1a084310bc3af2dae99f2",
+        "07316.json": "66dcb46980b8c0d66a051d8455081f2549cd09e6598217b3622c5721d9b6ec31",
+        "07316_attempts.jsonl": "4541adf0dcd9fdd52a44ac28d1c75c498987d3bedf5f51b8b75a5982ae688bf2"
+      },
+      "08564": {
+        "08564.npz": "32fcbe0435fc5a98b7a3fac185eb1c5171d2bcc58f47ab2985788a3fa18be4b4",
+        "08564.json": "2a5eb91ea676f719d3c3bbc387302f47bda12ffec0baa4b009689aedcc2ed220",
+        "08564_attempts.jsonl": "f73a0b37958dc2a14e06f8a7b3ade50e76539aa695979d7ef49e60ec92ee73f9"
+      },
+      "11678": {
+        "11678.npz": "faa151926c4713e0ef45b50e536535087cc2c22c3beea75615f20f8b0a275350",
+        "11678.json": "f9e077bba77210172e73483071716885ca198cf88ade7daf2e3b7ab5af5b36bb",
+        "11678_attempts.jsonl": "552ff07f9f430aa17763b3356feb532067f9fdc507c8079ffae69ac7bb58bc2e"
+      },
+      "13784": {
+        "13784.npz": "1e67ea2cb8efeb352cd13065d4ec804fc57eb3f0b7a14d440704236d7f56bbbe",
+        "13784.json": "c86b8b0b9c67cacf0e0f679bd5f7187da8b0c8ab6498a34e9052e08a3bc5456a",
+        "13784_attempts.jsonl": "168a9ab5551fa3c659586efd9a729fc0f5cef3334aea1fff51b227b6f32d74d7"
+      },
+      "14525": {
+        "14525.npz": "3d0295a42309c5f3878fc1728366b80abd33d0772da1bf2d81ac8bbd43fea01d",
+        "14525.json": "aab1dcb0a783678926912cc7aa2a32a9e638273b529e9bac087a3c0889a2cad9",
+        "14525_attempts.jsonl": "0d54a6ce4a4ab4d3473ef5fbebe19f1c049529a56377770ef8924e6bba910005"
+      },
+      "15014": {
+        "15014.npz": "b8ac117997fcd26f402dfe42729ed3d3e07332f0035dd5d531ee587c28d0db33",
+        "15014.json": "b5fe0c9ee2f1c385f83018c91c7cd1a1cadd4eb9000515e7d6f80644191bd5d8",
+        "15014_attempts.jsonl": "563b0e7360aa7a246f50d5dd9db3e21cd446ce824a9c1b666ddf1f9040a42683"
+      },
+      "16283": {
+        "16283.npz": "2cb889781fd68b9cb7fc48360763b674e3054666782c4b735f7b531f066dc21e",
+        "16283.json": "4846a2fb9dd022734f091a3b0324081438e951ca6e9a1fb2abe1b82b8854d59c",
+        "16283_attempts.jsonl": "0d9472661887429326b60aa65de816e43cf1e013c1c3f26f948642a9904e5099"
+      },
+      "17045": {
+        "17045.npz": "be7efadc9217f440eb53de82b6136ffd58ec76f75bef176413a7a5ae0332e890",
+        "17045.json": "2cd01196f406a39827529f210047ca4c52a372a3082ac877ab51e959946bb086",
+        "17045_attempts.jsonl": "18c7d1d987c3dd3954fc008b35836d2cb0e725d94cc75b31fd98118fb10ff7d0"
+      },
+      "17903": {
+        "17903.npz": "8640143e8b7581b49274f87b5ab9fe9d3409383d50ae503e08161ef2f4aa1b69",
+        "17903.json": "cb19223d3fb96466997c10c9b2a4def77bdfacea7e32ed94e36a1cc61499abb5",
+        "17903_attempts.jsonl": "2c1157fbdb32a79430a4f4089b2b344a363dc6ec3cecb3cfa27d2a654fc0424a"
+      },
+      "18957": {
+        "18957.npz": "21590bd640d108a6849ed46933c6481356fa08aea481867e5bb6e0b81154a517",
+        "18957.json": "03dcbd3ffa7875b3ddcf596ce3bd2049b9c44a60bbd37c57288672ccf1914c9c",
+        "18957_attempts.jsonl": "8b5d86e8db3ffdced422b7c1d593b3d987f658067616ae107ba22aae64c04d0b"
+      },
+      "19330": {
+        "19330.npz": "59f3da28a6e8d20f8d2e7dc6ff6a904e9474d55a37ea5dd419d9f5b9855d03de",
+        "19330.json": "229f04c410e34ab7cce028dc540305a30b9946a346e08bede91a0e4e9b38a14d",
+        "19330_attempts.jsonl": "1e07d76cc5029e2d62447d9b93ec8f126acd8cdfc5208c042afdc7ad4c5d9acd"
+      },
+      "19703": {
+        "19703.npz": "f82fbb4f3fd1399b9e8eef444f60237c65f9e856639b906af372034dfd3beb1d",
+        "19703.json": "aba64bc9af7dd283aaf74e98eb1ac1c4d919645aeeda8f0c3de502097e7a0f01",
+        "19703_attempts.jsonl": "c70d837240e23e4cda111306142751582c47489c8cc723c3cef04775f7949c13"
+      }
+    },
+    "counts": {
+      "fit": {
+        "records": 14324,
+        "patients": 13576,
+        "labels": {
+          "0": 13407,
+          "1": 917
+        }
+      },
+      "validation": {
+        "records": 3581,
+        "patients": 3391,
+        "labels": {
+          "0": 3352,
+          "1": 229
+        }
+      }
+    },
+    "created_at_utc": "2026-09-26T00:07:55.252674+00:00",
+    "models_trained": 0,
+    "official_test_processed": false
+  },
+  "preparation": {
+    "status": "complete",
+    "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+    "records": 17905,
+    "imported_cpu_records": 115,
+    "completed_at_utc": "2026-09-26T00:08:04.576567+00:00"
+  },
+  "device_tests": {
+    "passed": 4,
+    "seconds": 1.441
+  },
+  "existing_cpu_tests": {
+    "passed": 37,
+    "seconds": 5.129,
+    "gpu_skipped_in_that_invocation": 4
+  },
+  "pilot_status": {
+    "status": "complete",
+    "stage": "pilot",
+    "pid": 163559,
+    "started_at_utc": "2026-09-26T00:10:07.370327+00:00",
+    "updated_at_utc": "2026-09-26T00:10:33.711826+00:00",
+    "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+    "records_total": 16,
+    "records_complete": 16,
+    "records_resumed": 0,
+    "records_new": 16,
+    "elapsed_seconds": 26.34148769300009,
+    "records_per_hour": 2186.664651264418,
+    "active_record_ids": [],
+    "models_trained": 0,
+    "official_test_processed": false,
+    "stop_signal": null,
+    "stopped_after_max_batches": null
+  },
+  "pilot_batch": {
+    "time_utc": "2026-09-26T00:10:33.668108+00:00",
+    "batch_id": "163559-1790381414676692095",
+    "record_ids": [
+      "17045",
+      "11678",
+      "19330",
+      "15014",
+      "14525",
+      "08564",
+      "06496",
+      "07202",
+      "00407",
+      "18957",
+      "19703",
+      "16283",
+      "05554",
+      "17903",
+      "07316",
+      "13784"
+    ],
+    "load_seconds": 0.0323754689998168,
+    "wall_seconds": 19.023789869999746,
+    "records_per_hour": 3027.7878589709617
+  },
+  "pilot_checks": [
+    {
+      "record_id": "17045",
+      "patient_id": "P04328",
+      "label": 0,
+      "waveform_sha256": "e16869fbc14a8e41aef5775b3e7a7f7e87a2980916ba791f32d4941f269ff8b8",
+      "physical_input_sha256": "458218d45f16534e7a5ef23969bb893aa111b1df0d81cbb9026ea50f59b6afc7",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 1096,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1965,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1321,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 1519,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1703,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1900,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1720,
+          "capped": false
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2038,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 2454,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 2290,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3520,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2175,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2038,
+        2454,
+        1096,
+        1965,
+        1321,
+        1519,
+        2290,
+        3520,
+        1703,
+        2175,
+        1900,
+        1720
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        4000,
+        2000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.11585515400292934,
+      "reference_seconds": 0.13343231999897398,
+      "reference_max_abs_error": 0.0,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "be7efadc9217f440eb53de82b6136ffd58ec76f75bef176413a7a5ae0332e890",
+      "log_sha256": {
+        "17045_attempts.jsonl": "dc33b20535a114c00237e6b2e578bda6e44a5ef94e62f618039bc7473d24148d"
+      },
+      "completed_at_utc": "2026-09-26T00:10:30.562714+00:00"
+    },
+    {
+      "record_id": "11678",
+      "patient_id": "P17577",
+      "label": 0,
+      "waveform_sha256": "d5f296976633deeff2b1f4443836c33831549c336587588bb9c8eecbf11f4d64",
+      "physical_input_sha256": "dbf9aa7bebfa0bdfc4ce8def66944e1e248b3cd2a83c38532da07c0b35426834",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2072,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 3259,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 3122,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 4000,
+          "iterations": 3555,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "aVF",
+          "limit": 4000,
+          "iterations": 3352,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 3895,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3725,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 2716,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2324,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 8000,
+          "iterations": 4693,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 8000,
+          "iterations": 4988,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 8000,
+          "iterations": 4306,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2072,
+        3259,
+        3122,
+        3555,
+        4693,
+        3352,
+        3895,
+        3725,
+        2716,
+        2324,
+        4988,
+        4306
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        4000,
+        8000,
+        4000,
+        4000,
+        4000,
+        4000,
+        4000,
+        8000,
+        8000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.08320221999747446,
+      "reference_seconds": 0.13196722300199326,
+      "reference_max_abs_error": 0.0,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "faa151926c4713e0ef45b50e536535087cc2c22c3beea75615f20f8b0a275350",
+      "log_sha256": {
+        "11678_attempts.jsonl": "5bb3c8bab561182ed4425d557bef94cf7ed108d7b1ff19e52555c16b0096211d"
+      },
+      "completed_at_utc": "2026-09-26T00:10:30.886654+00:00"
+    },
+    {
+      "record_id": "19330",
+      "patient_id": "P01698",
+      "label": 1,
+      "waveform_sha256": "fa39cdf523abd040d1a4ffc96f10270cd8e62da41b6ca365bf2d02b4e7e6c215",
+      "physical_input_sha256": "794935db02f3bba93ec9e24867e353f9471f29574a0f86307b2eca14df0cb397",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1062,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1234,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 872,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 746,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 817,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 623,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 929,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2112,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 2307,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 2411,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 8000,
+          "iterations": 4575,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 8000,
+          "iterations": 4123,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1062,
+        1234,
+        872,
+        746,
+        817,
+        623,
+        929,
+        4575,
+        4123,
+        2112,
+        2307,
+        2411
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        8000,
+        8000,
+        4000,
+        4000,
+        4000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.09229944099934073,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "59f3da28a6e8d20f8d2e7dc6ff6a904e9474d55a37ea5dd419d9f5b9855d03de",
+      "log_sha256": {
+        "19330_attempts.jsonl": "e5d64124b215b0d9f71ae8c800617ad42475a607169ee6d9c3bb46510208f753"
+      },
+      "completed_at_utc": "2026-09-26T00:10:31.086530+00:00"
+    },
+    {
+      "record_id": "15014",
+      "patient_id": "P13540",
+      "label": 0,
+      "waveform_sha256": "89068f000562258944a7c03d891d5403dd1c7f4e02155497dffd652bbc043331",
+      "physical_input_sha256": "6d1bbcc85e24ca4ea430da3348d49f1e915930f5c7be58307c00547715aedafd",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1583,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 1522,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 3016,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 2277,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 2456,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 4000,
+          "iterations": 2551,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 4000,
+          "iterations": 2220,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2260,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 3369,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 3706,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 3581,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 8000,
+          "iterations": 4035,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        3016,
+        2277,
+        2456,
+        2551,
+        1583,
+        2220,
+        1522,
+        2260,
+        3369,
+        3706,
+        4035,
+        3581
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        4000,
+        2000,
+        4000,
+        2000,
+        4000,
+        4000,
+        4000,
+        8000,
+        4000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.10442116999911377,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "b8ac117997fcd26f402dfe42729ed3d3e07332f0035dd5d531ee587c28d0db33",
+      "log_sha256": {
+        "15014_attempts.jsonl": "894aabe7ad3d7abdc7256cf3d3e92ce0e68917b161afa5c8d2bc67f04f545680"
+      },
+      "completed_at_utc": "2026-09-26T00:10:31.296805+00:00"
+    },
+    {
+      "record_id": "14525",
+      "patient_id": "P00576",
+      "label": 0,
+      "waveform_sha256": "03c41c1ebb9737c7ce8ccdbde4786ee2114a5e671cf253fe0ebb9a28104b7006",
+      "physical_input_sha256": "d6101be53b5202b4667776fc99fe956cf1eea5ccd48b94dda442c6d4c24f9dcd",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1471,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1601,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 1480,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1244,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1205,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 908,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1980,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1716,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 2387,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3142,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 3481,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2613,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1471,
+        1601,
+        1480,
+        1244,
+        1205,
+        908,
+        2387,
+        3142,
+        3481,
+        2613,
+        1980,
+        1716
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        4000,
+        4000,
+        2000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.09414152200042736,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "3d0295a42309c5f3878fc1728366b80abd33d0772da1bf2d81ac8bbd43fea01d",
+      "log_sha256": {
+        "14525_attempts.jsonl": "d9584eb6cae99d762fa007c6b733d32f7da360eb00f196e0bd930c36f133d048"
+      },
+      "completed_at_utc": "2026-09-26T00:10:31.491243+00:00"
+    },
+    {
+      "record_id": "08564",
+      "patient_id": "P15883",
+      "label": 0,
+      "waveform_sha256": "71450cc89185015fcf74690899204cdc50ec42d1149c254ece6ca5026c7f4103",
+      "physical_input_sha256": "aa3ca80ceaafd647d5f9a4ed43b3c70af69bf6ed527f65f0e91a04f74c76340f",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1399,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1610,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 999,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1750,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 795,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 1006,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1539,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 2437,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2160,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 3646,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 2099,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 8000,
+          "iterations": 4050,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1399,
+        1610,
+        999,
+        1750,
+        795,
+        1006,
+        2437,
+        2160,
+        4050,
+        1539,
+        3646,
+        2099
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        8000,
+        2000,
+        4000,
+        4000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.12158523700054502,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "32fcbe0435fc5a98b7a3fac185eb1c5171d2bcc58f47ab2985788a3fa18be4b4",
+      "log_sha256": {
+        "08564_attempts.jsonl": "140569a00221e53c21beae03e7ab1342d7561df3f77b9afed05ff75998eca2c7"
+      },
+      "completed_at_utc": "2026-09-26T00:10:31.697948+00:00"
+    },
+    {
+      "record_id": "06496",
+      "patient_id": "P14811",
+      "label": 0,
+      "waveform_sha256": "9b623ac2e477fc3381dc9a0ca8d3966285f05500b100438dacd2b6c65a42eb52",
+      "physical_input_sha256": "f005735d916b0b2a326af80c428016ab505126bebc9ea8d20595ec5cb8979b72",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1157,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1288,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 592,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 943,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1089,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 969,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 1976,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1269,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1276,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1156,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 965,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2012,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1157,
+        1288,
+        592,
+        943,
+        1089,
+        969,
+        1976,
+        2012,
+        1269,
+        1276,
+        1156,
+        965
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.1365322540004854,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "8b6afe9eb691b5833726cc903ae176750bc5fa8cc1fbf203435de6cb9a083855",
+      "log_sha256": {
+        "06496_attempts.jsonl": "c003f11c059793e70645b7f8bec62cf8e58637f3d4b598eef7f9cc2715b6abb8"
+      },
+      "completed_at_utc": "2026-09-26T00:10:31.922448+00:00"
+    },
+    {
+      "record_id": "07202",
+      "patient_id": "P00246",
+      "label": 0,
+      "waveform_sha256": "c52da2cbecbef445f910943f21faac0bf223102838e2d35d71a05669aad03aa8",
+      "physical_input_sha256": "da47611c7d788c91277d1b0fc984ae592aef086541bae16005904c7887a08ef6",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 813,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1936,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 1784,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 1969,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1740,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1592,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2060,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 2957,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 2119,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3584,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 2113,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 2011,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2060,
+        2957,
+        2119,
+        813,
+        1936,
+        1784,
+        1969,
+        3584,
+        2113,
+        1740,
+        1592,
+        2011
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        2000,
+        4000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.10761119100061478,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "9297b2e4fc4e3a7f702a1e88410fdcf91e9d11e0e3994e3b8acb316a6d963537",
+      "log_sha256": {
+        "07202_attempts.jsonl": "bb7d1a77bee6a0c4a94ca7f0806b73498e002dd76d0af0425ff9b0547415b431"
+      },
+      "completed_at_utc": "2026-09-26T00:10:32.115047+00:00"
+    },
+    {
+      "record_id": "00407",
+      "patient_id": "P02939",
+      "label": 0,
+      "waveform_sha256": "447ee6fcff64c4a1478214ab164836b8aac93977389d9c30d7471ce5e4b7bd87",
+      "physical_input_sha256": "dc8b335a3e0a10f5a4ebe21791f00c6489d06dce71ff54bd820e696b75d863d7",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1173,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1413,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1211,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 869,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1757,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1517,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1387,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1333,
+          "capped": false
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2168,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 3046,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 3014,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2051,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2168,
+        1173,
+        3046,
+        1413,
+        1211,
+        869,
+        3014,
+        2051,
+        1757,
+        1517,
+        1387,
+        1333
+      ],
+      "vmd_limits": [
+        4000,
+        2000,
+        4000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.08297603300161427,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "e52c8bd377e8055021ea26a42d778271a84eaeafee64e41ccd5ccc93af1af718",
+      "log_sha256": {
+        "00407_attempts.jsonl": "2024cbef967b37a7a4e90166756640b78b4ff211eddf02472695f5e32893fbfd"
+      },
+      "completed_at_utc": "2026-09-26T00:10:32.281035+00:00"
+    },
+    {
+      "record_id": "18957",
+      "patient_id": "P16916",
+      "label": 0,
+      "waveform_sha256": "32e917f85e9da83e48b9ccbd49e1109fd13a4d21b4ac87d816d30672d76f2b74",
+      "physical_input_sha256": "9539160afff51acc756ef0011c657f13db9b3a3d782131418214aa31330266df",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1345,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1409,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 1076,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1136,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1154,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 333,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 1580,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1985,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1603,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 3806,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 2232,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 2250,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1345,
+        1409,
+        1076,
+        1136,
+        1154,
+        333,
+        3806,
+        1580,
+        1985,
+        2232,
+        2250,
+        1603
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.17535712699827855,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "21590bd640d108a6849ed46933c6481356fa08aea481867e5bb6e0b81154a517",
+      "log_sha256": {
+        "18957_attempts.jsonl": "9f6b6edcbdea925b28ea4e79eae8054b8accc14703d214b9942db4242d4f4645"
+      },
+      "completed_at_utc": "2026-09-26T00:10:32.550159+00:00"
+    },
+    {
+      "record_id": "19703",
+      "patient_id": "P06352",
+      "label": 0,
+      "waveform_sha256": "9f3b2f9c83185ab062ec74452bce633b91ec68f3726f3100f2a43bf2c6e987df",
+      "physical_input_sha256": "c6b8889380f09499b424fa5b9c93b6b67d05065eef6943858aaaf5d737bb1bd0",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1182,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1074,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 917,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1152,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1218,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 627,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1369,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1251,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 675,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1076,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 2326,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2551,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1182,
+        1074,
+        917,
+        1152,
+        1218,
+        627,
+        2326,
+        2551,
+        1369,
+        1251,
+        675,
+        1076
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.08817687299961108,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "f82fbb4f3fd1399b9e8eef444f60237c65f9e856639b906af372034dfd3beb1d",
+      "log_sha256": {
+        "19703_attempts.jsonl": "f3b15154fbe4d4509fa3219675f7ccef23cdc62da3f80440a0843da601ad1654"
+      },
+      "completed_at_utc": "2026-09-26T00:10:32.726427+00:00"
+    },
+    {
+      "record_id": "16283",
+      "patient_id": "P05855",
+      "label": 0,
+      "waveform_sha256": "acfa360231b15dee8ad5f8d7ce4a711319db08d6f56b1251635be1877e5e4b0c",
+      "physical_input_sha256": "eac4f0e490efa6a969b330c6a97359134dd485386eb6bfab98eb23c2259d7238",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 1536,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 996,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1690,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1351,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1762,
+          "capped": false
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2180,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 4000,
+          "iterations": 2236,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2259,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 3292,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 2373,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 8000,
+          "iterations": 7583,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 8000,
+          "iterations": 4049,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2180,
+        1536,
+        996,
+        1690,
+        1351,
+        2236,
+        7583,
+        2259,
+        4049,
+        3292,
+        2373,
+        1762
+      ],
+      "vmd_limits": [
+        4000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        8000,
+        4000,
+        8000,
+        4000,
+        4000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.08455250099723344,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "2cb889781fd68b9cb7fc48360763b674e3054666782c4b735f7b531f066dc21e",
+      "log_sha256": {
+        "16283_attempts.jsonl": "fe10b4d4361ed3a0219560a6e7a026a4604681a576625346a3ca3be5a80f1ccb"
+      },
+      "completed_at_utc": "2026-09-26T00:10:32.890934+00:00"
+    },
+    {
+      "record_id": "05554",
+      "patient_id": "P05143",
+      "label": 0,
+      "waveform_sha256": "c4baf9f2dd5300b26ab1bad3fb02b6244705a23367b666422a2259aab93906ea",
+      "physical_input_sha256": "8f8ef9b816fd8fee6c37fe932fd0f2f03c496de0508fbcc7b39ed03845f9b844",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 1474,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1147,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "I",
+          "limit": 4000,
+          "iterations": 2485,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 2536,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 2036,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 4000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 3361,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 4000,
+          "iterations": 3838,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 3414,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 3524,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 8000,
+          "iterations": 5243,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 8000,
+          "iterations": 5492,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 8000,
+          "iterations": 6092,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        2485,
+        2536,
+        2036,
+        5243,
+        5492,
+        1474,
+        6092,
+        3361,
+        3838,
+        1147,
+        3414,
+        3524
+      ],
+      "vmd_limits": [
+        4000,
+        4000,
+        4000,
+        8000,
+        8000,
+        2000,
+        8000,
+        4000,
+        4000,
+        2000,
+        4000,
+        4000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.08287166999798501,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "d09bf3768d472276629d99efe0a10cea97ff664f2fb92396714930989b44713a",
+      "log_sha256": {
+        "05554_attempts.jsonl": "e84d4bfdf60bb7afd1d32297aac12ffe6b55bb715852a344cc8b8ea60ed15567"
+      },
+      "completed_at_utc": "2026-09-26T00:10:33.060399+00:00"
+    },
+    {
+      "record_id": "17903",
+      "patient_id": "P00450",
+      "label": 0,
+      "waveform_sha256": "caf9905ce4899e59de62d9c7d7a447cb37250f4b892c06172f0c39c1e7bcf55e",
+      "physical_input_sha256": "3575b0bcf4f105fa2313354c5aebac21d1f5ec4e1d77a8e1aef6f12844d4de61",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1004,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 743,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 490,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 774,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 264,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 763,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 1118,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 1331,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1298,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1322,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 3847,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 4000,
+          "iterations": 3389,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1004,
+        743,
+        490,
+        774,
+        264,
+        763,
+        1118,
+        1331,
+        1298,
+        1322,
+        3847,
+        3389
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        4000,
+        4000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.10729084800186683,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "8640143e8b7581b49274f87b5ab9fe9d3409383d50ae503e08161ef2f4aa1b69",
+      "log_sha256": {
+        "17903_attempts.jsonl": "6f12000584632458abbbed92ec2f00c628cf2014430e48ebccd0ca23ac303359"
+      },
+      "completed_at_utc": "2026-09-26T00:10:33.251982+00:00"
+    },
+    {
+      "record_id": "07316",
+      "patient_id": "P15354",
+      "label": 0,
+      "waveform_sha256": "b3e0dced7862e10ecbdf30880e332fda72b866bec9ad1b71e47f40f93622d1dc",
+      "physical_input_sha256": "57363863f21311c7bbc66c93a64974d44c2bea2dcae19235d29d11ab734add2c",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 1576,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 1994,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1378,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 2000,
+          "capped": true
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1965,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 4000,
+          "iterations": 3811,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 4000,
+          "iterations": 2494,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 4000,
+          "iterations": 3202,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 4000,
+          "iterations": 2601,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 4000,
+          "iterations": 2125,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 4000,
+          "iterations": 2353,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 4000,
+          "iterations": 3059,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 4000,
+          "iterations": 2990,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        1576,
+        3811,
+        2494,
+        3202,
+        2601,
+        1994,
+        2125,
+        2353,
+        1378,
+        3059,
+        2990,
+        1965
+      ],
+      "vmd_limits": [
+        2000,
+        4000,
+        4000,
+        4000,
+        4000,
+        2000,
+        4000,
+        4000,
+        2000,
+        4000,
+        4000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.09673937899788143,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "a3e09398738ea25a881c5db0f1ceff0aef6fb6221ec1a084310bc3af2dae99f2",
+      "log_sha256": {
+        "07316_attempts.jsonl": "f947ee24ea513af7712405de1c7c4d3c6b99d6099b97891230b3a320e6eea09d"
+      },
+      "completed_at_utc": "2026-09-26T00:10:33.436736+00:00"
+    },
+    {
+      "record_id": "13784",
+      "patient_id": "P04703",
+      "label": 0,
+      "waveform_sha256": "2b266909bdb8d5ec921778f49cc036911871b1133710db439654e002a68466c4",
+      "physical_input_sha256": "d545a0082f8f02dbd9d24859ee27308b087e6c23206ef3c48aff104b21925562",
+      "vmd_attempts": [
+        {
+          "lead": "I",
+          "limit": 2000,
+          "iterations": 665,
+          "capped": false
+        },
+        {
+          "lead": "II",
+          "limit": 2000,
+          "iterations": 787,
+          "capped": false
+        },
+        {
+          "lead": "III",
+          "limit": 2000,
+          "iterations": 836,
+          "capped": false
+        },
+        {
+          "lead": "aVR",
+          "limit": 2000,
+          "iterations": 1177,
+          "capped": false
+        },
+        {
+          "lead": "aVL",
+          "limit": 2000,
+          "iterations": 1181,
+          "capped": false
+        },
+        {
+          "lead": "aVF",
+          "limit": 2000,
+          "iterations": 904,
+          "capped": false
+        },
+        {
+          "lead": "V1",
+          "limit": 2000,
+          "iterations": 532,
+          "capped": false
+        },
+        {
+          "lead": "V2",
+          "limit": 2000,
+          "iterations": 952,
+          "capped": false
+        },
+        {
+          "lead": "V3",
+          "limit": 2000,
+          "iterations": 1159,
+          "capped": false
+        },
+        {
+          "lead": "V4",
+          "limit": 2000,
+          "iterations": 1634,
+          "capped": false
+        },
+        {
+          "lead": "V5",
+          "limit": 2000,
+          "iterations": 1307,
+          "capped": false
+        },
+        {
+          "lead": "V6",
+          "limit": 2000,
+          "iterations": 1335,
+          "capped": false
+        }
+      ],
+      "vmd_iterations": [
+        665,
+        787,
+        836,
+        1177,
+        1181,
+        904,
+        532,
+        952,
+        1159,
+        1634,
+        1307,
+        1335
+      ],
+      "vmd_limits": [
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000,
+        2000
+      ],
+      "vmd_batch_seconds": 15.569340240999736,
+      "vmd_batch_records": 16,
+      "wst_seconds": 0.1084652069985168,
+      "reference_seconds": null,
+      "reference_max_abs_error": null,
+      "vmd_features": 2688,
+      "wst_features": 2808,
+      "execution_origin": "gpu_fp64_vmd_cpu_wst",
+      "cpu_comparison": {
+        "passed": true,
+        "vmd_exact": true,
+        "vmd_max_abs_error": 0.0,
+        "wst_exact": true,
+        "input_and_convergence_equal": true
+      },
+      "batch_id": "163559-1790381414676692095",
+      "batch_record_ids": [
+        "17045",
+        "11678",
+        "19330",
+        "15014",
+        "14525",
+        "08564",
+        "06496",
+        "07202",
+        "00407",
+        "18957",
+        "19703",
+        "16283",
+        "05554",
+        "17903",
+        "07316",
+        "13784"
+      ],
+      "status": "complete",
+      "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+      "features_sha256": "1e67ea2cb8efeb352cd13065d4ec804fc57eb3f0b7a14d440704236d7f56bbbe",
+      "log_sha256": {
+        "13784_attempts.jsonl": "920944af358c24de4822fc33f1567dc9b257fbf9f28a3f1bcb7636010a7259ec"
+      },
+      "completed_at_utc": "2026-09-26T00:10:33.631746+00:00"
+    }
+  ],
+  "pilot_restart_reused": true,
+  "recovery_verification": {
+    "status": "passed",
+    "verified_at_utc": "2026-09-26T00:18:59.463370+00:00",
+    "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+    "records_complete": 131,
+    "records_pending": 17774,
+    "origins": {
+      "imported_cpu_checkpoint": 115,
+      "gpu_fp64_vmd_cpu_wst": 16
+    },
+    "imported_npz_bytes_unchanged": true,
+    "original_cpu_artifacts_unchanged": true,
+    "writer_lock_released": true,
+    "checkpoint_file_sha256": {
+      "00001.npz": "103c0328461a027e66b3e4318285309431eb5d4f3bfaaeef47101d0836f65a43",
+      "00001_source_attempts.jsonl": "8e777979d2ea41203560c78c30c05111b0129577a501e98f4b2b5a2c5b56ccb2",
+      "00001.json": "af3aea832cac87e16a03545565f150a7aa11d32bfdf76f0872e7f6b560a36c0c",
+      "00002.npz": "153ebe6e2d88dabc6f6684f39244b0f2c822784b08df3bc2e9127026877d9dff",
+      "00002_source_attempts.jsonl": "a31d2f1039238baa2c774166eab4fd38c9696c23c695293e284b1daf70e56659",
+      "00002.json": "9993b2285ab8fbe7c8457b707945dcc17b33377bdec564e5c24fd90dc16d21c1",
+      "00003.npz": "21288f3a0c9676c90810561d122f63d23f90fca1c67bac0e4563bae9150523be",
+      "00003_source_attempts.jsonl": "8b605902f33c98b97b1fbb8ca2f7e3738524440c083951fae6b889186f8c4bd7",
+      "00003.json": "2184c74751c64b10b53a6f813878de4c871cb24eae0d3f98cd1735f90327a26d",
+      "00004.npz": "dcc72737c13fad852b8a408eca1944434d2bb86cc161830870ebbc5b23da5716",
+      "00004_source_attempts.jsonl": "c331d3942e1046c9268b3e9c7cb2f425aa911c74f658b70e8ea5f763906734e6",
+      "00004.json": "f4eacb3265dc6cfd433e7b8d62a69e1bf46e116c2bed87b894012e8619f536e1",
+      "00005.npz": "3a141a13c0a5c98d091c8b0d7cdc24be07de2ec6ef451fb6f2ee28866f78f827",
+      "00005_source_attempts.jsonl": "0fae58dbd1db6a5023bc630de401cb7de35c30d71e292ddda0b217258e06afbb",
+      "00005.json": "78a3764b02ad537232d6c754edbbabafd2d3593a688e81ee63379918b0b3d646",
+      "00006.npz": "e217e1268f10b3cbd099ece716ec9f19343e025f78c8f0ba3df7b17f5aed9834",
+      "00006_source_attempts.jsonl": "d4c9849e278cbc976e647828352f3bf9b1ff2d2b366e1c6f5098d6b517a925e4",
+      "00006.json": "91cad9caa7036530fe444c30c451bed5c238e336a6326b5d8d459a0a24114e4d",
+      "00007.npz": "881261b386af93642002910aebcbffbe613d5fdda23ca33b7c1c46abb1317949",
+      "00007_source_attempts.jsonl": "5f9d5ab004a20b1f414a2b7ac25e1eb3bf53188ac73191d6b9c3351871a231d0",
+      "00007.json": "11a0408662cc85836e0986ab941c516b855d4220e6af7f17b63485619ecc6870",
+      "00009.npz": "466558707e5ac2ab4f0fc0024b65d0424877e254a2c1685a88414d5096a82f2d",
+      "00009_source_attempts.jsonl": "b0d1ae1bcad4643f5350f086ff2f8eafd47b2c4b914db07c095fd0c1a1296440",
+      "00009.json": "d33c8e3f290280901026cdca9ea9d12a70c3f0d91563b130993d0d007a11d853",
+      "00010.npz": "35654f6e78115eadbfc3dcfcf06e77e74a296bf5bba731b0e48a4103bfae3714",
+      "00010_source_attempts.jsonl": "7e4a2162253d39ea5ea1f224ef56da3cf64da8d954113bc79faeeca9d1ca41d4",
+      "00010.json": "781917c6861b77cdcfae9c5ac4d31b23876657b78261a09a8a368cf4f15a75e1",
+      "00011.npz": "ed489b8fa43df186a669e325120ffc1d5ae2aa90c71090b228ae4efd8cecf7a6",
+      "00011_source_attempts.jsonl": "899c6662024ef7c99cdc65b5f40e0f1a8563a8bd6aa9ef4f736e349768086ecc",
+      "00011.json": "fbbfa161dbf478683243a0b11058c6e0a57251dd5fab8e9b369e56ec5da3e9ae",
+      "00012.npz": "4d0dde48dac455b2e4e6472c40a4b5a644a7e9ddf95ac5bd4b94746ea40d0759",
+      "00012_source_attempts.jsonl": "90659dceb6059d6174c56748a27dfa2d8547e1088911f523cad5f19e021dc67e",
+      "00012.json": "b9736510e5dd008af3f5c103c0f8b011dae81f4e3ed9e3e861154767b8222e70",
+      "00013.npz": "cb567192c5ee93ab1db8fd4d8ab089a26255f87ffeee4c9c69e9dd474a245148",
+      "00013_source_attempts.jsonl": "ddbf8c752106162816882a0a1579d2bd970c50912eae8681cac0bba1f1acdd48",
+      "00013.json": "bc8231d1409defceb78118db1f77e14dd545418b55b38986124c5339b7b36405",
+      "00014.npz": "0ff293f058fe5eb64d95cff418a9b089c915632e4bac771b6d0a21188e6c5f1b",
+      "00014_source_attempts.jsonl": "a9935c78c790207ed2043cefa4fa9c5dfe128c5fca07a092a9665545427007ec",
+      "00014.json": "38a35c100b4e5e7697d04c1b506c314d4c4296931da6cda862dde64cfd9b5d6e",
+      "00016.npz": "110dd9f826020c0cbb5f1e1e39a9ec97a47c0d52fc04f27e840f1f5ed82bb37e",
+      "00016_source_attempts.jsonl": "dab17fe8acfe7a521202f09bc0f7e419579b15c08e053dd6307a4f3e0a57d9d7",
+      "00016.json": "b7a886671b2d41024458288d414561b95de14ecd0510ec582b728e76d801538f",
+      "00017.npz": "9d5eeceea63cb8c6f60d936673763ee3d38936e3d17ce8dfce69c462706a0488",
+      "00017_source_attempts.jsonl": "11b5a901238be0312b3e925f4e8cb16448fff463a34b443d6aa377c42e41716a",
+      "00017.json": "556978b9ef3c13f2391870ac2cf0dfc190093fe62b9b30f43e6056b7eb7d8c69",
+      "00018.npz": "08888025f1e018ea235db3f67e00761bf8a973b441ac048e6d520fe8bf0ff26d",
+      "00018_source_attempts.jsonl": "7c351c03384b4223418561681c4a7a10fa640e86fcf79ae077b398ca63f679c8",
+      "00018.json": "f1d3620f6bfa344886ab1fc7a85ce8ec10d4d2f681be71a9afff4d767f976bef",
+      "00019.npz": "6eb730caa78ab115d5d183a32e009ee09c783a9510bf2fd888c020e90b9a2202",
+      "00019_source_attempts.jsonl": "3c4836088c16da05683db7f478e28615217a6c92c80c895ff1e705ff550dcb12",
+      "00019.json": "3df838b66f45f96bf0c2e7d2d79f7b3ed520189679705ee33c65dd66506b8f6f",
+      "00020.npz": "53b06b2bb437409109c44cf2f31f63dc1d1678c9c390fc3ac5b7dfcd043bf370",
+      "00020_source_attempts.jsonl": "edbb789a1f3861798e9b31f8744638975cec006e64b900cece96a1ae2a303251",
+      "00020.json": "8e7ab7d5ca91208cdcbaddc370a3e51f080b3a76e0fbc310c4cca756b4ca6a5a",
+      "00021.npz": "58604790fc9e6d613ce1340248fda5a5c956f711302f64d8e131445e744a1bf4",
+      "00021_source_attempts.jsonl": "a8d5f0a3aa1236f611d823c5341abb1fa4010243188ddce44e451524e5f7de8d",
+      "00021.json": "de5d80a567edee67323d3427567713ed00867f367ec087292878011a3a78d1f9",
+      "00022.npz": "21fd0273576ba9c550444f030108fce082ff397270ccff0974542f8f821a10c9",
+      "00022_source_attempts.jsonl": "68d43c79f54325969a92ca646353d8ddbfc6eb4a3e3ca2d3e5d58dfef52d08df",
+      "00022.json": "8ca557d9c11f2767e49cc88c7ad5c379e673d35cf2c9368cd7f95eb4c0aed973",
+      "00023.npz": "4b512b8c5dd40d278c5652a0d4a8fcce770ca3e5c3435c97ee7338bc2faa1f2d",
+      "00023_source_attempts.jsonl": "4758a3fcd80550f14b2a2900d3ea8dccd8ab0587769836cac2cbd5e9b2fb9cfb",
+      "00023.json": "919cc31d44896eb10bab4f33bf61cb7f251ffd12ee0a307c97f597d6d1a5a1e0",
+      "00024.npz": "9cda880a674bdee67b74e62a69f5c4e7715ee1cc6dedf2e97c2abdd017a31720",
+      "00024_source_attempts.jsonl": "ee5464538dc427e3ee1ef75ba1cd744539e7ffe267ba211799044fc2d4cc8e10",
+      "00024.json": "935d686aa688fc3f44c770ca3c6f3753cff0d3f8226ed5890d96205e72a149a2",
+      "00025.npz": "9d2968f6c12b904edcb7bee607d2edf453e361320f356a2fad75d540d12e2009",
+      "00025_source_attempts.jsonl": "a9bcc51600765b25b5bb0f3461e2c57fbbe62a7e78114d9b97c869214c4f95b1",
+      "00025.json": "12d6b7e662cf655ab5cb67a3fb4743ebe7d2d80b29caca55c6cae5500f3da596",
+      "00026.npz": "3ba78bad37eb092e8ee6a9de91f9513225a7fe0eacfd3f6c9dff8c6a93d0f199",
+      "00026_source_attempts.jsonl": "7b6d0fe2f8afd0a897440cdcb504bfcad5f4805ee806de45ab8b22050ea95280",
+      "00026.json": "798ed2efb67fdca194efd1a492202b59163798d10e8d78f6be9cbd2f835cd805",
+      "00027.npz": "cd221d2590228a3066984ea9ccd6ba66bdf5fd04459c65ac749709d433b9c73c",
+      "00027_source_attempts.jsonl": "e874eee75b348d2b24bd32f5f61d904be25143fa122f8fa35b665e1366cd6798",
+      "00027.json": "2df6fdda97233dc56673d7944937e89f260b69f37763a409a1a36af878a3da89",
+      "00029.npz": "1fa58ce7d90bb7bd0d48b94e904bebcc4e1395802f11f3b41901e3b0ffe7e324",
+      "00029_source_attempts.jsonl": "3a95b097abc253e28eaf9afb2312823e1cdb0d9718ecce5148c15c202500a2ca",
+      "00029.json": "71419c51a0c6dcbade45275fab4f0dc7ef6b116924fbcaa89f3d963ccd558fd3",
+      "00030.npz": "0f1269cdf91b3d50ae8c5d6b1752021b95942b43e9a5eae37514076d2f881f43",
+      "00030_source_attempts.jsonl": "f070308314bce3b5a7bb397600d9828c84b9ce32a0f9b68bda4a39e5db24cf5f",
+      "00030.json": "4df259b7408a72017b7abd0387f929c26a75b6edcd5a1ab92eba9aaa88ba639c",
+      "00031.npz": "6b5f70dd7fda2d0a12b2c12e7f15b256c981c7670580fcdedf8a6d8b4c743754",
+      "00031_source_attempts.jsonl": "6bf48c48abc13454ea777113a146f6cfa9657068ff3a7841663c2aceb2b537a4",
+      "00031.json": "3ed7e98af2e5331498bd3167a316a3e96392a0ef5807f36aec393c1e7f70b315",
+      "00032.npz": "cc0c496e06cb9e743f5fdefeb0778bb858cbc11123a7653d711a9c6bc05277dd",
+      "00032_source_attempts.jsonl": "e455279e873e28fa9612bdf88bff0d89cc6b9ef078fc09640b1c313ca16d35bc",
+      "00032.json": "694a48ec75eae407f425007fc498ec5a47b0c6f523cab5e656815af27a10a3a8",
+      "00033.npz": "50c3bc43ec683aed7039b0651ce69bd39a911605276b86cfb1735b37d973d3fa",
+      "00033_source_attempts.jsonl": "80c1303014be85a36a302ee671e5c3f26530fd617a40cad71595225c20530293",
+      "00033.json": "b208de5e6cdaad4017103356153b70a3fc35e521aec78ac8756744ac47ffe48f",
+      "00034.npz": "eb2d93c8a4268c877bc863e3adfc6501b36323658b95a5a73fb4e101749349d5",
+      "00034_source_attempts.jsonl": "2d75a7c7cde3f43c9b859bccf6444d9bff09c4daa9ba57f5397337f84795663a",
+      "00034.json": "0773295557fc23557556c0e371a8c57c0a79e18e44990917b14f1191c21de144",
+      "00036.npz": "024012956436820fe6c07730c8a307dcdf4802d121cbaf5dc5fff4699874d5e1",
+      "00036_source_attempts.jsonl": "3aca6bb8f36e2bf34b3983469b383dd76619d05c0c7eb3b0f54cf3745ba0be94",
+      "00036.json": "0bfc4d8e929230a78b414387d35c5af8cc6222191f3594cc5c7d8ff2295f3264",
+      "00037.npz": "726f85ecceca32a4c0f508e8bb5adf9b09d05e95583862625990cf61b4e0c389",
+      "00037_source_attempts.jsonl": "12c938ad03b67546056173231741a86b4c972e0b9544ece2e31ba241383d040a",
+      "00037.json": "63e3ef300a38e4110c0f5aec168598139ce7f5b645dd9666c2497b37816d366e",
+      "00038.npz": "b3bf6782fcf54e7b821b2cccf8887a6ebe0ae53042d7f2ac802fa68494fa5cbe",
+      "00038_source_attempts.jsonl": "93afbc4dd7941d149dc72e2f3d3a7b16bf47fcf7d92953391e89bb9562b65a87",
+      "00038.json": "8c3ae6f604bec4bce2cbe3d8e13098082e0fe75f8ab07e25785cc0f665b00108",
+      "00039.npz": "f338e1bbe84fc38d2475fdf75d2fcf6f83a78ec671638b28438a42c7d367887a",
+      "00039_source_attempts.jsonl": "1ae397719397e407ac67ccf67c9fedd156e292ebbc9f1e8d626a6cc2833cb791",
+      "00039.json": "f058d116be0d55cff83e66cbe4b1c3fb736d9f20fb2874c99280df1adb1abb83",
+      "00040.npz": "2ae50a91c06f1a529fb0dbd30c0879cb18f7d050ee3e68da472beb1c3395c1cb",
+      "00040_source_attempts.jsonl": "ab10474f89d254e90409bc715290110de03a3d586f91269a307d4fd993c30ac0",
+      "00040.json": "dd9b4c4fe970c4fa35663b604a773f77739c4a6e4f706a1b82764a556b2dba5a",
+      "00041.npz": "cc3c3796bb4f4d764ac752c8dfe6d60318c0b3d0080a7b63456830deca6b951d",
+      "00041_source_attempts.jsonl": "c80f85a7866d5945e683d069301f70d191ebb4c583a1bc483d52244f93d6385a",
+      "00041.json": "4d2eaf771f7ca2887e21c8504a1b2bef6a2e25267e07fab0ac99c7416d48d4dd",
+      "00042.npz": "443e2b08fa0a2aeddbcdd0ac496c36d011ef4fdaa14085bfd8001a719ec57f87",
+      "00042_source_attempts.jsonl": "26f234354ead4a74e3af3a18418d9b263815337ec1ac6e2836dd8eab79c37516",
+      "00042.json": "dc8208e1c02837fec39d76274bceb1f57d6ac197e30fa0e91a3085109a04a5ca",
+      "00044.npz": "ee566eae83989b9252393a0197ad93e061e6efb941615c998c22e42f917bf952",
+      "00044_source_attempts.jsonl": "a0165556a988890b8aec504da303bfbd0af7c20ce7a35fe3a4aedeb71364765e",
+      "00044.json": "a87f4069bc9a26e8548403aabaa6015232a7afe3cbc87d066b8f2b526bd8f99d",
+      "00045.npz": "f4e98e1a2d97cae9102839b2709163695f100b7579aa47b2a9d90725748e3f3f",
+      "00045_source_attempts.jsonl": "7eb2b464b3cff6970f542cd97e2185a0a389aa8dc198155021635357e21cd82e",
+      "00045.json": "d829ea9b40a18fd0403abf6017d8ecbacda1d4675b9c8c9916b0df5ac9a30166",
+      "00046.npz": "8692628ec4af395a0ea77fe76447059bc856085c87af900b530264a65543ee67",
+      "00046_source_attempts.jsonl": "ddf232c4a6f490ea332ed813b374994449f206506493a2c3067fc272d2a965ab",
+      "00046.json": "6b6e3811842449dce3e9019b34cfa3cd38adc212dd08251b0c65c79499ba5389",
+      "00047.npz": "ccdad5c06968e4232259c4a9236a5cce63a31ea2f9caedd637d719a815077dc0",
+      "00047_source_attempts.jsonl": "b063bce439aa46854828c5774e6357c1c318a4d596b58c44d85f48c2ca0a4144",
+      "00047.json": "195671bee91a48204c67299faedd6f20d8c60b694ccb8368dc5c40b52e57c794",
+      "00048.npz": "de34e43bb66ca0f2bd3833c1530e668d932635dad76425cff4fb737ac2ca5dbc",
+      "00048_source_attempts.jsonl": "854449c07d2ac90b4308cde7d106ed5c49fb43d48bc3f6e00c21fe73cb25f6ab",
+      "00048.json": "5c04cec836dc2d69196d22357284c78edadfc39ab29dade8550f9b14f4f0e9e0",
+      "00049.npz": "c6e347ac7e026690c7385f8cd4d8f4b9b60787e90732f2f7531a4ee1806f59e3",
+      "00049_source_attempts.jsonl": "84a0a8e196dec19eba0cb960b6ddc73cdbd940c3fdb730265b610afa22cb4f16",
+      "00049.json": "46d1087f41152dbfb93d7bdeafdee5e8a5fd001bbb3b825981dbfda16c794a85",
+      "00050.npz": "fa0452709b11995018e69d13934cf7f543341d3e7892410938ce691acb3aedb7",
+      "00050_source_attempts.jsonl": "18c20b80cb1292338e8b09afbc5156c3a98f6c62fc2295abd03bc251283ed89e",
+      "00050.json": "6df3211e1f09d2abff68f3b7a750ef1c565d8f2da5bdb179ce2e16500882049d",
+      "00051.npz": "1db1a08925770dcce565b9224b710ecaf2c0f3e8a265ea1d9a2eeaa15ee730d7",
+      "00051_source_attempts.jsonl": "6f0eff54b66c5c8d03bf1f3fd3d09f888ca60589668a4f56400406a5afbb0a20",
+      "00051.json": "68431072f5c193e84dcffe50dce8621921248b5d9fd975f3c6d28b23b66b639c",
+      "00052.npz": "4fd1f8dd66c8e6597face00db66a0395be0a45c3706870e117603b0a84912236",
+      "00052_source_attempts.jsonl": "94275f7aa5519c1390b225c3750f68daaf280459dc04930aa96f8e1c046a5fe1",
+      "00052.json": "80613217ead8e5da6f8cf7132ab5f873161bae35de0840fc1c320863024c108d",
+      "00054.npz": "6640a950c82d1b2fb0ac2ab2c0148e16f040b7d2b1555d0cd02a34b749dcd0d7",
+      "00054_source_attempts.jsonl": "c0cb50a559641af99400146caeb3d895db1f0e6f36d31979228a2bf087c199fb",
+      "00054.json": "8ce12ff823c11cdd28c2f71cb51f108de811e52a947241e2b20af533c2e7852b",
+      "00056.npz": "67bae3d6416aea9d16c2e6293e161e1198667f61d98c7796b93096658c02bc08",
+      "00056_source_attempts.jsonl": "37ebc8f11bff28aee8dc6027e63ee192d4d42a58d3dbd513a853a3b6e3fe275b",
+      "00056.json": "d457d8a17ca13fec2c4529a6cfa467c60f0a1744e2082ecc4775aa4fa8f925d8",
+      "00057.npz": "6ef7c7dd1235614402c3877e64cbd9f74095ed1327057ed34d99eaf7105b0331",
+      "00057_source_attempts.jsonl": "908381b7ae4659967a44cbcf7f63dd90dffd1c3459c8919e24c7528b3f101ce9",
+      "00057.json": "0cb2f6a2ee041eca71db2c6b99a7d7abc708fca08091257c9c487b06e54e1065",
+      "00058.npz": "37be7dcc4ede0ab2d07199715ba3662d6b73c73a57e320c89c772731aa6c821b",
+      "00058_source_attempts.jsonl": "5085712629c5d4acb310527929bd2446c0ede152fdff60013ee5214aad196424",
+      "00058.json": "0d5fbc9a01283597e885e68d527eef174c2970f7fa58c880eabaa4d2d73fe196",
+      "00059.npz": "40ad6db0f04e4d9254fe21ba3c12b5dddb1275eb318799dff10b4d2db5e12a72",
+      "00059_source_attempts.jsonl": "e025c10d8687d3555381908cb34d5205b0383cbb718c727cc0777d4992922c4e",
+      "00059.json": "b8af2cc8321b16353d2f764a8cd9d6b02b4ff13031dd796d5afe697cb7ae905b",
+      "00060.npz": "fc1b6c5724b8215f002e0ecc00f0d09c82b2d4444200a8036f26405923e306f2",
+      "00060_source_attempts.jsonl": "0c725456349a3f1923e57ef9e7a746bc8ceff996e7f1ae75406502c16028ba8e",
+      "00060.json": "c97e6cc6d69bbfa05954983495736caf27f4989e4d4148e6b5ce1eea762afd17",
+      "00061.npz": "5b4c1420f1bedc111359d888b025131607e67f2574ad0f1da2c27eea81c55942",
+      "00061_source_attempts.jsonl": "d210ba695cf9803d5102ca951b6c9a55f6f6fd9550d0ba76198c910f623cedee",
+      "00061.json": "6b9e82b69dba32c5d48ec2c6703b413c6588412c61c2e3c16c2a586f9fcf643b",
+      "00062.npz": "4fb92fbf467744e7a2ebbb198ea0a98cad67048d7b1757bfedeb603b938d3481",
+      "00062_source_attempts.jsonl": "4fc128a570e99d7588a997fb4fde947c3e16fd77cc46cb5c53d971c46d1a2e9f",
+      "00062.json": "3ddc458f61a6b293e0250f72c60441dd0a64cd578fd6e0d96e4f1156190e7dab",
+      "00063.npz": "08c48793dfec4d1603e9ce0f4ba171d940d8bd2fab0221dd7b07d66577ebf5bb",
+      "00063_source_attempts.jsonl": "8ae8fe296278e46f9f12c19ba0db580da1eaa6ece2813d9c44f11e7679f16201",
+      "00063.json": "5a61e586a3f2c887f91cb5936fb207761e91f9b9725e56f1d4f02c296594d548",
+      "00064.npz": "d2237f1fd0767d89ec247d83baba21a80db4f1fe3b5d129c237eae253ded8bd1",
+      "00064_source_attempts.jsonl": "569cdc41d0c8d4b3a43716bb5688e90fbb38089d209754263e35900c241e610b",
+      "00064.json": "1ff28be41e2321bdcb187e1a1d472785be29355ae7bc013cf9f27d55a811d4ae",
+      "00065.npz": "4ad13db77da1aefb70ff36d85d50eb9f36fb6829b6e893271b4f743007765f51",
+      "00065_source_attempts.jsonl": "7304617a3a3b9c6cb80e046a942f423b2c19a9e2509c2bd2ac2b533049dc545d",
+      "00065.json": "48635ab1f7259f214f44040cca712e633d1bad81b09d6c11c6ce308e1a662215",
+      "00066.npz": "6d6b57c948d3601e100e40792a6cab65a19a01afbe8983daea992c37b17416d0",
+      "00066_source_attempts.jsonl": "af37ff58f00d10ce3aa246d2d89b83bece283b6ee777be88b8b5cd950d78ac79",
+      "00066.json": "c82e2e620e983bf730001cec49980a9e16f7f5866f8584821b5e21194a1b5a2d",
+      "00067.npz": "c3a791e1dc284ff829d69ab3a2e8a40292289c6685be21fc7ac29a52fc0342cc",
+      "00067_source_attempts.jsonl": "9a7e29d85d9eab34ce637d2646d218d5a238130aa96c671aa9b6e1fd0f168abb",
+      "00067.json": "20380aa858cfe493373ed784ae7630a73c1967d4acf0c125220b2c3bed304600",
+      "00068.npz": "e8f9cb71b516e4357409f9caa27ff95c68bc829b629c01af3eaa6a663fd88a7b",
+      "00068_source_attempts.jsonl": "180b015da37b25972159a0746f7693edc1c36709cfeba0dec3b74f81f8077e26",
+      "00068.json": "7fdd2a47d1f33976cd4e319a15ceb1e227b337dc5b9256836f1eb6f90bfad6ba",
+      "00069.npz": "7939c5471c82abaa01a915281b029284c3bc44a88774b9e49d853b534be7c6ed",
+      "00069_source_attempts.jsonl": "dafe2cdf53786012d424fbaabffee00e5dc9fb1be431439daeb022827c8d3390",
+      "00069.json": "bb0f1d90b703685a6dda9373a1774ac8ffab2a5ed6d5b6f9dcf37fe76c3ca08a",
+      "00072.npz": "a033e8dafa3f20faca1eb1d9b5c1fa6c2ab90ba02aeea22d9f24b04e801ac8ab",
+      "00072_source_attempts.jsonl": "df44817f35161e886418fca71964b2785d5bfcc91a3f9ff30bbee191dc6b7f69",
+      "00072.json": "1bd035bb559320f44590f72bd94796d5e64ca8c4292dde87b1bbaf0c2e744987",
+      "00073.npz": "ab66e42241fc8720f7e81194211b0b3f2744e84ad877563cc4bd95ff6cfc09b0",
+      "00073_source_attempts.jsonl": "641fc68f7ea84fa5e6a5c63f613b19b36f68cd77740dc7e5e78a2814dfba3ca2",
+      "00073.json": "21acb25b214cce878536244568adef94ab8183c2711eeabcea1537ebf85c3407",
+      "00074.npz": "bc019834058954c241558e1fc7d0fd1fe5700012d9bfc097113013b784c82c54",
+      "00074_source_attempts.jsonl": "6aac8abea64d36907fbf5d0097fbf194a9d3dff25e592cdb468299e7976dceab",
+      "00074.json": "5c54e061af82214b7aecdefbf9bee78b7d2d3a471b9470975d41d09c2b98acea",
+      "00075.npz": "0e176122a2a7ec730f01577ef608f1c9c22c44ca1ceb9df3674bef72737f8a3a",
+      "00075_source_attempts.jsonl": "3b46aea089b7327e44b730851cd4ea3c9fb366af3af38ffd682eb30379f11728",
+      "00075.json": "aec448716e016ac8942597a692fe66a4e7b2bddf0be0cf90d521452c111c708d",
+      "00077.npz": "1b12de4ec4e8cc70e8433301c7fc709e5a8970e1acb846b442dc7bf291a1531b",
+      "00077_source_attempts.jsonl": "6859c6bd545a8a8028457ba2cdefa561feda83fe00474e15c569e7225253c305",
+      "00077.json": "5440c860fb98f4831ad07cd92caeb668543feb9e3b3e7bb04c3e5f2f8c55e579",
+      "00078.npz": "9ed66715ad0416b862e413a6454219f09745215073130cd4b277f391381dff3b",
+      "00078_source_attempts.jsonl": "07532fd01634a4055236ffe55cf14e6cd5957ec3bd68cd49205ef96f22596b00",
+      "00078.json": "919879ac1bf8e08ab18343ac6bc5e07692a70ac3af29b37988b0c5bb460bf16c",
+      "00079.npz": "e45ab66ce894a4825b908d222907df807df99cb5b7f02e8da8267e2b6f1e47e6",
+      "00079_source_attempts.jsonl": "8c94b75812c50d9cb0c1be413a4ac142455ef8612db48d587ee23f251825a9a9",
+      "00079.json": "8789ea4534c8b6fb65ae5f4185da29105c63664cb92a271ccd44e7a7ceddd8b8",
+      "00080.npz": "3ec78135992af557a15f9962e2044c8f672c9272ba42e9b4efd3b93d2a04636f",
+      "00080_source_attempts.jsonl": "68c0be87cae6d629ca6e2d4c22d82726679f6d13ef1129fd26fdf5407497965a",
+      "00080.json": "f7bdc3671ec130e42259923ccc4650d5df76b6e2de6d2516152c6de34adce1f0",
+      "00081.npz": "79649838377585904cc92233be290963347044388c20e0e5ded283bfbe60bf82",
+      "00081_source_attempts.jsonl": "5930bcdb252e977fc85c590c49d35165eefa6d6b74ee344bf9216de3ec6a13f9",
+      "00081.json": "bc6433e36dec24c88f940ae2792f474bcc9bebb920b78374a1be1f14450aa333",
+      "00082.npz": "d5989524f57ef2092325cc095f15a3c34c4b3d5014816daa2b09a630a70426e4",
+      "00082_source_attempts.jsonl": "7e1b8b1606869b0015d29692466fd4edac164a68fe6c7770992f581e3e47ccee",
+      "00082.json": "70e2ae91e42b8c9b1605c203c4e7b3b6ccaa9c77af57b52a1d4aa17c40cd32f3",
+      "00083.npz": "68294922e66facddd422833a45217e684a1658d9ffd2a8736e6190cf8da58cb0",
+      "00083_source_attempts.jsonl": "33c58d44a8a9a155eb76355bea61cbe8319c7a360337ed676a45fe0c3815cb9a",
+      "00083.json": "953ec1f23eeb0fd0409e4348e9c41496089cf325dc3b872f51ca7ae6c5baa229",
+      "00085.npz": "6aba624df1423bcb8e42915687fcc442b79490c0a56b9b694ea90cbd081c812f",
+      "00085_source_attempts.jsonl": "092aa05de6d1c3ab222052640e385d9a1f3b09e09cdf2ce23ec8d9364478596f",
+      "00085.json": "2084b255132d457defe3f66fb7cda8fe05e4c6c46f34074e01a15000a26b965b",
+      "00086.npz": "80622e04a27e356417d5aaff636aa6414e873fdb1161beef5ff0ac3b5e2194e2",
+      "00086_source_attempts.jsonl": "dbaa3d58f9f3fd7b1ab79c4ff5e7f973b94c9f6ea2cc66949b19d87f33982a6d",
+      "00086.json": "851a7dd2caf8e1a02cb479999d83bae54d12abafc3ea9879a55f3cc2e9893fe9",
+      "00087.npz": "636174550f520b1901b7c682fe953fb926f4d9dcb6b44554d3930b3f9a02be98",
+      "00087_source_attempts.jsonl": "884820af55467f76d813275ad6a1704367ab3e4b30e545dab0ff1dd6eb7c3a65",
+      "00087.json": "29022116183553254509494a0c806e86a02fc5733d0b859ed72575824c68dd98",
+      "00088.npz": "30654cb8bbbe485bd2dfb9625c61ec8a407ca91bdafe259755a0971a3c5af3ba",
+      "00088_source_attempts.jsonl": "7d657b78d6d7708416ced4ae377b7e4cf153b464ad96d03ea6e2a3b3d4b71add",
+      "00088.json": "72e2b3fb3ca034ecd54b0116a6d6863004bce29e4fa158fe687231a6a539bb75",
+      "00089.npz": "4ca1412817ebf8dda5fcfbb0a0a689db2126bf1854916216ba637f68605c3c0d",
+      "00089_source_attempts.jsonl": "83858fc71d0e502b6eebf171c70db24d5732f53a3ae486258f4790ddcb850916",
+      "00089.json": "b97e40fdd5eb5ffd5fa019195c4317f90d1ed3aa97ea62837a96fef59f8ecb87",
+      "00090.npz": "640db6ffb3ac731d4a6a9dc238561a1ae7e7e7a807081c3f5944575cdc16d8a6",
+      "00090_source_attempts.jsonl": "80f4d2329e26194c57f4845ec39df968647ab7cfe45ba097ec80cf61e57f901d",
+      "00090.json": "26597c6dfd6cae1a810bd157a4adabfb3a3c288d336e00d75025a638ed008b81",
+      "00091.npz": "94128e52f9f230ee6c25b11ab223896e1d6bba44039124bc4161d9635a744445",
+      "00091_source_attempts.jsonl": "370e1c6b3d757ef4eba40f3f5b69e8b74ff17d92af090c405103f4b323120a31",
+      "00091.json": "277b754cdf92849a410998cfc09445d364d02cfb785c3ebb673f7b443f45a0e1",
+      "00092.npz": "d8c09bf3a413da2ebb06e09493987bf9b97243650196b082cb870575a400d857",
+      "00092_source_attempts.jsonl": "09f783a17acb2ad35598774ce1d7ac3c07e9e089239433a63efb0adc026d7e98",
+      "00092.json": "04afe71e64221c2dd38108b36ce50f2f00d3e20a1191528a857184dcedcb1b99",
+      "00093.npz": "67c3ed7d2951dc34f5d9a83a373b11880524e516c88ca966993c1a88ca05da73",
+      "00093_source_attempts.jsonl": "09e517f4b0aeb6e69cb3f4a25d049d4813d22026f25cfcdd0a26442f6ddbdc3c",
+      "00093.json": "2b9db1ff3c6fb19884c5840031b81669e535e8b4e36c7020d28b7b3e604bc0b2",
+      "00094.npz": "1c8e914d4b97bd08062a14209b6bc2e3cd10b2baa954fede2cc9f86a28e7ac7d",
+      "00094_source_attempts.jsonl": "cb676c36af4fb284f543fdd9e024bc9a75edc6c82dd965ed2f96d3edd0628c6f",
+      "00094.json": "3238e7ac9196aed92b3bb9b2934c114737b5470beea47f964330add985e3ffe4",
+      "00095.npz": "947363cc312e3afe1fb9b5de88187b3f543e842e288031e0b68f3bbd9d70e7fe",
+      "00095_source_attempts.jsonl": "0f6d8b6185b752d5b9af97c42bf998ff2114043611a9c7362cc065c79c0c7f55",
+      "00095.json": "979115f97dda2b48986508fceaa3770828178b36e95990aba9348f5875320bb0",
+      "00096.npz": "22f9044477b79abdbb7cc926845ba736fb8b86e12034c44fe9dc1d20cd258e16",
+      "00096_source_attempts.jsonl": "ac7a2418c2ca439d4e217e885f6acf711e24567992ac8c98e5a40517326f2d24",
+      "00096.json": "fa0f6281c99e67e749c528dfaca64fd98c3646e5e2825a6463c8614f347e0b51",
+      "00097.npz": "f3ca0b71ffd5240d5e5a96aa469dbccee55d06c5b4f52ae67a3e91e71f293732",
+      "00097_source_attempts.jsonl": "d297cc7750a819ea58993c4966d854f187e71f7b653e10b4873c7b98c8dd6fe8",
+      "00097.json": "d37f70eedec833a622e01ff05607b845ac9e2d40d972cbe0250e0aa175c38f6d",
+      "00098.npz": "75639664f08a6ceb8c633ca18a9346f6d21b8fea04610a651e384aa39f322b1c",
+      "00098_source_attempts.jsonl": "292c49b6677770aec5ee2c8ebbe733a23559ae8fd7af4deebe1e9c54478e91a7",
+      "00098.json": "336ba7c061acb7a6f6db357ac0e961219e79257c537f926c930c830f343d30f6",
+      "00099.npz": "538ea32631efcea7131da3a48f500fa3fff827477f74ae8cf7a3f5bb00277454",
+      "00099_source_attempts.jsonl": "ad3b45c6bd35b9c774dc283e415784dd2b0b7c781e72324c4ffd86864670aa89",
+      "00099.json": "ec8895aa9c0a8755e9bba28d2bb4455d0d5d05e03f267dac0beadabcab337b1b",
+      "00100.npz": "fe78a401b572ba250c02cf613d089b21950081f76552b82a6a9985001d05cf7c",
+      "00100_source_attempts.jsonl": "24ced7955fa0f80e2c1ec44c340a954ec5df0fae0dbb2552031a5602acc7526e",
+      "00100.json": "aa08755723c887ffdac19ffcca30bf25d457a7c5388cef27912834c656a5711f",
+      "00101.npz": "dc6f577872d26a109957280a6a62c37de30d6cdf28089807885dfeb7852ed522",
+      "00101_source_attempts.jsonl": "91a09dc61bd5d587d525277152c4c03f65c5b8fc3b290661cdfd562ae1b4590d",
+      "00101.json": "83bb1470fd6de9e13fe73d1e9f8932c711d284afeaab932548fc9635b9fb134e",
+      "00102.npz": "a91a9746873ae02519da4d7640e56056199996bbbddafc89854cebbfa6199af5",
+      "00102_source_attempts.jsonl": "f293c070e2045aa217e4c2cfa4e15e00ee1c948f6be69827facca46ca655597a",
+      "00102.json": "c9927f547846e67f5ff5c09cbe8f991d25cd351b0edcdb50c439e6f327242b48",
+      "00103.npz": "df4d6a3b3e833d4ec357a96964f564cb93e7eb504d55ebfb1631954878f54f76",
+      "00103_source_attempts.jsonl": "f4093f870d2a58ca04a444a40e37630f9377a82d611174a58d17e22876fdb117",
+      "00103.json": "c13285c47f41ec7b1c4c407fe792ab4a1933228fb06e3e4027347180da7d7f3e",
+      "00105.npz": "79228fc8ee17fc4ee80c7861fcb5e352a71bcc0d403594588eec6a5235092cc3",
+      "00105_source_attempts.jsonl": "657b78010d2cce080902d8e9ce2177a2bd204adf2b55134bc03858e8e56f4ccb",
+      "00105.json": "1393b7a01b0852ac893be1cae93bde31f894afeb771345b9ab929056208f5528",
+      "00106.npz": "32d5223fd174839dbee1568d4733d6a6d94f192c81cdfe26ae780d166d4408e2",
+      "00106_source_attempts.jsonl": "7b51bf3fc01355723345d79bbceb7ef280041e25687386b8d660d219e05e0305",
+      "00106.json": "dca6cc63cac7b2d5ae57bc6cd9d38c03b7c9d3408b8997d3239b1c505cdab3a7",
+      "00107.npz": "31e2588596560604497305e3cb55efe2804f21e4d9b2f9391d7c7ca24a791aa3",
+      "00107_source_attempts.jsonl": "211601d57a28b26fcd0eae5bab377a28a3fd2d24c6749a26b12a7b00f967360d",
+      "00107.json": "1da2b390d8ac14faadc1796b57918473bfdfc156b1a92d8ad2973c0d505aeac9",
+      "00108.npz": "1f67a9ee24e2e76074579716f3ddadb9a4a25c154f5ac282f5ea958e912da149",
+      "00108_source_attempts.jsonl": "bfe2246d7441551fde5e7b28f3b177003e97adb12249733f5a4045a6060035f0",
+      "00108.json": "ea0e765f489252eda8c29bf5550519a6637b0033c58380481e13de396303ff1d",
+      "00109.npz": "808275e799c14c1466fab05b54b10333e53b657d3d7c8a512091d858b11dd84a",
+      "00109_source_attempts.jsonl": "ff4e243ef3eeca236dde1be510b8b44be8dd6a28fe5cfc786da07001c292c31a",
+      "00109.json": "0cfaf715e139269def8afeb454eb14e27645970a8e933829bad9a8ba002d7e32",
+      "00112.npz": "820b95029f084a6925e287022b9d7a5e223321135253e510d998737f17719fe5",
+      "00112_source_attempts.jsonl": "5026f30b0f4649665a6c74c8f67c57379ca2f22c520c6213b2ea7a90f26a7d7c",
+      "00112.json": "95d8c128868eab31945c9ead89deb4b62b60ae2aa24bd7121f17fdab189f4314",
+      "00114.npz": "745a10ec16176772554c7a9641143eb275124c871a39af3ea0b8f47c7f33053e",
+      "00114_source_attempts.jsonl": "605a4a8b66453d7b9ba0b3eedad44471f0b3991d66c990a2a648b411570cf5d7",
+      "00114.json": "c9e62d1f812dc65f2b9bf287c0fae6bb9cf7d912a2a6a0b478de3b6e993fca4c",
+      "00407.npz": "e52c8bd377e8055021ea26a42d778271a84eaeafee64e41ccd5ccc93af1af718",
+      "00407_source_attempts.jsonl": "6e09df298e6dbb640799526625a4c6fddde36df8b3ee3ef3f50ea43b8a67a978",
+      "00407.json": "0c4300b9d54afa305745f4f88caa543199fa73113542bed3675ca0e8141e87ec",
+      "05554.npz": "d09bf3768d472276629d99efe0a10cea97ff664f2fb92396714930989b44713a",
+      "05554_source_attempts.jsonl": "408e93858be13e1f393e1d06645be0c4ff04fdd66ca29248778a8925b43e1cd6",
+      "05554.json": "94c4db75ca436cf31af619281943e9777f1d6e0f72ab597040a58a760aff203f",
+      "06496.npz": "8b6afe9eb691b5833726cc903ae176750bc5fa8cc1fbf203435de6cb9a083855",
+      "06496_source_attempts.jsonl": "738e308dd550ee5ffc3685682cbb3d7d8cd9baa04ac018d613c6bdae72d10f68",
+      "06496.json": "444628e0ecea2cc16408e0c34b5d866408975384f1f1c8f69f4b7e83be70dd75",
+      "07202.npz": "9297b2e4fc4e3a7f702a1e88410fdcf91e9d11e0e3994e3b8acb316a6d963537",
+      "07202_source_attempts.jsonl": "a167c51266cef30eeb197fa1a7379d61e40c6926a439392e1db83e8825f3fd1e",
+      "07202.json": "bcc45e5b94c70b72e31c1ba7248f0c7c31bd861e8aee45d8ab3a57f7630c39c6",
+      "07316.npz": "a3e09398738ea25a881c5db0f1ceff0aef6fb6221ec1a084310bc3af2dae99f2",
+      "07316_source_attempts.jsonl": "4541adf0dcd9fdd52a44ac28d1c75c498987d3bedf5f51b8b75a5982ae688bf2",
+      "07316.json": "ca31ff21cc0802db763e91951a69e88bb2dfefc71d858003f2f5b5814462515f",
+      "08564.npz": "32fcbe0435fc5a98b7a3fac185eb1c5171d2bcc58f47ab2985788a3fa18be4b4",
+      "08564_source_attempts.jsonl": "f73a0b37958dc2a14e06f8a7b3ade50e76539aa695979d7ef49e60ec92ee73f9",
+      "08564.json": "71c902a25ea402dd769035d70a4a0be4c3828c8db6ba07070239cecba47539bb",
+      "11678.npz": "faa151926c4713e0ef45b50e536535087cc2c22c3beea75615f20f8b0a275350",
+      "11678_source_attempts.jsonl": "552ff07f9f430aa17763b3356feb532067f9fdc507c8079ffae69ac7bb58bc2e",
+      "11678.json": "902795d4c1faaea79e24c51e0b5a23cacb99af980d9624c5632da24ecb4dd668",
+      "13784.npz": "1e67ea2cb8efeb352cd13065d4ec804fc57eb3f0b7a14d440704236d7f56bbbe",
+      "13784_source_attempts.jsonl": "168a9ab5551fa3c659586efd9a729fc0f5cef3334aea1fff51b227b6f32d74d7",
+      "13784.json": "c728381a76de7133ec659cda12b37531dbf1ca034d2315063181bb9441f4f205",
+      "14525.npz": "3d0295a42309c5f3878fc1728366b80abd33d0772da1bf2d81ac8bbd43fea01d",
+      "14525_source_attempts.jsonl": "0d54a6ce4a4ab4d3473ef5fbebe19f1c049529a56377770ef8924e6bba910005",
+      "14525.json": "df0fb9e85902509d28d65c1276423b3abceb60258fd9d1d4a8502128a1f55a14",
+      "15014.npz": "b8ac117997fcd26f402dfe42729ed3d3e07332f0035dd5d531ee587c28d0db33",
+      "15014_source_attempts.jsonl": "563b0e7360aa7a246f50d5dd9db3e21cd446ce824a9c1b666ddf1f9040a42683",
+      "15014.json": "eebd591f305ec1b6877d941bd442388e338fd703858947afc958c0bba2d700f9",
+      "16283.npz": "2cb889781fd68b9cb7fc48360763b674e3054666782c4b735f7b531f066dc21e",
+      "16283_source_attempts.jsonl": "0d9472661887429326b60aa65de816e43cf1e013c1c3f26f948642a9904e5099",
+      "16283.json": "13db832edf783328060c8c9fcca5843b0507262fec2e2020059f78608e1b85ef",
+      "17045.npz": "be7efadc9217f440eb53de82b6136ffd58ec76f75bef176413a7a5ae0332e890",
+      "17045_source_attempts.jsonl": "18c7d1d987c3dd3954fc008b35836d2cb0e725d94cc75b31fd98118fb10ff7d0",
+      "17045.json": "939f4e7a350aa52943bd9663dd9f0896168a1a14122156d2802041fb77f716b3",
+      "17903.npz": "8640143e8b7581b49274f87b5ab9fe9d3409383d50ae503e08161ef2f4aa1b69",
+      "17903_source_attempts.jsonl": "2c1157fbdb32a79430a4f4089b2b344a363dc6ec3cecb3cfa27d2a654fc0424a",
+      "17903.json": "7205fea7f173895860431c233424c3c83e642f96966dc826a6271b654e58c51d",
+      "18957.npz": "21590bd640d108a6849ed46933c6481356fa08aea481867e5bb6e0b81154a517",
+      "18957_source_attempts.jsonl": "8b5d86e8db3ffdced422b7c1d593b3d987f658067616ae107ba22aae64c04d0b",
+      "18957.json": "e6c4dc59ca1ce50f2e724eb0494358afe457e2b321d51ebf5923358df48c0cf3",
+      "19330.npz": "59f3da28a6e8d20f8d2e7dc6ff6a904e9474d55a37ea5dd419d9f5b9855d03de",
+      "19330_source_attempts.jsonl": "1e07d76cc5029e2d62447d9b93ec8f126acd8cdfc5208c042afdc7ad4c5d9acd",
+      "19330.json": "747d4c079075ecade62e7998f7ad38377e689c92acc539f48f950a0badb18d52",
+      "19703.npz": "f82fbb4f3fd1399b9e8eef444f60237c65f9e856639b906af372034dfd3beb1d",
+      "19703_source_attempts.jsonl": "c70d837240e23e4cda111306142751582c47489c8cc723c3cef04775f7949c13",
+      "19703.json": "5e5c4ba2594830dd5fd83c53e9e56b2303444da022a0813eb4b46ad6efea172f",
+      "00104_attempts.jsonl": "791fdb3726915ca7e441958adc22e0cc2b8b84533e99bfcb8729dfc725c17ba2",
+      "00110_attempts.jsonl": "aab8b96d87c8601255b245a6d4b768f42a37bb83a4d9ea14fb40036d95be82ee",
+      "00111_attempts.jsonl": "654fce3f24cc74507e664c11e598f3c4aa1f5612cfdc0bbe227547686969e479",
+      "00113_attempts.jsonl": "7e7cb5b0fc685d43408650ac8f4ccae5a4fe736c814f8717813b31c224652b1b",
+      "00116_attempts.jsonl": "634d9a4a32966ae86988d36bfd323a4f9efe2f4ddde9e64226e408479439387d",
+      "00117_attempts.jsonl": "1ba1650df620969dea897802a6a95fc4deac92ea4e094e6155ba4f76ea584f84",
+      "00118_attempts.jsonl": "0c7e1fd3d04544440516d9bc3a37ecf269476b3e10da3b87e5a2b54046016dc1",
+      "00119_attempts.jsonl": "75eb28e5d0bd78e892a9073e321428b9cd55d62b7037b4cb8affde2ec5f5faf6",
+      "00120_attempts.jsonl": "40654a8ef583e9831cc4c33a50de4f0528145dd61a949fe632a99cb27c01d7cf",
+      "00121_attempts.jsonl": "1419f5af81065cbc021860e32b5f6b0703d385a0bc734e11af8b714b77e577f0",
+      "00122_attempts.jsonl": "246410f92f0da21a798f73b623c56fa4e3d2c0cc08457e8bc4ad44c210ff0950",
+      "00123_attempts.jsonl": "5c4cdb49a35646f7c228c3d3e5d59deed253edded8944ddede816fec41cdc39e",
+      "00124_attempts.jsonl": "d0fbfe6e3630de2fd05245d7ae043902a893ca37b7bebaadc5c6951edca11139",
+      "00125_attempts.jsonl": "dc5f57efd0b1469985146f440d15aae6aff41df35ac9bfb933b0cd86a132ce9e",
+      "00126_attempts.jsonl": "4bc27ad1b8c90a839cffc9942509bbc1bd3f491526101f043cbd37716a1ff26d",
+      "00127_attempts.jsonl": "9c3fd0dd82eb4787edb7896602638ad1584f9514a62de0c1666bc2b32fd0a837",
+      "00104.npz": "7ff8a044e7218292d528c45e785a6129c632862bb2affed654acd66f4e87d6ab",
+      "00104.json": "e258b3c94e366b9f9dc58c8a81eee3fbf16439045f156d2c98b8b1da60e2fe19",
+      "00110.npz": "992754023c4fcb9ec01167b82afbdfa9374050d11d5aafd66cb20cbc1aaeccc8",
+      "00110.json": "4cd92740c7122526e7c47c9794c4525c4a76b8ce2c94f2076b832e783c42eaa7",
+      "00111.npz": "d88f7fe3b152301097e5b5092b6fb3c8d2ae06e7a3096aadb8c59be586ad38ce",
+      "00111.json": "1a6911dce82c58f64512002cbe9e612b60695d98080b5b898145b94a1b5ce442",
+      "00113.npz": "e2fea3d372ff463f420f7bcc676f2a0bedf98a5c967edb942368dfd0667881c4",
+      "00113.json": "5617c00b790d8e715215fd7750312704d33087589014387de1f0078d158d987a",
+      "00116.npz": "5990dd658074de8ed8a87d0b76cd6175b2605ccb436e789d7de59fa34d73c70f",
+      "00116.json": "939458ae3847f1fcb3ea88773323dc6a8e5a0156037dbf84ad747c17bd722f69",
+      "00117.npz": "5c3c9b3e1efefbf3ea42d889cacc3a132cedd816b70678630649016dc2614012",
+      "00117.json": "6f980b24eb82ef174a849a28faff4122af3eb4a5d64ba34a4eac8a32a3695fd5",
+      "00118.npz": "b5635a8e90749e0c3593d54b4cf7d5c88e4f0d6ff67f116076a12e0e9cd7009e",
+      "00118.json": "a573f7a908de9ed1b52b9219e45bb4c423aa44fd4b7f012a66f7ba8331b8cb37",
+      "00119.npz": "5ca355d63f290975d9b754a24cf26166cab2a6bd26ef4a6acff33f55e62feba2",
+      "00119.json": "f007a3b50d4e30f342b89e7aec9f128ee0198297640cb75a175d522f6444f08e",
+      "00120.npz": "dd324c718c0fa5ee01ea88ab281ae1a3f83848792a98a8c30eb8a76ba320898b",
+      "00120.json": "f4905c98e34ac143784bcc5dce6225b0c2bbfa08e95da4ad7b8eb092b3dd5dfb",
+      "00121.npz": "3006c7800b3f1db3bb32eff1b193277b86e1f518233d87842c16cb84a963007f",
+      "00121.json": "d858e50469bd0080103992c38a4bc17bb01e9c2870b12c419de43470e7ee9486",
+      "00122.npz": "415d58beaff1e900f8e77eaaf9ace3b6a3bd02f62e4618814263d17e22029b53",
+      "00122.json": "120a9041c0890cb3a03d444044da9e33c4aed74327409bd60583ebe685b8d007",
+      "00123.npz": "de1c9724ff83bfd9492481746b1732527102438dc7da2b176044c4c8caea81e5",
+      "00123.json": "b23128bf95ffea702cd20e5f7efd39e6fd5f4da49e4c0947b16990ca4dd85b8d",
+      "00124.npz": "689c396aa2106225e324c09c288d651fe996407e844e383724c55e2d535a532e",
+      "00124.json": "b6a43a32d8ab35ac2ce6804d27dcbff30aff24d9b0796912ab5e427622074302",
+      "00125.npz": "4d8aa5bcef1d6fcb453be6c4ad26478a0d796930591c955c11f8d7300ab8063b",
+      "00125.json": "023b795a80a6009da74235cde99c39e92288e781260b22f40104e3a4338d3cac",
+      "00126.npz": "cf73ddd89a3c5badbdfe9a95f4138fcb9db7fa297083d67cc118c43bb11b011e",
+      "00126.json": "b3450e7606e97715bf46dce201da78876987b2437b6eb4f63ed345cde01b6315",
+      "00127.npz": "90311e236c5809f21a547a81fb1426134d9738732e721395e419aac7e7349268",
+      "00127.json": "f06d2d1627a1e5133391e06474e59127cfac62763da7354eb54f29fadfb39f39"
+    },
+    "pilot_restart_reused_without_computation": true,
+    "device_tests": {
+      "passed": 4,
+      "seconds": 1.441
+    },
+    "sandbox_pilot_restart_error": "Read-only resolved path for .run.lock; rerun outside sandbox passed"
+  },
+  "recovery_inventory_unchanged_after_resume": true,
+  "launch_status_snapshot": {
+    "status": "running",
+    "stage": "extract",
+    "pid": 192389,
+    "started_at_utc": "2026-09-26T00:57:48.594680+00:00",
+    "updated_at_utc": "2026-09-26T01:00:52.413359+00:00",
+    "manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+    "records_total": 17905,
+    "records_complete": 291,
+    "records_resumed": 131,
+    "records_new": 160,
+    "elapsed_seconds": 183.81867715400222,
+    "records_per_hour": 3133.5227133499093,
+    "active_record_ids": [
+      "00314",
+      "00315",
+      "00316",
+      "00317",
+      "00318",
+      "00319",
+      "00320",
+      "00322",
+      "00323",
+      "00324",
+      "00325",
+      "00326",
+      "00327",
+      "00328",
+      "00329",
+      "00330"
+    ],
+    "models_trained": 0,
+    "official_test_processed": false
+  },
+  "completed_batch_timings": [
+    {
+      "time_utc": "2026-09-26T00:18:14.730901+00:00",
+      "batch_id": "169175-1790381876246296090",
+      "record_ids": [
+        "00104",
+        "00110",
+        "00111",
+        "00113",
+        "00116",
+        "00117",
+        "00118",
+        "00119",
+        "00120",
+        "00121",
+        "00122",
+        "00123",
+        "00124",
+        "00125",
+        "00126",
+        "00127"
+      ],
+      "load_seconds": 0.03180511000027764,
+      "wall_seconds": 21.45118736099903,
+      "records_per_hour": 2685.1660484176314
+    },
+    {
+      "time_utc": "2026-09-26T00:58:13.160224+00:00",
+      "batch_id": "192389-1790384275413383381",
+      "record_ids": [
+        "00128",
+        "00129",
+        "00131",
+        "00132",
+        "00133",
+        "00134",
+        "00135",
+        "00136",
+        "00138",
+        "00139",
+        "00141",
+        "00143",
+        "00144",
+        "00145",
+        "00146",
+        "00148"
+      ],
+      "load_seconds": 0.029499209998903098,
+      "wall_seconds": 17.77633978099766,
+      "records_per_hour": 3240.2620961134285
+    },
+    {
+      "time_utc": "2026-09-26T00:58:30.459199+00:00",
+      "batch_id": "192389-1790384293211542343",
+      "record_ids": [
+        "00149",
+        "00150",
+        "00151",
+        "00152",
+        "00153",
+        "00154",
+        "00155",
+        "00156",
+        "00157",
+        "00158",
+        "00159",
+        "00160",
+        "00161",
+        "00162",
+        "00163",
+        "00164"
+      ],
+      "load_seconds": 0.029271859999425942,
+      "wall_seconds": 17.276927219001664,
+      "records_per_hour": 3333.926182003583
+    },
+    {
+      "time_utc": "2026-09-26T00:58:47.568032+00:00",
+      "batch_id": "192389-1790384310510084953",
+      "record_ids": [
+        "00165",
+        "00166",
+        "00167",
+        "00168",
+        "00169",
+        "00170",
+        "00171",
+        "00172",
+        "00174",
+        "00176",
+        "00177",
+        "00178",
+        "00179",
+        "00180",
+        "00181",
+        "00182"
+      ],
+      "load_seconds": 0.029044031998637365,
+      "wall_seconds": 17.086991674001183,
+      "records_per_hour": 3370.985431428613
+    },
+    {
+      "time_utc": "2026-09-26T00:59:05.096570+00:00",
+      "batch_id": "192389-1790384327619882251",
+      "record_ids": [
+        "00183",
+        "00186",
+        "00187",
+        "00188",
+        "00189",
+        "00190",
+        "00191",
+        "00192",
+        "00193",
+        "00194",
+        "00195",
+        "00196",
+        "00197",
+        "00198",
+        "00199",
+        "00200"
+      ],
+      "load_seconds": 0.028814948000217555,
+      "wall_seconds": 17.505504763001227,
+      "records_per_hour": 3290.3935521893964
+    },
+    {
+      "time_utc": "2026-09-26T00:59:23.974556+00:00",
+      "batch_id": "192389-1790384345140462991",
+      "record_ids": [
+        "00201",
+        "00202",
+        "00203",
+        "00204",
+        "00205",
+        "00206",
+        "00207",
+        "00208",
+        "00209",
+        "00210",
+        "00211",
+        "00212",
+        "00214",
+        "00215",
+        "00216",
+        "00217"
+      ],
+      "load_seconds": 0.025313643000117736,
+      "wall_seconds": 18.85940759299774,
+      "records_per_hour": 3054.178648823845
+    },
+    {
+      "time_utc": "2026-09-26T00:59:41.555634+00:00",
+      "batch_id": "192389-1790384364022102043",
+      "record_ids": [
+        "00218",
+        "00219",
+        "00221",
+        "00223",
+        "00224",
+        "00225",
+        "00226",
+        "00227",
+        "00228",
+        "00229",
+        "00231",
+        "00232",
+        "00233",
+        "00234",
+        "00237",
+        "00238"
+      ],
+      "load_seconds": 0.027001635000488022,
+      "wall_seconds": 17.56053563599926,
+      "records_per_hour": 3280.0821793795103
+    },
+    {
+      "time_utc": "2026-09-26T01:00:01.079593+00:00",
+      "batch_id": "192389-1790384381602471798",
+      "record_ids": [
+        "00239",
+        "00240",
+        "00241",
+        "00242",
+        "00243",
+        "00244",
+        "00245",
+        "00246",
+        "00247",
+        "00248",
+        "00249",
+        "00250",
+        "00251",
+        "00252",
+        "00253",
+        "00254"
+      ],
+      "load_seconds": 0.026116575001651654,
+      "wall_seconds": 19.503238003999286,
+      "records_per_hour": 2953.355744732679
+    },
+    {
+      "time_utc": "2026-09-26T01:00:14.706399+00:00",
+      "batch_id": "192389-1790384401127982495",
+      "record_ids": [
+        "00256",
+        "00257",
+        "00258",
+        "00259",
+        "00261",
+        "00263",
+        "00264",
+        "00266",
+        "00267",
+        "00268",
+        "00269",
+        "00271",
+        "00272",
+        "00273",
+        "00275",
+        "00276"
+      ],
+      "load_seconds": 0.026397491001262097,
+      "wall_seconds": 13.604814188998716,
+      "records_per_hour": 4233.795419754956
+    },
+    {
+      "time_utc": "2026-09-26T01:00:33.348635+00:00",
+      "batch_id": "192389-1790384414755629882",
+      "record_ids": [
+        "00277",
+        "00280",
+        "00282",
+        "00283",
+        "00284",
+        "00285",
+        "00286",
+        "00288",
+        "00289",
+        "00290",
+        "00291",
+        "00292",
+        "00294",
+        "00295",
+        "00296",
+        "00297"
+      ],
+      "load_seconds": 0.027073859997472027,
+      "wall_seconds": 18.62008073099787,
+      "records_per_hour": 3093.43449323021
+    },
+    {
+      "time_utc": "2026-09-26T01:00:52.400136+00:00",
+      "batch_id": "192389-1790384433396733988",
+      "record_ids": [
+        "00298",
+        "00299",
+        "00300",
+        "00301",
+        "00302",
+        "00303",
+        "00304",
+        "00305",
+        "00306",
+        "00307",
+        "00308",
+        "00309",
+        "00310",
+        "00311",
+        "00312",
+        "00313"
+      ],
+      "load_seconds": 0.027545967997866683,
+      "wall_seconds": 19.030949375999626,
+      "records_per_hour": 3026.648795179956
+    }
+  ],
+  "initial_timing": {
+    "records": 160,
+    "seconds": 176.82478896599423,
+    "records_per_hour": 3257.4618262984186,
+    "approximate_remaining_hours": 5.407277487581636,
+    "small_sample": true,
+    "scope": "Batch wall time includes record loading, GPU VMD, CPU descriptors/WST, verification and checkpoint writes; startup preflight excluded"
+  },
+  "earlier_access_failures": [
+    "Sandbox device tests failed before comparisons: cudaErrorInsufficientDriver; /dev/dxg absent",
+    "Initial outside-sandbox device permission request interrupted before execution",
+    "Completed pilot restart inside sandbox could not write .run.lock at resolved /mnt/d/Projects path; outside-sandbox rerun passed"
+  ],
+  "models_trained": 0,
+  "official_test_processed": false,
+  "pending": [
+    "Complete 17,905-record extraction",
+    "Verify and bundle complete feature archive",
+    "Implement model fitting with all seeds and controls",
+    "Save predictions, metrics, histories and patient-cluster uncertainty"
+  ]
+}

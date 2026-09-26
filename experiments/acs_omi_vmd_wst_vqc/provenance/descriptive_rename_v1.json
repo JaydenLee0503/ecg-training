@@ -1,0 +1,131 @@
+{
+  "purpose": "Path/import migration only; scientific settings and all saved manifests remain unchanged",
+  "support_sha256": {
+    "experiments/acs_omi_vmd_wst_vqc/layout.py": "02d08b06a4ccab589ed943937fbe47e1372629ba6666d33104dd0135ea15c84c"
+  },
+  "manifests": {
+    "ac3886997718235601183e537d7478b04dbdcd1970c9b0441b44777a28a51e16": {
+      "original_code_sha256": {
+        "ecgvmd/acs.py": "c2398f59f7ee5793b5843ed2daff87b56894d1ac59d10f31fbcf3e57955010b9",
+        "ecgvmd/acs_experiment.py": "7539378b910988d3eddab92212f7872ba1e04abc06e1b0a7925253b4bb2037b9",
+        "ecgvmd/vmd.py": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00",
+        "ecgvmd/features.py": "f4335fcaef9123bee0d6f0845c6a26466562d7576a96cb7ff15f0289898e1fe2",
+        "ecgvmd/scatter.py": "5a4a25203df37abf74afb7768337775da36bbe26516f1ca9cf1741c03fa44a14",
+        "ecgvmd/config.py": "0e5ae80c6c91bee38b3e8ec522f4a552d9d3a0e1d5729f1ee617ea1ac52fa9f0",
+        "ecgvmd/select.py": "35e34bf562b0fed1c9d415f47186e3c163f21af5af3b05ec57ffa5c1c3384c9c",
+        "ecgvmd/quantum.py": "089b70ca430a7aaf1ef49058b2f663c96c54fc99f3d7ec0761de123040e24af3",
+        "ecgvmd/reupload.py": "b1adea7570aa4a890daa3b40116d3a2e2db2f16fe180ef6b271a4928c764fef9",
+        "scripts/acs_experiment.py": "2caee2c29feb340ed775d4cab6a7a2ccd9634dc9a931fb2a5eb2fae095239ca4"
+      },
+      "run": "omi_v1",
+      "files": {
+        "ecgvmd/acs.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_reorganization/ecgvmd/acs.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/loader.py",
+          "current_sha256": "c22d144d43780769eafe8c225c9bf197b050b5183db4297200d685cb3ab6ce01"
+        },
+        "ecgvmd/acs_experiment.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_reorganization/ecgvmd/acs_experiment.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/pipeline.py",
+          "current_sha256": "feecc73e9c58b57702851e444844a6d204a86620c897a9254cd9673bd0a09f0b"
+        },
+        "ecgvmd/vmd.py": {
+          "snapshot": "ecgvmd/vmd.py",
+          "current": "ecgvmd/vmd.py",
+          "current_sha256": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00"
+        },
+        "ecgvmd/features.py": {
+          "snapshot": "ecgvmd/features.py",
+          "current": "ecgvmd/features.py",
+          "current_sha256": "f4335fcaef9123bee0d6f0845c6a26466562d7576a96cb7ff15f0289898e1fe2"
+        },
+        "ecgvmd/scatter.py": {
+          "snapshot": "ecgvmd/scatter.py",
+          "current": "ecgvmd/scatter.py",
+          "current_sha256": "5a4a25203df37abf74afb7768337775da36bbe26516f1ca9cf1741c03fa44a14"
+        },
+        "ecgvmd/config.py": {
+          "snapshot": "ecgvmd/config.py",
+          "current": "ecgvmd/config.py",
+          "current_sha256": "0e5ae80c6c91bee38b3e8ec522f4a552d9d3a0e1d5729f1ee617ea1ac52fa9f0"
+        },
+        "ecgvmd/select.py": {
+          "snapshot": "ecgvmd/select.py",
+          "current": "ecgvmd/select.py",
+          "current_sha256": "35e34bf562b0fed1c9d415f47186e3c163f21af5af3b05ec57ffa5c1c3384c9c"
+        },
+        "ecgvmd/quantum.py": {
+          "snapshot": "ecgvmd/quantum.py",
+          "current": "ecgvmd/quantum.py",
+          "current_sha256": "089b70ca430a7aaf1ef49058b2f663c96c54fc99f3d7ec0761de123040e24af3"
+        },
+        "ecgvmd/reupload.py": {
+          "snapshot": "ecgvmd/reupload.py",
+          "current": "ecgvmd/reupload.py",
+          "current_sha256": "b1adea7570aa4a890daa3b40116d3a2e2db2f16fe180ef6b271a4928c764fef9"
+        },
+        "scripts/acs_experiment.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_reorganization/scripts/acs_experiment.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/scripts/experiment.py",
+          "current_sha256": "61b9eb62218b56d11e22b24ec666321fea9c055c3c59c640754c012fd2d9f195"
+        }
+      }
+    },
+    "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c": {
+      "original_code_sha256": {
+        "experiments/acs/parallel.py": "b320ef0b6be2948268b9d85a65466917f1352e88587fefd3a978db6a73984e9b",
+        "experiments/acs/scripts/extract_parallel.py": "7b5921fbfbb00e07f56f70766d2688338689f80a3452c335ff30825d7e51a2eb",
+        "experiments/acs/protocols/parallel_extraction_v1.json": "a78e3d67ca3a2faf12236972adfa2fac998677661caf81b2ee5966aa089d6064"
+      },
+      "run": "omi_v1_parallel",
+      "files": {
+        "experiments/acs/parallel.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_descriptive_rename/parallel.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/parallel.py",
+          "current_sha256": "b320ef0b6be2948268b9d85a65466917f1352e88587fefd3a978db6a73984e9b"
+        },
+        "experiments/acs/scripts/extract_parallel.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_descriptive_rename/scripts/extract_parallel.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/scripts/extract_parallel.py",
+          "current_sha256": "6aa1b207140dc0cf53da26fe76984c55139adde6244aed3d23a26ca315716388"
+        },
+        "experiments/acs/protocols/parallel_extraction_v1.json": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/protocols/parallel_extraction_v1.json",
+          "current": "experiments/acs_omi_vmd_wst_vqc/protocols/parallel_extraction_v1.json",
+          "current_sha256": "a78e3d67ca3a2faf12236972adfa2fac998677661caf81b2ee5966aa089d6064"
+        }
+      }
+    },
+    "2d2df54dc5926ccf1bdf416eebfbae26e26673f0b693a14d2cb7a0ddd6f2ec59": {
+      "original_code_sha256": {
+        "experiments/acs/gpu_vmd.py": "c77b534e60c64fe80c87fefbc40411e12143d736ae4b6eb64c1447c358290369",
+        "experiments/acs/scripts/benchmark_gpu.py": "07f0f1517eea240fc7e5e5f00ab3f9005903409becb975ce8b3dc006b667affc",
+        "experiments/acs/tests/test_gpu_vmd.py": "7781ea1973239df7374d0d560dcb189c59d9e876ffcfc5da749096d496447e19",
+        "experiments/acs/protocols/gpu_vmd_benchmark_v1.json": "378c268a38792ec4f3d6d0bfd086b854762559a63bc4237ef4f760401d259a98"
+      },
+      "run": "gpu_vmd_benchmark_v1",
+      "files": {
+        "experiments/acs/gpu_vmd.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_descriptive_rename/gpu_vmd.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/gpu_vmd.py",
+          "current_sha256": "c77b534e60c64fe80c87fefbc40411e12143d736ae4b6eb64c1447c358290369"
+        },
+        "experiments/acs/scripts/benchmark_gpu.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_descriptive_rename/scripts/benchmark_gpu.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/scripts/benchmark_gpu.py",
+          "current_sha256": "dcdf77794771ff300f6f8de89ac6e80831286ccc5ff1c384952e3864bbc32bd1"
+        },
+        "experiments/acs/tests/test_gpu_vmd.py": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/provenance/before_descriptive_rename/tests/test_gpu_vmd.py.txt",
+          "current": "experiments/acs_omi_vmd_wst_vqc/tests/test_gpu_vmd.py",
+          "current_sha256": "81196e97dee7f870f4bb18725254819a0bf4965627ed12ba5e7d9a829e40208b"
+        },
+        "experiments/acs/protocols/gpu_vmd_benchmark_v1.json": {
+          "snapshot": "experiments/acs_omi_vmd_wst_vqc/protocols/gpu_vmd_benchmark_v1.json",
+          "current": "experiments/acs_omi_vmd_wst_vqc/protocols/gpu_vmd_benchmark_v1.json",
+          "current_sha256": "378c268a38792ec4f3d6d0bfd086b854762559a63bc4237ef4f760401d259a98"
+        }
+      }
+    }
+  }
+}

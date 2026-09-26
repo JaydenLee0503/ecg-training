@@ -1,0 +1,27 @@
+{
+  "id": "acs-omi-v1-gpu-vmd-benchmark-1",
+  "purpose": "Engineering speed and numerical equivalence only; no model fitting or official test access",
+  "parent_parallel_manifest_sha256": "e8ca76ec5bf7b29f6f8dc7e4bd53cedef7005e7aaa12d7f3fb2140439b2dbe7c",
+  "records": "Same 16 fit ECGs selected without labels for the completed parallel pilot",
+  "precision": "float64 / complex128; no fast math; CUDA FMA disabled",
+  "algorithm": "Frozen VMD settings and restart-from-initialization retry limits; CPU FFT and descriptors, GPU iterative updates",
+  "gpu_kernel": "One 256-thread block per lead; at most 64 iterations per kernel launch",
+  "variants": ["CPU serial reference on first two pilot records, four leads per batch", "GPU four-lead batches on first two records", "CPU eight-worker baseline on all 16 records, four leads per batch", "GPU all 192 leads batched together on all 16 records"],
+  "gpu_warm_repetitions": 3,
+  "cpu_full_repetitions": 1,
+  "timing": "Synchronized wall time includes VMD retries, transfers, reconstruction and CPU descriptors; source loading, reference checks and artifact writes excluded; CPU pool startup included and reported",
+  "startup": "Record GPU context initialization and synthetic compilation/warmup separately",
+  "checks": {
+    "features_atol": 0.000001,
+    "features_rtol": 0.00001,
+    "modes_atol": 0.00000001,
+    "modes_rtol": 0.0000001,
+    "omega_hz_atol": 0.000001,
+    "omega_hz_rtol": 0.0000001,
+    "iterations": "Require exact per-lead final iteration counts and retry limits; log every attempt",
+    "feature_names": "Require exact names and record/lead ordering",
+    "mismatch_policy": "Retain mismatch diagnostics, report failure, do not promote GPU output into the production run"
+  },
+  "full_extraction": "Keep existing CPU extraction stopped during timings; no automatic backend switch or full GPU launch",
+  "output": "Separate directory with status, manifest, timings, per-record diagnostics, predictions_available=false and retained failure traces"
+}

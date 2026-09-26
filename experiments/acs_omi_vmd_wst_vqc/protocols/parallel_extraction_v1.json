@@ -1,0 +1,31 @@
+{
+  "id": "acs-omi-v1-parallel-extraction-1",
+  "scientific_protocol_sha256": "37ebedf1fa4774f3a7efd2a832fdba6a5a79c7ef8d95bd518b796173822b5eaa",
+  "parent_manifest_sha256": "ac3886997718235601183e537d7478b04dbdcd1970c9b0441b44777a28a51e16",
+  "execution": {
+    "method": "process pool with spawn",
+    "default_workers": 8,
+    "numerical_threads_per_worker": 1,
+    "max_in_flight": "one record per worker",
+    "input": "coordinator verifies ZIPs once and sends decoded training ECGs to workers",
+    "output": "coordinator commits atomic per-record feature checkpoints; each worker logs its own VMD attempts",
+    "run_lock": "exclusive OS file lock; released automatically after process exit",
+    "failure_policy": "stop submitting work on first failure, retain results from already running records, log and fail the stage"
+  },
+  "pilot": {
+    "records": 16,
+    "selection": "smallest SHA-256 of scientific protocol id plus colon plus record id among fit records; labels unused",
+    "serial_comparison_records": ["11678", "17045"],
+    "comparison": "exact equality of both feature vectors, names, physical input hash, VMD attempts, iterations and limits",
+    "kymatio_reference": "both serial comparison records at frozen settings",
+    "accuracy_scoring": false
+  },
+  "full_run": {
+    "records": 17905,
+    "scope": "eligible official-training ECGs only; fit plus internal validation",
+    "reuse_pilot_checkpoints": true,
+    "require_complete_pilot": true,
+    "change_scientific_settings": false,
+    "train_models": false
+  }
+}

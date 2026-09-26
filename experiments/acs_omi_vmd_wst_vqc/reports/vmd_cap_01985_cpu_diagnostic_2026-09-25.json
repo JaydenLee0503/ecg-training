@@ -1,0 +1,61 @@
+{
+  "status": "complete",
+  "purpose": "CPU reference reproduction of the observed GPU iteration-cap failure; no production change",
+  "record_id": "01985",
+  "lead": "V5",
+  "partition": "fit",
+  "iterations": [
+    32000
+  ],
+  "capped": [
+    true
+  ],
+  "finite_modes": true,
+  "finite_omega": true,
+  "waveform_sha256": "743afc40e0410862f16ff48363cde9abe65aa6b29fecbe604cdadf91b0c27d62",
+  "physical_lead_sha256": "0854094250464384f5bb662eceb9c94f4b92cc238cfec0a7756b22cc2c9c56ca",
+  "elapsed_seconds": 16.46570275999693,
+  "source_manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+  "protocol": {
+    "purpose": "CPU reference reproduction of the observed GPU iteration-cap failure; no production change",
+    "source_manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+    "record_id": "01985",
+    "lead": "V5",
+    "partition": "fit",
+    "settings": {
+      "K": 8,
+      "alpha": 2000.0,
+      "tau": 0.0,
+      "dc": true,
+      "init": 1,
+      "tol": 1e-07,
+      "fs": 500,
+      "max_iter": 32000
+    },
+    "retries": "Single restart-from-initialization attempt at the same final 32000 cap",
+    "environment": {
+      "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+      "packages": {
+        "numpy": "2.5.2",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.0",
+        "kymatio": "0.3.0",
+        "pennylane": "0.45.1"
+      },
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      }
+    },
+    "code_sha256": {
+      "ecgvmd/vmd.py": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00",
+      "experiments/acs_omi_vmd_wst_vqc/loader.py": "c22d144d43780769eafe8c225c9bf197b050b5183db4297200d685cb3ab6ce01"
+    },
+    "probe_script_sha256": "dce6b8fd3931d18b45613cf00e4dd7b604f5c0c1dde372aa8aa0dd7f54c4ee39",
+    "created_at_utc": "2026-09-26T01:38:30.432558+00:00"
+  },
+  "artifact_sha256": "c9b94f54452ba91a131fc611cc73012ba967c6a6fd8ca37965c172ce08b91426",
+  "completed_at_utc": "2026-09-26T01:38:53.196960+00:00",
+  "production_resumed": false,
+  "production_settings_changed": false
+}

@@ -1,0 +1,57 @@
+{
+  "id": "acs_omi_cepstral_swin_v1",
+  "status": "implementation_only_no_training",
+  "task": "ACS OMI versus non-OMI",
+  "input": {
+    "fs": 500,
+    "samples": 5000,
+    "units": "mV",
+    "leads": ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
+    "record_policy": "acs-v1-strict-selected-leads-1",
+    "resampling": null,
+    "preemphasis": null,
+    "amplitude_normalization": null,
+    "official_test_access": false
+  },
+  "split": {
+    "path_from_repo": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1/splits.csv",
+    "sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba",
+    "seed": 20260924,
+    "fit_records": 14324,
+    "validation_records": 3581,
+    "group": "patient_id"
+  },
+  "cepstral": {
+    "fs": 500,
+    "frame_samples": 500,
+    "hop_samples": 125,
+    "n_fft": 512,
+    "n_filters": 40,
+    "n_ceps": 20,
+    "fmin": 0.0,
+    "fmax": 100.0,
+    "spacing": "linear",
+    "power_floor": 1e-12
+  },
+  "normalization": "Per lead and coefficient; mean and population std over fit frames only; scale below 1e-8 replaced by 1",
+  "model": {
+    "n_leads": 12,
+    "n_ceps": 20,
+    "num_classes": 2,
+    "embed_dim": 64,
+    "depths": [2, 2, 2],
+    "heads": [2, 4, 8],
+    "window_size": 8
+  },
+  "planned_seeds": [0, 1, 2],
+  "training": {"enabled": false, "optimizer": null, "epochs": null},
+  "evaluation_plan": {
+    "primary": "average_precision",
+    "secondary": ["roc_auc", "balanced_accuracy", "sensitivity", "specificity", "precision", "f1", "accuracy", "confusion_matrix"],
+    "threshold": 0.5,
+    "bootstrap_unit": "patient",
+    "bootstrap_resamples": 2000,
+    "bootstrap_seed": 20260925,
+    "controls_pending": ["constant fit prevalence", "always negative", "pooled cepstra plus logistic regression", "matched cepstral CNN", "matched cepstral RNN", "VMD/WST pipelines when fitted"]
+  }
+}
