@@ -1,0 +1,21 @@
+{
+  "id": "acs-omi-gpu-retry256k-v1",
+  "parent_manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+  "parent_stop_sha256": "73080f306852c4c68c8b98d3faecc856c1d08352d53c5a91ad36cc8bd4c0300d",
+  "gpu_diagnostic_manifest_sha256": "117126de2c699954ac9754bdacfd97af8d0591d7b427249fb8ae1b788a239116",
+  "gpu_diagnostic_summary_sha256": "e6c2b4e612dd8d76cc8eab1aed900ba667e414996e0953266d3757d9867ec3c5",
+  "expected_parent_records": 3700,
+  "records_per_gpu_batch": 16,
+  "hardware": {
+    "device": 0,
+    "name": "NVIDIA GeForce RTX 5070",
+    "total_memory": 12820480000,
+    "compute_capability": "120",
+    "runtime_version": 12090,
+    "driver_version": 13030
+  },
+  "change": "Append 256000 restart limit only; all other numerical/data/split/classifier settings fixed",
+  "evidence": "04124/V5 converges at 128234 on both frozen CPU and GPU; mode max absolute error 5.7421e-13",
+  "failure": "Stop at final nonconvergence; no tolerance relaxation, record exclusion or automatic extra retries",
+  "scope": "Eligible official training fit/validation ECGs only; test remains reserved"
+}

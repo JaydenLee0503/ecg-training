@@ -1,0 +1,88 @@
+{
+  "status": "complete",
+  "record_id": "04124",
+  "lead": "V5",
+  "partition": "fit",
+  "amplitude": {
+    "min_mV": -24.36,
+    "max_mV": 22.304,
+    "mean_mV": -0.00025520000000014986,
+    "std_mV": 5.133568460288902,
+    "peak_to_peak_mV": 46.664,
+    "finite": true
+  },
+  "cpu_reproduction": {
+    "iterations": 128000,
+    "capped": true,
+    "seconds": 69.0449913850025,
+    "finite_modes": true,
+    "finite_centres": true
+  },
+  "diagnostic": {
+    "iterations": 128234,
+    "capped": false,
+    "seconds": 69.78313409700058,
+    "finite_modes": true,
+    "finite_centres": true,
+    "final_stopping_statistic": 9.998223213623664e-08,
+    "tail_min": 9.998223213623664e-08,
+    "tail_max": 6.201309359837573e-07,
+    "omega_hz": [
+      0.0,
+      0.2976969759003334,
+      1.0354340715931831,
+      3.1555768118834333,
+      6.923735116583984,
+      12.351334560321307,
+      20.134172083510194,
+      31.565372893142207
+    ],
+    "residual_energy_fraction": 0.00012096476134162569
+  },
+  "settings": {
+    "K": 8,
+    "alpha": 2000.0,
+    "tau": 0.0,
+    "dc": true,
+    "init": 1,
+    "tol": 1e-07,
+    "fs": 500.0
+  },
+  "diagnostic_cap": 512000,
+  "waveform_sha256": "38ca653cb4d8b1b67d7a363454a6adbb52a33fdb7ce8b7ae72359cf142924b72",
+  "manifest_sha256": "060ea85e945da702c64312b6081d83c84df8bb46a18dd96d54f9904cac0503ad",
+  "artifacts": {
+    "cpu_128000.npz": "fa3d004d7c622a1abf8bb5dc7876fe4fc5378c5571f0ef20ce5c7822ca5eab1f",
+    "trace.npz": "44363ebc2547a7c47202090824f49d7b41017c4bfbc566f75f4e4053cf36eca2",
+    "cpu_reproduction.json": "9035ce091eebe0f175fa9b033c7e6310d862d371c073a96a5d4024e558e17956"
+  },
+  "production_resumed": false,
+  "production_settings_changed": false,
+  "models_trained": 0,
+  "official_test_processed": false,
+  "completed_at_utc": "2026-09-28T03:31:39.631423+00:00",
+  "saved_checkpoint_verification": {
+    "status": "passed",
+    "records_verified": 3700,
+    "records_pending": 14205,
+    "reused_features_unchanged": true,
+    "manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+    "verified_at_utc": "2026-09-28T03:31:07.160143+00:00"
+  },
+  "gpu_check": {
+    "status": "complete",
+    "passed": true,
+    "iterations": 128234,
+    "cap": 256000,
+    "modes_max_abs_error": 5.74207348336131e-13,
+    "omega_hz_max_abs_error": 1.056932319443149e-13,
+    "seconds": 49.948298423998494,
+    "result_sha256": "b88ec72b061a669fba2dd863d6240a9e210b331c1045da3f9cd2d519dc0e2de5",
+    "manifest_sha256": "117126de2c699954ac9754bdacfd97af8d0591d7b427249fb8ae1b788a239116",
+    "completed_at_utc": "2026-09-28T03:41:58.203027+00:00",
+    "production_resumed": false,
+    "production_settings_changed": false,
+    "models_trained": 0,
+    "official_test_processed": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "acs-omi-gpu-retry128k-v1",
+  "parent_manifest_sha256": "a2f0288767177d1d801744659a79517c1b6af0f4123dab5d6d631bcfb48fc685",
+  "parent_stop_sha256": "1ce082bf74d28b795db6297d41ecb4a296eba96352b5e27920ff2e96fd9b97e1",
+  "diagnostic_manifest_sha256": "26dcccd49de466f20920eb43799e79c2edb7384bb37b444b1650e538a62179fb",
+  "device_validation_manifest_sha256": "1238227498dad537de3344983e319a7be7e9cec9a8bdd11db1b1683030e18503",
+  "hardware": {
+    "device": 0,
+    "name": "NVIDIA GeForce RTX 5070",
+    "total_memory": 12820480000,
+    "compute_capability": "120",
+    "runtime_version": 12090,
+    "driver_version": 13030
+  },
+  "expected_parent_records": 1795,
+  "diagnostic_record_id": "01985",
+  "records_per_gpu_batch": 16,
+  "iteration_limits": [
+    2000,
+    4000,
+    8000,
+    16000,
+    32000,
+    64000,
+    128000
+  ],
+  "change": "Append bounded retries only; tolerance, inputs, split, features and classifier settings unchanged",
+  "reuse": "1795 converged parent checkpoints and 1 converged CPU/GPU diagnostic ECG; preserve original files",
+  "device_validation": "17 fit ECGs compared against saved references on current GPU driver; all feature/input/convergence checks passed and WST checked against Kymatio",
+  "failure": "Stop at final nonconvergence; preserve all logs; no exclusion or tolerance relaxation",
+  "scope": "17905 eligible official-training ECGs only; official test reserved",
+  "declared_at_utc": "2026-09-27"
+}

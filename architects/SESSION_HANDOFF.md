@@ -1,5 +1,76 @@
 # Session handoff — 2026-09-25
 
+## ACS paused for sleep — 2026-09-29 00:41 EDT
+
+The user asked to wrap up and continue tomorrow. Extraction finished its active
+batch and stopped cleanly at **12,916/17,905 ECGs (72.1%)**, with **4,989 pending**,
+at 2026-09-29T04:41:06 UTC. The extractor exited successfully after SIGTERM.
+The downstream workflow stopped at 04:41:19 UTC because extraction was interrupted;
+its `failed` marker records this expected pause, not a new convergence failure.
+No ACS model was trained. Both extraction and the downstream workflow have exited.
+The final full integrity check passed at 04:57:05 UTC for all **12,916 saved
+records**, with the 3,700 reused parent feature files unchanged.
+
+Resume the same 256k run tomorrow, reusing the saved records; do not restart from
+scratch or repeat the completed one-batch recovery experiment. Then restart the
+same downstream workflow once extraction reports `running`. Read the updated
+[ACS handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md) and
+[resume guide](../experiments/acs_omi_vmd_wst_vqc/reports/resume_acs_2026-09-28.md).
+The prior running-status snapshots below are historical.
+
+## ACS full continuation — 2026-09-28 21:25 EDT
+
+The user requested the full run. GPU extraction resumed from 3,716 verified ECGs
+and reached **4,052/17,905** at 2026-09-29T01:25:38 UTC. Its early production rate
+was about 2,881 ECGs/hour, suggesting 4.81 hours remaining for extraction at that
+snapshot. The earlier estimate of days came from an exceptional recovery batch
+and is superseded. Check the live status rather than treating this as a fixed ETA.
+
+The downstream workflow is waiting for successful extraction, then will verify
+and bundle the features, run the already authorized fixed model comparison and
+write the report. No ACS model had been trained at this snapshot. See the
+[launch report](../experiments/acs_omi_vmd_wst_vqc/reports/retry256k_launch_2026-09-28.md),
+[ACS handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md) and
+[resume guide](../experiments/acs_omi_vmd_wst_vqc/reports/resume_acs_2026-09-28.md).
+Earlier sleep/stopped-state entries below are historical. Do not launch duplicate
+extraction or workflow processes.
+
+## ACS sleep/restart state — 2026-09-28 EDT
+
+No ACS process is active. The new 256k run is prepared and verified with 3,700
+reusable checkpoints and 14,205 pending. Exact restart commands are in the
+[ACS resume guide](../experiments/acs_omi_vmd_wst_vqc/reports/resume_acs_2026-09-28.md).
+04124/V5 converged at iteration 128,234 on both frozen CPU and GPU solvers; the
+new run appends a 256,000 bound only. Original production code checksums pass.
+See the [diagnosis](../experiments/acs_omi_vmd_wst_vqc/reports/vmd_04124_diagnostic_2026-09-27.md)
+and [file-change inventory](../experiments/acs_omi_vmd_wst_vqc/reports/code_changes_2026-09-27.md).
+
+## ACS stop — 2026-09-27 23:13 EDT
+
+The amended ACS extraction stopped at **3,700/17,905 ECGs**: fit record 04124/V5
+reached the 128,000-iteration cap. Its downstream workflow also stopped; no ACS
+model training occurred. Preserve checkpoints and investigate convergence before
+a further amendment. See the [ACS handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md)
+and [failure evidence](../experiments/acs_omi_vmd_wst_vqc/reports/retry_stop_2026-09-27.json).
+Earlier running-status updates below are historical.
+
+## ACS continuation — 2026-09-27 EDT
+
+The user authorized ACS extraction and its planned fixed development comparison.
+The separate `experiments/acs_omi_vmd_wst_vqc/results/omi_v1_gpu_retry128k/` run
+reuses 1,795 production checkpoints plus the higher-limit diagnostic ECG. The
+diagnostic resolved 01985/V5 at iteration 67,827 without relaxing tolerance.
+A fresh 17-record GPU check passed. One-batch recovery reached 1,812 verified ECGs.
+
+Full extraction resumed; its status file is authoritative. A downstream workflow
+waits for successful completion before bundling, all six VQC fits and four classical
+fits, then patient-cluster reporting. State is in `results/omi_development_workflow_v1/`
+inside the ACS workspace. No real ACS model had been fitted at launch.
+Read the [updated ACS handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md)
+and [retry report](../experiments/acs_omi_vmd_wst_vqc/reports/retry_preparation_2026-09-27.md).
+The earlier stopped-status paragraphs below are historical. No attention training
+was started, and official ACS test data remain reserved.
+
 ## New attention method — implementation only
 
 Latest: the user approved **ECGData preparation, without training**, while keeping

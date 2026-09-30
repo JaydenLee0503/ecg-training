@@ -1,0 +1,113 @@
+{
+  "extraction_status": {
+    "status": "failed",
+    "stage": "extract",
+    "pid": 123045,
+    "started_at_utc": "2026-09-28T02:33:16.461175+00:00",
+    "updated_at_utc": "2026-09-28T03:13:02.873495+00:00",
+    "manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+    "records_total": 17905,
+    "records_complete": 3700,
+    "records_resumed": 1812,
+    "records_new": 1888,
+    "elapsed_seconds": 2570.678702839001,
+    "records_per_hour": 2643.971023097427,
+    "active_record_ids": [
+      "04109",
+      "04110",
+      "04111",
+      "04112",
+      "04113",
+      "04117",
+      "04118",
+      "04119",
+      "04121",
+      "04123",
+      "04124",
+      "04125",
+      "04128",
+      "04129",
+      "04130",
+      "04131"
+    ],
+    "models_trained": 0,
+    "official_test_processed": false,
+    "error_type": "RuntimeError",
+    "error": "Unconverged leads after 128000: [('04124', 'V5')]",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/extract_gpu_retry.py\", line 256, in run\n    for row,(vectors,details) in zip(selected,results,strict=True):\n  File \"/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/gpu_extraction.py\", line 57, in extract_records\n    raise RuntimeError(f'Unconverged leads after {limit}: {failed}')\nRuntimeError: Unconverged leads after 128000: [('04124', 'V5')]\n"
+  },
+  "workflow_status": {
+    "stage": "stopped",
+    "updated_at_utc": "2026-09-28T03:13:20.989479+00:00",
+    "status": "failed",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/finish_development.py\", line 44, in main\n    raise RuntimeError(f'Extraction stopped: {extraction[\"status\"]}; inspect its logs before resuming')\nRuntimeError: Extraction stopped: failed; inspect its logs before resuming\n"
+  },
+  "record": {
+    "record_id": "04124",
+    "patient_id": "P08687",
+    "split": "train",
+    "label": "0",
+    "waveform_sha256": "38ca653cb4d8b1b67d7a363454a6adbb52a33fdb7ce8b7ae72359cf142924b72",
+    "fold": "3",
+    "partition": "fit"
+  },
+  "v5_attempts": [
+    {
+      "time_utc": "2026-09-28T03:11:31.538657+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 2000,
+      "iterations": 2000,
+      "capped": true
+    },
+    {
+      "time_utc": "2026-09-28T03:11:35.142533+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 4000,
+      "iterations": 4000,
+      "capped": true
+    },
+    {
+      "time_utc": "2026-09-28T03:11:35.913376+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 8000,
+      "iterations": 8000,
+      "capped": true
+    },
+    {
+      "time_utc": "2026-09-28T03:11:42.058300+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 16000,
+      "iterations": 16000,
+      "capped": true
+    },
+    {
+      "time_utc": "2026-09-28T03:11:54.378763+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 32000,
+      "iterations": 32000,
+      "capped": true
+    },
+    {
+      "time_utc": "2026-09-28T03:12:16.244378+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 64000,
+      "iterations": 64000,
+      "capped": true
+    },
+    {
+      "time_utc": "2026-09-28T03:13:02.851898+00:00",
+      "batch_id": "123045-1790565087318890877",
+      "lead": "V5",
+      "limit": 128000,
+      "iterations": 128000,
+      "capped": true
+    }
+  ],
+  "note": "Completion count read from status and metadata inventory; full checkpoint checksum verification not repeated during this status check."
+}

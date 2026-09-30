@@ -1,0 +1,45 @@
+{
+  "source_manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+  "files": {
+    "ecgvmd/vmd.py": {
+      "sha256": "a4e0e3107c7136a8ee847f1137b66c6135b1887a0a4040332998f62ccca86c00",
+      "matches_frozen_manifest": true
+    },
+    "ecgvmd/features.py": {
+      "sha256": "f4335fcaef9123bee0d6f0845c6a26466562d7576a96cb7ff15f0289898e1fe2",
+      "matches_frozen_manifest": true
+    },
+    "ecgvmd/scatter.py": {
+      "sha256": "5a4a25203df37abf74afb7768337775da36bbe26516f1ca9cf1741c03fa44a14",
+      "matches_frozen_manifest": true
+    },
+    "ecgvmd/select.py": {
+      "sha256": "35e34bf562b0fed1c9d415f47186e3c163f21af5af3b05ec57ffa5c1c3384c9c",
+      "matches_frozen_manifest": true
+    },
+    "ecgvmd/reupload.py": {
+      "sha256": "b1adea7570aa4a890daa3b40116d3a2e2db2f16fe180ef6b271a4928c764fef9",
+      "matches_frozen_manifest": true
+    },
+    "experiments/acs_omi_vmd_wst_vqc/loader.py": {
+      "sha256": "c22d144d43780769eafe8c225c9bf197b050b5183db4297200d685cb3ab6ce01",
+      "matches_frozen_manifest": true
+    },
+    "experiments/acs_omi_vmd_wst_vqc/pipeline.py": {
+      "sha256": "feecc73e9c58b57702851e444844a6d204a86620c897a9254cd9673bd0a09f0b",
+      "matches_frozen_manifest": true
+    },
+    "experiments/acs_omi_vmd_wst_vqc/gpu_vmd.py": {
+      "sha256": "c77b534e60c64fe80c87fefbc40411e12143d736ae4b6eb64c1447c358290369",
+      "matches_frozen_manifest": true
+    },
+    "experiments/acs_omi_vmd_wst_vqc/gpu_extraction.py": {
+      "sha256": "0188b01e40333083522a00c3eb7b46d6057798a1c3f50d66e1af6bbbfdc82836",
+      "matches_frozen_manifest": true
+    },
+    "experiments/acs_omi_vmd_wst_vqc/scripts/extract_gpu.py": {
+      "sha256": "bfd333377ce3d772b67166a1695c7c8a28955d0b1ff7f782dbc7395a28f1f3ce",
+      "matches_frozen_manifest": true
+    }
+  }
+}

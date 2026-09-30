@@ -348,3 +348,114 @@ was performed. Current handoffs now state the stop; the earlier ETA is inactive.
 See [stop report](reports/gpu_extraction_stop_2026-09-25.md),
 [integrity check](reports/gpu_extraction_stop_2026-09-25.json) and
 [CPU reference diagnostic](reports/vmd_cap_01985_cpu_diagnostic_2026-09-25.json).
+
+## 2026-09-27 EDT — bounded retry run and fixed downstream comparison
+
+The user authorized continuation of ACS work. Saved CPU/GPU higher-limit diagnostics
+resolved 01985/V5 at iteration 67,827. Restored the exact temporary GPU packages;
+the first sandbox download failed on network isolation, then the authorized install
+succeeded. Revalidated 17 fit ECGs on GPU: all saved feature/input/convergence
+comparisons and all Kymatio checks passed in 127.658 seconds. CUDA reports the same
+hardware/runtime/driver fingerprint as the original run.
+
+Prepared a separate 128,000-cap retry protocol/run, preserving old results. Reused
+1,795 parent checkpoints and the diagnostic ECG, ran one new 16-record batch, then
+verified all 1,812 checkpoints and byte-identical reused features. Full extraction
+resumed in `results/omi_v1_gpu_retry128k/`; use its live status for progress.
+
+Added ACS-local complete-bundle verification, fixed classifier fitting, exact VQC
+epoch/optimizer/RNG recovery and patient-cluster statistical reporting. The 44 CPU
+checks in the expanded suite passed (four device tests skipped); two additional
+focused tests passed for classical artifact recovery and complete bundle integrity.
+No real ACS model has yet been trained. A downstream process waits for successful
+extraction, then runs the declared model comparison and reporting; it stops on
+failure or interruption. Official test and attention training remain untouched.
+
+Evidence and commands: [retry protocol](protocols/gpu_extraction_retry128k_v1.md),
+[preparation report](reports/retry_preparation_2026-09-27.md), and JSON evidence.
+
+## 2026-09-27 23:13 EDT — amended extraction hit another convergence cap
+
+The amended extraction stopped at 2026-09-28T03:13:02 UTC with **3,700/17,905**
+ECGs complete (14,205 pending). Fit ECG **04124, lead V5** exhausted every retry,
+including 128,000 iterations. The downstream workflow detected the failure and
+stopped at 03:13:20 UTC. No ACS model was trained and official test data remain
+reserved. The earlier running-status paragraphs are historical.
+
+All 3,700 completion metadata files are present; full checksum verification was
+not repeated during this status check. Preserve these checkpoints and the frozen
+run. Next investigate the single failing fit lead and convergence behavior before
+any further production amendment. Do not restart the unchanged command or silently
+raise limits/exclude the record. Evidence: `reports/retry_stop_2026-09-27.json`.
+
+
+## 2026-09-28 EDT — convergence diagnosis and saved resume state
+
+The user asked to diagnose 04124/V5 and clarify changed files. The frozen CPU
+solver reproduces the production cap at 128,000 (finite outputs), then converges
+at 128,234 with the unchanged 1e-7 tolerance. The frozen GPU solver also converges
+at 128,234; maximum CPU/GPU mode difference is 5.7421e-13. The stopping statistic
+is nonmonotonic and only 1.091e-7 at the previous cap. A separate 256,000-limit
+protocol/run was prepared; all 3,700 imported parent checkpoints verified unchanged.
+No new extraction started before sleep; 14,205 records remain pending.
+
+Original production VMD/GPU/WST/loader/extractor hashes match the frozen manifest.
+The only existing Python file edited during continuation is the retry runner's
+manifest/device-validation gate. New files add diagnostics, the separate 256k
+retry, bundling, and the already-planned downstream workflow. Full inventory:
+[code-change report](reports/code_changes_2026-09-27.md). One unrelated off-by-one
+in the unused scalar VMD reference counter is separately documented; no shared
+numerical source was changed.
+
+[Resume guide](reports/resume_acs_2026-09-28.md) records status, one-batch recovery,
+full extraction, dependency restoration and downstream workflow commands.
+
+## 2026-09-28 EDT — verified recovery and full 256k continuation
+
+Restored the exact temporary GPU dependencies after the initial restart failed
+with a missing CuPy distribution; the base environment was unchanged. Verified
+all 3,700 saved parent checkpoints, then completed the controlled 16-record batch
+at 2026-09-29T00:50:12 UTC. Full verification passed for all 3,716 records at
+00:59:27 UTC, including unchanged imported feature bytes.
+
+The user explicitly requested the full run. It resumed at 01:19:03 UTC with no
+batch limit and reached 4,052/17,905 by the 01:25:38 UTC snapshot. Its first 21
+batches took 13.57–29.29 seconds (median 19.07); the rate including session startup
+was 2,881 ECGs/hour. This suggests 4.81 hours remaining for extraction at the
+snapshot, subject to later retries. The earlier days estimate incorrectly used
+the exceptional recovery batch containing 04124/V5 as a normal throughput sample.
+
+The downstream workflow is waiting for successful extraction, then verifies and
+bundles every feature checkpoint before the already authorized fixed model fits
+and statistical report. No model had been fitted at the snapshot; official test
+records remain reserved. No numerical code, settings, seeds or split changed.
+A sandbox JSON report write failed with a read-only-filesystem error; the same
+write succeeded outside the sandbox while extraction continued.
+
+See the [launch report](reports/retry256k_launch_2026-09-28.md), its JSON evidence,
+the updated handoffs and the [resume guide](reports/resume_acs_2026-09-28.md).
+
+## 2026-09-29 00:41 EDT — paused cleanly for sleep
+
+The user requested that work stop for the night and resume tomorrow. Verified
+the extractor PID against its command before sending SIGTERM. It handled the
+signal, finished/checkpointed the active batch, and exited with code 0 at
+04:41:06 UTC with **12,916/17,905 records complete**, **4,989 pending**, no active
+records, and `stop_signal: 15`. The full session saved 9,200 new ECGs after reusing
+3,716. Its final measured rate was 2,661.68 ECGs/hour.
+
+The downstream workflow detected `interrupted` and exited 1 at 04:41:19 UTC.
+Its stopped/failed status and traceback record the designed response to this
+user-requested pause. No new convergence failure occurred, no record was excluded,
+and no model fitting or official-test evaluation took place. Saved protocols,
+numerical code and feature artifacts remain in their existing run directories.
+
+Updated both handoffs, the ACS README and the resume guide. Tomorrow, resume the
+same extraction without a batch limit and restart the same downstream workflow
+only after extraction reports `running`. Do not repeat completed recovery work.
+
+Post-stop verification finished successfully at **04:57:05 UTC**: all **12,916
+saved checkpoints passed**; 4,989 remain pending; reused parent feature files
+are unchanged. The verifier exited 0. The report snapshot is
+[pause_acs_2026-09-29.json](reports/pause_acs_2026-09-29.json). No extraction,
+training or verification process from this session is left running.

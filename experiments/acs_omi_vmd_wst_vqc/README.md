@@ -1,3 +1,7 @@
+## Resume after sleep or restart
+
+The latest run is `results/omi_v1_gpu_retry256k/`, paused at the user's request on September 29 EDT with **12,916/17,905 ECGs saved (72.1%)** and 4,989 pending. The active batch finished before extraction stopped; the downstream workflow also exited. No ACS model has been trained. Resume the same extraction tomorrow, then restart the workflow after extraction reports `running`. See the [handoff](SESSION_HANDOFF.md) and [resume guide](reports/resume_acs_2026-09-28.md). The official test remains reserved.
+
 # ACS / OMI experiment
 
 This folder contains the new ACS study, separate from the original ECGData
@@ -5,12 +9,12 @@ ARR/CHF/NSR experiments. Start with [SESSION_HANDOFF.md](SESSION_HANDOFF.md).
 The plain-language experiment plan is in [PLAN.md](PLAN.md), and all log
 locations are explained in [LOGS.md](LOGS.md).
 
-Latest status: **GPU extraction stopped at 1,795/17,905 ECGs** because record
+Historical first GPU stop: extraction stopped at 1,795/17,905 ECGs because record
 01985/V5 exhausted the 32,000-iteration convergence limit. All saved checkpoints
 passed verification, and a CPU reference attempt reproduced the capped result.
 See the [stop report](reports/gpu_extraction_stop_2026-09-25.md) and handoff before
-resuming. No record was excluded or production setting changed. No ACS model
-training has started.
+resuming that historical run. Separate validated retry protocols subsequently
+resolved this stop and the later 04124/V5 stop; see the latest status above.
 
 The separate [GPU benchmark](reports/gpu_vmd_benchmark_2026-09-25.md) is complete:
 16 ECGs took 222.416 seconds on eight CPU workers versus 11.670 seconds median
@@ -69,11 +73,10 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MPLCONFIGDIR=/tmp/acs-matplotlib /home/
 ```
 
 Follow [SESSION_HANDOFF.md](SESSION_HANDOFF.md) for monitoring and resume commands.
-Diagnose the current numerical stop before restarting full extraction. The GPU run is
-`results/omi_v1_gpu/`; all 115 old CPU records were imported without changing their
-feature bytes, and 16 additional GPU records passed a controlled stop/resume test.
-The original CPU run stays interrupted. Full GPU extraction does not automatically
-launch training. Bundling, fitting and statistical reporting remain later work.
+The active GPU run is `results/omi_v1_gpu_retry256k/`. Earlier CPU/GPU runs remain
+preserved. The separate `finish_development256k` workflow handles verification,
+bundling, fitting and reporting after extraction succeeds; inspect its status
+before starting another workflow. The extraction command alone does not train models.
 
 Only a **new** experiment directory needs preparation:
 
@@ -112,3 +115,15 @@ The later descriptive rename is recorded in
 [descriptive_rename_v1.json](provenance/descriptive_rename_v1.json), with original
 sources in `provenance/before_descriptive_rename/`. Old historical paths are
 mapped explicitly; no compatibility symlink or mutable result manifest is used.
+# Current continuation — 2026-09-27 EDT
+
+The separate `results/omi_v1_gpu_retry128k/` run resumes the original extraction
+with validated bounded extra retries. Original checkpoints remain unchanged.
+Read [SESSION_HANDOFF.md](SESSION_HANDOFF.md) and the
+[retry protocol](protocols/gpu_extraction_retry128k_v1.md) before starting a writer.
+
+Live extraction status: `results/omi_v1_gpu_retry128k/extraction_status.json`.
+Downstream workflow: `results/omi_development_workflow_v1/status.json` and stage logs.
+The workflow waits for complete extraction, then verifies/bundles features, trains
+all declared models and reports internal-validation metrics. It stops on failures.
+Model output: `results/omi_models_v1_retry128k/`. Official test data remain reserved.

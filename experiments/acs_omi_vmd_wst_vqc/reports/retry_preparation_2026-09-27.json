@@ -1,0 +1,196 @@
+{
+  "status": "complete",
+  "manifest_sha256": "1238227498dad537de3344983e319a7be7e9cec9a8bdd11db1b1683030e18503",
+  "hardware": {
+    "device": 0,
+    "name": "NVIDIA GeForce RTX 5070",
+    "total_memory": 12820480000,
+    "compute_capability": "120",
+    "runtime_version": 12090,
+    "driver_version": 13030
+  },
+  "records": 17,
+  "elapsed_seconds": 127.65814412100008,
+  "completed_at_utc": "2026-09-28T01:38:45.752754+00:00",
+  "official_test_processed": false,
+  "models_trained": 0,
+  "record_checks": {
+    "17045": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "11678": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "19330": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "15014": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "14525": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "08564": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "06496": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "07202": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "00407": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "18957": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "19703": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "16283": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "05554": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "17903": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "07316": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "13784": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    },
+    "01985": {
+      "passed": true,
+      "vmd_exact": true,
+      "vmd_max_abs_error": 0.0,
+      "wst_exact": true,
+      "input_and_convergence_equal": true
+    }
+  },
+  "source": "results/retry_device_validation_20260927/",
+  "prior_diagnostic": "results/vmd_retry_extension_diagnostic_v1/",
+  "retry_lead": "01985/V5",
+  "converged_at_iterations": 67827,
+  "production_run": "results/omi_v1_gpu_retry128k/",
+  "recovery_verification": {
+    "status": "passed",
+    "records_verified": 1812,
+    "records_pending": 16093,
+    "reused_features_unchanged": true,
+    "manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+    "verified_at_utc": "2026-09-28T02:02:17.191757+00:00"
+  },
+  "launch_snapshot": {
+    "status": "running",
+    "stage": "extract",
+    "pid": 123045,
+    "started_at_utc": "2026-09-28T02:33:16.461175+00:00",
+    "updated_at_utc": "2026-09-28T02:37:20.578528+00:00",
+    "manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+    "records_total": 17905,
+    "records_complete": 1988,
+    "records_resumed": 1812,
+    "records_new": 176,
+    "elapsed_seconds": 262.714616108,
+    "records_per_hour": 2411.7424808200694,
+    "active_record_ids": [
+      "02198",
+      "02199",
+      "02200",
+      "02201",
+      "02202",
+      "02203",
+      "02205",
+      "02206",
+      "02207",
+      "02208",
+      "02209",
+      "02210",
+      "02211",
+      "02212",
+      "02213",
+      "02214"
+    ],
+    "models_trained": 0,
+    "official_test_processed": false
+  },
+  "workflow_snapshot": {
+    "stage": "waiting_for_extraction",
+    "updated_at_utc": "2026-09-28T02:37:09.419288+00:00",
+    "records_complete": 1972,
+    "records_total": 17905
+  },
+  "tests": {
+    "cpu_checks_passed": 46,
+    "device_unit_tests_skipped": 4,
+    "real_fit_ecg_gpu_checks_passed": 17
+  }
+}

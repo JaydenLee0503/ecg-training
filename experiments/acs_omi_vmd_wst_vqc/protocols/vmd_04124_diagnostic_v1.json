@@ -1,0 +1,15 @@
+{
+  "id": "acs-omi-04124-convergence-diagnostic-v1",
+  "parent_manifest_sha256": "c5f0a49a223328bdde73aa4d5c382dc3de49d0f1208671e646a0eddf54d408b7",
+  "record_id": "04124",
+  "lead": "V5",
+  "partition": "fit",
+  "reproduction_cap": 128000,
+  "diagnostic_cap": 512000,
+  "purpose": "Reproduce the production cap on frozen CPU solver and observe its unchanged stopping statistic under a bounded diagnostic extension",
+  "settings": "All scientific settings identical to parent; only the diagnostic iteration cap differs",
+  "trace": "Diagnostic-only copy of vmd_batch with read-only observation callback, parity tested on converged and capped synthetic signals",
+  "production_resumed": false,
+  "official_test_processed": false,
+  "models_trained": 0
+}

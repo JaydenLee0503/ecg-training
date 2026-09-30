@@ -23,11 +23,12 @@ from threadpoolctl import threadpool_limits
 
 SOURCE = BASE/'results/omi_v1_gpu'
 DIAGNOSTIC = BASE/'results/vmd_retry_extension_diagnostic_v1'
+DEVICE_VALIDATION = BASE/'results/retry_device_validation_20260927'
 SPEC = BASE/'protocols/gpu_extraction_retry128k_v1.json'
 PROTOCOL = BASE/'protocols/acs_omi_protocol_v1_retry128k.json'
 CODE = sorted(set(old.CODE + [str((BASE/name).relative_to(ROOT)) for name in (
     'scripts/extract_gpu_retry.py', 'gpu_retry.py', 'tests/test_gpu_retry.py',
-    'scripts/diagnose_vmd_retry.py', 'protocols/vmd_retry_extension_diagnostic_v1.json',
+    'scripts/diagnose_vmd_retry.py', 'scripts/validate_retry_device.py', 'protocols/vmd_retry_extension_diagnostic_v1.json',
     'protocols/gpu_extraction_retry128k_v1.json', 'protocols/acs_omi_protocol_v1_retry128k.json')]))
 
 
@@ -62,6 +63,27 @@ def context():
     compare_cpu(*gpu,*cpu)
     if cpu[1]['reference_max_abs_error'] is None or gpu[1]['reference_max_abs_error'] is None:
         raise ValueError('Missing Kymatio reference checks')
+    device_manifest = json.loads((DEVICE_VALIDATION/'manifest.json').read_text())
+    device_status = json.loads((DEVICE_VALIDATION/'status.json').read_text())
+    device_sha = old.serial.file_hash(DEVICE_VALIDATION/'manifest.json')
+    if (device_sha != spec['device_validation_manifest_sha256']
+            or device_status['status'] != 'complete' or device_status['manifest_sha256'] != device_sha
+            or device_manifest['hardware'] != spec['hardware']
+            or device_manifest['environment'] != old.environment()
+            or device_manifest['protocol'] != protocol
+            or device_manifest['records'] != parent['pilot_record_ids']+[row['record_id']]):
+        raise ValueError('Missing current-device validation')
+    for name, expected in device_manifest['code_sha256'].items():
+        if old.serial.file_hash(ROOT/name) != expected:
+            raise ValueError('Changed validated device implementation')
+    lookup = {r['record_id']:r for r in rows}
+    for rid in device_manifest['records']:
+        vectors, details = old.checked(DEVICE_VALIDATION,lookup[rid],device_sha)
+        if details['reference_max_abs_error'] is None:
+            raise ValueError('Missing current-device WST reference')
+        reference = old.checked(DIAGNOSTIC/'cpu',lookup[rid],diagnostic_sha) if rid==row['record_id'] else old.checked(
+            SOURCE/'pilot',lookup[rid],parent_sha)
+        compare_cpu(vectors,details,*reference)
     return spec, protocol, parent, rows, diagnostic_sha
 
 
@@ -73,7 +95,7 @@ def read_run(out, *, prepared=True):
     m = json.loads((out/'manifest.json').read_text())
     if (m['execution_protocol'] != spec or m['scientific_protocol'] != protocol
             or m['source_manifest'] != parent['source_manifest'] or m['environment'] != old.environment()
-            or m['hardware'] != parent['hardware']
+            or m['hardware'] != spec['hardware']
             or m['pilot_record_ids'] != parent['pilot_record_ids']+[spec['diagnostic_record_id']]
             or m['code_sha256'] != {name:old.serial.file_hash(ROOT/name) for name in CODE}):
         raise ValueError('Changed implementation/settings/environment; use a new run')
@@ -113,7 +135,7 @@ def prepare(args):
             if rid in checkpoint_inventory:
                 raise ValueError('Diagnostic unexpectedly overlaps completed original features')
             m = dict(scientific_protocol=protocol, execution_protocol=spec, environment=old.environment(),
-                     hardware=parent['hardware'],source_manifest=parent['source_manifest'],
+                     hardware=spec['hardware'],source_manifest=parent['source_manifest'],
                      splits_sha256=parent['splits_sha256'],source_records_sha256=parent['source_records_sha256'],
                      code_sha256={name:old.serial.file_hash(ROOT/name) for name in CODE},
                      imported_checkpoints=checkpoint_inventory,pilot_checkpoints=pilot_inventory,

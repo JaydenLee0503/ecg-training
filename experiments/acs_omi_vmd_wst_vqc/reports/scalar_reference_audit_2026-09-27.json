@@ -1,0 +1,35 @@
+{
+  "scope": "Separate scalar reference routine; not used by ACS production extraction",
+  "file": "ecgvmd/vmd.py",
+  "function": "vmd",
+  "finding": "At exhaustion, the zero-based loop index is returned as the number of iterations for max_iter > 1, causing capped=False even though all allowed iterations ran. The batched solver initializes counts to max_iter and does not have this bookkeeping symptom.",
+  "reproduction": {
+    "signal": "sin(arange(128)*0.17)+0.2*cos(arange(128)*0.63)",
+    "settings": {
+      "K": 4,
+      "dc": true,
+      "tol": 0,
+      "max_iter": 2
+    },
+    "legacy_scalar": {
+      "iterations": [
+        1
+      ],
+      "capped": [
+        false
+      ]
+    },
+    "production_batch": {
+      "iterations": [
+        2
+      ],
+      "capped": [
+        true
+      ]
+    }
+  },
+  "why_tol_zero": "The implemented stopping statistic adds positive machine epsilon, so it cannot meet zero tolerance; both iterations must execute. This isolates cap bookkeeping independently of ECG convergence.",
+  "production_changed": false,
+  "relation_to_04124": "Not the cause: failed ACS extraction called the GPU batched solver, and frozen CPU vmd_batch reproduced the 128000 cap.",
+  "remediation": "Correct scalar iteration counting and add regression tests in a separately documented shared-code revision; do not invalidate active frozen manifests silently."
+}

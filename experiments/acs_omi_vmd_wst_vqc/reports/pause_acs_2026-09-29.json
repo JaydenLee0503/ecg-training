@@ -1,0 +1,40 @@
+{
+  "reason": "User requested wrapping up for sleep and continuing tomorrow",
+  "run": "results/omi_v1_gpu_retry256k",
+  "manifest_sha256": "fc080f2481d1cb1c671f99f78876391d1d1af5cba7bd74a3c2040182cb224474",
+  "extraction_stop": {
+    "status": "interrupted",
+    "stopped_at_utc": "2026-09-29T04:41:06.012833+00:00",
+    "exit_code": 0,
+    "stop_signal": 15,
+    "records_total": 17905,
+    "records_complete": 12916,
+    "records_resumed_this_session": 3716,
+    "records_new_this_session": 9200,
+    "records_pending": 4989,
+    "active_record_ids": [],
+    "elapsed_seconds": 12443.253982680002,
+    "records_per_hour": 2661.6831936485705
+  },
+  "workflow_stop": {
+    "run": "results/omi_development_workflow_v2",
+    "stopped_at_utc": "2026-09-29T04:41:19.752901+00:00",
+    "stage": "stopped",
+    "status": "failed",
+    "exit_code": 1,
+    "reason": "Extraction stopped: interrupted",
+    "interpretation": "Expected workflow response to the user's requested pause; no new numerical failure"
+  },
+  "verification": {
+    "status": "passed",
+    "records_verified": 12916,
+    "records_pending": 4989,
+    "reused_features_unchanged": true,
+    "verified_at_utc": "2026-09-29T04:57:05.865664+00:00",
+    "exit_code": 0
+  },
+  "models_trained": 0,
+  "official_test_processed": false,
+  "extraction_workflow_and_verifier_exited": true,
+  "resume_guide": "reports/resume_acs_2026-09-28.md"
+}
