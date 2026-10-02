@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-09-30T01:44:22.970232+00:00",
+  "data": "synthetic only; no ECG fitting",
+  "torch": "2.7.1+cu128",
+  "cuda": "12.8",
+  "device": "NVIDIA GeForce RTX 5070",
+  "capability": [
+    12,
+    0
+  ],
+  "compiled_architectures": [
+    "sm_75",
+    "sm_80",
+    "sm_86",
+    "sm_90",
+    "sm_100",
+    "sm_120",
+    "compute_120"
+  ],
+  "parameters": 33607,
+  "max_forward_absolute_error": 1.4901161193847656e-07,
+  "max_gradient_absolute_error": 7.450580596923828e-08,
+  "interrupted_resume_weights_and_predictions": "bitwise equal to uninterrupted fit",
+  "seconds": 21.04295454899966,
+  "source_sha256": "c22037d58959c442c55a8d75a553cba4ea6ff3c9016bd3a2a785d94051cb8838"
+}
+{"time_utc": "2026-09-30T01:44:53.280498+00:00", "completed_fits": 2, "saved_epochs": 40, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:45:24.112513+00:00", "completed_fits": 3, "saved_epochs": 86, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:45:55.029939+00:00", "completed_fits": 5, "saved_epochs": 132, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:46:25.948274+00:00", "completed_fits": 6, "saved_epochs": 178, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:46:56.842271+00:00", "completed_fits": 7, "saved_epochs": 223, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:47:27.697282+00:00", "completed_fits": 9, "saved_epochs": 268, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:47:58.747979+00:00", "completed_fits": 10, "saved_epochs": 313, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:48:29.730401+00:00", "completed_fits": 11, "saved_epochs": 356, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:49:00.655116+00:00", "completed_fits": 14, "saved_epochs": 401, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:49:31.571653+00:00", "completed_fits": 15, "saved_epochs": 444, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:50:02.495784+00:00", "completed_fits": 17, "saved_epochs": 487, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:50:33.464165+00:00", "completed_fits": 18, "saved_epochs": 530, "planned_epochs": 600}
+{"time_utc": "2026-09-30T01:51:04.464455+00:00", "completed_fits": 19, "saved_epochs": 575, "planned_epochs": 600}
+{"status": "complete", "trials": 20}

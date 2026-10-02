@@ -1,5 +1,43 @@
 # Attention method experiment log
 
+## 2026-09-29 — Learning-curve protocol drafted; nothing run
+
+At the user's request, wrote [ecgdata_learning_curve_protocol.md](ecgdata_learning_curve_protocol.md)
+and its JSON. It asks whether held-out Swin performance still rises as training
+patients are added: nested, class-stratified patient subsets of 25/50/75% per fold
+(3 draws paired with seeds 0/1/2), same test folds and frozen settings, reusing the
+completed 100% trials read-only. Primary contrast is 100% minus 75% window macro-F1
+with a paired patient bootstrap and a pre-stated interpretation rule. The runner
+is not implemented and no model was fitted.
+
+## 2026-09-29 — ECGData LFCC + Swin GPU training completed
+
+After user authorization and Git checkpoint `eba3a78`, reused the verified
+1,620-window LFCC cache and unchanged protocol with five patient folds. All 15 Swin
+fits (seeds 0/1/2, 40 epochs each) and five deterministic logistic controls
+completed. Swin used the RTX 5070 and isolated PyTorch 2.7.1+cu128; the original
+environment and ACS work were unchanged. Training took 407.645 seconds,
+excluding setup; no real-data fit failed or generated logistic warnings.
+
+All 21 CPU tests and synthetic GPU/recovery checks passed. All 20 saved models
+were reloaded on CPU, reproduced their predicted classes, and passed partition,
+normalization, checkpoint and coverage checks. All 134 protected files were
+unchanged after fitting; 930 older improvement artifacts passed preflight.
+
+Mean Swin window accuracy/macro-F1: 83.35% / 0.8006; patient-vote accuracy:
+94.17%. Logistic: 76.48% / 0.7342 / 87.50%. The primary paired macro-F1 gain
+over logistic is +0.0664, 95% patient-bootstrap interval [0.0224, 0.1143].
+All Swin fits reached 100% training accuracy, leaving a generalization gap.
+This is an exploratory, repeatedly studied 80-patient cohort with source/label
+confounding, not external validation. No further tuning was performed.
+
+Setup issues were a sandbox DNS failure and a forward-only invocation without
+the PyTorch path; both were resolved before fitting. Windows-drive dependency
+copying was slow. All setup issues, seeds, negative findings, controls, histories,
+predictions, intervals, runtimes and reproduction commands are recorded in the
+[results](reports/ecgdata_lfcc_swin_v1/results.md) and
+[execution guide](reports/ecgdata_gpu_execution_2026-09-29.md).
+
 ## 2026-09-25 — ECGData preparation completed; training deferred
 
 User approved the ECGData adapter, frozen protocol, CPU cache and training runner

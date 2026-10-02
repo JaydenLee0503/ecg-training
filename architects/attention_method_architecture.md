@@ -1,5 +1,11 @@
 # Cepstral extraction and temporal Swin — architecture record
 
+**Update — 2026-09-29:** ECGData training is complete: 15 Swin fits on the RTX
+5070 and five logistic controls. Mean window accuracy is 83.35%, macro-F1 0.8006,
+and patient-vote accuracy 94.17%. All saved models passed reload checks. See the
+[full results and limitations](../attention%20method/reports/ecgdata_lfcc_swin_v1/results.md).
+The preparation-only statements below record the earlier state; ACS is unchanged.
+
 Update: the separate [ECGData preparation record](ecgdata_attention_preparation.md)
 now documents a completed CPU feature cache and smaller three-class model with
 an explicit-only training runner. No fitting has run. The ACS configuration

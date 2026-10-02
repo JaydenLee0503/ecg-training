@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-09-30T01:44:22.970232+00:00",
+  "data": "synthetic only; no ECG fitting",
+  "torch": "2.7.1+cu128",
+  "cuda": "12.8",
+  "device": "NVIDIA GeForce RTX 5070",
+  "capability": [
+    12,
+    0
+  ],
+  "compiled_architectures": [
+    "sm_75",
+    "sm_80",
+    "sm_86",
+    "sm_90",
+    "sm_100",
+    "sm_120",
+    "compute_120"
+  ],
+  "parameters": 33607,
+  "max_forward_absolute_error": 1.4901161193847656e-07,
+  "max_gradient_absolute_error": 7.450580596923828e-08,
+  "interrupted_resume_weights_and_predictions": "bitwise equal to uninterrupted fit",
+  "seconds": 21.04295454899966,
+  "source_sha256": "c22037d58959c442c55a8d75a553cba4ea6ff3c9016bd3a2a785d94051cb8838"
+}

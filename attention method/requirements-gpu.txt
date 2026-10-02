@@ -1,0 +1,6 @@
+# Separate target directory; use with the existing project interpreter.
+# pip install --target 'attention method/.venv/torch-cu128' -r 'attention method/requirements-gpu.txt'
+# Prefix execution with PYTHONPATH='attention method/.venv/torch-cu128'.
+# NumPy 2.5.2, SciPy 1.18.1 and scikit-learn 1.9.0 come from the existing environment.
+--index-url https://download.pytorch.org/whl/cu128
+torch==2.7.1+cu128

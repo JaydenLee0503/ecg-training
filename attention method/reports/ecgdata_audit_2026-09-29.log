@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-09-30T01:52:21.466547+00:00",
+  "fits": 20,
+  "history_rows": 600,
+  "new_prediction_rows": 6480,
+  "all_saved_models_reloaded_on": "cpu",
+  "same_predicted_classes": true,
+  "max_probability_absolute_error": 1.8477439880371094e-06,
+  "sum_fit_seconds": 402.3885674459998,
+  "max_peak_cuda_bytes": 75372032,
+  "failed_real_trials": [],
+  "logistic_warnings": {},
+  "checked": [
+    "patient separation and saved indices",
+    "fit-only normalization",
+    "class weights",
+    "all 40 epochs and cosine learning rates",
+    "finite model parameters and losses",
+    "saved probabilities reproduced",
+    "exactly-once out-of-fold coverage"
+  ],
+  "script_sha256": "c7c7f9db1f4dee6549d18481a4c75ce195f597d638bd839d38d5ddb45698d774"
+}

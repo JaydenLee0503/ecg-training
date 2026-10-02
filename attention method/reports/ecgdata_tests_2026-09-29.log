@@ -1,0 +1,26 @@
+test_acs_adapter_identity_and_official_test_guard (test_attention.DataTests.test_acs_adapter_identity_and_official_test_guard) ... ok
+test_patient_boundaries_test_rejection_and_duplicates (test_attention.DataTests.test_patient_boundaries_test_rejection_and_duplicates) ... ok
+test_split_checksum_guard (test_attention.DataTests.test_split_checksum_guard) ... ok
+test_streaming_fit_statistics_and_validation_guard (test_attention.DataTests.test_streaming_fit_statistics_and_validation_guard) ... ok
+test_gain_changes_c0_only_above_floor (test_attention.FeatureTests.test_gain_changes_c0_only_above_floor) ... ok
+test_padding_zero_mel_and_invalid_inputs (test_attention.FeatureTests.test_padding_zero_mel_and_invalid_inputs) ... ok
+test_reference_periodogram_and_explicit_cosine_matrix (test_attention.FeatureTests.test_reference_periodogram_and_explicit_cosine_matrix) ... ok
+test_padding_keys_are_excluded (test_attention.ModelTests.test_padding_keys_are_excluded) ... ok
+test_reject_wrong_axes_and_nonfinite (test_attention.ModelTests.test_reject_wrong_axes_and_nonfinite) ... ok
+test_shapes_batch_independence_no_weight_updates_and_roundtrip (test_attention.ModelTests.test_shapes_batch_independence_no_weight_updates_and_roundtrip) ... ok
+test_shift_connects_neighbors_without_circular_wrap (test_attention.ModelTests.test_shift_connects_neighbors_without_circular_wrap) ... ok
+test_128hz_features_cover_tail_and_retain_single_lead (test_ecgdata.ECGDataTests.test_128hz_features_cover_tail_and_retain_single_lead) ... ok
+test_checkpoint_roundtrip_and_corruption_without_training (test_ecgdata.ECGDataTests.test_checkpoint_roundtrip_and_corruption_without_training) ... ok
+test_completed_trial_corruption_and_writer_exclusion (test_ecgdata.ECGDataTests.test_completed_trial_corruption_and_writer_exclusion) ... ok
+test_metrics_vote_ties_and_paired_cluster_intervals (test_ecgdata.ECGDataTests.test_metrics_vote_ties_and_paired_cluster_intervals) ... ok
+test_normalization_never_uses_held_out_windows (test_ecgdata.ECGDataTests.test_normalization_never_uses_held_out_windows) ... ok
+test_patient_partitions_and_leakage_rejection (test_ecgdata.ECGDataTests.test_patient_partitions_and_leakage_rejection) ... ok
+test_restart_shuffle_and_control_pooling (test_ecgdata.ECGDataTests.test_restart_shuffle_and_control_pooling) ... ok
+test_small_model_forward_only_and_protocol_defaults (test_ecgdata.ECGDataTests.test_small_model_forward_only_and_protocol_defaults) ... ok
+test_training_flag_rejected_before_cache_or_model_access (test_ecgdata.ECGDataTests.test_training_flag_rejected_before_cache_or_model_access) ... ok
+test_writes_cannot_target_original_data_or_experiments (test_ecgdata.ECGDataTests.test_writes_cannot_target_original_data_or_experiments) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.425s
+
+OK

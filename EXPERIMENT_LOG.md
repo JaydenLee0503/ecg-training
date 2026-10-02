@@ -1,5 +1,21 @@
 # Experiment log — the quantum stage
 
+## 2026-09-29 — ECGData LFCC + Swin completed
+
+The user authorized execution after checkpoint `eba3a78`. The unchanged attention
+protocol reused the exact corrected windows and five patient folds. All 15 Swin
+fits (seeds 0/1/2, 40 epochs) ran on the RTX 5070; five logistic controls also
+finished. Mean Swin window accuracy/macro-F1: 83.35% / 0.8006; patient-vote
+accuracy: 94.17%. Logistic: 76.48% / 0.7342 / 87.50%. No real-data fit failed.
+The 407.645-second training routine excludes dependency setup and reporting.
+
+All 21 CPU tests, GPU/recovery checks and saved-model reload checks passed.
+All 134 protected files remained unchanged. Complete seeds, controls, uncertainty,
+training-fit gap, limitations, histories and predictions are in the
+[attention results](attention%20method/reports/ecgdata_lfcc_swin_v1/results.md)
+and [attention log](attention%20method/EXPERIMENT_LOG.md). This is an exploratory
+80-patient comparison with source/diagnosis confounding. ACS remains paused.
+
 **Patient-grouping correction (2026-09-21).** The historical experiments below used
 ECGData row IDs. Those rows include different leads and repeat recordings from the
 same patient, so the scores do not establish performance on independent patients.

@@ -1,0 +1,79 @@
+{
+  "id": "ecgdata_lfcc_swin_learning_curve_v1",
+  "status": "draft protocol; runner not implemented; nothing fitted",
+  "written": "2026-09-29",
+  "question": "Does held-out LFCC + Swin performance still improve as training patients are added, within the existing ECGData folds?",
+  "base_protocol": {
+    "path": "ecgdata_protocol.json",
+    "id": "ecgdata_lfcc_small_swin_v1",
+    "unchanged": ["classes", "input", "reference", "cepstral", "model", "training", "control", "evaluation.patient_vote_tie"],
+    "note": "Only the training patients change. Cache, windows, outer folds, test patients, architecture, optimizer, epochs and seeds are the frozen base settings."
+  },
+  "cache": {"path": "features/ecgdata_lfcc_v1", "windows_sha256": "3eaffccfb4f7390ea677937bd233285d1a918f0810da527b3634566b952f9af9",
+    "fold_sha256": "1d88466d8e2050de0f05fdf3f51b05bdbdd791da114f5e477ffeb472bcc650f5"},
+  "subsampling": {
+    "unit": "patient",
+    "fractions": [0.25, 0.5, 0.75, 1.0],
+    "stratify_by": "class",
+    "count_rule": "n_c = max(2, ceil(fraction * N_c)), where N_c is the number of class-c training patients in that outer fold",
+    "min_patients_per_class": 2,
+    "nested": true,
+    "draw": "for each (fold, class, replicate): sort training patient IDs, permute with numpy default_rng(subset_seed + 1000*replicate + 10*fold + class_index), take the first n_c",
+    "subset_seed": 20260929,
+    "replicates": [0, 1, 2],
+    "replicate_seed_pairing": "replicate r is fitted with initialization seed r, so spread across the three fits includes both subset and initialization variation",
+    "windows": "all windows (all leads and recordings) of every selected patient; none from unselected patients",
+    "test_set": "the full held-out outer fold, unchanged at every fraction",
+    "expected_counts_per_fold": {
+      "full_training": {"fold0": [38, 12, 14], "fold1": [38, 12, 14], "fold2": [37, 12, 15], "fold3": [38, 12, 14], "fold4": [37, 12, 15]},
+      "order": ["ARR", "CHF", "NSR"],
+      "0.25": "ARR 10, CHF 3, NSR 4 (all folds)",
+      "0.5": "ARR 19, CHF 6, NSR 7 or 8",
+      "0.75": "ARR 28-29, CHF 9, NSR 11-12"
+    }
+  },
+  "fitting": {
+    "fit_only_quantities": ["coefficient normalization", "class weights n_train / (3 * class_count)", "logistic StandardScaler"],
+    "epochs": "fixed 40 at every fraction, as in the base protocol; smaller subsets therefore receive fewer optimizer steps",
+    "new_swin_fits": "3 fractions (0.25, 0.5, 0.75) x 3 replicates x 5 folds = 45",
+    "new_logistic_fits": "3 fractions x 3 replicates x 5 folds = 45",
+    "fraction_1_0": "reuse the 15 Swin and 5 logistic trials in results/ecgdata_lfcc_swin_v1 read-only, after verifying them against reports/ecgdata_lfcc_swin_v1/artifact_inventory.csv; never refit or modify them",
+    "no_tuning": "no early stopping, architecture change or selection based on test predictions",
+    "device": "Swin on the RTX 5070 with the base determinism settings; logistic on CPU"
+  },
+  "evaluation": {
+    "primary": "window_macro_f1 averaged over the three replicate fits, at each fraction",
+    "secondary": ["window_accuracy", "patient_vote_accuracy", "patient_vote_macro_f1", "per-class window recall", "training accuracy and training macro-F1"],
+    "report_every_fit": true,
+    "bootstrap": {"unit": "test patient", "resamples": 2000, "seed": 20260925, "paired": "same patient multiplicities across all fractions, arms and replicates in each draw",
+      "contrasts": ["1.0 minus 0.75 (primary)", "1.0 minus 0.5", "1.0 minus 0.25", "Swin minus logistic at each fraction"],
+      "scope": "conditional on saved predictions; excludes retraining uncertainty beyond the three replicates"},
+    "interpretation_rule": {
+      "still_improving": "primary 1.0 minus 0.75 macro-F1 difference > 0 and its 95% interval lower bound > 0",
+      "no_detectable_gain": "95% interval includes 0 and point estimate <= 0.01; reported as no detectable gain at this scale, not proof of a plateau",
+      "inconclusive": "any other outcome"
+    },
+    "not_allowed": ["extrapolating accuracy to a specific larger cohort size", "claiming that other sources or populations would behave the same"]
+  },
+  "outputs": {
+    "results": "results/ecgdata_lfcc_swin_learning_curve_v1/",
+    "reports": "reports/ecgdata_lfcc_swin_learning_curve_v1/",
+    "per_trial": ["subset.json (patient IDs, window indices, hashes)", "preprocessing.npz", "checkpoint.pt", "history.json", "predictions.npz", "fit.json", "completed.json"],
+    "summary": ["subsets.csv", "fits.csv", "metrics.csv", "predictions.csv", "histories.csv", "learning_curve.png/.svg", "artifact_inventory.csv", "results.md"]
+  },
+  "pre_run_checks": [
+    "unit tests: subsets are nested, class minimums hold, selected patients never appear in the test fold, subset hashes are deterministic",
+    "normalizer and class weights are computed from the subset only",
+    "the 1.0 reuse path verifies all base-run hashes and writes nothing there",
+    "synthetic interrupted-fit recovery reproduces an uninterrupted fit",
+    "protected-file hashes identical before and after the run"
+  ],
+  "execution": {"training_requires_explicit_cli_flag": true, "default_action": "none",
+    "estimated_gpu_time": "about 10-15 minutes, extrapolated from the base run's 407.6 s for 15 full-size fits; an estimate, not a measurement"},
+  "limitations": [
+    "the primary contrast adds only about 16 patients per fold, so its interval is likely wide and an inconclusive result is plausible",
+    "fixed epochs confound subset size with number of optimizer steps",
+    "only three subset draws per fraction",
+    "the 80-patient cohort has informed earlier decisions and confounds diagnosis with source database; the curve cannot show whether patients from new sources would help"
+  ]
+}

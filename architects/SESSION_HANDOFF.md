@@ -1,5 +1,38 @@
 # Session handoff — 2026-09-25
 
+## ECGData learning-curve protocol drafted — 2026-09-29 EDT
+
+Draft protocol only: [attention method/ecgdata_learning_curve_protocol.md](../attention%20method/ecgdata_learning_curve_protocol.md).
+Its runner is not implemented and nothing has been trained.
+
+## ECGData LFCC + Swin completed — 2026-09-29 EDT
+
+The user authorized training after checkpoint commit `eba3a78`. All **15 Swin
+fits and five logistic controls** completed on the unchanged ECGData protocol,
+with 600 saved epochs, seeds 0/1/2 and the existing five patient folds. Swin ran
+on the RTX 5070; the training routine took **407.645 seconds**, excluding setup.
+There are no failed real-data trials and no remaining attention fits to resume.
+
+Three-seed mean LFCC + Swin window accuracy is **83.35%**, macro-F1 **0.8006**,
+and patient-vote accuracy **94.17%**. The pooled LFCC logistic control has 76.48%
+window accuracy and 0.7342 macro-F1. The paired patient-bootstrap interval for
+the primary macro-F1 difference is [0.0224, 0.1143]. These are exploratory results
+on a repeatedly studied 80-patient cohort with diagnosis/source confounding.
+All Swin fits attained 100% training accuracy; held-out accuracy remains lower.
+Do not interpret the result as external validation or isolate transform effects
+from this comparison of complete pipelines.
+
+All 21 CPU tests, GPU forward/gradient and synthetic checkpoint-recovery checks,
+and saved-model reload checks passed. All 134 protected files remained unchanged;
+all 930 older VQC improvement artifacts passed the preflight integrity check.
+Read the [full results](../attention%20method/reports/ecgdata_lfcc_swin_v1/results.md)
+and [attention handoff](../attention%20method/SESSION_HANDOFF.md) before reporting
+or restarting. The original cache, scientific protocol and training implementation
+were unchanged. CUDA dependencies are local and gitignored.
+
+The older attention preparation-only entries below are historical. ACS remains
+paused; this work did not resume its extraction or train ACS models.
+
 ## ACS paused for sleep — 2026-09-29 00:41 EDT
 
 The user asked to wrap up and continue tomorrow. Extraction finished its active

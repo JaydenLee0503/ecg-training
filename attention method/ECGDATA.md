@@ -1,8 +1,13 @@
 # ECGData LFCC + small temporal Swin
 
-This is a separate protocol from the original ACS setup. **Preparation is
-complete; training has not started.** The original ACS raw archives, protocols,
-adapter and model defaults are intact. No GPU was used for preparation.
+**Training completed on 2026-09-29:** all 15 Swin fits and five logistic controls,
+using the RTX 5070 for Swin. Mean window accuracy/macro-F1: **83.35% / 0.8006**;
+patient-vote accuracy: **94.17%**. Read the
+[full results and limitations](reports/ecgdata_lfcc_swin_v1/results.md).
+
+This is a separate protocol from the original ACS setup. The original ACS raw
+archives, protocols, adapter and model defaults are intact. Preparation used CPU;
+training used the separate CUDA environment. ACS remains paused.
 
 ## Frozen scientific settings
 
@@ -34,7 +39,7 @@ The compact model is deliberately smaller than the ACS default. It has not been
 selected using any new prediction score. Input representation and classifier
 budgets differ from the VQC, so this is a complete-pipeline comparison.
 
-The future fit protocol is fixed at 40 epochs, batch 32, AdamW (learning rate
+The executed fit protocol is fixed at 40 epochs, batch 32, AdamW (learning rate
 0.001, weight decay 0.01), cosine decay to 0.0001, gradient norm clipping at 1,
 and training-label-derived balanced cross entropy. Seeds are 0/1/2. There is no
 architecture search, epoch selection or early stopping in v1, so no inner
@@ -44,7 +49,7 @@ and a new protocol; outer predictions must not select settings.
 Control: concatenate temporal means and population standard deviations of the
 16 cepstra (32 features), then training-only StandardScaler and balanced logistic
 regression (`C=1`, `lbfgs`, max 2,000 iterations). It has five deterministic fits;
-Swin has 15 fits. **Neither control nor Swin has been fitted.**
+Swin has 15 fits. **All 20 fits are complete and verified.**
 
 ## Prepared artifacts and commands
 
@@ -69,27 +74,28 @@ shards. Changed inputs/code/settings require a new cache directory. Corruption
 raises an error instead of silently recomputing a different experiment. The cache
 is gitignored; the checked-in report records its identity but is not a backup.
 
-For CPU forward inference only, while temporary PyTorch dependencies exist:
+For CPU forward inference only, with the separate CUDA-capable PyTorch target:
 
 ```bash
-PYTHONPATH=/tmp/ecg-attention-deps OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/ecgdata.py' dry-run
+PYTHONPATH='attention method/.venv/torch-cu128' OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/ecgdata.py' dry-run
 ```
 
 This reads two outer-training windows, uses fit-only normalization and random
 weights, runs inference on CPU, and verifies that weights did not change. It
 prints shapes, not diagnostic predictions. No optimizer or gradient update runs.
 
-## Training runner, prepared for later use
+## Completed training, reuse and reporting
 
-The `train` subcommand is implemented but **must not be run yet under the current
-instruction**. It requires both an explicit `--execute-training` flag and a
+The user authorized execution on 2026-09-29. The `train` subcommand requires
+both an explicit `--execute-training` flag and a
 `--device cpu` or `--device cuda` choice; there is no default training action or
-automatic GPU fallback. CPU-only PyTorch at `/tmp/ecg-attention-deps` cannot train
-on CUDA. A later GPU run needs a separately verified CUDA-enabled environment
-compatible with the RTX 5070, plus `CUBLAS_WORKSPACE_CONFIG=:4096:8`. No new GPU
-installation or workload was started.
+automatic GPU fallback. The tested CUDA installation is PyTorch 2.7.1+cu128 at
+`attention method/.venv/torch-cu128`, loaded through PYTHONPATH with the original
+project interpreter. CUDA execution requires `CUBLAS_WORKSPACE_CONFIG=:4096:8`.
+The old `/tmp/ecg-attention-deps` installation is absent. See the
+[execution guide](reports/ecgdata_gpu_execution_2026-09-29.md).
 
-Default future outputs go only to
+Completed outputs are in
 `attention method/results/ecgdata_lfcc_swin_v1/`. Output guards reject original
 data/experiment directories. Training holds an exclusive writer lock and pins
 the cache, protocol, execution code, software versions and device. It saves
@@ -101,7 +107,7 @@ per-epoch shuffling. A checkpoint/marker mismatch stops for inspection; it is no
 claimed to automatically recover a partially written checkpoint. Logistic fits
 restart if interrupted before completion.
 
-After a later successful training run, the separate `report` subcommand verifies
+The separate `report` subcommand verifies
 all 20 fits and exactly-once out-of-fold coverage, then calculates per-seed window
 and patient-majority-vote metrics. Ties use ARR/CHF/NSR class order. It includes
 paired comparisons to the saved original VMD/WST VQC predictions, without refitting
@@ -110,10 +116,11 @@ them. Primary metric is window macro-F1. Paired patient-cluster intervals use
 saved predictions and exclude retraining uncertainty. Single-class draws are
 counted and skipped. This repeatedly studied cohort is not external validation.
 
-Full optimizer execution, GPU execution, interruption during real fitting and
-end-to-end trained reporting remain unverified because no training was allowed.
-Unit tests cover partitioning, fit-only normalization, deterministic shuffle,
-checkpoint serialization/corruption, write guards and metric/bootstrap logic
-without fitting a classifier. See the
-[preparation report](reports/ecgdata_preparation.md) and
-[protocol](ecgdata_protocol.json).
+Full optimizer execution, GPU execution and end-to-end reporting completed.
+All 21 CPU tests passed. Synthetic CUDA checkpoint recovery reproduced an
+uninterrupted fit exactly; no real-data interruption occurred. All 20 saved
+models were reloaded on CPU and reproduced their predicted classes. Results,
+full histories, all seeds, controls, bootstrap intervals and validation are in the
+[results directory](reports/ecgdata_lfcc_swin_v1/results.md). See also the
+[historical preparation report](reports/ecgdata_preparation.md) and unchanged
+[protocol](ecgdata_protocol.json). Completed runs should be verified and reused.

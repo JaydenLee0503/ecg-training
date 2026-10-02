@@ -1,5 +1,11 @@
 # ECGData cepstral + Swin preparation — 2026-09-25
 
+**Update — 2026-09-29:** ECGData training is complete: 15 Swin fits on the RTX
+5070 and five logistic controls. Mean window accuracy is 83.35%, macro-F1 0.8006,
+and patient-vote accuracy 94.17%. All saved models passed reload checks. See the
+[full results and limitations](../attention%20method/reports/ecgdata_lfcc_swin_v1/results.md).
+The preparation-only statements below record the earlier state; ACS is unchanged.
+
 The user approved preparing the ECGData attention experiment while keeping the
 original ACS data intact and leaving training unstarted. Preparation is complete.
 

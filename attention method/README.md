@@ -1,16 +1,19 @@
 # Cepstral features + temporal Swin Transformer
 
-**ECGData preparation added:** the separate [ECGData guide](ECGDATA.md) describes
-the 128 Hz, single-lead, three-class protocol, completed CPU LFCC cache, smaller
-Swin and explicit-only training/report runner. No model training has started.
-The ACS settings below remain intact; their pending runner descriptions refer
-to ACS, not the new ECGData implementation.
+**ECGData training completed on 2026-09-29:** the RTX 5070 finished all 15 Swin
+fits; all five logistic controls also finished. Mean Swin window accuracy is
+83.35%, macro-F1 0.8006, and patient-vote accuracy 94.17%. See
+[results and limitations](reports/ecgdata_lfcc_swin_v1/results.md) and the
+[ECGData guide](ECGDATA.md). This is an exploratory 80-patient comparison.
+The ACS settings and pending work below remain separate and unchanged.
 
-Separate experiment requested by the user. **No training has started.** This
-directory contains the implemented feature extractor, randomly initialized model,
-ACS adapter, normalization, synthetic checks, and a declared representation.
-There is no optimizer, training loop, trained checkpoint, or diagnostic score.
-The default task is the current ACS OMI versus non-OMI task. Generic feature/model
+## Original ACS implementation status
+
+**No ACS attention training has started.** The ACS implementation contains the
+feature extractor, randomly initialized model, adapter, normalization, synthetic
+checks, and declared representation. The completed ECGData runner and results
+are described above. The original default task is ACS OMI versus non-OMI.
+Generic feature/model
 APIs can support other tasks only under a new declared input/split protocol.
 
 ## Pipeline
@@ -69,19 +72,22 @@ Run from the repository root; quote the directory because its name contains a sp
 /home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/check.py' --features-only
 ```
 
-The existing environment did not contain PyTorch. CPU PyTorch 2.6.0 was installed
+During preparation the existing environment did not contain PyTorch. CPU PyTorch 2.6.0 was installed
 in `/tmp/ecg-attention-deps` solely for development checks; it is temporary and
-does not modify the original environment. While it exists:
+did not modify the original environment. That temporary installation is now
+absent. Use the separate CUDA target for CPU checks too:
 
 ```bash
-PYTHONPATH=/tmp/ecg-attention-deps OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/check.py'
-PYTHONPATH=/tmp/ecg-attention-deps OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B -m unittest discover -s 'attention method/tests' -v
+PYTHONPATH='attention method/.venv/torch-cu128' OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/check.py'
+PYTHONPATH='attention method/.venv/torch-cu128' OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B -m unittest discover -s 'attention method/tests' -v
 ```
 
 For a durable setup, create a separate virtual environment and install the
 declared `requirements.txt`. A CPU-only install can use the official PyTorch CPU
 index for `torch==2.6.0`; a future GPU environment needs its own tested installation
-and recorded manifest. GPU execution has not been verified for this model.
+and recorded manifest. GPU execution is now verified for the compact ECGData
+model using [requirements-gpu.txt](requirements-gpu.txt); the larger ACS model
+has not been trained.
 Without PyTorch, feature/data tests run and model tests explicitly skip.
 
 `check.py` uses synthetic signals, a fixed initialization seed, `eval()` and
