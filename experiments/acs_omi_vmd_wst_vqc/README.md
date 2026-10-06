@@ -1,6 +1,19 @@
 ## Resume after sleep or restart
 
-The latest run is `results/omi_v1_gpu_retry256k/`, paused at the user's request on September 29 EDT with **12,916/17,905 ECGs saved (72.1%)** and 4,989 pending. The active batch finished before extraction stopped; the downstream workflow also exited. No ACS model has been trained. Resume the same extraction tomorrow, then restart the workflow after extraction reports `running`. See the [handoff](SESSION_HANDOFF.md) and [resume guide](reports/resume_acs_2026-09-28.md). The official test remains reserved.
+**The entire ACS development comparison is complete**, including all 17,905 ECGs,
+all ten model fits and the final report, as of 2026-10-02T03:57:53 UTC. A post-run
+check verified 516 model/report artifact entries. No job remains to resume.
+Read the [results summary](reports/acs_omi_results_v1/SUMMARY.md) and
+[handoff](SESSION_HANDOFF.md). Official test data remain reserved. The progress
+snapshots below are historical.
+
+**Extraction is complete for all 17,905 ECGs**, as of 2026-10-02T03:27:27 UTC.
+The existing workflow entered full feature verification/bundling at 03:27:52 UTC;
+model training and reporting follow after those checks pass. Do not restart
+extraction. Check `results/omi_development_workflow_v2/status.json` and the
+[handoff](SESSION_HANDOFF.md) for current progress. The snapshot below is historical.
+
+The latest run is `results/omi_v1_gpu_retry256k/`, resumed on October 1 EDT after rechecking all 12,916 saved ECGs. At the 2026-10-02T02:39:29 UTC snapshot, **15,780/17,905 ECGs were saved (88.1%)**. The downstream workflow is waiting for successful extraction before full feature verification and the fixed model comparison. Check live status before starting another process. See the [resume report](reports/acs_resume_2026-10-01.md), [handoff](SESSION_HANDOFF.md) and [resume guide](reports/resume_acs_2026-09-28.md). The official test remains reserved.
 
 # ACS / OMI experiment
 

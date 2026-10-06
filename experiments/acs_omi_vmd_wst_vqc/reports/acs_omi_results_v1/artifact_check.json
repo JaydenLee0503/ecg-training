@@ -1,0 +1,131 @@
+{
+  "exported_report_artifacts": {
+    "report.md": {
+      "sha256": "2b47f684227d6ee6b625560f3e81e2162de3ca5ad3169d615226ea734cad9c27",
+      "matches_source_bytes": true
+    },
+    "analysis.json": {
+      "sha256": "cb9bd2cd852cb1958e02df36c7d2c91b1696519cfa3ae9bc8b2d76811580e5c6",
+      "matches_source_bytes": true
+    },
+    "metrics.csv": {
+      "sha256": "dbaa7928949884eb11237850450ad94672c4fee55753a46e762d1e8deb798daf",
+      "matches_source_bytes": false,
+      "normalization": "CRLF to LF only; parsed CSV rows verified identical"
+    }
+  },
+  "context_sha256": "43680cf7f71980b2a64a06784881b35596e6adeb736f1a68bd453c264580f088",
+  "checked_artifact_entries": 516,
+  "epoch_records": 240,
+  "trials": [
+    {
+      "arm": "vmd",
+      "classifier": "logistic",
+      "status": "complete",
+      "seconds": 0.08685569800036319,
+      "training_seconds": null,
+      "completed_at_utc": "2026-10-02T03:32:24.422285+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "vmd",
+      "classifier": "weighted_knn",
+      "status": "complete",
+      "seconds": 0.6731930499990995,
+      "training_seconds": null,
+      "completed_at_utc": "2026-10-02T03:32:25.008387+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "vmd",
+      "classifier": "vqc_seed0",
+      "status": "complete",
+      "seconds": 802.5483658490011,
+      "training_seconds": 799.9552014599994,
+      "completed_at_utc": "2026-10-02T03:44:44.040567+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "vmd",
+      "classifier": "vqc_seed1",
+      "status": "complete",
+      "seconds": 801.9891483560004,
+      "training_seconds": 799.5969686560002,
+      "completed_at_utc": "2026-10-02T03:44:43.682578+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "vmd",
+      "classifier": "vqc_seed2",
+      "status": "complete",
+      "seconds": 794.7617360639997,
+      "training_seconds": 792.9378025569986,
+      "completed_at_utc": "2026-10-02T03:44:37.053892+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "wst",
+      "classifier": "logistic",
+      "status": "complete",
+      "seconds": 0.05621902799975942,
+      "training_seconds": null,
+      "completed_at_utc": "2026-10-02T03:44:37.464808+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "wst",
+      "classifier": "weighted_knn",
+      "status": "complete",
+      "seconds": 0.6200960879996273,
+      "training_seconds": null,
+      "completed_at_utc": "2026-10-02T03:44:38.243306+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "wst",
+      "classifier": "vqc_seed0",
+      "status": "complete",
+      "seconds": 800.1780531179993,
+      "training_seconds": 799.2443862260006,
+      "completed_at_utc": "2026-10-02T03:56:51.240720+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "wst",
+      "classifier": "vqc_seed1",
+      "status": "complete",
+      "seconds": 800.5928620789982,
+      "training_seconds": 799.7763195520001,
+      "completed_at_utc": "2026-10-02T03:56:57.275038+00:00",
+      "warnings": []
+    },
+    {
+      "arm": "wst",
+      "classifier": "vqc_seed2",
+      "status": "complete",
+      "seconds": 804.2964476289999,
+      "training_seconds": 803.4766946039999,
+      "completed_at_utc": "2026-10-02T03:57:01.375722+00:00",
+      "warnings": []
+    }
+  ],
+  "issues": [],
+  "workflow_status": {
+    "stage": "complete",
+    "updated_at_utc": "2026-10-02T03:57:53.798717+00:00",
+    "status": "complete",
+    "report": "/mnt/d/projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/results/omi_models_v1_retry256k/report.md",
+    "official_test_processed": false
+  },
+  "verified_at_utc": "2026-10-02T04:04:28.974920+00:00",
+  "source_report_marker": {
+    "status": "complete",
+    "context_sha": "43680cf7f71980b2a64a06784881b35596e6adeb736f1a68bd453c264580f088",
+    "files": {
+      "analysis.json": "cb9bd2cd852cb1958e02df36c7d2c91b1696519cfa3ae9bc8b2d76811580e5c6",
+      "metrics.csv": "ac9ab1d6e507c8b559b6f0e12bc1b2a38a0c1ea7c5e456b1a6bd19c12e60abfb",
+      "predictions.csv": "82b9b3a84065ca298d16e3d3f1cdf92062d18c2befda2cd9889dbb2b9dd13ff4",
+      "report.md": "2b47f684227d6ee6b625560f3e81e2162de3ca5ad3169d615226ea734cad9c27"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "verified_date_utc": "2026-10-04",
+  "workflow_completed_at_utc": "2026-10-04T21:57:18Z",
+  "workflow_exit_code": 0,
+  "manifest_sha256": "8217704d106df9c8b772cb61f5a21c091296ad531ee142789557d354810481bc",
+  "current_source_files_and_snapshots_checked": 27,
+  "completion_or_preprocessing_markers_checked": 21,
+  "artifact_entries_checked": 768,
+  "protected_baseline_files_checked": 529,
+  "exact_report_exports_checked": ["analysis.json", "metrics.csv", "report.md", "integrity.json"],
+  "missing_or_changed_files": 0,
+  "new_fits_complete": 14,
+  "vqc_epoch_history_entries": 240,
+  "swin_epoch_history_entries": 120,
+  "bootstrap_requested": 2000,
+  "bootstrap_valid": 2000,
+  "bootstrap_seed": 20260925,
+  "official_test_processed": false,
+  "swin_unique_original_fit_diagnostics": {
+    "seed0": {"records": 14324, "accuracy": 0.9882016196593131, "sensitivity": 0.9934569247546347, "specificity": 0.9878421719997017},
+    "seed1": {"records": 14324, "accuracy": 1.0, "sensitivity": 1.0, "specificity": 1.0},
+    "seed2": {"records": 14324, "accuracy": 1.0, "sensitivity": 1.0, "specificity": 1.0}
+  },
+  "verification_scope": "SHA-256 checks against saved markers and protected inventory; current pinned source and snapshots; matching report exports. These numerical/integrity checks do not prove absence of every software bug."
+}

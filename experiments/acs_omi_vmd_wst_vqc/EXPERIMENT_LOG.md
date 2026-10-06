@@ -459,3 +459,127 @@ saved checkpoints passed**; 4,989 remain pending; reused parent feature files
 are unchanged. The verifier exited 0. The report snapshot is
 [pause_acs_2026-09-29.json](reports/pause_acs_2026-09-29.json). No extraction,
 training or verification process from this session is left running.
+
+## 2026-10-01 EDT — extraction and downstream workflow resumed
+
+The user requested continuation. Restored the missing pinned GPU packages to
+`/tmp/acs-gpu-deps-v1` while retaining the base environment. The full runner
+validated its frozen context/pilot and all 12,916 saved checkpoints, then resumed
+at 2026-10-02T01:35:15 UTC without a batch limit. The completed one-batch recovery
+experiment was not repeated. Numerical code, settings, patient split and seeds
+remain unchanged.
+
+At 02:39:29 UTC, extraction was running with **15,780/17,905 ECGs saved**, including
+2,864 new records this session. Its first 179 completed batches took a median
+20.26 seconds (range 14.79–91.56 seconds); the session rate was 2,508 ECGs/hour.
+The remaining 2,125 ECGs suggest about 51 minutes of extraction at that rate,
+excluding verification, models and reporting and subject to later retries.
+
+Restarted the existing downstream workflow under its saved manifest. It is
+waiting for successful extraction before full verification/bundling and the
+authorized fixed comparison. No ACS model had been fitted at this snapshot,
+and official test records remain reserved. Updated the handoffs and resume guide.
+See the [resume report](reports/acs_resume_2026-10-01.md) and its JSON snapshot.
+
+## 2026-10-01 23:27 EDT — all ACS extraction checkpoints completed
+
+The extractor reached **17,905/17,905 ECGs** at 2026-10-02T03:27:27 UTC and exited
+0. The final session reused 12,916 records and saved the remaining 4,989; its
+recorded elapsed time was 7,230.605 seconds and average rate 2,483.94 ECGs/hour.
+No final active records remain. Preserve the completed extraction and its frozen
+protocol; no recomputation is needed after a new chat or restart.
+
+At 03:27:52 UTC the existing downstream workflow automatically started `bundle`.
+Full archive verification/bundling was running at the snapshot; model preparation,
+fixed classifier fits and reporting remain downstream work. No ACS model had yet
+been fitted and official test data remain reserved. Updated handoffs and resume
+guidance distinguish completed extraction from the ongoing workflow.
+Evidence: [completion record](reports/extraction_complete_2026-10-01.json).
+
+## 2026-10-01 23:43 EDT — full feature verification passed; model fitting active
+
+The complete feature bundle passed verification at 2026-10-02T03:32:03 UTC:
+17,905 ECGs, zero final capped leads, maximum final VMD iteration count 146,271.
+VMD/WST shapes are (17905, 2688) and (17905, 2808); the bundle SHA-256 is
+`cf7cd681f1d336ea791eddf124e55d2dae73460374fe4bb91053db0b05c41c8b`.
+Verification/bundling took about 4 minutes 11 seconds. Model preparation completed
+at 03:32:23 UTC using the fixed fit/validation partitions.
+
+The workflow entered `train_models` automatically. At 03:43:58 UTC, both VMD
+classical controls were complete and all three VMD VQC seeds had epoch 37/40
+checkpoints. WST fits and the final patient-cluster report remained pending.
+No numerical settings changed and official test data remain reserved. These are
+progress observations, not a completed performance comparison.
+
+## 2026-10-02 EDT — ACS model comparison and reporting completed and checked
+
+All ten fits completed at 03:57:01 UTC and the workflow/report completed at
+03:57:53 UTC (October 1, 23:57 EDT). The workflow exited 0. Six VQC fits completed
+all 40 epochs using seeds 0/1/2 for each front end; all four classical controls
+also completed. All 240 epoch records are saved and all trial warning lists are
+empty. The final report used all 2,000 valid paired patient-bootstrap draws,
+seed 20260925, on 3,581 validation ECGs from 3,391 patients.
+
+Post-run verification checked the training manifest hash, all ten completion
+markers, all saved model/prediction/epoch artifacts named by those markers, and
+the report artifacts: **516 entries**, zero missing files or hash mismatches.
+Copied the generated report, full analysis and all-seed metrics into
+`reports/acs_omi_results_v1/`. The report and analysis retain exact source bytes
+and hashes; the CSV only normalizes CRLF to LF and its parsed rows match exactly.
+The artifact check records the export hashes, normalization, each fit's runtime
+and completion marker.
+
+Primary AP is 0.1442 for VMD + VQC and 0.1352 for WST + VQC (means over seeds).
+Their paired difference is +0.0090, 95% interval [-0.0190, +0.0353]. Logistic
+controls have AP 0.1540 / 0.1569; VQC-minus-logistic AP intervals include zero.
+There is no established transform superiority or quantum advantage. KNN's high
+accuracy accompanies very low positive-class sensitivity; the always-negative
+baseline is already 93.61% accurate. Official test records remain reserved.
+
+No further experiment was started. Updated handoffs and recovery guidance to
+mark the entire fixed comparison complete. Read the
+[results summary](reports/acs_omi_results_v1/SUMMARY.md) and linked full report
+before choosing further work. Completed artifacts should be reused after restart.
+
+## 2026-10-04 EDT — separate balanced OMI + Swin follow-up paused
+
+At the user's explicit request, the new implementation lives in the repository
+root at `correct balance training set OMI/`. It plans balanced fit-only positive
+oversampling for VMD/WST classifiers and the existing LFCC temporal Swin model,
+with the original validation patients and all initialization seeds retained.
+Original numerical code, protocols and saved results were not edited.
+
+New CPU and GPU synthetic checks and five existing ACS regression tests passed.
+No real-data preparation, LFCC extraction or new fitting ran. The user said
+“let's do it tomorrow”; all test processes have exited, and the work is paused.
+Read the [new handoff](../../correct%20balance%20training%20set%20OMI/SESSION_HANDOFF.md)
+for the pending integration review and exact continuation state.
+
+## 2026-10-04 17:08 EDT — separate balanced comparison resumed
+
+The user resumed `correct balance training set OMI/`. New integration checks and
+real-data preparation passed: all original fit ECGs retained, 13,407 training
+examples per class, unchanged validation and byte-identical VMD/WST preprocessing.
+Two fit-only LFCC engineering checks passed. At 21:07:51 UTC, the full workflow
+started balanced VMD/WST fits alongside LFCC extraction, with GPU Swin and final
+paired reporting following automatically. The new manifest is frozen; original
+ACS numerical sources and saved results remain intact. See the separate handoff
+for live status and avoid duplicate jobs. No new accuracy result was reported
+at this launch snapshot.
+
+## 2026-10-04 EDT — separate balanced OMI + Swin comparison completed
+
+The root-folder balanced experiment finished all 14 fits and the paired report
+at 21:57:18 UTC, exiting 0. It saved 240 VQC and 120 Swin epoch-history entries
+and used all 2,000 patient-bootstrap draws. Post-run verification checked 768
+artifact entries, 27 current source files plus snapshots, 529 protected original
+artifacts and 4 report exports, with zero missing/changed files.
+
+Balancing increased VQC sensitivity but did not establish better AP. Balanced
+VMD/WST VQC accuracy is 66.56%/65.11%, sensitivity 63.32%/62.45%, AP 0.1454/0.1374.
+LFCC + logistic has AP 0.2091 and outperformed Swin (AP 0.1680) in their paired
+primary-metric comparison. Swin accuracy 91.48% accompanies sensitivity 17.03%.
+The original saved ACS models and features are intact; official test patients
+remain reserved. No additional tuning was started. Read the
+[full summary](../../correct%20balance%20training%20set%20OMI/reports/v1/SUMMARY.md)
+before interpreting accuracy or choosing another experiment.

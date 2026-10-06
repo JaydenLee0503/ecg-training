@@ -1,0 +1,70 @@
+{
+  "recorded_at_utc": "2026-10-02T02:39:29.288126+00:00",
+  "manifest_sha256": "fc080f2481d1cb1c671f99f78876391d1d1af5cba7bd74a3c2040182cb224474",
+  "extraction_status": {
+    "status": "running",
+    "stage": "extract",
+    "pid": 15237,
+    "started_at_utc": "2026-10-02T01:35:15.330279+00:00",
+    "updated_at_utc": "2026-10-02T02:39:24.560854+00:00",
+    "manifest_sha256": "fc080f2481d1cb1c671f99f78876391d1d1af5cba7bd74a3c2040182cb224474",
+    "records_total": 17905,
+    "records_complete": 15780,
+    "records_resumed": 12916,
+    "records_new": 2864,
+    "elapsed_seconds": 4110.438475945,
+    "records_per_hour": 2508.3455354795483,
+    "active_record_ids": [
+      "17583",
+      "17584",
+      "17585",
+      "17586",
+      "17587",
+      "17588",
+      "17589",
+      "17590",
+      "17591",
+      "17592",
+      "17593",
+      "17594",
+      "17595",
+      "17596",
+      "17597",
+      "17598"
+    ],
+    "models_trained": 0,
+    "official_test_processed": false
+  },
+  "workflow_status": {
+    "stage": "waiting_for_extraction",
+    "updated_at_utc": "2026-10-02T02:39:17.774388+00:00",
+    "records_complete": 15764,
+    "records_total": 17905
+  },
+  "prior_stop_verification": {
+    "status": "passed",
+    "records_verified": 12916,
+    "records_pending": 4989,
+    "reused_features_unchanged": true,
+    "manifest_sha256": "fc080f2481d1cb1c671f99f78876391d1d1af5cba7bd74a3c2040182cb224474",
+    "verified_at_utc": "2026-09-29T04:57:05.865664+00:00"
+  },
+  "revalidated_and_resumed_records": 12916,
+  "temporary_dependencies_restored": {
+    "cupy-cuda12x": "14.2.0",
+    "cuda-pathfinder": "1.8.2",
+    "numpy": "2.5.2"
+  },
+  "temporary_dependency_target": "/tmp/acs-gpu-deps-v1",
+  "completed_batches_this_session": 179,
+  "batch_seconds": {
+    "min": 14.785770753999714,
+    "median": 20.259705350999866,
+    "max": 91.55691799199985
+  },
+  "estimated_extraction_hours_remaining_at_snapshot": 0.8471719585450734,
+  "estimate_limits": "Estimate excludes bundling, training and reporting; later convergence retries can change throughput.",
+  "scientific_protocol_or_numerical_code_changed": false,
+  "models_trained_at_snapshot": 0,
+  "official_test_processed": false
+}

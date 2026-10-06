@@ -1,0 +1,24 @@
+{
+  "run": "results/omi_v1_gpu_retry256k",
+  "manifest_sha256": "fc080f2481d1cb1c671f99f78876391d1d1af5cba7bd74a3c2040182cb224474",
+  "extraction_status": "complete",
+  "extraction_exit_code": 0,
+  "completed_at_utc": "2026-10-02T03:27:27.306542+00:00",
+  "records_total": 17905,
+  "records_complete": 17905,
+  "records_resumed_in_final_session": 12916,
+  "records_new_in_final_session": 4989,
+  "final_session_elapsed_seconds": 7230.604899813,
+  "final_session_records_per_hour": 2483.941557982859,
+  "active_record_ids": [],
+  "workflow_snapshot": {
+    "run": "results/omi_development_workflow_v2",
+    "stage": "bundle",
+    "status": "running",
+    "updated_at_utc": "2026-10-02T03:27:52.704951+00:00"
+  },
+  "full_bundle_verification_complete_at_snapshot": false,
+  "models_trained_at_snapshot": 0,
+  "official_test_processed": false,
+  "note": "All extraction checkpoints were saved. Full verification and bundling started automatically; model training and reporting remain pending."
+}

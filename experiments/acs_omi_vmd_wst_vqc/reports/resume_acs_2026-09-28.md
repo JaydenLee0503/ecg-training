@@ -1,5 +1,41 @@
 # Resume ACS extraction after sleep or restart
 
+## Entire workflow complete — verified October 2 EDT
+
+There is **nothing left to resume** in this fixed comparison. All extraction,
+verification, preprocessing, ten model fits and the final report completed by
+2026-10-02T03:57:53 UTC. The workflow exited 0. All 516 checked model/report
+artifact entries matched their saved hashes, and all six VQC fits have 40 epochs.
+Read the [results summary](acs_omi_results_v1/SUMMARY.md) and
+[handoff](../SESSION_HANDOFF.md). Preserve the saved models and feature archives;
+do not retrain them after a chat/reboot. Commands and progress snapshots below
+are historical recovery instructions. Official test data remain reserved.
+
+## Extraction complete — October 1 EDT
+
+All **17,905 ECGs** finished extraction at 2026-10-02T03:27:27 UTC; the extractor
+exited 0. **Do not restart extraction.** The existing downstream workflow started
+full feature verification/bundling at 03:27:52 UTC. Model work follows only after
+those checks pass. Inspect `results/omi_development_workflow_v2/status.json` and
+current process liveness before issuing any workflow command. The extraction
+commands and restart histories below are retained for provenance.
+
+See the [completion record](extraction_complete_2026-10-01.json) and
+[current handoff](../SESSION_HANDOFF.md). No ACS model had been trained at this
+completion snapshot; it does not claim the downstream workflow is finished.
+
+## Latest continuation — October 1 EDT
+
+ACS has resumed. The exact temporary GPU packages were restored and the full
+runner rechecked/reused all 12,916 saved records before extraction resumed at
+2026-10-02T01:35:15 UTC. At 02:39:29 UTC, **15,780/17,905 ECGs** were saved.
+The downstream workflow has also restarted and is waiting for extraction to
+complete. Check both live status files before issuing any start command; do not
+launch duplicates. See the [resume report](acs_resume_2026-10-01.md).
+
+The September 29 pause below is historical. Its stopped workflow marker was
+the expected response to that pause and has now been superseded by the live run.
+
 ## Latest pause — September 29 EDT
 
 The user requested a pause for sleep. Extraction finished its batch and exited
