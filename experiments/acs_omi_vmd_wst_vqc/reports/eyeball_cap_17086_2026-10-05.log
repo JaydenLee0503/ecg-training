@@ -1,0 +1,90 @@
+{
+  "seconds": 1.2777379100007238,
+  "components": 4,
+  "sifting": [
+    {
+      "candidate": 1,
+      "sifts": 60,
+      "capped": false,
+      "decomposition_end_condition": false,
+      "reason": "imf_criterion"
+    },
+    {
+      "candidate": 2,
+      "sifts": 506,
+      "capped": false,
+      "decomposition_end_condition": false,
+      "reason": "imf_criterion"
+    },
+    {
+      "candidate": 3,
+      "sifts": 1715,
+      "capped": false,
+      "decomposition_end_condition": false,
+      "reason": "imf_criterion"
+    },
+    {
+      "candidate": 4,
+      "sifts": 53,
+      "capped": false,
+      "decomposition_end_condition": false,
+      "reason": "imf_criterion"
+    }
+  ],
+  "reconstruction_max_abs_mV": 0.0,
+  "analytic": {
+    "trim_samples_each_end": 125,
+    "retained_samples": 4750,
+    "valid_phase_fraction": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "envelope_floor_mV": [
+      2.1248061192654755e-09,
+      7.264900464347377e-10,
+      4.11645587062951e-10,
+      1.2985684366718835e-09
+    ],
+    "negative_frequency_fraction": [
+      0.35747368421052633,
+      0.21136842105263157,
+      0.05263157894736842,
+      0.03494736842105263
+    ],
+    "frequency_quantiles_hz": [
+      [
+        -67.51186348845086,
+        10.30328778302912,
+        204.9668687252864
+      ],
+      [
+        -53.271083919124244,
+        12.672428781260955,
+        125.015534721879
+      ],
+      [
+        -30.661532218994246,
+        17.97870503972068,
+        95.04877997674679
+      ],
+      [
+        -16.650787782380572,
+        10.276374544831631,
+        63.930965430137306
+      ]
+    ],
+    "arc_length_mV": 31.653992736504122,
+    "time_centroid_mV": [
+      -0.0001652400210564952,
+      8.127884282961565e-06
+    ]
+  },
+  "total_seconds": 1.706567619999987,
+  "status": "complete",
+  "limit": 4000,
+  "reference_exact_match": true,
+  "warnings": [],
+  "seconds_with_reference": 2.9503170600000885
+}

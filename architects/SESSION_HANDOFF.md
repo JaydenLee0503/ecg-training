@@ -1,5 +1,49 @@
 # Session handoff — 2026-09-25
 
+## Rotational morphology pilot complete; training gate failed — 2026-10-08 EDT
+
+The separate 64k assessment completed at **2026-10-09T02:46:22Z**; its report
+completed at 02:46:46Z. Both processes exited 0. **355/384 baseline leads passed;
+29 hit the iteration limit across 16/32 patients.** Lead I passed for all 32
+patients and all 32 exact repeats matched. All 224 perturbations produced valid
+features, but cropping 0.1 seconds per end caused descriptor warnings in 25/32
+ECGs; both noise levels caused warnings in 32/32. Expected amplitude/polarity
+effects were distinguished from instability.
+
+Read the [full engineering report](../experiments/acs_omi_vmd_wst_vqc/reports/eyeball_assessment_2026-10-08/report.md)
+and [continuation/review](../experiments/acs_omi_vmd_wst_vqc/reports/eyeball_continuation_2026-10-08.md).
+All 3,184 assessment artifact entries verified; all 1,424 protected earlier files
+remain unchanged. No classifier was trained and no new accuracy is available.
+Do not resume or scale this completed pilot: a revised extraction or single-lead
+study needs a new documented protocol. No job is running; official test patients
+remain reserved. Older running-state entries below are historical.
+
+## Rotational morphology pilot active — 2026-10-05 EDT
+
+The user authorized execution and the isolated EMD package download. Eight
+focused checks passed and 1,542 protected artifact entries verified unchanged.
+The first pilot stopped on an EMD iteration cap; its failed run is preserved.
+A fit-only diagnostic resolved that ECG without relaxing convergence criteria.
+The same 32-patient pilot is running in a separate 16,000-bound directory.
+Read the [execution record](../experiments/acs_omi_vmd_wst_vqc/reports/eyeball_execution_2026-10-05.md)
+and [ACS handoff](../experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md) before any
+restart. No classifier has been trained for this representation yet. Earlier
+research-only entries are historical.
+
+## Rotational morphology researched; pilot draft only — 2026-10-05 EDT
+
+The user asked to research the ECG “eyeball” approach as a possible next
+experiment and retain every result. The [research review](../experiments/acs_omi_vmd_wst_vqc/reports/eyeball_research_2026-10-05.md)
+and [draft protocol](../experiments/acs_omi_vmd_wst_vqc/protocols/eyeball_omi_pilot_v1_draft.md)
+are saved in the ACS workspace. The recommendation is a fit-only numerical pilot,
+then a fixed EMD/Hilbert feature comparison with classical controls and VQC.
+Exact numerical settings/source fidelity remain unresolved; the draft is not
+frozen. No new feature extraction, package installation, training or performance
+result occurred. Existing status files for original ACS, balanced OMI and
+ECGData Swin report complete; they were inspected without retraining. Read the
+review for the acquisition/task mismatch, source-access limits and recording
+requirements. No new experiment is running or waiting to resume.
+
 ## Balanced OMI + Swin complete and verified — 2026-10-04 EDT
 
 The separate `correct balance training set OMI/` workflow completed all **14

@@ -1,0 +1,90 @@
+{
+  "id": "eyeball_omi_pilot_retry64k_v1",
+  "status": "declared engineering adaptation; freeze by manifest before real data",
+  "reference": "https://www.medrxiv.org/content/10.64898/2026.07.08.26357521v1.full",
+  "fidelity": "independent 10-second adaptation; exact paper implementation unverified",
+  "input": {
+    "fs": 500,
+    "seconds": 10,
+    "units": "mV",
+    "filter": null,
+    "resampling": null,
+    "amplitude_normalization": null
+  },
+  "minimum_seconds": 2,
+  "emd": {
+    "distribution": "EMD-signal",
+    "version": "1.6.4",
+    "components": 4,
+    "parameters": {
+      "spline_kind": "cubic",
+      "nbsym": 2,
+      "extrema_detection": "simple",
+      "MAX_ITERATION": 64000,
+      "FIXE": 0,
+      "FIXE_H": 0,
+      "energy_ratio_thr": 0.2,
+      "std_thr": 0.2,
+      "svar_thr": 0.001,
+      "total_power_thr": 0.005,
+      "range_thr": 0.001,
+      "scale_factor": 1.0
+    },
+    "reconstruction_atol_mV": 1e-12,
+    "reconstruction_rtol": 1e-12,
+    "failure": "Reject capped/invalid output; preserve failure and continue other declared pilot tasks. No automatic larger cap or patient replacement."
+  },
+  "analytic": {
+    "implementation": "scipy.signal.hilbert native length, no additional extension",
+    "trim_seconds": 0.25,
+    "frequency": "unwrap phase; numpy.gradient dt=1/fs edge_order=2; signed Hz without clipping",
+    "envelope_floor_mV": 1e-12,
+    "envelope_floor_relative": 1e-08,
+    "minimum_valid_phase_fraction": 0.95,
+    "component_means": "frequency mean over valid samples; envelope mean over all retained samples",
+    "global_frequency": "instantaneous energy-weighted frequency over valid components, then time mean",
+    "global_envelope": "instantaneous root-sum-square of all component envelopes, then time mean",
+    "geometry": "sum of four trimmed analytic signals; exact continuous arc-length centroid of open piecewise-linear path; zero-length edges zero weight"
+  },
+  "pilot": {
+    "patients": 32,
+    "selection": "SHA256 id|patient_id; one SHA256 id|record_id-ranked ECG each; fit only, outcomes unused",
+    "stages": [
+      "All 384 baseline leads; independent failures do not stop assessment",
+      "Exact repeats of successful Lead-I baselines",
+      "All 224 Lead-I perturbations, including records with failed baselines; compare only when both succeed"
+    ],
+    "perturbation_seed": 20261005,
+    "perturbations": [
+      "first 5 seconds",
+      "last 5 seconds",
+      "Gaussian noise 30 dB SNR",
+      "Gaussian noise 20 dB SNR",
+      "amplitude multiplied by 2",
+      "polarity inversion",
+      "remove first and last 0.1 seconds"
+    ],
+    "relative_feature_warning": 0.25,
+    "relative_difference": "2*abs(a-b)/(abs(a)+abs(b)+1e-12); first ten features only; descriptive warnings, not filtering",
+    "centroid_warning": "Euclidean shift divided by baseline global envelope exceeds 0.1",
+    "synthetic_atol": 1e-08,
+    "full_run_gate": "synthetic checks pass, every baseline lead succeeds, exact repeat extraction; perturbation failures or warnings are reported and reviewed, never used to remove records",
+    "memory": "process ru_maxrss high-water KiB per task, not incremental allocation",
+    "selection_id": "eyeball_omi_pilot_v1"
+  },
+  "models_trained": 0,
+  "official_test_processed": false,
+  "amendment": {
+    "parent": "eyeball_omi_engineering_retry16k_v1.json",
+    "scientific_change": "Iteration ceiling 16000 to 64000; all convergence and descriptor criteria unchanged; same selected patients",
+    "evidence": "results/eyeball_stopping_diagnostic_v1/summary.json: record 15689 third IMF converged after 46081 sifts with exact uninstrumented parity; FIXE_H=5 diagnostic failed and is not adopted",
+    "execution_change": "Collect all predeclared outcomes rather than aborting on first numerical failure; deterministic parallel tasks and explicit artifact reuse",
+    "result_status": "No model scoring used; no further ceiling increase is scheduled"
+  },
+  "execution": {
+    "workers": 4,
+    "restart": "Verify and reuse terminal successes and numerical failures; rerun only unfinished tasks",
+    "reuse": "Import nine verified uncapped 16k Lead-I outputs and the verified default-64k diagnostic for record 15689; check input identity, environment and unchanged numerical settings",
+    "completion": "Assessment completion is separate from passing the engineering gate. Any baseline failure prevents full extraction and model fitting."
+  }
+}

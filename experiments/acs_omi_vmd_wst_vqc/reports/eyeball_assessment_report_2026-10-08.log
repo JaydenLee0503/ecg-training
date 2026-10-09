@@ -1,0 +1,70 @@
+{
+  "summary": {
+    "status": "complete",
+    "assessment_complete": true,
+    "baseline_gate_passed": false,
+    "full_run_authorized_by_engineering": false,
+    "decision": "Do not scale or train: baseline engineering gate failed",
+    "baseline_patients": 32,
+    "baseline_attempts": 384,
+    "baseline_successes": 355,
+    "baseline_failures": 29,
+    "lead_I_successes": 32,
+    "exact_repeat_checks": 32,
+    "reused_baselines": 10,
+    "perturbation_attempts": 224,
+    "perturbation_successes": 224,
+    "perturbation_failures": 0,
+    "available_perturbation_comparisons": 224,
+    "perturbation_feature_warnings": 1223,
+    "perturbation_centroid_warnings": 205,
+    "maximum_converged_sifts": 61945,
+    "maximum_reconstruction_error_mV": 0.0,
+    "summed_baseline_task_seconds": 3198.740536516988,
+    "baseline_task_seconds_quantiles": {
+      "min": 0.05571216600037587,
+      "median": 1.7526065315000778,
+      "p90": 28.523942482500107,
+      "max": 114.52783480899961
+    },
+    "runtime_caveat": "Four simultaneous workers; imported durations measured earlier, diagnostic import decomposition-only; not serial throughput",
+    "seconds_this_session": 978.2643240299994,
+    "models_trained": 0,
+    "official_test_processed": false
+  },
+  "cohort": {
+    "fit_patients": 32,
+    "validation_patients": 0,
+    "positive_ECGs": 2,
+    "sampling": "Fixed patient/record hash ranking without outcome use"
+  },
+  "patients_with_any_baseline_failure": 16,
+  "baseline_failure_fraction": 0.07552083333333333,
+  "descriptive_patient_bootstrap_interval": [
+    0.03645833333333333,
+    0.1250651041666663
+  ],
+  "failures_by_lead": {
+    "I": 0,
+    "II": 1,
+    "III": 1,
+    "aVR": 0,
+    "aVL": 0,
+    "aVF": 1,
+    "V1": 4,
+    "V2": 5,
+    "V3": 8,
+    "V4": 5,
+    "V5": 2,
+    "V6": 2
+  },
+  "median_negative_instantaneous_frequency_fractions": [
+    0.3471578947368421,
+    0.10063157894736842,
+    0.040210526315789474,
+    0.03305263157894737
+  ],
+  "failure_reasons": {
+    "EMD reached the declared iteration cap": 29
+  }
+}

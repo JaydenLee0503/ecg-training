@@ -1,0 +1,13 @@
+test_amplitude_modulation (test_rotational.RotationalTests.test_amplitude_modulation) ... ok
+test_cap_and_insufficient_components_are_failures (test_rotational.RotationalTests.test_cap_and_insufficient_components_are_failures) ... ok
+test_centroid_density_invariance_circle_and_scale (test_rotational.RotationalTests.test_centroid_density_invariance_circle_and_scale) ... ok
+test_completed_artifact_rejects_changed_bytes_context (test_rotational.RotationalTests.test_completed_artifact_rejects_changed_bytes_context) ... ok
+test_emd_instrumentation_matches_unmodified_solver (test_rotational.RotationalTests.test_emd_instrumentation_matches_unmodified_solver) ... ok
+test_known_sinusoid_envelopes_frequencies_global_energy (test_rotational.RotationalTests.test_known_sinusoid_envelopes_frequencies_global_energy) ... ok
+test_phase_floor_and_input_rejection (test_rotational.RotationalTests.test_phase_floor_and_input_rejection) ... ok
+test_selection_ignores_labels_order_and_excludes_validation (test_rotational.RotationalTests.test_selection_ignores_labels_order_and_excludes_validation) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.145s
+
+OK

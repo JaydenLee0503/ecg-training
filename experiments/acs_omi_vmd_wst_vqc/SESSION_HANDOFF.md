@@ -1,5 +1,75 @@
 # ACS session handoff — 2026-09-25
 
+## Eyeball assessment complete; engineering gate failed — 2026-10-08 EDT
+
+The 64k assessment completed at **2026-10-09T02:46:22Z** and its report at
+**02:46:46Z**. Both processes exited 0; nothing remains running. It preserved
+the same 32 fit patients and every failure. **355/384 baseline leads succeeded;
+29 exhausted the limit, affecting 16 patients.** Lead I succeeded for all 32;
+all 32 exact repeat checks matched. Ten earlier completed outputs were imported
+with verified provenance. All 224 perturbations produced valid features.
+
+Validity did not establish stability: removing 0.1 seconds at each end triggered
+descriptor warnings in 25/32 ECGs, and noise at both levels triggered warnings
+in 32/32. Amplitude/polarity changes stayed within warning thresholds after
+undoing their expected effects. Read the
+[full report](reports/eyeball_assessment_2026-10-08/report.md) and
+[engineering review](reports/eyeball_continuation_2026-10-08.md), including the
+descriptive patient-bootstrap uncertainty and fixed-sample gallery.
+
+**Do not scale or fit the proposed classifiers from this run.** It failed the
+declared baseline gate, and perturbation sensitivity warrants further work.
+No new accuracy, model predictions or classifier seeds were produced. A revised
+extractor or Lead-I-only study would need a separate protocol and output, not
+an automatic retry. Official test patients remain reserved.
+
+Saved assessment: `results/eyeball_omi_pilot_retry64k_v1/`; saved report:
+`reports/eyeball_assessment_2026-10-08/`. Both have hashed `completed.json`
+markers. Report verification checked 3,184 assessment artifact entries; a
+separate preservation audit rechecked all 1,424 protected earlier files without
+mismatches. Three new reuse/failure tests passed; eight prior numerical checks
+remain unchanged. The isolated EMD installation is intact; do not reinstall or
+repeat completed work. Earlier failed pilots/diagnostics remain saved. Their
+old running snapshots and session IDs below are historical.
+
+## Eyeball pilot running with bounded retry — 2026-10-05 EDT
+
+Execution is authorized. EMD-signal 1.6.4 is installed only under
+`results/eyeball_dependencies_v1/`. All eight focused tests passed; 1,542 old
+artifact entries checked with zero mismatches (1,424 protected unique files).
+
+The first 1,000-bound pilot failed on 17086 / P18802 / I, third component capped.
+The preserved `results/eyeball_cap_17086_v1/` diagnostic resolved it after 1,715
+sifts with unchanged stopping criteria and exact uninstrumented-package parity.
+The separate `results/eyeball_omi_pilot_retry16k_v1/` pilot now uses a 16,000 bound
+on the same 32 fit patients; at 02:36:21 UTC, nine Lead-I ECGs were complete.
+The initial pilot, its source snapshots and every failure remain intact.
+
+Read the [execution report](reports/eyeball_execution_2026-10-05.md) and
+`results/eyeball_omi_pilot_retry16k_v1/status.json` for state before restarting.
+Active session at launch: 1157; do not assume session IDs survive restart.
+Log: `reports/eyeball_pilot_retry16k_2026-10-05.log`. Numerical source and
+engineering manifests are frozen; do not edit them in place. Planned model
+comparison follows engineering review; no new classifier or official-test
+evaluation has started.
+
+## Rotational morphology review and draft complete — 2026-10-05 EDT
+
+The user proposed researching the ECG “eyeball” method for a possible next
+experiment, with all outcomes retained. Saved the [research review](reports/eyeball_research_2026-10-05.md)
+and [draft pilot/comparison protocol](protocols/eyeball_omi_pilot_v1_draft.md).
+Only research/documentation finished: no extractor implementation, pilot,
+synthetic checks, new predictions or fitting. The EMD package is not installed
+in the checked existing environment; no environment changes were made.
+
+The draft proposes fit-only numerical checks followed by a separate declared
+classifier comparison. Source equations and exact processing choices still need
+verification or explicit adaptation. Keep the existing 10-second OMI cohort,
+patient assignments and official-test reservation. Existing completed results
+remain the references; their completion statuses were read, not recomputed.
+No new experiment is active. Record every later attempt, failure, exclusion,
+seed, setting, runtime and prediction as specified in the draft.
+
 ## Separate balanced OMI + Swin comparison complete — 2026-10-04 EDT
 
 All **14 new fits and the final report** completed at **21:57:18 UTC** and the

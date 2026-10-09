@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "context_sha": "107429346abf5ded44b731298f354a38e81425ad99fec9d28ea3e7f8e2228254",
+  "files": {
+    "manifest.json": "107429346abf5ded44b731298f354a38e81425ad99fec9d28ea3e7f8e2228254",
+    "reporting_source.py": "c28c65a023b7784fbb1041e1d13ca2840996304f2d9b0dfce5ad9b75c13228bd",
+    "artifact_inventory.json": "5de54219a16695465c91287be9927085a28f6c7a0c7be3201923aa0d70cc56db",
+    "analysis.json": "caf3ffd63bbb7d58f73382ed81eec3c09427ba35bf6b267d9a785c82edad632c",
+    "bootstrap_draws.npz": "d2c8b2858eac019bd9bf3f749c7a8dec25435750605b434d9513645bf6a33875",
+    "baseline_outcomes.csv": "35669b5028c9005fcdf204a1e4447a71662531a13eae3c1645d132bb8dcd7af2",
+    "report.md": "435578caaf9fb8d77013643f80f088dce90375c9380197de841e856965ed07fc",
+    "pilot_geometry.png": "051b0cd51a20bd29bb53035cf0e3907dd1d37afe2d74934b4d732729ca31a184"
+  },
+  "completed_utc": "2026-10-09T02:46:46Z"
+}

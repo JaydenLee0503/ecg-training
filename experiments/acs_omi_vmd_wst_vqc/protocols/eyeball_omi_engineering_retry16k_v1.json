@@ -1,0 +1,83 @@
+{
+  "id": "eyeball_omi_pilot_retry16k_v1",
+  "status": "declared engineering adaptation; freeze by manifest before real data",
+  "reference": "https://www.medrxiv.org/content/10.64898/2026.07.08.26357521v1.full",
+  "fidelity": "independent 10-second adaptation; exact paper implementation unverified",
+  "input": {
+    "fs": 500,
+    "seconds": 10,
+    "units": "mV",
+    "filter": null,
+    "resampling": null,
+    "amplitude_normalization": null
+  },
+  "minimum_seconds": 2,
+  "emd": {
+    "distribution": "EMD-signal",
+    "version": "1.6.4",
+    "components": 4,
+    "parameters": {
+      "spline_kind": "cubic",
+      "nbsym": 2,
+      "extrema_detection": "simple",
+      "MAX_ITERATION": 16000,
+      "FIXE": 0,
+      "FIXE_H": 0,
+      "energy_ratio_thr": 0.2,
+      "std_thr": 0.2,
+      "svar_thr": 0.001,
+      "total_power_thr": 0.005,
+      "range_thr": 0.001,
+      "scale_factor": 1.0
+    },
+    "reconstruction_atol_mV": 1e-12,
+    "reconstruction_rtol": 1e-12,
+    "failure": "stop on cap, insufficient IMFs, invalid features; preserve every attempt"
+  },
+  "analytic": {
+    "implementation": "scipy.signal.hilbert native length, no additional extension",
+    "trim_seconds": 0.25,
+    "frequency": "unwrap phase; numpy.gradient dt=1/fs edge_order=2; signed Hz without clipping",
+    "envelope_floor_mV": 1e-12,
+    "envelope_floor_relative": 1e-08,
+    "minimum_valid_phase_fraction": 0.95,
+    "component_means": "frequency mean over valid samples; envelope mean over all retained samples",
+    "global_frequency": "instantaneous energy-weighted frequency over valid components, then time mean",
+    "global_envelope": "instantaneous root-sum-square of all component envelopes, then time mean",
+    "geometry": "sum of four trimmed analytic signals; exact continuous arc-length centroid of open piecewise-linear path; zero-length edges zero weight"
+  },
+  "pilot": {
+    "patients": 32,
+    "selection": "SHA256 id|patient_id; one SHA256 id|record_id-ranked ECG each; fit only, outcomes unused",
+    "stages": [
+      "Lead I for all selected records",
+      "remaining leads for same records",
+      "Lead I perturbations"
+    ],
+    "perturbation_seed": 20261005,
+    "perturbations": [
+      "first 5 seconds",
+      "last 5 seconds",
+      "Gaussian noise 30 dB SNR",
+      "Gaussian noise 20 dB SNR",
+      "amplitude multiplied by 2",
+      "polarity inversion",
+      "remove first and last 0.1 seconds"
+    ],
+    "relative_feature_warning": 0.25,
+    "relative_difference": "2*abs(a-b)/(abs(a)+abs(b)+1e-12); first ten features only; descriptive warnings, not filtering",
+    "centroid_warning": "Euclidean shift divided by baseline global envelope exceeds 0.1",
+    "synthetic_atol": 1e-08,
+    "full_run_gate": "synthetic checks pass, every baseline lead succeeds, exact repeat extraction; perturbation failures or warnings are reported and reviewed, never used to remove records",
+    "memory": "process ru_maxrss high-water KiB per task, not incremental allocation",
+    "selection_id": "eyeball_omi_pilot_v1"
+  },
+  "models_trained": 0,
+  "official_test_processed": false,
+  "amendment": {
+    "parent": "eyeball_omi_engineering_v1.json",
+    "only_scientific_change": "Iteration ceiling 1000 to 16000; identical convergence criteria and same selected patients",
+    "evidence": "results/eyeball_cap_17086_v1/summary.json; third IMF converged after 1715 sifts with 4000 bound",
+    "result_status": "No model scoring used for this amendment"
+  }
+}

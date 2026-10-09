@@ -1,0 +1,26 @@
+baseline_lead_I: 1/32 ECGs
+baseline_lead_I: 2/32 ECGs
+baseline_lead_I: 3/32 ECGs
+baseline_lead_I: 4/32 ECGs
+baseline_lead_I: 5/32 ECGs
+baseline_lead_I: 6/32 ECGs
+baseline_lead_I: 7/32 ECGs
+baseline_lead_I: 8/32 ECGs
+baseline_lead_I: 9/32 ECGs
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot_retry.py", line 113, in <module>
+    if __name__=='__main__': run()
+                             ^^^^^
+  File "/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot_retry.py", line 62, in run
+    one(out/'records'/rid/lead,signals[rid][LEADS.index(lead)],spec,digest,
+  File "/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot.py", line 23, in one
+    values, details, saved = extract(signal, spec['input']['fs'], spec, retain=retain)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projects/test-ecg-training/ecgvmd/rotational.py", line 147, in extract
+    modes, residual, details = decompose(signal, spec['emd'])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projects/test-ecg-training/ecgvmd/rotational.py", line 130, in decompose
+    raise RotationalError('EMD reached the declared iteration cap', details)
+ecgvmd.rotational.RotationalError: EMD reached the declared iteration cap

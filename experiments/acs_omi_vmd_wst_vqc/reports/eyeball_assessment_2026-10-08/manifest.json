@@ -1,0 +1,23 @@
+{
+  "assessment_manifest_sha256": "82522f22a135af6bb5bfa6952b29399b6960e31c9a514dbbcdd9089a0393fbef",
+  "assessment_completion_sha256": "230957ca8cd0b3367ebd51fde37474887810ca662f4fd88b6336cd5334eb451c",
+  "reporting_source_sha256": "c28c65a023b7784fbb1041e1d13ca2840996304f2d9b0dfce5ad9b75c13228bd",
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "packages": {
+      "numpy": "2.5.2",
+      "scipy": "1.18.1",
+      "EMD-signal": "1.6.4",
+      "matplotlib": "3.11.1",
+      "scikit-learn": "1.9.0"
+    }
+  },
+  "bootstrap": {
+    "unit": "patient",
+    "draws": 2000,
+    "seed": 20261008,
+    "statistic": "fraction of baseline leads with numerical failure",
+    "interval": "percentile 2.5,97.5"
+  },
+  "scope": "Descriptive numerical feasibility; no classifier prediction or clinical performance"
+}

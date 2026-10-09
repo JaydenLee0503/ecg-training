@@ -1,0 +1,76 @@
+{
+  "time_utc": "2026-10-06T02:30:13Z",
+  "distribution": "EMD-signal",
+  "version": "1.6.4",
+  "target": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_dependencies_v1",
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "packages": {
+      "numpy": "2.5.2",
+      "scipy": "1.18.1",
+      "EMD-signal": "1.6.4",
+      "matplotlib": "3.11.1",
+      "scikit-learn": "1.9.0"
+    }
+  },
+  "files": {
+    "EMD_signal-1.6.4.dist-info/INSTALLER": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+    "EMD_signal-1.6.4.dist-info/LICENSE.md": "1b5cbb408839d1f69c8f556fe773c33e987a3e0507c03fc67126bc82a10bf7c6",
+    "EMD_signal-1.6.4.dist-info/METADATA": "9af25d330e9375b54438a62d8863df88e38c1bb1bd423b3a0f7a7cc5b0e0af91",
+    "EMD_signal-1.6.4.dist-info/RECORD": "4471f145cae526ae272551bf8d8c74e3653e86f64e84b1bd15102e4cbedde0a7",
+    "EMD_signal-1.6.4.dist-info/REQUESTED": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "EMD_signal-1.6.4.dist-info/WHEEL": "715c5c07d026b93717aa6c2bb4f84d2bcf1dafb211fdbeaa6a04e3d14bc811b6",
+    "EMD_signal-1.6.4.dist-info/top_level.txt": "cfe855a94a69f3f58c6f0e186e162080353f16174c7f34500b3c6097ae8057d4",
+    "PyEMD/BEMD.py": "98c247fe0f8530470a4feb494dd619e7e8c964f3f3846221c6865a0062b8e54d",
+    "PyEMD/CEEMDAN.py": "3b032da71669c3884ec90114693dcd2c42efd657258daab35e606b68e0fc635b",
+    "PyEMD/EEMD.py": "5607606a99c8d7805c5676f29c61a522ef3c3fa2cf083c6ae8e38ddd87e534f0",
+    "PyEMD/EMD.py": "542d07d47f413d4a611ecad8d8c9a6a2186cf24df5dc843cbeeeec4243f08327",
+    "PyEMD/EMD2d.py": "f8a3813d3e92d89a9ba33b56aabf14e51907f9cbe65b3fc376e0075d5ff736bb",
+    "PyEMD/EMD_matlab.py": "df4a76041de8c472ebc8d678532bcfea9b912d66a1d77af4440f7ea15b8ccb62",
+    "PyEMD/__init__.py": "67b0740d3960708a66757d46988a1bfb3de0abc88ad984b5bd6f50826228fc0f",
+    "PyEMD/checks.py": "b4ded76181721670be106a176fa023438b789ad2fdc6aa156dc9db2265a9cb44",
+    "PyEMD/compact.py": "144006beb72b742875734890e197951542d07c52dca163c93c595e24f8448fe1",
+    "PyEMD/experimental/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "PyEMD/experimental/jitemd.py": "cdf6d8d65c74823e5b9ea06b6996950a6ba66f7817e58e815d161363d7ff8ee3",
+    "PyEMD/splines.py": "5bea874a5eea7aab5aa9d4498b56a2ac531901502e057bd313d2e8439a1ebeca",
+    "PyEMD/tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "PyEMD/tests/test_all.py": "b58f16a673bbbdd54a59d6bf16fa86f80506d6f0443ffaa63b93b666eb6a07ae",
+    "PyEMD/tests/test_bemd.py": "6d7b8245fa04d5c9db6162fdb5929a0e0860bebd68d4a5e405a600f8da119ee2",
+    "PyEMD/tests/test_ceemdan.py": "3de1682f1da35654d074143c74975d9664a2dfe9ff31feb2057fd134f1c052c9",
+    "PyEMD/tests/test_checks.py": "00fe47eba33b1cfc3b48a831f80c581dfca405fe965ea81a71d52ebab4590479",
+    "PyEMD/tests/test_compact.py": "9af13795e73ca5aab1b5e04cc4bddb6dc33c34346acec306e5c168d9bf01aca7",
+    "PyEMD/tests/test_eemd.py": "5edcb0964d5383c921a71961d9019d327c1c43bce81c681be1bcc87b97965f06",
+    "PyEMD/tests/test_emd.py": "f0bf4c2892441ff100fabd79e094f28d54b8ab8f31cdae3d6a3671761f17a356",
+    "PyEMD/tests/test_emd2d.py": "c3cc725fd2d05b1dd31983303deb136fc9ee850bcbe43c58e93fb3eefc34760f",
+    "PyEMD/tests/test_emd_matlab.py": "e93d7c3cd58f68451b139ebced24d9bfa2fa72476641750c58c5bef341a86e8e",
+    "PyEMD/tests/test_extrema.py": "178b59f670b23a0c49b5981c4e986f6c4dd739a7ae73053efe368f1114532afd",
+    "PyEMD/tests/test_splines.py": "004a75664baa5080279060597399911914d6ec412e3b24e1e19d48a1576ce4ab",
+    "PyEMD/tests/test_utils.py": "f5c38706ff0a0db725a24e9e6eb79b6c5c3c939454d8a6e27288f9f6a2c80f8d",
+    "PyEMD/tests/test_visualization.py": "12f6a8c70a01f78499a8d0811236c11ac6360d857b7dfd1f39048112162d20fc",
+    "PyEMD/utils.py": "a5e4196350b5b4baaee53a24b1546d43e29d96e2a2098c17788f1a202d4399c8",
+    "PyEMD/visualisation.py": "6b5f485da45c6bec3aa5937c350f9de82c0d18b1fe5104668be16f97b10bd4c6"
+  },
+  "attempts": [
+    {
+      "status": "failed",
+      "detail": "Initial sandbox pip request failed DNS; no package installed"
+    },
+    {
+      "status": "interrupted",
+      "detail": "First escalation request interrupted by user before installation"
+    },
+    {
+      "status": "complete",
+      "detail": "User authorized download; isolated --no-deps pip install exited 0"
+    }
+  ],
+  "import_check": "PyEMD 1.6.4 imported and decomposed synthetic sinusoid successfully",
+  "warnings": [
+    "Initial import created temporary Matplotlib cache; subsequent commands set MPLCONFIGDIR=/tmp/eyeball-mpl"
+  ],
+  "synthetic_tests": {
+    "discovered": 8,
+    "passed": 8,
+    "seconds": 0.845
+  }
+}

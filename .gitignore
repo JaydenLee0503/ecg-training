@@ -8,6 +8,7 @@ features/
 results/
 cache/
 ecgvmd_bundle.zip
+.writer.lock
 
 # --- python ---------------------------------------------------------------
 __pycache__/

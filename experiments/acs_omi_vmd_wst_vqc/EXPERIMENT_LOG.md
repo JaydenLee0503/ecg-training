@@ -583,3 +583,92 @@ The original saved ACS models and features are intact; official test patients
 remain reserved. No additional tuning was started. Read the
 [full summary](../../correct%20balance%20training%20set%20OMI/reports/v1/SUMMARY.md)
 before interpreting accuracy or choosing another experiment.
+
+## 2026-10-05 EDT — rotational morphology literature review; no experiment run
+
+Researched the user's suggested ECG “eyeball” method and documented a proposed
+EMD/Hilbert pilot and fixed classifier comparison. Read the
+[research review](reports/eyeball_research_2026-10-05.md) and
+[draft protocol](protocols/eyeball_omi_pilot_v1_draft.md). These are research
+artifacts, not numerical results. Exact source/implementation details remain
+pending; no pilot records, features, model scores or new initialization seeds
+were executed. Existing VMD descriptors already include Hilbert-derived features,
+so the proposed comparison explicitly investigates additional representation
+and geometry choices.
+
+Primary-source indexed text was accessible, but direct full-text/PDF/supplement
+fetches failed and equation images were unreadable in extraction. A provider
+page timed out. Those limitations are retained in the review; a complete author
+implementation and preprocessing specification were not verified. Checked the
+existing Python environment; an EMD distribution was absent and nothing was
+installed. Original ACS, balanced OMI and ECGData Swin status files report
+complete. No full artifact checksum audit was run for this documentation task.
+
+The draft requires immutable run versions, fit-only numerical checks, patient
+separation, classical controls, all VQC seeds, paired uncertainty, and an attempt
+ledger including negative results and failures. Official test ECGs remain
+reserved. Updated both handoffs; no completed protocol, source, data, feature
+archive or saved model was edited.
+
+Documentation verification initially detected a formula rendered as an unintended
+Markdown link. Converted the formula to code notation before repeating the link
+and whitespace checks; all eight local links and the whitespace checks then
+passed. This was a documentation issue, not an experiment failure.
+
+## 2026-10-05 EDT — EMD setup, synthetic verification, failed pilot and retry
+
+The user authorized execution and package download. Installed EMD-signal 1.6.4
+in an isolated results directory, retaining existing numerical dependencies.
+The first sandbox request failed DNS; an escalation was interrupted before a
+later authorized installation succeeded. Eight focused tests passed in 1.145s.
+Preflight checked 1,542 existing artifact entries with zero mismatches.
+
+The label-independent 32-fit-patient pilot stopped at 02:32:27 UTC on its first
+ECG, 17086 / I: component three exhausted the 1,000 iteration bound. Rejected
+the capped decomposition and retained all diagnostics. A separate bounded
+diagnostic converged with 4,000 allowed iterations (actual sifts 60/506/1715/53),
+with exact uninstrumented PyEMD parity and zero reconstruction error. A separate
+16,000-bound pilot reuses the unchanged sample and stopping criteria. It was
+running in session 1157 at the last snapshot; no model training had started.
+Read [the execution report](reports/eyeball_execution_2026-10-05.md), current
+status files and saved logs. These engineering outcomes are not accuracy results.
+
+## 2026-10-08 EDT — rotational morphology resumed; bounded assessment launched
+
+Restart audit verified 1,424 protected files, 14 Eyeball completion markers and
+76 source entries, with zero mismatches. No download or reinstall was needed.
+Recovered the previous session's final outcomes: the 16k pilot failed after nine
+Lead-I completions; the default-64k diagnostic for 15689 / I converged at 46,081
+sifts with exact package parity, while the alternative FIXE_H=5 / 1k diagnostic
+failed. All earlier negative results remain saved.
+
+Created a separate 64k protocol and assessment runner. Three new reuse/failure/
+tamper checks passed in 0.747 seconds. The unchanged 32-patient pilot started at
+2026-10-09T02:29:34Z, importing ten verified prior outputs and using four CPU
+workers to collect all baseline and perturbation outcomes. Any baseline failure
+prevents full extraction and fitting. Read the
+[continuation record](reports/eyeball_continuation_2026-10-08.md) for the eventual
+outcome and current saved status. This is an engineering assessment, not a new
+OMI accuracy estimate; official test patients remain reserved.
+
+## 2026-10-08 EDT — rotational assessment completed; negative engineering outcome
+
+Assessment and report finished at 2026-10-09T02:46:22Z and 02:46:46Z, both
+exiting 0. All 384 baseline outcomes were collected: 355 successes, 29 iteration
+caps across 16/32 patients. Lead I passed in 32/32; 32 exact repeats matched.
+Ten verified prior outputs were reused. All 224 perturbations returned valid
+features, but cropping 0.1 seconds per end triggered descriptor warnings in
+25/32 ECGs; both noise levels triggered warnings in 32/32. Amplitude and polarity
+had zero threshold warnings after undoing their expected physical effects.
+
+The full-run gate failed. No full extraction, classifier fit, new accuracy or
+held-out evaluation was launched. The result applies to this adaptation and
+iteration ceiling, not to rotational morphology in general. The sample and
+every failure remain intact. Runtime, all seeds/settings, patient-bootstrap
+draws, outcomes, comparisons and the gallery are saved in the
+[complete report](reports/eyeball_assessment_2026-10-08/report.md); read the
+[engineering review](reports/eyeball_continuation_2026-10-08.md) for interpretation.
+The report verified 3,184 assessment artifact entries. Preservation verification
+rechecked all 1,424 protected earlier files with zero mismatches. Both handoffs
+now identify this run as complete, with further research requiring a separate
+documented experiment rather than a resume.

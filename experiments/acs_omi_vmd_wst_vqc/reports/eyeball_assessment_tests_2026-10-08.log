@@ -1,0 +1,7 @@
+Command: OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MPLCONFIGDIR=/tmp/eyeball-mpl /home/jaydenlee/venvs/test-ecg-training/bin/python -B -m unittest discover -s experiments/acs_omi_vmd_wst_vqc/tests -p test_eyeball_assessment.py -v
+test_failed_task_is_recorded_not_recomputed_and_tampering_rejected ... ok
+test_only_unused_ceiling_may_change_for_import ... ok
+test_success_reused_and_corruption_rejected ... ok
+
+Ran 3 tests in 0.747s
+OK

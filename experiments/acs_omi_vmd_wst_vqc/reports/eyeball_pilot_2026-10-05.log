@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot.py", line 159, in <module>
+    run(args.out)
+  File "/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot.py", line 99, in run
+    one(out / 'records' / rid / lead, signals[rid][LEADS.index(lead)], spec, digest,
+  File "/mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot.py", line 23, in one
+    values, details, saved = extract(signal, spec['input']['fs'], spec, retain=retain)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projects/test-ecg-training/ecgvmd/rotational.py", line 147, in extract
+    modes, residual, details = decompose(signal, spec['emd'])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projects/test-ecg-training/ecgvmd/rotational.py", line 130, in decompose
+    raise RotationalError('EMD reached the declared iteration cap', details)
+ecgvmd.rotational.RotationalError: EMD reached the declared iteration cap

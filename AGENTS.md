@@ -4,6 +4,7 @@ Read [architects/SESSION_HANDOFF.md](architects/SESSION_HANDOFF.md) at the start
 
 ## Working rules
 
+- Commit completed, verified work in coherent increments as you go, as requested by the user. Use the user's configured Git identity and do not add AI or Codex `Co-authored-by` trailers. Preserve other people's existing attribution; this preference applies to new assistant-created commits.
 - ACS / OMI work belongs in `experiments/acs_omi_vmd_wst_vqc/`. Read its `SESSION_HANDOFF.md` and keep its code, tests, protocols, reports, log, data and results there. Original ECGData experiments retain their current layout; shared numerical methods remain in `ecgvmd/`.
 - The project compares VMD + VQC with standard WST + VQC for ECG classification. The user wants every experiment documented, including negative results, exclusions, splits, seeds, settings, runtimes, predictions, and uncertainty.
 - Check saved completion markers and artifacts before starting expensive computation. A new chat or PC restart is not a reason to retrain a completed experiment.

@@ -1,0 +1,100 @@
+baseline: 16/384; numerical failures=0
+baseline: 30/384; numerical failures=1
+baseline: 32/384; numerical failures=1
+baseline: 48/384; numerical failures=1
+baseline: 56/384; numerical failures=2
+baseline: 60/384; numerical failures=3
+baseline: 64/384; numerical failures=3
+baseline: 80/384; numerical failures=3
+baseline: 96/384; numerical failures=3
+baseline: 107/384; numerical failures=4
+baseline: 112/384; numerical failures=4
+baseline: 126/384; numerical failures=5
+baseline: 128/384; numerical failures=6
+baseline: 144/384; numerical failures=6
+baseline: 145/384; numerical failures=7
+baseline: 148/384; numerical failures=8
+baseline: 149/384; numerical failures=9
+baseline: 150/384; numerical failures=10
+baseline: 151/384; numerical failures=11
+baseline: 152/384; numerical failures=12
+baseline: 153/384; numerical failures=13
+baseline: 157/384; numerical failures=14
+baseline: 160/384; numerical failures=14
+baseline: 162/384; numerical failures=15
+baseline: 174/384; numerical failures=16
+baseline: 176/384; numerical failures=16
+baseline: 188/384; numerical failures=17
+baseline: 189/384; numerical failures=18
+baseline: 192/384; numerical failures=18
+baseline: 208/384; numerical failures=18
+baseline: 224/384; numerical failures=18
+baseline: 233/384; numerical failures=19
+baseline: 238/384; numerical failures=20
+baseline: 240/384; numerical failures=20
+baseline: 256/384; numerical failures=20
+baseline: 272/384; numerical failures=20
+baseline: 285/384; numerical failures=21
+baseline: 288/384; numerical failures=21
+baseline: 304/384; numerical failures=21
+baseline: 317/384; numerical failures=22
+baseline: 319/384; numerical failures=23
+baseline: 320/384; numerical failures=23
+baseline: 331/384; numerical failures=24
+baseline: 336/384; numerical failures=24
+baseline: 352/384; numerical failures=24
+baseline: 356/384; numerical failures=25
+baseline: 357/384; numerical failures=26
+baseline: 366/384; numerical failures=27
+baseline: 368/384; numerical failures=27
+baseline: 383/384; numerical failures=28
+baseline: 384/384; numerical failures=29
+exact_repeats: 16/32; numerical failures=0
+exact_repeats: 32/32; numerical failures=0
+perturbations: 16/224; numerical failures=0
+perturbations: 32/224; numerical failures=0
+perturbations: 48/224; numerical failures=0
+perturbations: 64/224; numerical failures=0
+perturbations: 80/224; numerical failures=0
+perturbations: 96/224; numerical failures=0
+perturbations: 112/224; numerical failures=0
+perturbations: 128/224; numerical failures=0
+perturbations: 144/224; numerical failures=0
+perturbations: 160/224; numerical failures=0
+perturbations: 176/224; numerical failures=0
+perturbations: 192/224; numerical failures=0
+perturbations: 208/224; numerical failures=0
+perturbations: 224/224; numerical failures=0
+{
+  "status": "complete",
+  "assessment_complete": true,
+  "baseline_gate_passed": false,
+  "full_run_authorized_by_engineering": false,
+  "decision": "Do not scale or train: baseline engineering gate failed",
+  "baseline_patients": 32,
+  "baseline_attempts": 384,
+  "baseline_successes": 355,
+  "baseline_failures": 29,
+  "lead_I_successes": 32,
+  "exact_repeat_checks": 32,
+  "reused_baselines": 10,
+  "perturbation_attempts": 224,
+  "perturbation_successes": 224,
+  "perturbation_failures": 0,
+  "available_perturbation_comparisons": 224,
+  "perturbation_feature_warnings": 1223,
+  "perturbation_centroid_warnings": 205,
+  "maximum_converged_sifts": 61945,
+  "maximum_reconstruction_error_mV": 0.0,
+  "summed_baseline_task_seconds": 3198.740536516988,
+  "baseline_task_seconds_quantiles": {
+    "min": 0.05571216600037587,
+    "median": 1.7526065315000778,
+    "p90": 28.523942482500107,
+    "max": 114.52783480899961
+  },
+  "runtime_caveat": "Four simultaneous workers; imported durations measured earlier, diagnostic import decomposition-only; not serial throughput",
+  "seconds_this_session": 978.2643240299994,
+  "models_trained": 0,
+  "official_test_processed": false
+}
