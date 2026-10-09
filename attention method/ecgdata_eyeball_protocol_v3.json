@@ -1,5 +1,5 @@
 {
-  "id": "ecgdata_eyeball_30s_v2",
+  "id": "ecgdata_eyeball_30s_v3",
   "purpose": "Exploratory ECGData.mat evaluation of four-mode EMD/Hilbert rotational morphology descriptors",
   "status": "frozen before real-data extraction",
   "source_method": "Alavi et al., medRxiv 2026, DOI 10.64898/2026.07.08.26357521; independent adaptation, not a verified reproduction",
@@ -93,9 +93,10 @@
   },
   "execution": {
     "extraction_workers": 4,
+    "extraction_executor": "separate processes; thread-based EMD was stopped before producing outputs",
     "minimum_extraction_coverage_for_fitting": 0.9,
     "resume": "verify content identity and reuse terminal successes and failures; unfinished clips only",
-    "output": "attention method/results/ecgdata_eyeball_30s_v2",
+    "output": "attention method/results/ecgdata_eyeball_30s_v3",
     "training_requires_explicit_cli_flag": true,
     "validation_and_test": "all five patient folds are outer evaluation folds; no external data or patients",
     "source_hashes_and_environment": "record before extraction and model fitting"

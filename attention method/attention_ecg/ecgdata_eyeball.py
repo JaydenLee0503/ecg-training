@@ -1,6 +1,6 @@
 """Resumable 30-second EMD/Hilbert ECGData experiment."""
 import csv
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 import fcntl
 import hashlib
 import json
@@ -17,8 +17,8 @@ import scipy
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parent
-PROTOCOL = ROOT / 'ecgdata_eyeball_protocol_v2.json'
-DEFAULT_RUN = ROOT / 'results/ecgdata_eyeball_30s_v2'
+PROTOCOL = ROOT / 'ecgdata_eyeball_protocol_v3.json'
+DEFAULT_RUN = ROOT / 'results/ecgdata_eyeball_30s_v3'
 DEPS = REPO / 'experiments/acs_omi_vmd_wst_vqc/results/eyeball_dependencies_v1'
 sys.path.insert(0, str(DEPS))
 sys.path.insert(0, str(REPO))
@@ -204,7 +204,7 @@ def extract_all(mat=REPO/'ECGData.mat', run=DEFAULT_RUN, *, execute=False):
                 patient_id=str(data['patients'][i]), seconds=result['seconds'], error=result.get('error'))
 
         spec = _feature_spec(protocol)
-        with ThreadPoolExecutor(max_workers=protocol['execution']['extraction_workers']) as pool:
+        with ProcessPoolExecutor(max_workers=protocol['execution']['extraction_workers']) as pool:
             for first in range(0, len(pending), 8):
                 batch = pending[first:first+8]
                 futures = {pool.submit(_extract_clip, data['signals'][i],
