@@ -93,6 +93,7 @@
   },
   "execution": {
     "extraction_workers": 1,
+    "minimum_extraction_coverage_for_fitting": 0.9,
     "resume": "verify content identity and reuse terminal successes and failures; unfinished clips only",
     "output": "attention method/results/ecgdata_eyeball_30s_v1",
     "training_requires_explicit_cli_flag": true,
@@ -101,7 +102,7 @@
   },
   "limitations": [
     "ECGData has only 80 patients and diagnosis is confounded with source database.",
-    "Each 30-second window is independently z-scored, so centroid and envelope amplitudes are in standardized signal units rather than calibrated mV."
+    "Each 30-second window is independently z-scored, so centroid and envelope amplitudes are in standardized signal units rather than calibrated mV.",
     "This three-class ARR/CHF/NSR experiment is not an MI or OMI diagnostic evaluation.",
     "Results are not directly comparable to the prior LFCC Swin score because window duration and representation differ."
   ]
