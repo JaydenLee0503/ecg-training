@@ -1,5 +1,6 @@
 """Resumable 30-second EMD/Hilbert ECGData experiment."""
 import csv
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import fcntl
 import hashlib
 import json
@@ -16,8 +17,8 @@ import scipy
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parent
-PROTOCOL = ROOT / 'ecgdata_eyeball_protocol_v1.json'
-DEFAULT_RUN = ROOT / 'results/ecgdata_eyeball_30s_v1'
+PROTOCOL = ROOT / 'ecgdata_eyeball_protocol_v2.json'
+DEFAULT_RUN = ROOT / 'results/ecgdata_eyeball_30s_v2'
 DEPS = REPO / 'experiments/acs_omi_vmd_wst_vqc/results/eyeball_dependencies_v1'
 sys.path.insert(0, str(DEPS))
 sys.path.insert(0, str(REPO))
@@ -139,6 +140,17 @@ def _verified_clip(path, context):
                     details=json.loads(str(z['details'].item())))
 
 
+def _extract_clip(signal, fs, spec):
+    started = time.perf_counter()
+    try:
+        features, details, _ = extract(signal, fs, spec, retain=False)
+        return dict(status='complete', features=features, details=details,
+                    seconds=time.perf_counter()-started)
+    except Exception as exc:
+        return dict(status='failed', error=f'{type(exc).__name__}: {exc}',
+                    details=getattr(exc, 'diagnostics', {}), seconds=time.perf_counter()-started)
+
+
 def extract_all(mat=REPO/'ECGData.mat', run=DEFAULT_RUN, *, execute=False):
     if not execute:
         raise ValueError('Extraction requires explicit --execute-extraction')
@@ -162,41 +174,50 @@ def extract_all(mat=REPO/'ECGData.mat', run=DEFAULT_RUN, *, execute=False):
             context_sha256=context_sha, total=len(data['ids']), updated_utc=time.time()), indent=2)+'\n')
         _record_event(run, 'extraction_started', clips=len(data['ids']), context_sha256=context_sha)
         failures = []
-        for i, signal in enumerate(data['signals']):
-            path = _artifact(run, i)
-            saved = _verified_clip(path, context_sha)
+        pending = []
+        for i in range(len(data['ids'])):
+            saved = _verified_clip(_artifact(run, i), context_sha)
             if saved is None:
-                started = time.perf_counter()
-                try:
-                    features, details, _ = extract(signal, protocol['data']['sampling_rate_hz'],
-                                                   _feature_spec(protocol), retain=False)
-                    payload = dict(status=np.array('complete'), features=features,
-                                   details=np.array(json.dumps(details, allow_nan=False)))
-                    status = 'complete'
-                except Exception as exc:
-                    details = getattr(exc, 'diagnostics', {})
-                    payload = dict(status=np.array('failed'), error=np.array(f'{type(exc).__name__}: {exc}'),
-                                   details=np.array(json.dumps(details, allow_nan=False)))
-                    status = 'failed'
-                atomic_npz(path, **payload)
-                atomic_json(path.with_suffix('.json'), dict(context_sha256=context_sha,
-                            sha256=file_hash(path), seconds=time.perf_counter()-started,
-                            record_id=int(data['row_ids'][i]), patient_id=str(data['patients'][i]),
-                            start_sample=int(data['starts'][i]), status=status))
-                saved = _verified_clip(path, context_sha)
-                _record_event(run, status, clip=int(i), record_id=int(data['row_ids'][i]),
-                              patient_id=str(data['patients'][i]), seconds=time.perf_counter()-started,
-                              error=saved.get('error'))
-            if saved['status'] != 'complete':
+                pending.append(i)
+            elif saved['status'] == 'failed':
                 failures.append(dict(clip=int(i), row_id=int(data['row_ids'][i]),
-                                     patient_id=str(data['patients'][i]), y=int(data['y'][i]),
-                                     fold=int(data['fold'][i]), error=saved['error'], details=saved['details']))
-            if (i+1) % 25 == 0 or i+1 == len(data['ids']):
-                complete = i+1-len(failures)
+                    patient_id=str(data['patients'][i]), y=int(data['y'][i]),
+                    fold=int(data['fold'][i]), error=saved['error'], details=saved['details']))
+
+        def save_result(i, result):
+            path = _artifact(run, i)
+            payload = dict(status=np.array(result['status']),
+                details=np.array(json.dumps(result['details'], allow_nan=False)))
+            if result['status'] == 'complete':
+                payload['features'] = result['features']
+            else:
+                payload['error'] = np.array(result['error'])
+                failures.append(dict(clip=int(i), row_id=int(data['row_ids'][i]),
+                    patient_id=str(data['patients'][i]), y=int(data['y'][i]),
+                    fold=int(data['fold'][i]), error=result['error'], details=result['details']))
+            atomic_npz(path, **payload)
+            atomic_json(path.with_suffix('.json'), dict(context_sha256=context_sha,
+                sha256=file_hash(path), seconds=result['seconds'], record_id=int(data['row_ids'][i]),
+                patient_id=str(data['patients'][i]), start_sample=int(data['starts'][i]),
+                status=result['status']))
+            _record_event(run, result['status'], clip=int(i), record_id=int(data['row_ids'][i]),
+                patient_id=str(data['patients'][i]), seconds=result['seconds'], error=result.get('error'))
+
+        spec = _feature_spec(protocol)
+        with ThreadPoolExecutor(max_workers=protocol['execution']['extraction_workers']) as pool:
+            for first in range(0, len(pending), 8):
+                batch = pending[first:first+8]
+                futures = {pool.submit(_extract_clip, data['signals'][i],
+                    protocol['data']['sampling_rate_hz'], spec): i for i in batch}
+                for future in as_completed(futures):
+                    save_result(futures[future], future.result())
+                finished = len(data['ids']) - len(pending) + min(first+len(batch), len(pending))
+                successes = finished - len(failures)
                 atomic_json(run/'status.json', dict(status='running', stage='extraction',
-                    attempted=i+1, total=len(data['ids']), successful=complete,
-                    failed=len(failures), updated_utc=time.time()))
-                print(f'extraction {i+1}/{len(data["ids"])}; success={complete}; failed={len(failures)}', flush=True)
+                    attempted=finished, total=len(data['ids']), successful=successes,
+                    failed=len(failures), workers=protocol['execution']['extraction_workers'],
+                    updated_utc=time.time()))
+                print(f'extraction {finished}/{len(data["ids"])}; success={successes}; failed={len(failures)}', flush=True)
         summary = dict(status='complete', attempted=len(data['ids']),
                        successful=len(data['ids'])-len(failures), failed=len(failures),
                        coverage=(len(data['ids'])-len(failures))/len(data['ids']),

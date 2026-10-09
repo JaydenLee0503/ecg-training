@@ -12,7 +12,7 @@ from attention_ecg.ecgdata import read_json
 class ECGDataEyeballTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.protocol = read_json(ROOT/'ecgdata_eyeball_protocol_v1.json')
+        cls.protocol = read_json(ROOT/'ecgdata_eyeball_protocol_v2.json')
 
     def test_feature_spec_matches_frozen_numerics(self):
         spec = _feature_spec(self.protocol)
@@ -36,7 +36,7 @@ class ECGDataEyeballTests(unittest.TestCase):
         self.assertTrue(((data['signals'].std(axis=1) - 1) < 1e-12).all())
 
     def test_protocol_is_valid_json(self):
-        json.loads((ROOT/'ecgdata_eyeball_protocol_v1.json').read_text())
+        json.loads((ROOT/'ecgdata_eyeball_protocol_v2.json').read_text())
 
 
 if __name__ == '__main__':
