@@ -1,5 +1,19 @@
 # ACS session handoff — 2026-09-25
 
+## Lead-I engineering check running — 2026-10-08 23:35 EDT
+
+Codex launched the frozen Lead-I study at **2026-10-09T03:31:53Z**
+(`python -B -m experiments.acs_omi_vmd_wst_vqc.scripts.eyeball_lead_i`, log
+`experiments/acs_omi_vmd_wst_vqc/reports/eyeball_lead_i_run_2026-10-08.log`).
+Codex usage then ran out and Claude Code took over monitoring; no code, protocol
+or setting was changed. At 03:35:16Z the engineering stage had **275/512
+terminal extractions with 5 numerical failures**, the maximum the prospective
+99% gate allows. One further failure fails the gate, which stops the study
+after its failure report, before evaluation extraction or any fit. This is a
+live snapshot, not a result: read `results/eyeball_lead_i_feasibility_v1/status.json`
+and `attempts.jsonl` for the current state. Extractions are saved per record,
+so an interrupted run resumes with the same command; do not launch a duplicate.
+
 ## Separate Lead-I follow-up authorized and prepared — 2026-10-08 EDT
 
 The user authorized the larger Lead-I extraction check and conditional logistic
