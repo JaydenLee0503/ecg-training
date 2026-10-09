@@ -672,3 +672,18 @@ The report verified 3,184 assessment artifact entries. Preservation verification
 rechecked all 1,424 protected earlier files with zero mismatches. Both handoffs
 now identify this run as complete, with further research requiring a separate
 documented experiment rather than a resume.
+
+## 2026-10-08 EDT — Lead-I-only feasibility study authorized and prepared
+
+After clarification that all 32 Lead-I baselines passed, the user authorized a
+larger fixed training-patient sample and conditional class-weighted logistic
+comparison. The new protocol declares 2,048 unique original-fit patients,
+1,536/512 internal fit/evaluation split, a 512-patient engineering stage,
+prospective 99% coverage gates, explicit failure/fallback handling and 2,000
+paired patient-bootstrap draws. Prior pilot patients are excluded prospectively.
+No solver settings change and no original-validation or official-test ECG is used.
+All three new checks passed; the joblib/NumPy deprecation warning is retained.
+Read [the execution record](reports/eyeball_lead_i_execution_2026-10-08.md).
+No real-data extraction or model fitting had started at this preparation snapshot.
+The user requested incremental commits under their own configured Git identity;
+the completed all-lead pilot and this preference were committed as `8b69d35`.

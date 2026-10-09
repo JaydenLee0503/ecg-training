@@ -1,0 +1,139 @@
+{
+  "id": "eyeball_lead_i_feasibility_v1",
+  "created_utc": "2026-10-09",
+  "scope": "New Lead-I-only feasibility study authorized by user; original all-lead pilot stays complete and failed its own gate",
+  "extractor": {
+    "reference": "https://www.medrxiv.org/content/10.64898/2026.07.08.26357521v1.full",
+    "fidelity": "independent 10-second adaptation; exact paper implementation unverified",
+    "input": {
+      "fs": 500,
+      "seconds": 10,
+      "units": "mV",
+      "filter": null,
+      "resampling": null,
+      "amplitude_normalization": null
+    },
+    "minimum_seconds": 2,
+    "emd": {
+      "distribution": "EMD-signal",
+      "version": "1.6.4",
+      "components": 4,
+      "parameters": {
+        "spline_kind": "cubic",
+        "nbsym": 2,
+        "extrema_detection": "simple",
+        "MAX_ITERATION": 64000,
+        "FIXE": 0,
+        "FIXE_H": 0,
+        "energy_ratio_thr": 0.2,
+        "std_thr": 0.2,
+        "svar_thr": 0.001,
+        "total_power_thr": 0.005,
+        "range_thr": 0.001,
+        "scale_factor": 1.0
+      },
+      "reconstruction_atol_mV": 1e-12,
+      "reconstruction_rtol": 1e-12,
+      "failure": "Reject capped/invalid output; preserve failure and continue other declared pilot tasks. No automatic larger cap or patient replacement."
+    },
+    "analytic": {
+      "implementation": "scipy.signal.hilbert native length, no additional extension",
+      "trim_seconds": 0.25,
+      "frequency": "unwrap phase; numpy.gradient dt=1/fs edge_order=2; signed Hz without clipping",
+      "envelope_floor_mV": 1e-12,
+      "envelope_floor_relative": 1e-08,
+      "minimum_valid_phase_fraction": 0.95,
+      "component_means": "frequency mean over valid samples; envelope mean over all retained samples",
+      "global_frequency": "instantaneous energy-weighted frequency over valid components, then time mean",
+      "global_envelope": "instantaneous root-sum-square of all component envelopes, then time mean",
+      "geometry": "sum of four trimmed analytic signals; exact continuous arc-length centroid of open piecewise-linear path; zero-length edges zero weight"
+    }
+  },
+  "cohort": {
+    "patients": 2048,
+    "engineering_patients": 512,
+    "model_fit_patients": 1536,
+    "model_evaluation_patients": 512,
+    "parent_partition": "fit",
+    "exclude_previous_pilot_patients": true,
+    "selection_id": "eyeball_lead_i_feasibility_v1|cohort",
+    "split_id": "eyeball_lead_i_feasibility_v1|split",
+    "engineering_id": "eyeball_lead_i_feasibility_v1|engineering",
+    "method": "Choose distinct fit patients and one record each by SHA256 ranks, without labels. Separate hash ranking assigns 512 internal-evaluation patients; first 512 hash-ranked remaining model-fit patients form engineering stage."
+  },
+  "gate": {
+    "minimum_engineering_coverage": 0.99,
+    "minimum_model_fit_coverage": 0.99,
+    "minimum_training_positives": 30,
+    "minimum_training_negatives": 30,
+    "minimum_evaluation_positives": 15,
+    "minimum_evaluation_negatives": 15,
+    "rationale": "Prospective engineering usability threshold allowing at most 5/512 engineering failures; not a clinical requirement or guarantee. Complete all declared engineering cases; no cap increase or patient replacement. Do not start evaluation feature extraction/model scoring if engineering or model-fit gate fails."
+  },
+  "failure_policy": {
+    "extractor": "Reject capped or invalid features; preserve numerical failure, timing, input identity and traces. No imputation of feature vectors.",
+    "fit": "Fit scaler and classifier only on numerically successful model-fit rows; list every omitted fit record and class counts. No patient replacement.",
+    "evaluation": "Keep every selected evaluation patient in primary metrics. On extraction failure use the original selected model-fit cohort prevalence as an explicitly flagged fallback probability. Also report extraction coverage by class and covered-only metrics. Do not describe fallback as a classifier-produced ECG score."
+  },
+  "classifiers": {
+    "full_geometry": {
+      "features": "all 12"
+    },
+    "without_geometry": {
+      "features": "first 10"
+    },
+    "shared": {
+      "scaler": "StandardScaler fitted on successful model-fit rows only",
+      "classifier": "LogisticRegression",
+      "C": 1.0,
+      "solver": "lbfgs",
+      "max_iter": 2000,
+      "class_weight": "balanced",
+      "random_state": 0,
+      "threshold": 0.5,
+      "tuning": false
+    },
+    "controls": [
+      "constant selected model-fit prevalence"
+    ],
+    "VQC_or_Swin_fits": 0
+  },
+  "perturbations": {
+    "evaluation_variants": [
+      "noise_30dB",
+      "noise_20dB",
+      "crop_100ms"
+    ],
+    "seed_base": 20261009,
+    "seed_assignment": "seed_base plus index in record-id-sorted evaluation cohort; same existing perturbations function generates both noise arrays and crop",
+    "retrain_on_perturbed_data": false,
+    "comparisons": "clean vs each variant: AP/sensitivity changes, probability shifts, threshold label flips and per-class coverage; evaluate both logistic representations"
+  },
+  "evaluation": {
+    "primary": "average_precision",
+    "metrics": [
+      "average_precision",
+      "roc_auc",
+      "accuracy",
+      "balanced_accuracy",
+      "sensitivity",
+      "specificity",
+      "precision",
+      "f1",
+      "confusion_counts"
+    ],
+    "primary_contrast": "full_geometry minus without_geometry AP on clean evaluation signals",
+    "bootstrap_draws": 2000,
+    "bootstrap_seed": 20261009,
+    "bootstrap_unit": "patient, paired across all arms and perturbations",
+    "uncertainty": "pointwise percentile intervals conditional on selected cohort and fitted models; exclude retraining uncertainty; resample failures too",
+    "label": "Exploratory internal holdout wholly inside original fit patients; no direct ranking against models evaluated on original validation cohort"
+  },
+  "execution": {
+    "workers": 8,
+    "checkpoint": "per-record terminal outcomes, per-stage markers, saved models/predictions and hashed final completion",
+    "preserve_previous_runs": true
+  },
+  "original_validation_processed": false,
+  "official_test_processed": false
+}

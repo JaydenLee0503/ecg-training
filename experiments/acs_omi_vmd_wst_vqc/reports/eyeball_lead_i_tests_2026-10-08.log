@@ -1,0 +1,11 @@
+test_paired_bootstrap_identical_models_have_zero_difference (test_lead_i_study.LeadIStudyTests.test_paired_bootstrap_identical_models_have_zero_difference) ... ok
+test_sampling_ignores_labels_excludes_old_and_validation_and_separates_patients (test_lead_i_study.LeadIStudyTests.test_sampling_ignores_labels_excludes_old_and_validation_and_separates_patients) ... ok
+test_scaler_uses_only_valid_training_rows_and_fallback_preserves_evaluation_cohort (test_lead_i_study.LeadIStudyTests.test_scaler_uses_only_valid_training_rows_and_fallback_preserves_evaluation_cohort) ... /home/jaydenlee/venvs/test-ecg-training/lib/python3.12/site-packages/joblib/numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.146s
+
+OK

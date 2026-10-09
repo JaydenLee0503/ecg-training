@@ -1,5 +1,26 @@
 # ACS session handoff — 2026-09-25
 
+## Separate Lead-I follow-up authorized and prepared — 2026-10-08 EDT
+
+The user authorized the larger Lead-I extraction check and conditional logistic
+study. Read [the execution record](reports/eyeball_lead_i_execution_2026-10-08.md)
+and `protocols/eyeball_lead_i_feasibility_v1.json`. Code:
+`lead_i_study.py`, `scripts/eyeball_lead_i.py`; output:
+`results/eyeball_lead_i_feasibility_v1/`. The first 512 new fit patients must have
+at least 99% extraction coverage before extending to the fixed 2,048-patient
+study. This new, prospective engineering threshold permits explicit failures;
+it is not the prior all-lead zero-failure gate. Model-fit coverage is checked
+again before evaluation extraction or fitting. Failure handling and all class
+count requirements are fixed in the protocol. Official test and original
+validation patients remain untouched.
+
+Three focused checks passed (one retained joblib/NumPy deprecation warning;
+exact model reload parity passed). No real-data work has started at this
+preparation snapshot. Check status/completion markers before launch or resume;
+do not edit frozen numerical code. User preference: commit verified increments
+as work proceeds, under their configured identity without AI co-author trailers.
+Prior completed pilot and preference checkpoint: `8b69d35`.
+
 ## Eyeball assessment complete; engineering gate failed — 2026-10-08 EDT
 
 The 64k assessment completed at **2026-10-09T02:46:22Z** and its report at

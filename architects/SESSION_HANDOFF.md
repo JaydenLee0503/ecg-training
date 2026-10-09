@@ -1,5 +1,18 @@
 # Session handoff — 2026-09-25
 
+## Lead-I-only follow-up authorized and prepared — 2026-10-08 EDT
+
+The user authorized a larger Lead-I check and conditional logistic comparison.
+The separate [execution record](../experiments/acs_omi_vmd_wst_vqc/reports/eyeball_lead_i_execution_2026-10-08.md)
+describes the fixed 2,048-patient fit-only cohort, 512-patient engineering check,
+prospective 99% extraction-coverage gate, patient-separated internal evaluation,
+explicit fallback for failed evaluation inputs, and all recording requirements.
+Three focused checks passed. No new ECG has been processed at this preparation
+snapshot; consult run status before launching. Earlier all-lead results remain
+unchanged. The user also requested committing completed work as we go, using
+their configured identity without AI co-author trailers; this is in AGENTS.md.
+Completed all-lead pilot checkpoint: `8b69d35`.
+
 ## Rotational morphology pilot complete; training gate failed — 2026-10-08 EDT
 
 The separate 64k assessment completed at **2026-10-09T02:46:22Z**; its report
