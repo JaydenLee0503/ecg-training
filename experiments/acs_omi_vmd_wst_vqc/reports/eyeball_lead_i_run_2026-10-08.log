@@ -12,3 +12,43 @@ engineering: 214/512; failures=5
 engineering: 224/512; failures=5
 engineering: 256/512; failures=5
 engineering: 288/512; failures=5
+engineering: 317/512; failures=6
+engineering: 320/512; failures=6
+engineering: 323/512; failures=7
+engineering: 344/512; failures=8
+engineering: 352/512; failures=8
+engineering: 357/512; failures=9
+engineering: 374/512; failures=10
+engineering: 384/512; failures=10
+engineering: 416/512; failures=10
+engineering: 448/512; failures=10
+engineering: 454/512; failures=11
+engineering: 480/512; failures=11
+engineering: 512/512; failures=12
+{
+  "status": "complete",
+  "study": "eyeball_lead_i_feasibility_v1",
+  "models_trained": 0,
+  "original_validation_processed": false,
+  "official_test_processed": false,
+  "engineering_coverage": {
+    "attempted": 512,
+    "successful": 500,
+    "failed": 12,
+    "fraction": 0.9765625,
+    "by_class": {
+      "0": {
+        "attempted": 483,
+        "successful": 471,
+        "failed": 12
+      },
+      "1": {
+        "attempted": 29,
+        "successful": 29,
+        "failed": 0
+      }
+    }
+  },
+  "decision": "Stop: larger Lead-I engineering coverage is below the declared 99% threshold.",
+  "seconds_this_session": 424.129306973
+}

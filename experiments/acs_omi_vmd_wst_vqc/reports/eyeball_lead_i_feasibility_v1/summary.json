@@ -1,0 +1,27 @@
+{
+  "status": "complete",
+  "study": "eyeball_lead_i_feasibility_v1",
+  "models_trained": 0,
+  "original_validation_processed": false,
+  "official_test_processed": false,
+  "engineering_coverage": {
+    "attempted": 512,
+    "successful": 500,
+    "failed": 12,
+    "fraction": 0.9765625,
+    "by_class": {
+      "0": {
+        "attempted": 483,
+        "successful": 471,
+        "failed": 12
+      },
+      "1": {
+        "attempted": 29,
+        "successful": 29,
+        "failed": 0
+      }
+    }
+  },
+  "decision": "Stop: larger Lead-I engineering coverage is below the declared 99% threshold.",
+  "seconds_this_session": 424.129306973
+}

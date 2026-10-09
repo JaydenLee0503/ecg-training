@@ -1,0 +1,13 @@
+{
+  "status": "complete",
+  "context_sha": "3cb56f3138033bfb9847bb65c2807cfc541c8eb49fad702e5109bef141efe4c2",
+  "files": {
+    "summary.json": "ce83beb7c79ae8da599904f3ab89382b9a490e55015cdaeb1d7a0245f5deabc6",
+    "report.md": "edb91cee3c4a3e6366b64a519a924b88d63a9c5fcc697be94fa7b28380a3a55e",
+    "cohort.csv": "f48ec7faecbf311e47e3cf7290445e1e29516e6cfa30e48c4998773c21ea14d6",
+    "exclusions.json": "a4eb06a63cc8adf29c2ad97d77e183fc2832208ab888a09b7ff35621729c017e",
+    "manifest.json": "3cb56f3138033bfb9847bb65c2807cfc541c8eb49fad702e5109bef141efe4c2",
+    "artifact_check.json": "96ccf60d40c7d53a56a5db6400645dd0b981e9c4002c3d62651d5db610fbcd70"
+  },
+  "completed_utc": "2026-10-09T03:39:02Z"
+}

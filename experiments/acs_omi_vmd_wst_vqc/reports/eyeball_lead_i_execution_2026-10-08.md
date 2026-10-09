@@ -64,3 +64,32 @@ and the commit workflow preference were committed as `8b69d35`.
 Status at preparation: code and protocol prepared; no new waveform extraction,
 classifier fit or prediction has started. The continuation outcome will be
 appended after execution.
+
+## Outcome — engineering gate not passed (2026-10-08 23:39 EDT)
+
+Codex launched the frozen run at 2026-10-09T03:31:53Z; Claude Code monitored it
+after Codex usage ran out. No code, protocol, cap or setting was changed. The
+engineering stage completed at 03:38:45Z (405.9 s; 8 workers) and the study
+ended at 03:39:02Z (424.1 s total). The process exited normally.
+
+**Engineering coverage: 500/512 (97.66%)**, below the declared 99% gate (at most
+five failures). All 12 failures were `EMD reached the declared iteration cap`,
+all in class 0 (12/483 failed; 29/29 class-1 ECGs succeeded). Failed record IDs:
+01019, 02446, 02622, 03276, 03340, 10401, 10932, 12120, 12218, 12495, 14125,
+16569. The class imbalance in failures is descriptive only: 29 positives is far
+too few to infer that cap failures are label-dependent.
+
+As declared, the study stopped before model-fit extraction of the remaining
+1,536 patients, evaluation extraction, perturbations and classifier fitting.
+**No model was trained; no accuracy, AP or predictions exist.** No patient was
+replaced. Original validation and official test patients were not processed.
+
+The run wrote a hashed `completed.json` (artifact check: 2,570 entries) and
+exported `reports/eyeball_lead_i_feasibility_v1/`. Re-invoking the same command
+afterwards printed "Verified completed Lead-I study; no computation repeated"
+(9.4 s). Full run log: [eyeball_lead_i_run_2026-10-08.log](eyeball_lead_i_run_2026-10-08.log).
+
+Implication: Lead I alone does not escape the cap failures seen in the all-lead
+pilot. Its failure rate here (2.3%) is low but not within the declared limit.
+Any continuation (e.g. a different cap or failure policy, or a different
+extractor) is a new protocol and a new output directory, not a rerun of this one.

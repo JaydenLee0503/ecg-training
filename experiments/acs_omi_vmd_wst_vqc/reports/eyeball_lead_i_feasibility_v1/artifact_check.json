@@ -1,0 +1,13 @@
+{
+  "time_utc": "2026-10-09T03:39:02Z",
+  "run_root": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_lead_i_feasibility_v1",
+  "completed_sha256": "13aa267463e52a2e2b9eaaa4bbce84d70c30aa475e32928530ae2ff76e1db58d",
+  "entries": 2570,
+  "exported": [
+    "summary.json",
+    "report.md",
+    "cohort.csv",
+    "exclusions.json",
+    "manifest.json"
+  ]
+}
