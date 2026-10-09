@@ -1,5 +1,18 @@
 # ACS session handoff — 2026-09-25
 
+## Lead-I feasibility study ended at its engineering gate — 2026-10-08 23:39 EDT
+
+The frozen run completed at **2026-10-09T03:39:02Z** and exited normally. The
+engineering check covered **500/512 Lead-I ECGs (97.66%)**, below the
+prospective 99% gate. All 12 failures were EMD iteration-cap failures, all in class 0
+(29/29 positives succeeded; too few to interpret). As declared, the study
+stopped before any further extraction or fitting: **no classifier was trained
+and no performance result exists.** Validation and test patients were untouched.
+Completion marker verified by re-invocation without recomputation. Read the
+[execution record outcome](reports/eyeball_lead_i_execution_2026-10-08.md) and `reports/eyeball_lead_i_feasibility_v1/report.md`.
+Nothing is running. A continuation needs a new protocol and output directory;
+none has been proposed or approved. The running entry below is historical.
+
 ## Lead-I engineering check running — 2026-10-08 23:35 EDT
 
 Codex launched the frozen Lead-I study at **2026-10-09T03:31:53Z**
