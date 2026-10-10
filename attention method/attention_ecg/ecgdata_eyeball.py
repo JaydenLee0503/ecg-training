@@ -227,7 +227,7 @@ def extract_all(mat=REPO/'ECGData.mat', run=DEFAULT_RUN, *, execute=False):
         atomic_json(run/'failures.json', failures)
         atomic_npz(run/'cohort.npz', **{k:v for k,v in data.items() if k!='signals'})
         atomic_json(run/'status.json', dict(**summary, stage='extraction'))
-        _record_event(run, 'extraction_complete', **summary)
+        _record_event(run, 'extraction_complete', result=summary)
     return summary
 
 
