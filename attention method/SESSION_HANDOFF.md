@@ -1,5 +1,20 @@
 # Attention method handoff — 2026-09-25
 
+## ECGData rotational-morphology training completed — 2026-10-10
+
+The frozen 30-second Eyeball experiment completed extraction and all five
+patient-separated folds. Balanced RBF SVC achieved **81.25% patient-vote
+accuracy** (macro-F1 0.7621); balanced logistic achieved 67.50% (macro-F1
+0.6766). Extraction coverage was 1,531/1,620 (94.51%); 89 EMD iteration-cap
+failures were retained in the failure and prediction exports. Coverage and
+fold/class safeguards passed. All 80 patients retained valid clips. Reload and
+artifact audit passed; no refit is pending. See the [full report](reports/ecgdata_eyeball_30s_v3/report.md)
+and versioned exports beside it. This is ARR/CHF/NSR classification, not MI/OMI.
+It is not a controlled comparison with the LFCC Swin result (94.17%), which
+uses a different 3.9-second pipeline. Small cohort and source/diagnosis
+confounding limit interpretation. Large resumable outputs remain gitignored
+under `results/ecgdata_eyeball_30s_v3/`.
+
 ## Learning-curve protocol drafted — 2026-09-29 EDT
 
 A draft [learning-curve protocol](ecgdata_learning_curve_protocol.md) is written

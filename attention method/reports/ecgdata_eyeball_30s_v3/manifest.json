@@ -1,0 +1,164 @@
+{
+  "protocol": {
+    "id": "ecgdata_eyeball_30s_v3",
+    "purpose": "Exploratory ECGData.mat evaluation of four-mode EMD/Hilbert rotational morphology descriptors",
+    "status": "frozen before real-data extraction",
+    "source_method": "Alavi et al., medRxiv 2026, DOI 10.64898/2026.07.08.26357521; independent adaptation, not a verified reproduction",
+    "data": {
+      "file": "ECGData.mat",
+      "sampling_rate_hz": 128,
+      "classes": [
+        "ARR",
+        "CHF",
+        "NSR"
+      ],
+      "patient_map": "ecgvmd/ecgdata_subjects.csv",
+      "outer_folds": "reuse exact five patient folds in attention method/features/ecgdata_lfcc_v1",
+      "windows": {
+        "seconds": 30,
+        "samples": 3840,
+        "per_lead_row": 10,
+        "selection": "uniform without replacement from complete non-overlapping 30-second grid windows",
+        "selection_seed": 0,
+        "zscore_each_window": true,
+        "preprocessing_fit": "none; each window is independently standardized before EMD"
+      },
+      "cohort_expectation": {
+        "lead_rows": 162,
+        "patients": 80,
+        "windows": 1620,
+        "fold_window_counts": [
+          340,
+          320,
+          320,
+          320,
+          320
+        ]
+      }
+    },
+    "features": {
+      "components": 4,
+      "names": [
+        "f1_hz",
+        "f2_hz",
+        "f3_hz",
+        "f4_hz",
+        "env1_standardized_units",
+        "env2_standardized_units",
+        "env3_standardized_units",
+        "env4_standardized_units",
+        "global_frequency_hz",
+        "global_envelope_standardized_units",
+        "centroid_x_standardized_units",
+        "centroid_y_standardized_units"
+      ],
+      "emd": {
+        "distribution": "EMD-signal",
+        "version": "1.6.4",
+        "spline_kind": "cubic",
+        "nbsym": 2,
+        "extrema_detection": "simple",
+        "MAX_ITERATION": 64000,
+        "FIXE": 0,
+        "FIXE_H": 0,
+        "energy_ratio_thr": 0.2,
+        "std_thr": 0.2,
+        "svar_thr": 0.001,
+        "total_power_thr": 0.005,
+        "range_thr": 0.001,
+        "scale_factor": 1.0,
+        "failure": "retain terminal failure; no automatic cap increase, replacement, or silent exclusion"
+      },
+      "analytic": {
+        "implementation": "scipy.signal.hilbert at native length",
+        "trim_seconds_each_end": 0.25,
+        "frequency": "unwrap phase and differentiate with numpy.gradient at dt=1/fs, edge_order=2; signed Hz without clipping",
+        "envelope_floor_mV": 1e-12,
+        "envelope_floor_relative": 1e-08,
+        "minimum_valid_phase_fraction": 0.95,
+        "component_frequency": "mean on valid samples",
+        "component_envelope": "mean over retained samples",
+        "global_frequency": "instantaneous energy-weighted frequency, then time mean",
+        "global_envelope": "instantaneous root-sum-square envelope, then time mean",
+        "geometry": "exact arc-length centroid of the open piecewise-linear path formed by summing four trimmed analytic components"
+      },
+      "reconstruction_atol": 1e-12,
+      "reconstruction_rtol": 1e-12
+    },
+    "models": [
+      {
+        "name": "balanced_logistic",
+        "kind": "StandardScaler then LogisticRegression",
+        "C": 1.0,
+        "class_weight": "balanced",
+        "solver": "lbfgs",
+        "max_iter": 2000,
+        "random_state": 0
+      },
+      {
+        "name": "balanced_rbf_svc",
+        "kind": "StandardScaler then SVC",
+        "C": 1.0,
+        "gamma": "scale",
+        "class_weight": "balanced",
+        "probability": true,
+        "random_state": 0
+      }
+    ],
+    "evaluation": {
+      "primary": "window_macro_f1",
+      "secondary": [
+        "window_accuracy",
+        "window_balanced_accuracy",
+        "window_average_precision_ovr",
+        "patient_vote_accuracy",
+        "patient_vote_macro_f1"
+      ],
+      "patient_vote": "sum out-of-fold probabilities across the 10 sampled windows per patient lead row; choose highest averaged class probability; combine all lead rows for patient",
+      "bootstrap_unit": "patient",
+      "bootstrap_resamples": 2000,
+      "bootstrap_seed": 20261009,
+      "interval_scope": "conditional on saved out-of-fold predictions; does not include retraining uncertainty",
+      "failures": "all attempted clips remain in the ledger; report primary complete-case metrics only when coverage and per-class failure counts are shown; do not replace failed clips"
+    },
+    "execution": {
+      "extraction_workers": 4,
+      "extraction_executor": "separate processes; thread-based EMD was stopped before producing outputs",
+      "minimum_extraction_coverage_for_fitting": 0.9,
+      "resume": "verify content identity and reuse terminal successes and failures; unfinished clips only",
+      "output": "attention method/results/ecgdata_eyeball_30s_v3",
+      "training_requires_explicit_cli_flag": true,
+      "validation_and_test": "all five patient folds are outer evaluation folds; no external data or patients",
+      "source_hashes_and_environment": "record before extraction and model fitting"
+    },
+    "limitations": [
+      "ECGData has only 80 patients and diagnosis is confounded with source database.",
+      "Each 30-second window is independently z-scored, so centroid and envelope amplitudes are in standardized signal units rather than calibrated mV.",
+      "This three-class ARR/CHF/NSR experiment is not an MI or OMI diagnostic evaluation.",
+      "Results are not directly comparable to the prior LFCC Swin score because window duration and representation differ."
+    ]
+  },
+  "sources": {
+    "attention method/ecgdata_eyeball_protocol_v3.json": "a1c3bdac8a5fb269b8a9b9c31a281df1aca52ed1a3086b82a02960b3aa5c87a3",
+    "attention method/attention_ecg/ecgdata_eyeball.py": "86cb5ba91d7960c31fe43962810f705417e8cffb6d7f267998fc0b0834465ed1",
+    "ecgvmd/rotational.py": "942be34bbb82b5b8e220940c189d30d458746819f31701ddb47f8c3894eb7ab5",
+    "ecgvmd/data.py": "ee16e893508110b733750fc8f9643a079952705e0ff61a279689f56fc330e5b5",
+    "ecgvmd/ecgdata_subjects.csv": "b0dfbd8d0f4c030a4a83eaf9eeff81c1ba1d508b5078eca473fa8502cc86855e",
+    "attention method/ecgdata.py": "8230b49c0a1b778428b89c3b1de6814673ae029b94355f5b75c1e637b3254296",
+    "attention method/attention_ecg/ecgdata.py": "732b449cdf3332e704eff0d7d803e84903b37330ba0295e09f9fbfdc5ab2fd1a"
+  },
+  "mat_sha256": "031ccc6b3fc905742e70a44d810377ba655dd58b346c84485e9e7beab03d140a",
+  "versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.2",
+    "scipy": "1.18.1"
+  },
+  "cohort": {
+    "windows": 1620,
+    "patients": 80,
+    "signals_sha256": "cdc500d8e76892c60503f2a5397b1260ec0828af59d9cd78e7453539f11465e1",
+    "patient_sha256": "3d6f8d9962282f0d0e1feae4457d536da4a0af95fe89de57872637c26913768d",
+    "fold_sha256": "1d88466d8e2050de0f05fdf3f51b05bdbdd791da114f5e477ffeb472bcc650f5",
+    "starts_sha256": "73dd6af133c684d4b5e29e9de4d409a7b8b0de94f19ddf74e0fa5e204f254e39"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "status": "complete",
+  "attempted": 1620,
+  "successful": 1531,
+  "failed": 89,
+  "coverage": 0.9450617283950618,
+  "class_failures": {
+    "0": 49,
+    "1": 4,
+    "2": 36
+  },
+  "folds": 5,
+  "finished_utc": "2026-10-10T01:30:47Z"
+}

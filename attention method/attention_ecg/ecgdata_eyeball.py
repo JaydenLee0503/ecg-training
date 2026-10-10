@@ -319,6 +319,7 @@ def train_models(run=DEFAULT_RUN, *, execute=False):
 
 def report(run=DEFAULT_RUN):
     from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score, average_precision_score
+    from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
     run = safe_output(run, 'results')
     protocol = read_json(PROTOCOL)
     summary = read_json(run/'extraction_summary.json')
@@ -347,6 +348,7 @@ def report(run=DEFAULT_RUN):
             patient_y.append(labels[0])
             patient_probs.append(probs[idx].mean(0))
             patient_pred.append(np.mean(probs[idx], axis=0).argmax())
+        patient_probs = np.asarray(patient_probs)
         yv, pv = ys[valid], probs[valid]
         metrics = dict(window_accuracy=float(accuracy_score(yv,pred[valid])),
             window_macro_f1=float(f1_score(yv,pred[valid],average='macro')),
@@ -357,6 +359,27 @@ def report(run=DEFAULT_RUN):
             patient_vote_average_precision_ovr=float(average_precision_score(patient_y,patient_probs,average='macro')),
             valid_windows=int(valid.sum()), total_windows=len(ys), patient_count=len(patient_y),
             class_coverage={str(c):int(np.sum(ys[valid]==c)) for c in range(3)})
+        precision, recall, class_f1, class_support = precision_recall_fscore_support(
+            yv, pred[valid], labels=[0,1,2], zero_division=0)
+        metrics['window_confusion_matrix'] = confusion_matrix(yv,pred[valid],labels=[0,1,2]).tolist()
+        metrics['window_per_class'] = {protocol['data']['classes'][c]:dict(
+            precision=float(precision[c]), recall=float(recall[c]), f1=float(class_f1[c]),
+            support=int(class_support[c])) for c in range(3)}
+        metrics['per_fold'] = {}
+        for fold in range(5):
+            idx = (cohort['fold'] == fold) & valid
+            metrics['per_fold'][str(fold)] = dict(n=int(idx.sum()),
+                accuracy=float(accuracy_score(ys[idx],pred[idx])),
+                macro_f1=float(f1_score(ys[idx],pred[idx],average='macro')),
+                balanced_accuracy=float(balanced_accuracy_score(ys[idx],pred[idx])),
+                confusion_matrix=confusion_matrix(ys[idx],pred[idx],labels=[0,1,2]).tolist())
+        patient_pred_array = np.asarray(patient_pred)
+        metrics['patient_vote_confusion_matrix'] = confusion_matrix(
+            patient_y,patient_pred_array,labels=[0,1,2]).tolist()
+        metrics['patients_with_any_failure'] = int(sum(
+            np.any((patients == patient) & ~valid) for patient in np.unique(patients)))
+        metrics['patients_with_no_valid_clip'] = int(sum(
+            not np.any((patients == patient) & valid) for patient in np.unique(patients)))
         arms[spec['name']] = metrics
         saved_predictions[spec['name']] = (pred, probs)
         atomic_npz(run/f'{spec["name"]}_predictions.npz', indices=np.flatnonzero(valid),
@@ -398,6 +421,11 @@ def report(run=DEFAULT_RUN):
                                       for key,values in draws.items()}
     output = dict(status='complete', protocol_id=protocol['id'], extraction=summary,
                   models=arms, classes=protocol['data']['classes'],
+                  training=dict(settings=protocol['models'],
+                      fold_fit_seconds=[row for row in map(json.loads,(run/'attempts.jsonl').read_text().splitlines())
+                                        if row.get('status')=='model_fold_complete'],
+                      source_hashes=read_json(run/'manifest.json')['sources'],
+                      environment=read_json(run/'manifest.json')['versions']),
                   uncertainty_95=uncertainty, bootstrap=dict(unit='patient',
                       resamples=protocol['evaluation']['bootstrap_resamples'],
                       seed=protocol['evaluation']['bootstrap_seed'],
@@ -406,6 +434,74 @@ def report(run=DEFAULT_RUN):
                       name:file_hash(run/f'{name}_predictions.npz') for name in saved_predictions})
     atomic_json(run/'report.json', output)
     return output
+
+
+def audit_run(run=DEFAULT_RUN):
+    """Verify all extracted clips and reloaded out-of-fold model probabilities."""
+    import joblib
+    run = safe_output(run, 'results')
+    protocol = read_json(PROTOCOL)
+    manifest = read_json(run/'manifest.json')
+    manifest_sha = file_hash(run/'manifest.json')
+    if (run/'manifest.sha256').read_text().strip() != manifest_sha:
+        raise ValueError('Extraction manifest checksum mismatch')
+    context_sha = hashlib.sha256(_canonical(manifest).encode()).hexdigest()
+    with np.load(run/'cohort.npz', allow_pickle=False) as z:
+        cohort = {k:z[k] for k in z.files}
+    if len(cohort['ids']) != 1620 or len(np.unique(cohort['patients'])) != 80:
+        raise ValueError('Unexpected saved cohort')
+    X = np.full((len(cohort['ids']),12), np.nan)
+    outcomes = []
+    for i in cohort['ids']:
+        saved = _verified_clip(_artifact(run,int(i)), context_sha)
+        if saved is None:
+            raise ValueError(f'Missing clip {i}')
+        outcomes.append(saved['status'])
+        if saved['status'] == 'complete':
+            X[i] = saved['features']
+    valid = np.isfinite(X).all(1)
+    failures = read_json(run/'failures.json')
+    summary = read_json(run/'extraction_summary.json')
+    if (int(valid.sum()) != summary['successful'] or int((~valid).sum()) != summary['failed'] or
+            len(failures) != summary['failed']):
+        raise ValueError('Extraction summary does not match clip artifacts')
+    model_checks = []
+    for model_spec in protocol['models']:
+        name = model_spec['name']
+        for fold in range(5):
+            expected = np.flatnonzero((cohort['fold']==fold)&valid)
+            path = run/f'models/{name}_fold{fold}.npz'
+            with np.load(path,allow_pickle=False) as z:
+                if (not np.array_equal(z['indices'],expected) or
+                    not np.array_equal(z['y'],cohort['y'][expected]) or
+                    not np.array_equal(z['patients'],cohort['patients'][expected]) or
+                    z['probabilities'].shape != (len(expected),3) or
+                    not np.isfinite(z['probabilities']).all()):
+                    raise ValueError(f'Invalid prediction artifact: {path}')
+                stored = z['probabilities'].copy()
+            model = joblib.load(path.with_suffix('.joblib'))
+            actual = model.predict_proba(X[expected])
+            error = float(np.max(np.abs(actual-stored)))
+            if not np.array_equal(actual.argmax(1),stored.argmax(1)) or error > 1e-12:
+                raise ValueError(f'Reloaded predictions differ: {path} max_abs={error}')
+            model_checks.append(dict(model=name,fold=fold,n=len(expected),
+                                     max_probability_difference=error))
+    inventory = {}
+    for path in sorted(run.rglob('*')):
+        if not path.is_file() or path.name in ('artifact_inventory.json','completed.json') or path.name == '.writer.lock':
+            continue
+        inventory[str(path.relative_to(run))] = dict(bytes=path.stat().st_size,sha256=file_hash(path))
+    atomic_json(run/'artifact_inventory.json',dict(status='complete',files=inventory,
+                files_checked=len(inventory),successful_clips=int(valid.sum()),
+                failed_clips=int((~valid).sum()),model_checks=model_checks))
+    result = dict(status='complete',protocol_id=protocol['id'],
+        context_sha256=context_sha,artifact_inventory_sha256=file_hash(run/'artifact_inventory.json'),
+        files_checked=len(inventory),successful_clips=int(valid.sum()),failed_clips=int((~valid).sum()),
+        coverage=float(valid.mean()),reloaded_model_fits=len(model_checks),
+        maximum_probability_difference=max(x['max_probability_difference'] for x in model_checks),
+        verified_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()))
+    atomic_json(run/'completed.json',result)
+    return result
 
 
 def main():
@@ -420,13 +516,17 @@ def main():
     p.add_argument('--execute-training', action='store_true', required=True)
     p = sub.add_parser('report')
     p.add_argument('--out', type=Path, default=DEFAULT_RUN)
+    p = sub.add_parser('audit')
+    p.add_argument('--out', type=Path, default=DEFAULT_RUN)
     args = parser.parse_args()
     if args.action == 'extract':
         result = extract_all(args.mat, args.out, execute=args.execute_extraction)
     elif args.action == 'train':
         result = train_models(args.out, execute=args.execute_training)
-    else:
+    elif args.action == 'report':
         result = report(args.out)
+    else:
+        result = audit_run(args.out)
     print(json.dumps(result, indent=2, allow_nan=False))
 
 

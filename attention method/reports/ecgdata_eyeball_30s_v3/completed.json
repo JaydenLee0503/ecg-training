@@ -1,0 +1,13 @@
+{
+  "status": "complete",
+  "protocol_id": "ecgdata_eyeball_30s_v3",
+  "context_sha256": "ef41c995eefeffff94ddb0f83be74d283e6cf11bddc24ccce1c9efe578d6f8fb",
+  "artifact_inventory_sha256": "bca7b754710f047071ee42d75a765acdc649353f66d7f336a5bc1f7f4f21acbc",
+  "files_checked": 3271,
+  "successful_clips": 1531,
+  "failed_clips": 89,
+  "coverage": 0.9450617283950618,
+  "reloaded_model_fits": 10,
+  "maximum_probability_difference": 0.0,
+  "verified_utc": "2026-10-10T03:39:20Z"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "complete",
+  "folds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "models": [
+    "balanced_logistic",
+    "balanced_rbf_svc"
+  ],
+  "valid_windows": 1531,
+  "training_completed_utc": "2026-10-10T03:35:15Z"
+}

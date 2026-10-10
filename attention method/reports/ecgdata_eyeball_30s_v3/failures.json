@@ -1,0 +1,3740 @@
+[
+  {
+    "clip": 41,
+    "row_id": 4,
+    "patient_id": "mitdb/113",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 80.97474631400001,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 13538,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 133,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 43,
+    "row_id": 4,
+    "patient_id": "mitdb/113",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 50.829680921999994,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 17538,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 109,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 490,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 48,
+    "row_id": 4,
+    "patient_id": "mitdb/113",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 60.139127049999985,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 15492,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 167,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 24409,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 60,
+    "row_id": 6,
+    "patient_id": "mitdb/115",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.92102146499997,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 4,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 96,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 33,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 62,
+    "row_id": 6,
+    "patient_id": "mitdb/115",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.681879890999994,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 11,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 76,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 423,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 69,
+    "row_id": 6,
+    "patient_id": "mitdb/115",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 35.45545541900003,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 5,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 95,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 14,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 102,
+    "row_id": 10,
+    "patient_id": "mitdb/119",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.72464741900001,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 19,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2744,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 508,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 107,
+    "row_id": 10,
+    "patient_id": "mitdb/119",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.87729881300004,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 15,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 4750,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 979,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 109,
+    "row_id": 10,
+    "patient_id": "mitdb/119",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.079917572,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 14,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 5101,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1360,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 111,
+    "row_id": 11,
+    "patient_id": "mitdb/101",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 60.99949523700002,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 2035,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 12119,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 33778,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 147,
+    "row_id": 14,
+    "patient_id": "mitdb/123",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 43.35999163600002,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 72,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 16919,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 27,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 221,
+    "row_id": 22,
+    "patient_id": "mitdb/102",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 36.297685505000004,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 337,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 25,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1706,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 264,
+    "row_id": 26,
+    "patient_id": "mitdb/212",
+    "y": 0,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.934006055000054,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 4340,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 87,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1743,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 303,
+    "row_id": 30,
+    "patient_id": "mitdb/217",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.48004855599993,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1965,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 6475,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1470,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 313,
+    "row_id": 31,
+    "patient_id": "mitdb/219",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.590427811000154,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 78,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2529,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 26,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 317,
+    "row_id": 31,
+    "patient_id": "mitdb/219",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.53055605700001,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3423,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 22,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 392,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.159128173,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 17,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 92,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 728,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 390,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.01017020900008,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 19,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3133,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 27,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 389,
+    "row_id": 38,
+    "patient_id": "mitdb/230",
+    "y": 0,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 42.70778601799998,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 188,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 10191,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 19,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 391,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 52.70964082800015,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 9,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 29076,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 81,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 393,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.84461732799991,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 6,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 152,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 27,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 394,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.212678965999885,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 9,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 118,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 19,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 395,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.60359761400014,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 12,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 1433,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 20,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 396,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 36.23214104199997,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 13,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 100,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 14,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 397,
+    "row_id": 39,
+    "patient_id": "mitdb/231",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 33.958545996999874,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 350,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 432,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 39,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 430,
+    "row_id": 43,
+    "patient_id": "mitdb/100",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 54.16327435900007,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 4886,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 21563,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 46,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 435,
+    "row_id": 43,
+    "patient_id": "mitdb/100",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 70.44649255800005,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1783,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 7921,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 50563,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 440,
+    "row_id": 44,
+    "patient_id": "mitdb/104",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.994025788000044,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 815,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 58,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 3835,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 460,
+    "row_id": 46,
+    "patient_id": "mitdb/102",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 43.94514445599998,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 12126,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 86,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1738,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 466,
+    "row_id": 46,
+    "patient_id": "mitdb/102",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 53.88902248899967,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1178,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 29896,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 6103,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 480,
+    "row_id": 48,
+    "patient_id": "mitdb/104",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 42.091191077000076,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 234,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 344,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 9992,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 486,
+    "row_id": 48,
+    "patient_id": "mitdb/104",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.897718626999904,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 192,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 80,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1853,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 488,
+    "row_id": 48,
+    "patient_id": "mitdb/104",
+    "y": 0,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.50137910000012,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 212,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 121,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 2878,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 510,
+    "row_id": 51,
+    "patient_id": "mitdb/107",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 34.93269752900005,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 225,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 157,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 551,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 574,
+    "row_id": 57,
+    "patient_id": "mitdb/113",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 35.13383782600022,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 92,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 202,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 133,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 580,
+    "row_id": 58,
+    "patient_id": "mitdb/114",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 72.3092837080003,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1630,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 4970,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 588,
+    "row_id": 58,
+    "patient_id": "mitdb/114",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 42.17564944800006,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 2266,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 5978,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 216,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 584,
+    "row_id": 58,
+    "patient_id": "mitdb/114",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 76.74732447800034,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1660,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 5091,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 589,
+    "row_id": 58,
+    "patient_id": "mitdb/114",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 76.81282513999986,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1205,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 11956,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 660,
+    "row_id": 66,
+    "patient_id": "mitdb/106",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 43.02970489299969,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 4158,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 127,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 9409,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 667,
+    "row_id": 66,
+    "patient_id": "mitdb/106",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 45.16928778400006,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 262,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 1303,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 14366,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 665,
+    "row_id": 66,
+    "patient_id": "mitdb/106",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 74.33824699000024,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 820,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 12867,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 54915,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 668,
+    "row_id": 66,
+    "patient_id": "mitdb/106",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 55.05743669599997,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 4453,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 258,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 28167,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 666,
+    "row_id": 66,
+    "patient_id": "mitdb/106",
+    "y": 0,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 84.20331401299973,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 3394,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 17335,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 711,
+    "row_id": 71,
+    "patient_id": "mitdb/201-202",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.441003249000005,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 59,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 2205,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 4,
+          "sifts": 82,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 713,
+    "row_id": 71,
+    "patient_id": "mitdb/201-202",
+    "y": 0,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 64.29901074899999,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 436,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 3072,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 46650,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 840,
+    "row_id": 84,
+    "patient_id": "mitdb/219",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.83667853499992,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 27,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 4586,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 16,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 843,
+    "row_id": 84,
+    "patient_id": "mitdb/219",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.64880761099994,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 24,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2774,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 17,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 847,
+    "row_id": 84,
+    "patient_id": "mitdb/219",
+    "y": 0,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.06484786200008,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 33,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2608,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 24,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1032,
+    "row_id": 103,
+    "patient_id": "chfdb/chf01",
+    "y": 1,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.19818521699972,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1383,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2838,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 4777,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1039,
+    "row_id": 103,
+    "patient_id": "chfdb/chf01",
+    "y": 1,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.20453077499997,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1826,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 1875,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 7590,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1107,
+    "row_id": 110,
+    "patient_id": "chfdb/chf07",
+    "y": 1,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.73345975799975,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 158,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 4022,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 1886,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1108,
+    "row_id": 110,
+    "patient_id": "chfdb/chf07",
+    "y": 1,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 42.821652377999726,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 138,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 9978,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 70,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1289,
+    "row_id": 128,
+    "patient_id": "nsrdb/17453",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 43.08588418300042,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 228,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 4295,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 4185,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1302,
+    "row_id": 130,
+    "patient_id": "nsrdb/18184",
+    "y": 2,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.246155460999944,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 76,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3833,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 47,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1309,
+    "row_id": 130,
+    "patient_id": "nsrdb/18184",
+    "y": 2,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.62950605900005,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 95,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 6265,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 84,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1319,
+    "row_id": 131,
+    "patient_id": "nsrdb/19088",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.77125074800006,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 11,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 614,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 25,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1318,
+    "row_id": 131,
+    "patient_id": "nsrdb/19088",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.19651700800023,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 26,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 845,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 61,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1317,
+    "row_id": 131,
+    "patient_id": "nsrdb/19088",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.74779305700031,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 51,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 4949,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 127,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1322,
+    "row_id": 132,
+    "patient_id": "nsrdb/19090",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.20041127599961,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 67,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2843,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 133,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1329,
+    "row_id": 132,
+    "patient_id": "nsrdb/19090",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.27667740900051,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 54,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 1988,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 167,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1328,
+    "row_id": 132,
+    "patient_id": "nsrdb/19090",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 44.05825142100002,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 110,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 7551,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 3716,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1341,
+    "row_id": 134,
+    "patient_id": "nsrdb/19140",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.70109435999984,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 47,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3157,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 51,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1363,
+    "row_id": 136,
+    "patient_id": "nsrdb/16265",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.524082442999315,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 24,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 41,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 82,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1365,
+    "row_id": 136,
+    "patient_id": "nsrdb/16265",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.744733164000536,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 33,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 500,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 13,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1430,
+    "row_id": 143,
+    "patient_id": "nsrdb/16773",
+    "y": 2,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.77927742300017,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 34,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2584,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 23,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1433,
+    "row_id": 143,
+    "patient_id": "nsrdb/16773",
+    "y": 2,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 41.846017701000164,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 42,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3284,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 46,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1435,
+    "row_id": 143,
+    "patient_id": "nsrdb/16773",
+    "y": 2,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.92721455500032,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 36,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 5619,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 15,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1436,
+    "row_id": 143,
+    "patient_id": "nsrdb/16773",
+    "y": 2,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.401261065000654,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 33,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2168,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 19,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1440,
+    "row_id": 144,
+    "patient_id": "nsrdb/16786",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.016570662999584,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1218,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 28,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 2480,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1442,
+    "row_id": 144,
+    "patient_id": "nsrdb/16786",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.79719002999991,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 1099,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 41,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 2459,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1449,
+    "row_id": 144,
+    "patient_id": "nsrdb/16786",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 42.99886366099963,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 8,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 5855,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 95,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1511,
+    "row_id": 151,
+    "patient_id": "nsrdb/19088",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.40880796399961,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 44,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2795,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 25,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1532,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 37.98331931499979,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 25,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3456,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 30,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1531,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 43.62321066499953,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 132,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 8350,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 7945,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1536,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.30242005299988,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 33,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2812,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 20,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1533,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.574172147000354,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 22,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 2435,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 119,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1534,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 47.6283727,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 216,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 10575,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 5685,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1535,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 59.11287584399997,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 820,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 37191,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 52,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1538,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 46.232816542000364,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 196,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 12113,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 3629,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1537,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 46.5904206919995,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 253,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 12748,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 4057,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1539,
+    "row_id": 153,
+    "patient_id": "nsrdb/19093",
+    "y": 2,
+    "fold": 4,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.41862931600008,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 59,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 6049,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 32,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1575,
+    "row_id": 157,
+    "patient_id": "nsrdb/16483",
+    "y": 2,
+    "fold": 2,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.99403150300077,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 26,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3480,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 92,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1580,
+    "row_id": 158,
+    "patient_id": "nsrdb/16539",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 36.18778948399995,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 20,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 1210,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 88,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1582,
+    "row_id": 158,
+    "patient_id": "nsrdb/16539",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.356008802999895,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 32,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3918,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 19,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1587,
+    "row_id": 158,
+    "patient_id": "nsrdb/16539",
+    "y": 2,
+    "fold": 1,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 39.517654442000094,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 38,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3820,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 513,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1590,
+    "row_id": 159,
+    "patient_id": "nsrdb/16773",
+    "y": 2,
+    "fold": 3,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 46.94242095100071,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 248,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 9795,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 8835,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1603,
+    "row_id": 160,
+    "patient_id": "nsrdb/16786",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 40.03711250300057,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 3331,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 2,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 3,
+          "sifts": 140,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 2874,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  },
+  {
+    "clip": 1609,
+    "row_id": 160,
+    "patient_id": "nsrdb/16786",
+    "y": 2,
+    "fold": 0,
+    "error": "RotationalError: EMD reached the declared iteration cap",
+    "details": {
+      "seconds": 38.354072739,
+      "components": 4,
+      "sifting": [
+        {
+          "candidate": 1,
+          "sifts": 63999,
+          "capped": true,
+          "decomposition_end_condition": false,
+          "reason": "iteration_cap"
+        },
+        {
+          "candidate": 2,
+          "sifts": 31,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 3,
+          "sifts": 3650,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        },
+        {
+          "candidate": 4,
+          "sifts": 69,
+          "capped": false,
+          "decomposition_end_condition": false,
+          "reason": "imf_criterion"
+        }
+      ]
+    }
+  }
+]

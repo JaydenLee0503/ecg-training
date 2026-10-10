@@ -1,5 +1,17 @@
 # Session handoff — 2026-09-25
 
+## ECGData Eyeball training completed — 2026-10-10
+
+The user-requested 30-second EMD/Hilbert rotational-morphology experiment on
+`ECGData.mat` completed all five patient-separated folds. Balanced RBF SVC
+patient-vote accuracy was **81.25%** (macro-F1 0.7621), versus 67.50% (0.6766)
+for balanced logistic. Extraction coverage was 94.51% (1,531/1,620); 89 clips
+hit the fixed EMD iteration cap. Coverage and class safeguards passed, saved
+model reloads matched exactly, and the artifact audit passed. Results classify
+ARR/CHF/NSR rather than MI/OMI. Do not interpret as a controlled comparison to
+the different-window LFCC Swin 94.17% result. See the [full report](../attention%20method/reports/ecgdata_eyeball_30s_v3/report.md)
+and [attention-method handoff](../attention%20method/SESSION_HANDOFF.md).
+
 ## Lead-I feasibility study ended at its engineering gate — 2026-10-08 23:39 EDT
 
 The frozen run completed at **2026-10-09T03:39:02Z** and exited normally. The
