@@ -1,5 +1,22 @@
 # ACS session handoff — 2026-09-25
 
+## Manuscript literature review completed — 2026-10-11 EDT
+
+Expanded the [existing report](reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+into a standalone narrative review, as requested. It covers ML/deep learning,
+recent primary studies through October 2026, VMD/WST, proposed LFCC–Swin and
+VQC comparisons, weak supervision, published error rates, generalization gaps
+and a controlled research framework. There are 31 references. Local file paths,
+audit links, custom split details and unpublished scores are absent from the
+manuscript; the earlier verification JSON is preserved separately.
+
+Metric complements and illustrative arithmetic were checked. Published scores
+are not ranked across unlike tasks. Exact LFCC–Swin OMI clinical validation was
+not found in this targeted search; this does not establish novelty. Quantum ECG
+simulation is distinguished from hardware advantage. WST and weakly supervised
+learning are explained separately because the user's “WSL” was ambiguous.
+No real-data processing, fitting, predictions or protocol changes occurred.
+
 ## Dataset and mortality research completed — 2026-10-11 EDT
 
 The requested [ECGData / ACS-OMI Markdown report](reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)

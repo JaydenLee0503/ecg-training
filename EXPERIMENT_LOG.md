@@ -935,3 +935,13 @@ saved patient split also passed; the linked JSON records the checks. No training
 or feature extraction was performed, and existing experiments remain unchanged.
 The [ACS log](experiments/acs_omi_vmd_wst_vqc/EXPERIMENT_LOG.md) records the full
 review scope and the live Figshare access limitation.
+
+## 2026-10-11 EDT — Literature review and methodological gaps
+
+Expanded the same [Markdown review](experiments/acs_omi_vmd_wst_vqc/reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+into research-paper prose with 31 references. Added conventional ML, deep
+learning, recent primary ECG/OMI studies, WST/VMD, LFCC–Swin, quantum classifiers,
+reported errors and a controlled comparison framework. Removed repository-specific
+paths, internal audit references and unpublished results from the manuscript.
+The earlier verification JSON is preserved; the ACS log records source access
+limitations and verification. No models or experiments were run.

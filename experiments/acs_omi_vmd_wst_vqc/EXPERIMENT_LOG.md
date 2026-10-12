@@ -712,3 +712,37 @@ metadata came from the preserved official API snapshot and the accessible
 publisher paper. No downloads, feature extraction, model fitting or test
 evaluation occurred. This was documentation research, not a new experiment;
 there are no new predictions, model seeds, accuracy estimates or pending runs.
+
+## 2026-10-11 EDT — Standalone literature review, errors and research gaps
+
+At the user's request, rewrote and expanded the same [report](reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+as a narrative review and proposed research framework. It retains dataset and
+mortality background and adds conventional ML, deep learning, recent 2023–2026
+papers, WST, VMD, LFCC–Swin, weak supervision and quantum classification. The
+manuscript contains 31 references, eight tables, error definitions and a matched
+comparison framework. It excludes local paths, custom splits, audit links and
+unpublished model scores. The previous verification JSON was not modified.
+
+Primary sources were checked through official publishers, PubMed abstracts,
+author manuscripts and original-paper PDFs. Herman Table 4 was available as
+full-text PDF extraction; a screenshot request failed, but the table and methods
+were readable. It uses patient contacts with maximum pre-angiography evidence
+and validation-selected thresholds. Nahak's WST paper was accessible through its
+publisher abstract/search record, but not full text; the review explicitly leaves
+patient-disjoint evaluation unverified. Several publisher page fetches failed;
+available primary text was used without inferring inaccessible methods. Figshare
+version metadata remains supported by the prior official snapshot. No exact
+clinical LFCC–Swin OMI validation was verified, and no first-use claim is made.
+The recent quantum ECG paper explicitly describes noisy simulator execution;
+the manuscript does not equate that with hardware acceleration. Bowles is marked
+as a preprint. Both WST and weakly supervised learning are explained because
+the user's “WSL” was ambiguous and the optional clarification had no reply.
+
+Verified metric transcription against the cited sources, all stated accuracy,
+sensitivity, specificity and PPV complements, the Swin CI complement, the Herman
+percentage-point differences and the illustrative prevalence calculation.
+Reference numbering, external-only manuscript links and table column counts
+passed structural checks. Initial diff checking found two intentional Markdown
+hard-break spaces; these were replaced with blank lines. No data extraction,
+training, test prediction or frozen-protocol change occurred. The proposed
+framework is literature synthesis, not an executed or newly frozen experiment.

@@ -1,5 +1,24 @@
 # Session handoff — 2026-09-25
 
+## Literature review expanded into manuscript form — 2026-10-11 EDT
+
+At the user's request, the [same Markdown report](../experiments/acs_omi_vmd_wst_vqc/reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+now reads as a standalone narrative literature review and proposed research
+framework. It retains dataset provenance/structure and dated WHO mortality,
+and adds conventional ML, deep learning, recent 2023–2026 studies, VMD, WST,
+LFCC–Swin, weak supervision, quantum classifiers, quantified errors and gaps.
+It contains 31 references and distinguishes established evidence from proposals.
+Repository paths, internal audit links, custom splits and unpublished experiment
+scores were removed from the manuscript. The earlier verification JSON remains
+unchanged as an audit artifact; the entry below describes the prior report form.
+
+Checked published metric transcription, all stated error complements and the
+illustrative prevalence calculation. The direct Herman comparison uses patient
+contacts and validation-selected thresholds. The review distinguishes internal
+and external OMI tasks, and labels the Bowles benchmark as a preprint. No exact
+clinical LFCC–Swin OMI study was verified; no priority or superiority is claimed.
+Only documentation changed. No extraction, training or evaluation was launched.
+
 ## Dataset structure, citations and mortality review — 2026-10-11 EDT
 
 Completed the user-requested [Markdown research report](../experiments/acs_omi_vmd_wst_vqc/reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
