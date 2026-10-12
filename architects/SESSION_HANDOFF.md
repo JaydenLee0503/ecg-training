@@ -1,5 +1,21 @@
 # Session handoff — 2026-09-25
 
+## Dataset structure, citations and mortality review — 2026-10-11 EDT
+
+Completed the user-requested [Markdown research report](../experiments/acs_omi_vmd_wst_vqc/reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+covering ECGData.mat and ACS/OMI provenance, schemas, labels, patient counts,
+exclusions, citation details and global mortality context. A linked JSON records
+new read-only checks of local source hashes, all 162 ECGData row identities,
+ACS CSV counts and the saved patient split. Both ACS archive hashes match the
+prior full audit; no waveform quality rescan or model artifact audit was repeated.
+
+The report distinguishes WHO observation years: the live causes-of-death page
+updated 2 October 2026 reports 2023 estimates, while the CVD fact sheet reports
+2022. Neither ECG dataset provides mortality follow-up. Live Figshare access
+failed, so the pinned data citation was checked against the preserved official
+API snapshot. No training, feature extraction, test evaluation or new experiment
+was started; existing completed work and frozen protocols remain unchanged.
+
 ## ECGData Eyeball training completed — 2026-10-10
 
 The user-requested 30-second EMD/Hilbert rotational-morphology experiment on

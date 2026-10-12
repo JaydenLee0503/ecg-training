@@ -1,0 +1,171 @@
+{
+  "verified_at_utc": "2026-10-12T01:23:53.963696+00:00",
+  "scope": "Read-only source identity, MAT structure and mapped row hashes, CSV schema/counts, saved split verification; no training, feature extraction, new test waveform processing or full model artifact audit.",
+  "source_files": {
+    "ECGData.mat": {
+      "bytes": 70075220,
+      "sha256": "031ccc6b3fc905742e70a44d810377ba655dd58b346c84485e9e7beab03d140a"
+    },
+    "ecgvmd/ecgdata_subjects.csv": {
+      "bytes": 59394,
+      "sha256": "b0dfbd8d0f4c030a4a83eaf9eeff81c1ba1d508b5078eca473fa8502cc86855e"
+    },
+    "experiments/acs_omi_vmd_wst_vqc/data/CSV.zip": {
+      "bytes": 296769,
+      "sha256": "675a57e90eea1175259301293812ec0a23c73f83ec7fb352a8309f05843d0005"
+    },
+    "experiments/acs_omi_vmd_wst_vqc/data/ECG_row_data.zip": {
+      "bytes": 1277577332,
+      "sha256": "9a5a1bf1655b28d09de152bd4bf443c491cef4a1adff108b40938ee90e6693c4"
+    },
+    "experiments/acs_omi_vmd_wst_vqc/results/omi_v1_gpu_retry256k/splits.csv": {
+      "bytes": 1690297,
+      "sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba"
+    }
+  },
+  "ecgdata": {
+    "mat_fields": [
+      "Data",
+      "Labels"
+    ],
+    "struct_shape": [
+      1,
+      1
+    ],
+    "data_shape": [
+      162,
+      65536
+    ],
+    "dtype": "float64",
+    "labels_shape": [
+      162,
+      1
+    ],
+    "sampling_hz": 128.0,
+    "duration_seconds": 512.0,
+    "finite": true,
+    "verified_waveform_row_hashes": 162,
+    "recordings": 81,
+    "patients": 80,
+    "classes": {
+      "ARR": {
+        "lead_rows": 96,
+        "recordings": 48,
+        "patients": 47
+      },
+      "CHF": {
+        "lead_rows": 30,
+        "recordings": 15,
+        "patients": 15
+      },
+      "NSR": {
+        "lead_rows": 36,
+        "recordings": 18,
+        "patients": 18
+      }
+    }
+  },
+  "acs": {
+    "metadata": {
+      "train": {
+        "records": 17960,
+        "patients": 17018,
+        "columns": [
+          "Patient_id",
+          "ecg_row_record",
+          "ecg_med_record",
+          "gender",
+          "age",
+          "Time_Interval",
+          "AMI",
+          "OMI",
+          "CTO",
+          "PCI",
+          "NSTEMI",
+          "STEMI",
+          "UA",
+          "LM",
+          "PLAD",
+          "MLAD",
+          "DLAD",
+          "DB",
+          "PLCX",
+          "MLCX",
+          "DLCX",
+          "OM",
+          "PRCA",
+          "MRCA",
+          "DRCA",
+          "VF_VT",
+          "Paced",
+          "Prior_PCI"
+        ],
+        "diagnosis_counts": {
+          "AMI": {
+            "0": 15281,
+            "1": 2679
+          },
+          "OMI": {
+            "0": 16809,
+            "1": 1151
+          },
+          "CTO": {
+            "0": 17003,
+            "1": 957
+          },
+          "NSTEMI": {
+            "0": 16725,
+            "1": 1235
+          },
+          "STEMI": {
+            "0": 16518,
+            "1": 1442
+          },
+          "UA": {
+            "0": 11747,
+            "1": 6213
+          }
+        }
+      },
+      "test": {
+        "records": 1995,
+        "patients": 1891,
+        "columns": [
+          "Patient_id",
+          "ecg_row_record",
+          "ecg_med_record",
+          "gender",
+          "age",
+          "Time_Interval"
+        ],
+        "diagnosis_counts": {}
+      }
+    },
+    "archive_sha256_matches_prior_full_audit": true,
+    "official_patient_overlap": 0,
+    "saved_development_split": {
+      "fit": {
+        "records": 14324,
+        "patients": 13576,
+        "omi_counts": {
+          "0": 13407,
+          "1": 917
+        }
+      },
+      "validation": {
+        "records": 3581,
+        "patients": 3391,
+        "omi_counts": {
+          "0": 3352,
+          "1": 229
+        }
+      }
+    },
+    "fit_validation_patient_overlap": 0,
+    "development_test_patient_overlap": 0,
+    "mixed_omi_label_development_patients": 114,
+    "prior_quality_audit": "acs_loader_2026-09-24.json",
+    "quality_policy_reused_without_rescanning_waveforms": true
+  },
+  "elapsed_seconds": 39.58355228699838
+}

@@ -923,3 +923,15 @@ The September 23–24 ACS entries were moved intact in substance, with updated
 paths, to the [ACS experiment log](experiments/acs/EXPERIMENT_LOG.md).
 Original ECGData code, frozen protocols, models, and results remain in place.
 See the [ACS workspace guide](experiments/acs/README.md) for current commands.
+
+## 2026-10-11 EDT — ECGData and ACS/OMI data and mortality documentation
+
+Created the requested [sourced Markdown review](experiments/acs_omi_vmd_wst_vqc/reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md).
+It documents both dataset structures, original sources, correct data citations,
+patient counts and the limits of relating classification labels to global deaths.
+New read-only checks verified all ECGData waveform-row identities and confirmed
+162 rows / 81 recordings / 80 patients. ACS metadata, archive identity and the
+saved patient split also passed; the linked JSON records the checks. No training
+or feature extraction was performed, and existing experiments remain unchanged.
+The [ACS log](experiments/acs_omi_vmd_wst_vqc/EXPERIMENT_LOG.md) records the full
+review scope and the live Figshare access limitation.

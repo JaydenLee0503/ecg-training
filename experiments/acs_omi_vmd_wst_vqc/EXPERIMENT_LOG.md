@@ -687,3 +687,28 @@ Read [the execution record](reports/eyeball_lead_i_execution_2026-10-08.md).
 No real-data extraction or model fitting had started at this preparation snapshot.
 The user requested incremental commits under their own configured Git identity;
 the completed all-lead pilot and this preference were committed as `8b69d35`.
+
+## 2026-10-11 EDT — Dataset structure, attribution and mortality review
+
+Completed the user-requested [Markdown review](reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+of ECGData.mat and ACS/OMI, including schemas, provenance, source populations,
+label meanings, patient grouping, existing exclusions, dataset/publication DOIs
+and global mortality context. Mortality observation years are explicit; the live
+WHO causes-of-death page superseded its stale search preview. Global IHD deaths
+are not presented as ACS/OMI deaths, and no mortality outcome is inferred from
+either ECG classification dataset.
+
+Read-only local verification passed in 39.584 seconds: source SHA-256 hashes,
+all 162 MAT waveform-row hashes, class/record/patient counts, public ACS metadata
+schemas and the frozen development split. It reconfirmed 80 ECGData patients,
+18,909 full-release ACS patients, zero cross-partition patient overlap and 114
+development patients with mixed record-level OMI labels. Both ZIP hashes match
+the prior full audit. Quality decisions were reused without rescanning waveforms.
+The [verification JSON](reports/ecgdata_acs_omi_data_review_2026-10-11_verification.json)
+retains the evidence and exact UTC timestamp.
+
+Live Figshare access failed through the research browser; citation/version
+metadata came from the preserved official API snapshot and the accessible
+publisher paper. No downloads, feature extraction, model fitting or test
+evaluation occurred. This was documentation research, not a new experiment;
+there are no new predictions, model seeds, accuracy estimates or pending runs.

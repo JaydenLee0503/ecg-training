@@ -1,5 +1,21 @@
 # ACS session handoff — 2026-09-25
 
+## Dataset and mortality research completed — 2026-10-11 EDT
+
+The requested [ECGData / ACS-OMI Markdown report](reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
+covers data origins, exact structure, label definitions, patient counts,
+quality exclusions, references and year-specific WHO global mortality estimates.
+The [new verification record](reports/ecgdata_acs_omi_data_review_2026-10-11_verification.json)
+rechecks source hashes, MAT row identities, ACS metadata and the existing patient
+split. All checks passed; the ZIPs still match the earlier full audit. That
+audit's quality decisions were reused without rescanning test waveforms.
+
+Neither dataset supplies mortality follow-up. The report does not infer global
+OMI mortality from IHD totals or dataset prevalence. Live Figshare page/API access
+failed; the versioned data reference was verified against the saved official
+API metadata. No extraction, fitting, test prediction or new experiment occurred.
+Existing completion states and frozen protocols are unchanged.
+
 ## Lead-I feasibility study ended at its engineering gate — 2026-10-08 23:39 EDT
 
 The frozen run completed at **2026-10-09T03:39:02Z** and exited normally. The
