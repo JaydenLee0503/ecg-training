@@ -1,0 +1,206 @@
+{
+  "review_date_toronto": "2026-10-12",
+  "audited_at_utc": "2026-10-13T02:25:45.1051398Z",
+  "scope": "Saved Swin v1 artifact checksum verification and descriptive analysis; no model loaded, fitted, or newly inferred",
+  "completion_status": "complete",
+  "artifact_inventory_entries": 129,
+  "artifact_problems": [],
+  "swin_fits": 15,
+  "fits_with_perfect_training_accuracy": 15,
+  "history_rows": 600,
+  "class_statistics_from_saved_report": [
+    {
+      "class": "ARR",
+      "mean_window_recall": 0.8881944444444444,
+      "mean_window_f1": 0.880727388055965,
+      "mean_patient_recall": 0.9929078014184397
+    },
+    {
+      "class": "CHF",
+      "mean_window_recall": 0.7200000000000001,
+      "mean_window_f1": 0.7313260080100057,
+      "mean_patient_recall": 0.8444444444444444
+    },
+    {
+      "class": "NSR",
+      "mean_window_recall": 0.7824074074074074,
+      "mean_window_f1": 0.7897262738069782,
+      "mean_patient_recall": 0.8888888888888888
+    }
+  ],
+  "prediction_coverage": [
+    {
+      "seed": 0,
+      "rows": 1620,
+      "unique_windows": 1620,
+      "patients": 80,
+      "accuracy_recomputed_from_saved_classes": 0.8197530864197531
+    },
+    {
+      "seed": 1,
+      "rows": 1620,
+      "unique_windows": 1620,
+      "patients": 80,
+      "accuracy_recomputed_from_saved_classes": 0.8475308641975309
+    },
+    {
+      "seed": 2,
+      "rows": 1620,
+      "unique_windows": 1620,
+      "patients": 80,
+      "accuracy_recomputed_from_saved_classes": 0.8333333333333334
+    }
+  ],
+  "incorrect_patient_votes": [
+    {
+      "seed": 0,
+      "patient": "chfdb/chf07",
+      "label": "CHF",
+      "vote": "NSR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 0,
+      "patient": "chfdb/chf08",
+      "label": "CHF",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 0,
+      "patient": "chfdb/chf10",
+      "label": "CHF",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 0,
+      "patient": "mitdb/233",
+      "label": "ARR",
+      "vote": "CHF",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 0,
+      "patient": "nsrdb/16265",
+      "label": "NSR",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 0,
+      "patient": "nsrdb/16773",
+      "label": "NSR",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 1,
+      "patient": "chfdb/chf04",
+      "label": "CHF",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 1,
+      "patient": "nsrdb/16265",
+      "label": "NSR",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 1,
+      "patient": "nsrdb/19093",
+      "label": "NSR",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 2,
+      "patient": "chfdb/chf04",
+      "label": "CHF",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 2,
+      "patient": "chfdb/chf07",
+      "label": "CHF",
+      "vote": "NSR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 2,
+      "patient": "chfdb/chf13",
+      "label": "CHF",
+      "vote": "NSR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 2,
+      "patient": "nsrdb/16265",
+      "label": "NSR",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    },
+    {
+      "seed": 2,
+      "patient": "nsrdb/16773",
+      "label": "NSR",
+      "vote": "ARR",
+      "correct": false,
+      "windows": 20
+    }
+  ],
+  "input_hashes": [
+    {
+      "path": "attention method/ecgdata_protocol.json",
+      "sha256": "397dac613b711510ce7aadc74363b2a410a355de55217fed541473246a815741"
+    },
+    {
+      "path": "attention method/attention_ecg/model.py",
+      "sha256": "df3cc984adce7ddc9a07ab7529343f79a5c0e3e7365b949163a635e335645115"
+    },
+    {
+      "path": "attention method/attention_ecg/cepstral.py",
+      "sha256": "7dd2f45dd1f8e7f21fbf8ef58fe0e2ce83f4b6416b0edee70141e267536a3c0f"
+    },
+    {
+      "path": "attention method/attention_ecg/ecgdata_training.py",
+      "sha256": "db917c268ae38f229a202650211cdea1940652cab5f64d8e4c8d2cdecd7ab8df"
+    },
+    {
+      "path": "attention method/reports/ecgdata_lfcc_swin_v1/report.json",
+      "sha256": "c0814112c12dd5001844f20391f72e814906aee312e190e0502ccb7f39ee18bc"
+    },
+    {
+      "path": "attention method/reports/ecgdata_lfcc_swin_v1/predictions.csv",
+      "sha256": "fa6563965b906e1c6aec29bfc43fcbcf45c4d260708e455dcc317e4a9d7ba928"
+    },
+    {
+      "path": "attention method/reports/ecgdata_lfcc_swin_v1/fits.csv",
+      "sha256": "d0212ddfd459e254eecd3a2ac8e6ca2c0c325627802bb8f94c9eb6cb34452fd7"
+    },
+    {
+      "path": "attention method/reports/ecgdata_lfcc_swin_v1/histories.csv",
+      "sha256": "1927499d632338e0ce743e1bac65e13ef09f300d57303f7846547410fc2fbf58"
+    },
+    {
+      "path": "attention method/reports/ecgdata_lfcc_swin_v1/artifact_inventory.csv",
+      "sha256": "3858705f55b9ccad626723d7943ee984da88191384b6bd3a90c37473827a1661"
+    }
+  ]
+}

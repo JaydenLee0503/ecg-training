@@ -1,5 +1,23 @@
 # Attention method handoff — 2026-09-25
 
+## Swin literature and improvement review — 2026-10-12 EDT
+
+Completed the user-requested [research review](reports/swin_research_2026-10-12.md)
+of the current ECGData code/results and nine relevant 2024–2026 papers, with
+publication/access limits and proposed implementation changes. Priority is a
+bounded regularization and inner-patient epoch-selection experiment, followed
+by representation controls/raw-waveform fusion and external ECG pretraining.
+The proposed v2 experiment is not implemented or frozen; no fitting was started.
+
+The [fresh audit](reports/swin_research_audit_2026-10-12.json) verified all 129
+saved v1 artifact entries with no mismatches, and checked exported window and
+patient-vote accuracies. All 15 Swin fits have perfect training accuracy; mean
+window recall is ARR 88.82%, CHF 72.00%, NSR 78.24%. These are descriptive saved
+results, not new model evaluations. The audit script uses PowerShell only.
+Completed models, features, protocols and ACS work remain unchanged. The
+learning-curve draft remains unimplemented. No new training is pending from
+this research-only session.
+
 ## ECGData rotational-morphology training completed — 2026-10-10
 
 The frozen 30-second Eyeball experiment completed extraction and all five

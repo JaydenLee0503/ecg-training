@@ -1,5 +1,27 @@
 # Attention method experiment log
 
+## 2026-10-12 — Swin literature review and saved-result audit; no training
+
+Inspected the ECGData protocol, LFCC extractor, temporal Swin and training loop;
+reviewed nine primary 2024–2026 papers, distinguishing preprints, different tasks
+and inaccessible full texts. Saved the [research report](reports/swin_research_2026-10-12.md)
+with ranked methods and an unimplemented, unfrozen v2 regularization proposal.
+The first proposed comparison uses inner patient folds, all seeds 0/1/2 and
+candidate epochs 10/20/40, preserving the original outer folds and results.
+
+A [PowerShell audit](scripts/research_swin_audit_2026-10-12.ps1) verified all 129
+saved Swin artifact entries, 15 fit summaries and 600 history rows. Exported
+window/patient-vote accuracies match the report; all seeds cover 1,620 windows
+and 80 patients. No missing/changed artifact was found. All fits have perfect
+training accuracy. Descriptive mean window recall is ARR 88.82%, CHF 72.00%,
+NSR 78.24%; [JSON evidence](reports/swin_research_audit_2026-10-12.json) includes
+source hashes and patient-vote errors. No new predictions or models were made.
+
+Access issues: shell sandbox initially denied the workspace path; approved
+access succeeded. Git required command-scoped safe.directory. Some paper/PDF
+retrievals failed and are identified in the report. No dependencies were added,
+no extraction/training ran, and frozen code/protocols/results were preserved.
+
 ## 2026-09-29 — Learning-curve protocol drafted; nothing run
 
 At the user's request, wrote [ecgdata_learning_curve_protocol.md](ecgdata_learning_curve_protocol.md)

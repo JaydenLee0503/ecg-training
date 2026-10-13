@@ -1,5 +1,22 @@
 # Session handoff — 2026-09-25
 
+## ECGData Swin research and improvement priorities — 2026-10-12 EDT
+
+Completed the [Swin research review](../attention%20method/reports/swin_research_2026-10-12.md)
+requested by the user, covering the actual LFCC/Swin implementation, saved
+class-level results, nine 2024–2026 papers and a bounded experiment proposal.
+The recommendation is inner-patient epoch selection with modest regularization,
+then raw/cepstral representation controls; external ECG pretraining is a larger
+extension. Proposed settings are untested, and no improved accuracy is claimed.
+
+Verified all 129 saved Swin artifact entries by size/SHA-256, with zero issues;
+recomputed exported window and patient-vote accuracies match the saved report.
+All 15 Swin fits have 100% training accuracy. Mean CHF window recall is 72.00%,
+versus ARR 88.82% and NSR 78.24%. See the [audit](../attention%20method/reports/swin_research_audit_2026-10-12.json).
+No model reload, new inference, extraction, training or dependency installation
+occurred. Existing protocols/results and ACS work remain intact. The v2 proposal
+and earlier learning-curve study have no implemented runner and were not run.
+
 ## Literature review expanded into manuscript form — 2026-10-11 EDT
 
 At the user's request, the [same Markdown report](../experiments/acs_omi_vmd_wst_vqc/reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)
