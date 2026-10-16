@@ -1,5 +1,17 @@
 # Attention method handoff — 2026-09-25
 
+## LFCC + Swin walkthrough notebook — 2026-10-15
+
+At the user's request, [lfcc_swin_walkthrough.ipynb](lfcc_swin_walkthrough.ipynb)
+walks through every stage of the completed v1 experiment with **no training**:
+raw windows (hash-matched), patient folds, step-by-step LFCC and full cache
+rebuild (bit-exact), fit-only normalization, architecture/shifted-window masks,
+the training code (printed only), CPU reload of all 15 Swin + 5 logistic models,
+metrics and the 2,000-draw bootstrap. Executed in about 1 minute on CPU: predicted classes
+identical, max probability difference 1.85e-6, and metrics/bootstrap equal the
+saved `report.json` exactly. It writes nothing to `results/` or `features/`.
+The running regularization v2 study is not covered.
+
 ## Regularization v2 prepared and authorized — 2026-10-15
 
 The user authorized the suggested improvement work. The first bounded study is
