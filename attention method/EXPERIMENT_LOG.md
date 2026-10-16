@@ -1,5 +1,24 @@
 # Attention method experiment log
 
+## 2026-10-15 — Epoch selection and dropout study prepared
+
+User authorized the proposed accuracy-improvement work. Implemented a separate
+resumable nested patient-validation runner and dropout model wrapper without
+editing frozen v1 code. [Protocol](ecgdata_regularization_protocol_v2.md): R0 and
+dropout-0.1 R1, candidate epochs 10/20/40, three inner folds, seeds 0/1/2, 90 inner
+fits and 30 outer trials. R0 epoch-40 models are reused from v1 after reload.
+All outer selections are saved before any new outer inference. Both arms and
+negative outcomes are retained; the primary metric remains window macro-F1.
+
+Six new CPU checks passed in 19.670 s; the explicit GPU check was deferred. Ten
+original ECGData tests passed in 0.207 s. New checks cover parameter/forward/
+gradient/training equivalence at zero dropout, exact resumed dropout training,
+candidate checkpoint retention, reuse/corruption, patient isolation, fit-only
+normalization and evaluation-data independence. Completed LFCC cache and original
+predictions verified; RTX 5070 available outside sandbox. No new package installed.
+No real-data training at this preparation snapshot. An unrelated existing audit
+JSON modification was preserved; its CRLF whitespace warnings were not edited.
+
 ## 2026-10-12 — Swin literature review and saved-result audit; no training
 
 Inspected the ECGData protocol, LFCC extractor, temporal Swin and training loop;

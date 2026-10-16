@@ -1,5 +1,29 @@
 # Attention method handoff — 2026-09-25
 
+## Regularization v2 prepared and authorized — 2026-10-15
+
+The user authorized the suggested improvement work. The first bounded study is
+[v2 epoch selection and dropout](ecgdata_regularization_protocol_v2.md), with R0
+and dropout-0.1 R1, epoch candidates 10/20/40, three inner patient folds and seeds
+0/1/2. It preserves all original windows/outer folds and compares both candidates
+plus their inner-selected procedure against saved v1 and logistic controls.
+Plan: 90 inner fits and 30 outer trials; R0 epoch-40 selections reuse v1 models.
+
+Six new CPU checks passed (one GPU check deferred to launch), including exact
+zero-dropout training equivalence to v1, patient isolation, fit-only statistics,
+dropout checkpoint recovery and completed-result reuse. Ten original ECGData
+tests also passed. Existing feature cache and completed v1 predictions verified.
+The RTX 5070 is accessible outside the sandbox with existing PyTorch 2.7.1+cu128.
+No dependencies installed. Real training has not started at this preparation entry.
+
+Launch: `/home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/scripts/run_ecgdata_regularization.py' --execute-training --device cuda`.
+The launcher first runs CPU/GPU agreement and exact GPU recovery checks. It logs
+to `reports/ecgdata_lfcc_swin_regularization_v2/execution.log`. Check the matching
+`results/.../status.json` and completion markers before a restart; never duplicate
+a running job. Do not change the frozen protocol or source during execution.
+Feature/raw-waveform, longer-window and additional-patient comparisons remain
+separate follow-ups. An existing modified October-12 audit JSON was left untouched.
+
 ## Swin literature and improvement review — 2026-10-12 EDT
 
 Completed the user-requested [research review](reports/swin_research_2026-10-12.md)

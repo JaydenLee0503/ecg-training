@@ -1,0 +1,21 @@
+{
+  "id": "ecgdata_lfcc_swin_regularization_v2",
+  "base_protocol": "ecgdata_protocol.json",
+  "candidates": [{"id": "R0", "dropout": 0.0}, {"id": "R1", "dropout": 0.1}],
+  "epoch_candidates": [10, 20, 40],
+  "inner_folds": 3,
+  "inner_split_seed": 20261015,
+  "seeds": [0, 1, 2],
+  "schedule_horizon": 40,
+  "selection_metric": "pooled_inner_window_macro_f1_mean_over_seeds",
+  "ties": "earlier epoch, then candidate order",
+  "outer_refits": "each candidate at its inner-selected epoch; combined procedure uses inner-selected candidate",
+  "planned_inner_fits": 90,
+  "planned_outer_trials": 30,
+  "reuse_completed": "R0 selected at epoch 40 reuses the corresponding completed v1 fit",
+  "primary_contrast": "inner_selected_procedure_minus_saved_v1_window_macro_f1",
+  "secondary_contrasts": ["R0_minus_saved_v1", "R1_minus_saved_v1", "selected_minus_logistic"],
+  "bootstrap_resamples": 2000,
+  "bootstrap_seed": 20260925,
+  "no_new_exclusions": true
+}

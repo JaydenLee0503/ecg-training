@@ -1,5 +1,16 @@
 # Session handoff — 2026-09-25
 
+## ECGData regularization improvement study prepared — 2026-10-15
+
+The user authorized improvement work following the 83.35% window-accuracy
+discussion. Prepared the isolated [epoch-selection/dropout protocol](../attention%20method/ecgdata_regularization_protocol_v2.md):
+90 inner fits and 30 outer trials, all seeds 0/1/2, unchanged patient folds and
+LFCC windows. R0 at epoch 40 reuses completed v1 fits. Six new CPU checks and ten
+existing ECGData checks passed; GPU numerical/recovery checks precede launch.
+No real training has started at this dated preparation snapshot. See the
+[attention handoff](../attention%20method/SESSION_HANDOFF.md) for the launch command,
+status and restart paths. Existing experiments remain intact; no ACS work started.
+
 ## Separate ACS/OMI sensitivity study — 2026-10-15 EDT
 
 The user authorized saved-score tradeoff analysis plus new patient-separated
