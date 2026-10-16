@@ -1,5 +1,16 @@
 # ACS session handoff — 2026-09-25
 
+## Separate sensitivity study authorized — 2026-10-15 EDT
+
+The new [sensitivity_study_v1](sensitivity_study_v1/README.md) folder contains the
+authorized saved-score analysis and 14 new balanced fits with a patient-separated
+calibration split. All seeds 0/1/2, controls, targets 80/90/95%, uncertainty and
+artifacts are retained. See its [handoff](sensitivity_study_v1/SESSION_HANDOFF.md)
+for actual status and restart checks. Eight focused checks passed. Preparation
+refits learned preprocessing on subfit records only; no official test processing.
+Existing completed experiments remain intact. No new accuracy/sensitivity result
+is claimed at this preparation snapshot.
+
 ## Manuscript literature review completed — 2026-10-11 EDT
 
 Expanded the [existing report](reports/ecgdata_acs_omi_data_and_mortality_review_2026-10-11.md)

@@ -1,0 +1,14 @@
+{
+  "id": "acs-omi-sensitivity-v1-20261015",
+  "targets_percent": [80, 90, 95],
+  "threshold_rule": "largest observed calibration score whose score >= cutoff predictions reach the target; retain all ties; no interpolation or randomization",
+  "calibration_split": {"method": "StratifiedGroupKFold", "n_splits": 5, "fold": 0, "seed": 20261015, "source": "original fit patients only; use one fixed held-out fold for calibration, other four for fitting"},
+  "sampling": {"method": "retain every subfit ECG then duplicate minority with replacement to equal class counts", "seed": 20261015},
+  "models": {"frontends": ["vmd", "wst", "lfcc"], "vmd_wst": ["logistic", "weighted_knn", "vqc_seed0", "vqc_seed1", "vqc_seed2"], "lfcc": ["logistic", "swin_seed0", "swin_seed1", "swin_seed2"], "neural_seeds": [0, 1, 2], "fits": 14, "settings": "inherit balanced-v1 classifiers, epochs and learning schedules unchanged; refit all learned preprocessing on unique subfit records only"},
+  "selection": {"early_stopping": false, "hyperparameter_search": false, "model_selection": false, "refit_after_calibration": false, "validation_threshold_tuning": false},
+  "bootstrap": {"draws": 2000, "seed": 20261015, "unit": "patient with all their ECGs retained", "interval": "pointwise paired percentile 95%; average seed metrics, not scores", "saved_scores": "reselect threshold in each resampled validation curve; descriptive, not independent evaluation", "new_fits": "hold calibration thresholds fixed and resample validation patients; excludes fitting and calibration uncertainty"},
+  "sources": {"balanced": "correct balance training set OMI/results/v1", "original": "experiments/acs_omi_vmd_wst_vqc/results/omi_models_v1_retry256k", "features": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1_gpu_retry256k/features.npz", "split": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1/splits.csv", "split_sha256": "d036f1eff7c350638e1e7e738d1ded6d017b4c7b62380a8debf89e89a3c5faba"},
+  "reporting": ["all per-seed thresholds and confusion counts", "achieved sensitivity", "specificity", "precision", "AP and ROC AUC", "accuracy", "false alarms per 1000 non-OMI ECGs", "paired differences from LFCC logistic", "split and sampling ledger", "settings and source snapshots", "checkpoints and histories", "model reload parity", "runtime, warnings and failures", "artifact hashes"],
+  "limits": "ECG-level outcomes on patient-disjoint internal validation previously examined in earlier research. Calibration targets are not guarantees on validation. Fewer fitting patients than the earlier study. No clinical or quantum advantage claim. No new exclusions or waveform extraction.",
+  "official_test_processed": false
+}

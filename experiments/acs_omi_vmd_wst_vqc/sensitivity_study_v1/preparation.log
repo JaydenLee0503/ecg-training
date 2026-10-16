@@ -1,0 +1,5 @@
+Verifying protected models, predictions and feature caches
+Refitting vmd feature selection and scaling on unique subfit records
+Refitting wst feature selection and scaling on unique subfit records
+Refitting LFCC scaling on unique subfit records
+{"partitions": {"subfit": {"records": 11458, "patients": 10859, "counts": [10725, 733]}, "calibration": {"records": 2866, "patients": 2717, "counts": [2682, 184]}, "validation": {"records": 3581, "patients": 3391, "counts": [3352, 229]}}, "balanced_counts": [10725, 10725], "patient_overlap": 0, "exclusions_added": 0, "official_test_processed": false, "warnings": [], "seconds": 113.67932522599995, "completed_at_utc": "2026-10-16T02:50:05Z", "protected_files": 1088, "learned_preprocessing_fit_on": "unique subfit only"}

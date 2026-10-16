@@ -1,0 +1,21 @@
+test_cluster_bootstrap_seed_means_and_paired_zero (test_study.ThresholdTests.test_cluster_bootstrap_seed_means_and_paired_zero) ... ok
+test_end_to_end_logistic_validation_labels_cannot_change_cutoffs (test_study.ThresholdTests.test_end_to_end_logistic_validation_labels_cannot_change_cutoffs) ... vmd/logistic: complete in 0.0s
+vmd/logistic: verified complete
+vmd/logistic: complete in 0.0s
+vmd/logistic: verified complete
+ok
+test_fixed_threshold_is_not_reselected_to_hit_target (test_study.ThresholdTests.test_fixed_threshold_is_not_reselected_to_hit_target) ... ok
+test_invalid_inputs_rejected (test_study.ThresholdTests.test_invalid_inputs_rejected) ... ok
+test_patient_split_and_sampling_are_separate (test_study.ThresholdTests.test_patient_split_and_sampling_are_separate) ... ok
+test_swin_adapter_keeps_calibration_and_validation_separate (test_study.ThresholdTests.test_swin_adapter_keeps_calibration_and_validation_separate) ... Swin seed 0: epoch 1/2, loss=0.70956, 0.5s
+Swin seed 0: epoch 2/2, loss=0.68703, 0.0s
+lfcc/swin_seed0: complete in 63.2s
+lfcc/swin_seed0: verified complete
+ok
+test_ties_constant_and_exact_percentage_boundary (test_study.ThresholdTests.test_ties_constant_and_exact_percentage_boundary) ... ok
+test_weighted_curve_matches_literal_patient_duplicates (test_study.ThresholdTests.test_weighted_curve_matches_literal_patient_duplicates) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 63.357s
+
+OK

@@ -1,5 +1,18 @@
 # Session handoff — 2026-09-25
 
+## Separate ACS/OMI sensitivity study — 2026-10-15 EDT
+
+The user authorized saved-score tradeoff analysis plus new patient-separated
+threshold-selection fits and requested a separate folder with complete records.
+All new work lives in [sensitivity_study_v1](../experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/README.md).
+Read its [handoff](../experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/SESSION_HANDOFF.md)
+and actual completion markers before starting or resuming anything. Eight focused
+checks passed; preparation refits learned preprocessing using subfit patients only.
+The protocol retains every seed and targets 80/90/95% sensitivity. One inner
+patient calibration fold selects cutoffs; the unchanged validation cohort evaluates
+them. Original runs are read-only sources; official test patients remain reserved.
+This entry records preparation, not completed new performance results.
+
 ## ECGData Swin research and improvement priorities — 2026-10-12 EDT
 
 Completed the [Swin research review](../attention%20method/reports/swin_research_2026-10-12.md)
