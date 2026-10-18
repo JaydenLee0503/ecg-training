@@ -14,7 +14,7 @@ The running regularization v2 study is not covered.
 
 ## LFCC + Swin full-training notebook — 2026-10-17
 
-At the user's request, [lfcc_swin_training.ipynb](lfcc_swin_training.ipynb)
+At the user's request, [reproduce_swin/lfcc_swin_training.ipynb](reproduce_swin/lfcc_swin_training.ipynb)
 trains the unchanged v1 protocol, Swin arm only (15 fits, no logistic control),
 from `ECGData.mat` into the new `results/ecgdata_lfcc_swin_retrain/`. The notebook
 is intended for Colab and lists its minimal input files. It was not run in full here. A
@@ -23,6 +23,11 @@ reproduced every original predicted class; max probability difference was
 0.0053 versus the GPU fit. Results cells, run read-only on the v1 fits, gave
 83.35%/0.8006/94.17% with matching bootstrap intervals. Other hardware
 or library versions may change weights; results should be close but are not bit-identical.
+Later the same day the notebook moved into the self-contained
+[reproduce_swin/](reproduce_swin/README.md) upload folder, which holds copies of the raw data,
+loader, frozen reference files and code, and gained a cell showing LFCC extraction.
+Run from a Colab-like copy, it extracted everything from scratch and trained one CPU fit
+that reproduced the original classes.
 
 ## Regularization v2 prepared and authorized — 2026-10-15
 

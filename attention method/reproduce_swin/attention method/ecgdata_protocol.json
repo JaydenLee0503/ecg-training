@@ -1,0 +1,27 @@
+{
+  "id": "ecgdata_lfcc_small_swin_v1",
+  "classes": ["ARR", "CHF", "NSR"],
+  "input": {"fs": 128, "seg_len": 500, "n_per_record": 10, "seed": 0, "zscore_each_window": true},
+  "reference": {
+    "directory": "results/patient_vmd_wst_vqc",
+    "windows_sha256": "3eaffccfb4f7390ea677937bd233285d1a918f0810da527b3634566b952f9af9",
+    "subject_map_sha256": "b0dfbd8d0f4c030a4a83eaf9eeff81c1ba1d508b5078eca473fa8502cc86855e",
+    "fold_sha256": "1d88466d8e2050de0f05fdf3f51b05bdbdd791da114f5e477ffeb472bcc650f5"
+  },
+  "cepstral": {"fs": 128, "frame_samples": 128, "hop_samples": 32, "n_fft": 256,
+    "n_filters": 32, "n_ceps": 16, "fmin": 0.0, "fmax": 64.0, "spacing": "linear", "power_floor": 1e-12},
+  "model": {"n_leads": 1, "n_ceps": 16, "num_classes": 3, "embed_dim": 16,
+    "depths": [2, 2], "heads": [2, 4], "window_size": 4},
+  "training": {"seeds": [0, 1, 2], "epochs": 40, "batch_size": 32,
+    "optimizer": "AdamW", "lr": 0.001, "min_lr": 0.0001, "weight_decay": 0.01,
+    "class_weights": "n_train / (3 * class_count)", "gradient_clip_norm": 1.0,
+    "selection": "fixed architecture and 40 epochs; no early stopping or outer-label tuning",
+    "shuffle_seed_offset": 10000, "cpu_threads": 1},
+  "control": {"kind": "temporal mean and population std of cepstra -> StandardScaler -> logistic regression",
+    "C": 1.0, "class_weight": "balanced", "max_iter": 2000, "solver": "lbfgs"},
+  "evaluation": {"primary": "window_macro_f1", "secondary": ["window_accuracy", "patient_vote_accuracy", "patient_vote_macro_f1"],
+    "patient_vote_tie": "lowest class index in ARR, CHF, NSR order", "bootstrap_unit": "patient",
+    "bootstrap_resamples": 2000, "bootstrap_seed": 20260925,
+    "interval_scope": "conditional on saved out-of-fold predictions, no retraining uncertainty"},
+  "execution": {"training_requires_explicit_cli_flag": true, "default_action": "none"}
+}
