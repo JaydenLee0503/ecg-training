@@ -12,6 +12,18 @@ identical, max probability difference 1.85e-6, and metrics/bootstrap equal the
 saved `report.json` exactly. It writes nothing to `results/` or `features/`.
 The running regularization v2 study is not covered.
 
+## LFCC + Swin full-training notebook — 2026-10-17
+
+At the user's request, [lfcc_swin_training.ipynb](lfcc_swin_training.ipynb)
+trains the unchanged v1 protocol, Swin arm only (15 fits, no logistic control),
+from `ECGData.mat` into the new `results/ecgdata_lfcc_swin_retrain/`. The notebook
+is intended for Colab and lists its minimal input files. It was not run in full here. A
+one-fit CPU smoke test (seed 0, fold 0, from a minimal-file copy, since deleted)
+reproduced every original predicted class; max probability difference was
+0.0053 versus the GPU fit. Results cells, run read-only on the v1 fits, gave
+83.35%/0.8006/94.17% with matching bootstrap intervals. Other hardware
+or library versions may change weights; results should be close but are not bit-identical.
+
 ## Regularization v2 prepared and authorized — 2026-10-15
 
 The user authorized the suggested improvement work. The first bounded study is
