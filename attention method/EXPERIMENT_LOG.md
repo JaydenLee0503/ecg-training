@@ -1,5 +1,37 @@
 # Attention method experiment log
 
+## 2026-10-23 — Completed regularization study verified and reported
+
+On resuming the user-authorized work, found v2 already complete at
+2026-10-16T04:32:18Z. All 90 inner fits and 30 outer trials finished with no
+recorded training failures. GPU numerical/recovery preflight passed before the
+October-15 launch. No existing fit was retrained during this review.
+
+[Completion review](reports/ecgdata_lfcc_swin_regularization_v2/SUMMARY.md): the
+predeclared inner-selected procedure yielded window accuracy 84.12%, macro-F1
+0.8099 and patient-vote accuracy 94.58%, averaging seeds 0/1/2. Original v1 was
+83.35% / 0.8006 / 94.17%. Primary macro-F1 change +0.0093, paired 95% interval
+[-0.0023,+0.0212], does not establish improvement. R0 epoch-only achieved
+83.46% / 0.8012 / 93.75%; R1 dropout achieved 84.49% / 0.8144 / 95.83%.
+R1's positive secondary window intervals are pointwise, unadjusted for multiple
+comparisons; the primary result remains the selected procedure. CHF recall
+increased from 72% to 75% in R1, but the training/held-out gap remains large.
+
+Added an independent saved-artifact/prediction audit and descriptive inner
+learning-curve figures, leaving frozen v2 code/results unchanged. Verified 1,887
+v2 entries, 472 protected originals, 10 current sources plus snapshots and 8
+exports. Checked all patient splits, fit-only normalization/class weights,
+learning-rate histories, candidate probabilities/pooled selections and sklearn
+recalculations of window/patient metrics. All 4,380 histories, 300 retained
+prediction sets and 14,580 exported outer rows accounted for. Audit JSON and
+inventory are beside the report. No new inference, extraction or model training.
+
+The first audit completed its numerical checks but failed writing the export
+because of sandbox path-capitalization permissions (`projects` / `Projects`).
+The approved rerun succeeded. This was an export failure, not a model failure.
+Original v1 artifacts and unrelated ACS/audit modifications were preserved.
+No further representation, longer-window or additional-patient trial was launched.
+
 ## 2026-10-15 — Epoch selection and dropout study prepared
 
 User authorized the proposed accuracy-improvement work. Implemented a separate

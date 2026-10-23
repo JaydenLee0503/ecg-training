@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "checks": [
+    "GPU/CPU forward and gradient agreement",
+    "exact interrupted dropout training recovery on GPU",
+    "candidate checkpoint retention/reload and completed-fit reuse"
+  ],
+  "seconds": 33.08059181699991
+}

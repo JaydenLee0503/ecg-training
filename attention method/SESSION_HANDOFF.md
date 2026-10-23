@@ -1,5 +1,38 @@
 # Attention method handoff — 2026-09-25
 
+## Regularization v2 completed and audited — 2026-10-23 EDT
+
+The authorized study completed on **2026-10-16T04:32:18Z** (00:32 EDT), with
+90 inner fits and 30 outer trials, all seeds 0/1/2, and no recorded training
+failures. **Do not retrain this completed run.** No epoch-40 R0 models were
+selected, so all 30 outer trials required fitting. See the
+[completion review](reports/ecgdata_lfcc_swin_regularization_v2/SUMMARY.md) and
+[frozen report](reports/ecgdata_lfcc_swin_regularization_v2/report.md).
+
+The predeclared inner-selected procedure reached **84.12% window accuracy**,
+0.8099 macro-F1 and 94.58% patient-vote accuracy, versus v1's 83.35%, 0.8006 and
+94.17%. Primary macro-F1 difference +0.0093 has paired 95% interval
+[-0.0023, +0.0212], so improvement is not established. Dropout R1 reached
+84.49% / 0.8144 / 95.83%; its positive pointwise secondary window intervals are
+promising but do not replace the primary comparison or establish external validity.
+R0 reached 83.46% / 0.8012 / 93.75%; logistic remains 76.48% / 0.7342 / 87.50%.
+
+The October 23 read-only numerical review verified 1,887 artifact entries,
+472 protected original files, 10 sources/snapshots and 8 report exports. It
+independently checked all patient splits, fit-only statistics, pooled inner
+selections, window/patient metrics and 14,580 prediction export rows. All 4,380
+epoch records and 300 retained candidate/final prediction sets are accounted for.
+The frozen runner had already reloaded all retained weights during execution;
+this review performed no new model inference, extraction or training.
+
+Audit reproduction: `/home/jaydenlee/venvs/test-ecg-training/bin/python -B 'attention method/scripts/audit_ecgdata_regularization.py'`.
+It writes only new audit/inventory/figure exports beside the report. The first
+invocation's export failed because the sandbox allowed lowercase `projects`
+while the resolved path used uppercase `Projects`; the approved rerun succeeded.
+Numerical checks passed. Existing v1 and unrelated ACS/audit edits remain intact.
+Further feature, raw-waveform, longer-window and additional-patient experiments
+remain unrun separate follow-ups. Large checkpoints remain local and gitignored.
+
 ## LFCC + Swin walkthrough notebook — 2026-10-15
 
 At the user's request, [lfcc_swin_walkthrough.ipynb](lfcc_swin_walkthrough.ipynb)

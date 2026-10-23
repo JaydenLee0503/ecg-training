@@ -1,0 +1,450 @@
+{
+  "status": "passed",
+  "checked_at_utc": "2026-10-23T04:42:21.846212+00:00",
+  "artifact_checks": {
+    "v2": 1887,
+    "protected": 472,
+    "sources": 10
+  },
+  "source_snapshots": 10,
+  "matching_report_exports": 8,
+  "fits": 120,
+  "candidate_prediction_sets": 300,
+  "history_rows": 4380,
+  "exported_prediction_rows": 14580,
+  "independently_recomputed_metrics": {
+    "R0": [
+      {
+        "window": {
+          "accuracy": 0.8203703703703704,
+          "macro_f1": 0.7852068727607665,
+          "balanced_accuracy": 0.7847222222222223,
+          "confusion_matrix": [
+            [
+              836,
+              71,
+              53
+            ],
+            [
+              65,
+              205,
+              30
+            ],
+            [
+              60,
+              12,
+              288
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.925,
+          "macro_f1": 0.909440267335004,
+          "balanced_accuracy": 0.904334121355398,
+          "confusion_matrix": [
+            [
+              45,
+              2,
+              0
+            ],
+            [
+              1,
+              13,
+              1
+            ],
+            [
+              2,
+              0,
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "window": {
+          "accuracy": 0.8506172839506173,
+          "macro_f1": 0.8234791190684302,
+          "balanced_accuracy": 0.8228935185185184,
+          "confusion_matrix": [
+            [
+              859,
+              54,
+              47
+            ],
+            [
+              42,
+              238,
+              20
+            ],
+            [
+              64,
+              15,
+              281
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.95,
+          "macro_f1": 0.9356001198915399,
+          "balanced_accuracy": 0.9185185185185185,
+          "confusion_matrix": [
+            [
+              47,
+              0,
+              0
+            ],
+            [
+              2,
+              13,
+              0
+            ],
+            [
+              1,
+              1,
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "window": {
+          "accuracy": 0.832716049382716,
+          "macro_f1": 0.7949345048660117,
+          "balanced_accuracy": 0.7910648148148148,
+          "confusion_matrix": [
+            [
+              858,
+              60,
+              42
+            ],
+            [
+              57,
+              208,
+              35
+            ],
+            [
+              61,
+              16,
+              283
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.9375,
+          "macro_f1": 0.9233693477390957,
+          "balanced_accuracy": 0.9,
+          "confusion_matrix": [
+            [
+              47,
+              0,
+              0
+            ],
+            [
+              1,
+              13,
+              1
+            ],
+            [
+              3,
+              0,
+              15
+            ]
+          ]
+        }
+      }
+    ],
+    "R1": [
+      {
+        "window": {
+          "accuracy": 0.832716049382716,
+          "macro_f1": 0.8027212042437117,
+          "balanced_accuracy": 0.8043055555555556,
+          "confusion_matrix": [
+            [
+              838,
+              66,
+              56
+            ],
+            [
+              60,
+              217,
+              23
+            ],
+            [
+              54,
+              12,
+              294
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.95,
+          "macro_f1": 0.9442810457516341,
+          "balanced_accuracy": 0.9336485421591805,
+          "confusion_matrix": [
+            [
+              46,
+              1,
+              0
+            ],
+            [
+              1,
+              14,
+              0
+            ],
+            [
+              2,
+              0,
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "window": {
+          "accuracy": 0.8530864197530864,
+          "macro_f1": 0.8250995026387825,
+          "balanced_accuracy": 0.8237268518518518,
+          "confusion_matrix": [
+            [
+              863,
+              52,
+              45
+            ],
+            [
+              43,
+              235,
+              22
+            ],
+            [
+              61,
+              15,
+              284
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.975,
+          "macro_f1": 0.9720374931581829,
+          "balanced_accuracy": 0.9592592592592593,
+          "confusion_matrix": [
+            [
+              47,
+              0,
+              0
+            ],
+            [
+              1,
+              14,
+              0
+            ],
+            [
+              1,
+              0,
+              17
+            ]
+          ]
+        }
+      },
+      {
+        "window": {
+          "accuracy": 0.8487654320987654,
+          "macro_f1": 0.8155193427356342,
+          "balanced_accuracy": 0.8080787037037037,
+          "confusion_matrix": [
+            [
+              875,
+              55,
+              30
+            ],
+            [
+              49,
+              223,
+              28
+            ],
+            [
+              69,
+              14,
+              277
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.95,
+          "macro_f1": 0.937309769268532,
+          "balanced_accuracy": 0.9185185185185185,
+          "confusion_matrix": [
+            [
+              47,
+              0,
+              0
+            ],
+            [
+              1,
+              13,
+              1
+            ],
+            [
+              2,
+              0,
+              16
+            ]
+          ]
+        }
+      }
+    ],
+    "swin": [
+      {
+        "window": {
+          "accuracy": 0.8302469135802469,
+          "macro_f1": 0.7994173872409553,
+          "balanced_accuracy": 0.8021527777777777,
+          "confusion_matrix": [
+            [
+              835,
+              68,
+              57
+            ],
+            [
+              59,
+              216,
+              25
+            ],
+            [
+              53,
+              13,
+              294
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.95,
+          "macro_f1": 0.9442810457516341,
+          "balanced_accuracy": 0.9336485421591805,
+          "confusion_matrix": [
+            [
+              46,
+              1,
+              0
+            ],
+            [
+              1,
+              14,
+              0
+            ],
+            [
+              2,
+              0,
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "window": {
+          "accuracy": 0.8518518518518519,
+          "macro_f1": 0.825472148611416,
+          "balanced_accuracy": 0.8228240740740741,
+          "confusion_matrix": [
+            [
+              862,
+              53,
+              45
+            ],
+            [
+              44,
+              237,
+              19
+            ],
+            [
+              67,
+              12,
+              281
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.95,
+          "macro_f1": 0.9429771908763506,
+          "balanced_accuracy": 0.9185185185185185,
+          "confusion_matrix": [
+            [
+              47,
+              0,
+              0
+            ],
+            [
+              2,
+              13,
+              0
+            ],
+            [
+              2,
+              0,
+              16
+            ]
+          ]
+        }
+      },
+      {
+        "window": {
+          "accuracy": 0.841358024691358,
+          "macro_f1": 0.804750845349088,
+          "balanced_accuracy": 0.7995138888888889,
+          "confusion_matrix": [
+            [
+              869,
+              60,
+              31
+            ],
+            [
+              48,
+              218,
+              34
+            ],
+            [
+              67,
+              17,
+              276
+            ]
+          ]
+        },
+        "patient_vote": {
+          "accuracy": 0.9375,
+          "macro_f1": 0.9233693477390957,
+          "balanced_accuracy": 0.9,
+          "confusion_matrix": [
+            [
+              47,
+              0,
+              0
+            ],
+            [
+              1,
+              13,
+              1
+            ],
+            [
+              3,
+              0,
+              15
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "checked": [
+    "sizes/hashes via frozen completion marker",
+    "protected original files",
+    "current sources and snapshots",
+    "patient splits and training-only normalization/class weights",
+    "learning-rate schedule and histories",
+    "all candidate probabilities and pooled inner selection",
+    "window/patient metrics using sklearn",
+    "exported predictions against original arrays"
+  ],
+  "new_training": false,
+  "new_inference": false,
+  "script_sha256": "cdd08dcd115411cd84edca4c1b624eb8aca4cf0fa8f3101796a4a89e23253e00"
+}
