@@ -1,5 +1,25 @@
 # Session handoff — 2026-09-25
 
+## ECGData Swin regularization completed; review finished — 2026-10-23 EDT
+
+The authorized epoch-selection/dropout study finished **2026-10-16T04:32:18Z**:
+90 inner fits and 30 outer trials, seeds 0/1/2, no training failures. It was
+already complete when the user resumed on October 23; no training was restarted.
+The [completion review](../attention%20method/reports/ecgdata_lfcc_swin_regularization_v2/SUMMARY.md)
+reports selected-procedure window accuracy **84.12%** versus v1 **83.35%**, and
+macro-F1 0.8099 versus 0.8006. Primary difference interval **[-0.0023, +0.0212]**
+includes zero. Dropout R1 scored 84.49% window / 95.83% patient-vote accuracy,
+an encouraging secondary result, not a replacement for the predeclared primary.
+
+The completion audit verified 1,887 v2 artifact entries, 472 protected original
+files, 10 current sources/snapshots and 8 exports, with independent checks of
+patient splits, normalization, selection and prediction metrics. All 4,380 epoch
+records and 300 retained prediction sets are present. No new extraction,
+inference or training occurred during review. See the
+[attention handoff](../attention%20method/SESSION_HANDOFF.md) for audit/restart
+details. Do not retrain completed v2; broader representation/window studies remain
+separate unrun follow-ups. Unrelated ACS edits were left untouched.
+
 ## Sensitivity study complete; independently verified — 2026-10-23 EDT
 
 All 14 fits and both sensitivity reports completed at **2026-10-16T03:59:19Z**
