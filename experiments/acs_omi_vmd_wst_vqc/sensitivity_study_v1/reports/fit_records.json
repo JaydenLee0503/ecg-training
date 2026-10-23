@@ -1,0 +1,515 @@
+{
+  "vmd/logistic": {
+    "settings": {
+      "C": 1.0,
+      "class_weight": null,
+      "dual": false,
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "l1_ratio": 0.0,
+      "max_iter": 2000,
+      "n_jobs": null,
+      "penalty": "deprecated",
+      "random_state": null,
+      "solver": "lbfgs",
+      "tol": 0.0001,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "seconds": 0.2689434710000569,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:35:07Z"
+  },
+  "vmd/weighted_knn": {
+    "settings": {
+      "algorithm": "auto",
+      "leaf_size": 30,
+      "metric": "euclidean",
+      "metric_params": null,
+      "n_jobs": null,
+      "n_neighbors": 10,
+      "p": 2,
+      "weights": "distance"
+    },
+    "seconds": 3.6912412620004034,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:35:10Z"
+  },
+  "vmd/vqc_seed0": {
+    "settings": {
+      "batch_size": 32,
+      "class_weight": null,
+      "device": "default.qubit",
+      "diff_method": "backprop",
+      "epochs": 40,
+      "lr": 0.02,
+      "min_lr": 0.002,
+      "n_layers": 2,
+      "n_qubits": 6,
+      "reupload": false,
+      "schedule_epochs": 40,
+      "seed": 0,
+      "verbose": false
+    },
+    "seconds": 1407.1815723239997,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:34Z"
+  },
+  "vmd/vqc_seed1": {
+    "settings": {
+      "batch_size": 32,
+      "class_weight": null,
+      "device": "default.qubit",
+      "diff_method": "backprop",
+      "epochs": 40,
+      "lr": 0.02,
+      "min_lr": 0.002,
+      "n_layers": 2,
+      "n_qubits": 6,
+      "reupload": false,
+      "schedule_epochs": 40,
+      "seed": 1,
+      "verbose": false
+    },
+    "seconds": 1401.5629754070005,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:28Z"
+  },
+  "vmd/vqc_seed2": {
+    "settings": {
+      "batch_size": 32,
+      "class_weight": null,
+      "device": "default.qubit",
+      "diff_method": "backprop",
+      "epochs": 40,
+      "lr": 0.02,
+      "min_lr": 0.002,
+      "n_layers": 2,
+      "n_qubits": 6,
+      "reupload": false,
+      "schedule_epochs": 40,
+      "seed": 2,
+      "verbose": false
+    },
+    "seconds": 1413.0863923489997,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:40Z"
+  },
+  "wst/logistic": {
+    "settings": {
+      "C": 1.0,
+      "class_weight": null,
+      "dual": false,
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "l1_ratio": 0.0,
+      "max_iter": 2000,
+      "n_jobs": null,
+      "penalty": "deprecated",
+      "random_state": null,
+      "solver": "lbfgs",
+      "tol": 0.0001,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "seconds": 0.38193465499989543,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:35:07Z"
+  },
+  "wst/weighted_knn": {
+    "settings": {
+      "algorithm": "auto",
+      "leaf_size": 30,
+      "metric": "euclidean",
+      "metric_params": null,
+      "n_jobs": null,
+      "n_neighbors": 10,
+      "p": 2,
+      "weights": "distance"
+    },
+    "seconds": 1.9861776530005955,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:35:12Z"
+  },
+  "wst/vqc_seed0": {
+    "settings": {
+      "batch_size": 32,
+      "class_weight": null,
+      "device": "default.qubit",
+      "diff_method": "backprop",
+      "epochs": 40,
+      "lr": 0.02,
+      "min_lr": 0.002,
+      "n_layers": 2,
+      "n_qubits": 6,
+      "reupload": false,
+      "schedule_epochs": 40,
+      "seed": 0,
+      "verbose": false
+    },
+    "seconds": 1402.286928173,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:33Z"
+  },
+  "wst/vqc_seed1": {
+    "settings": {
+      "batch_size": 32,
+      "class_weight": null,
+      "device": "default.qubit",
+      "diff_method": "backprop",
+      "epochs": 40,
+      "lr": 0.02,
+      "min_lr": 0.002,
+      "n_layers": 2,
+      "n_qubits": 6,
+      "reupload": false,
+      "schedule_epochs": 40,
+      "seed": 1,
+      "verbose": false
+    },
+    "seconds": 1412.93344592,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:46Z"
+  },
+  "wst/vqc_seed2": {
+    "settings": {
+      "batch_size": 32,
+      "class_weight": null,
+      "device": "default.qubit",
+      "diff_method": "backprop",
+      "epochs": 40,
+      "lr": 0.02,
+      "min_lr": 0.002,
+      "n_layers": 2,
+      "n_qubits": 6,
+      "reupload": false,
+      "schedule_epochs": 40,
+      "seed": 2,
+      "verbose": false
+    },
+    "seconds": 1399.0647878120008,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:34Z"
+  },
+  "lfcc/logistic": {
+    "settings": {
+      "C": 1.0,
+      "class_weight": null,
+      "dual": false,
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "l1_ratio": 0.0,
+      "max_iter": 2000,
+      "n_jobs": null,
+      "penalty": "deprecated",
+      "random_state": 0,
+      "solver": "lbfgs",
+      "tol": 0.0001,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "seconds": 1.916853489999994,
+    "warnings": [
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed).",
+      "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:58:35Z"
+  },
+  "lfcc/swin_seed0": {
+    "settings": {
+      "model": {
+        "n_leads": 12,
+        "n_ceps": 20,
+        "num_classes": 2,
+        "embed_dim": 64,
+        "depths": [
+          2,
+          2,
+          2
+        ],
+        "heads": [
+          2,
+          4,
+          8
+        ],
+        "window_size": 8
+      },
+      "training": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "epochs": 40,
+        "batch_size": 128,
+        "optimizer": "AdamW",
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "class_weight": null,
+        "shuffle_seed_offset": 10000,
+        "cpu_threads": 1,
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      },
+      "seed": 0
+    },
+    "seconds": 345.85894431199995,
+    "warnings": [],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:40:52Z"
+  },
+  "lfcc/swin_seed1": {
+    "settings": {
+      "model": {
+        "n_leads": 12,
+        "n_ceps": 20,
+        "num_classes": 2,
+        "embed_dim": 64,
+        "depths": [
+          2,
+          2,
+          2
+        ],
+        "heads": [
+          2,
+          4,
+          8
+        ],
+        "window_size": 8
+      },
+      "training": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "epochs": 40,
+        "batch_size": 128,
+        "optimizer": "AdamW",
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "class_weight": null,
+        "shuffle_seed_offset": 10000,
+        "cpu_threads": 1,
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      },
+      "seed": 1
+    },
+    "seconds": 352.6185223659995,
+    "warnings": [],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:46:51Z"
+  },
+  "lfcc/swin_seed2": {
+    "settings": {
+      "model": {
+        "n_leads": 12,
+        "n_ceps": 20,
+        "num_classes": 2,
+        "embed_dim": 64,
+        "depths": [
+          2,
+          2,
+          2
+        ],
+        "heads": [
+          2,
+          4,
+          8
+        ],
+        "window_size": 8
+      },
+      "training": {
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "epochs": 40,
+        "batch_size": 128,
+        "optimizer": "AdamW",
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "class_weight": null,
+        "shuffle_seed_offset": 10000,
+        "cpu_threads": 1,
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      },
+      "seed": 2
+    },
+    "seconds": 349.92079135099993,
+    "warnings": [],
+    "calibration_records": 2866,
+    "validation_records": 3581,
+    "subfit_records": 11458,
+    "balanced_training_examples": 21450,
+    "calibration_reload_exact": true,
+    "validation_reload_exact": true,
+    "threshold_frozen_before_validation_inference": true,
+    "official_test_processed": false,
+    "completed_at_utc": "2026-10-16T03:52:47Z"
+  }
+}

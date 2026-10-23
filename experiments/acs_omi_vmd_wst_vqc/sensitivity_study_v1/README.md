@@ -50,3 +50,7 @@ checksums. The final calibration comparison conditions on fitted models/cutoffs;
 bootstrap uncertainty excludes retraining, split and calibration uncertainty.
 The validation cohort has been examined previously, so it is internal evidence.
 No clinical or quantum advantage is claimed.
+
+## Completed results
+
+All 14 fits and both analyses are complete. Read the [results summary](reports/SUMMARY.md) and [latest handoff](SESSION_HANDOFF.md). Completion and artifacts were independently verified on 2026-10-23. Do not retrain completed fits.

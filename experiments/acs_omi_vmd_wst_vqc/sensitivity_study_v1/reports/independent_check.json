@@ -1,0 +1,11 @@
+{
+  "models": 14,
+  "calibration_selected_operating_points_checked": 42,
+  "all_epoch_entries_verified": 360,
+  "protected_files_verified": 1088,
+  "patient_overlap": 0,
+  "split_and_sampling_verified": true,
+  "metric_mismatches": 0,
+  "seconds": 39.71547196499995,
+  "checked_at_utc": "2026-10-23T04:39:25Z"
+}

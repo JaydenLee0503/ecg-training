@@ -1,0 +1,40 @@
+Verified completed preparation; no recomputation
+Patient bootstrap 500/2000
+Patient bootstrap 1000/2000
+Patient bootstrap 1500/2000
+Patient bootstrap 2000/2000
+Saved-score comparison complete
+Started vmd/logistic, PID 70694, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/vmd_logistic.log
+Started lfcc/swin_seed0, PID 70695, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/lfcc_swin_seed0.log
+Started vmd/weighted_knn, PID 70696, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/vmd_weighted_knn.log
+Started vmd/vqc_seed0, PID 70697, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/vmd_vqc_seed0.log
+Started vmd/vqc_seed1, PID 70698, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/vmd_vqc_seed1.log
+Started vmd/vqc_seed2, PID 70699, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/vmd_vqc_seed2.log
+Started wst/logistic, PID 70700, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/wst_logistic.log
+Finished vmd/logistic
+Finished wst/logistic
+Started wst/weighted_knn, PID 70807, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/wst_weighted_knn.log
+Started wst/vqc_seed0, PID 70808, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/wst_vqc_seed0.log
+Finished vmd/weighted_knn
+Started wst/vqc_seed1, PID 70862, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/wst_vqc_seed1.log
+Finished wst/weighted_knn
+Started wst/vqc_seed2, PID 70908, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/wst_vqc_seed2.log
+Finished lfcc/swin_seed0
+Started lfcc/swin_seed1, PID 78438, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/lfcc_swin_seed1.log
+Finished lfcc/swin_seed1
+Started lfcc/swin_seed2, PID 82732, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/lfcc_swin_seed2.log
+Finished lfcc/swin_seed2
+Finished vmd/vqc_seed1
+Started lfcc/logistic, PID 87786, log /mnt/d/Projects/test-ecg-training/experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/logs/lfcc_logistic.log
+Finished wst/vqc_seed0
+Finished vmd/vqc_seed0
+Finished lfcc/logistic
+Finished wst/vqc_seed2
+Finished vmd/vqc_seed2
+Finished wst/vqc_seed1
+Patient bootstrap 500/2000
+Patient bootstrap 1000/2000
+Patient bootstrap 1500/2000
+Patient bootstrap 2000/2000
+Independent calibration-threshold evaluation complete
+{"status": "complete", "protected_files_verified": 1088, "new_artifact_entries_verified": 622, "source_snapshots_verified": 27, "fits": 14, "mismatches": 0, "official_test_processed": false, "completed_at_utc": "2026-10-16T03:59:18Z"}

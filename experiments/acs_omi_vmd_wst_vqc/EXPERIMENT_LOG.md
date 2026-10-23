@@ -746,3 +746,30 @@ passed structural checks. Initial diff checking found two intentional Markdown
 hard-break spaces; these were replaced with blank lines. No data extraction,
 training, test prediction or frozen-protocol change occurred. The proposed
 framework is literature synthesis, not an executed or newly frozen experiment.
+
+## 2026-10-23 — Completed run recovered, independently checked and documented
+
+The workflow had finished on 2026-10-16 at 03:59:19Z in 1470.974 seconds.
+All 14 fits and both reports were reused. No training, inference, waveform
+extraction, protocol changes or official-test processing occurred on resumption.
+All 360 epoch entries and all 42 calibrated operating points were independently
+verified. Restart audit: 622 new artifact entries, 1,088 protected earlier files,
+27 source snapshots and 12 report exports; zero mismatches or source drift.
+The original completion markers and reports remain unchanged.
+
+Results, all eight pipelines and uncertainty are summarized in
+[sensitivity_study_v1/reports/SUMMARY.md](sensitivity_study_v1/reports/SUMMARY.md). LFCC logistic's 90% calibration target
+yielded 82.10% validation sensitivity, 55.55% specificity, 11.20% precision,
+188 TP / 41 FN / 1,490 FP; cutoff 0.5 yielded 136 TP / 93 FN / 679 FP.
+VMD logistic at the 95% target yielded 93.89% sensitivity and 35.50% specificity.
+VMD/WST VQC at that target averaged 92.14%/91.85% sensitivity over all seeds.
+KNN required a zero cutoff and labeled all validation ECGs positive. Targets
+did not reliably transfer; no cutoff was retuned on validation.
+
+No real-data fitting failures. All 42 serialization/reload warnings
+concern the NumPy 2.5 shape deprecation; exact model reload checks passed.
+Fit records, runtime CSV and all epoch histories are now exported for review.
+The two initial audit exports failed on the sandbox's path-case mismatch;
+approved outside-sandbox execution completed them. Independent check script
+was prepared during the original session and run on October 23. The pre-existing
+Swin audit modification and unrelated regularization outputs remain untouched.

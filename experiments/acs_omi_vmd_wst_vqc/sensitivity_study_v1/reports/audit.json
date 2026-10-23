@@ -1,0 +1,10 @@
+{
+  "status": "complete",
+  "protected_files_verified": 1088,
+  "new_artifact_entries_verified": 622,
+  "source_snapshots_verified": 27,
+  "fits": 14,
+  "mismatches": 0,
+  "official_test_processed": false,
+  "completed_at_utc": "2026-10-16T03:59:18Z"
+}

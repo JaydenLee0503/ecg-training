@@ -1,0 +1,15 @@
+model,seconds,warnings,calibration_reload_exact,validation_reload_exact
+vmd/logistic,0.2689434710000569,4,True,True
+vmd/weighted_knn,3.6912412620004034,9,True,True
+vmd/vqc_seed0,1407.1815723239997,2,True,True
+vmd/vqc_seed1,1401.5629754070005,2,True,True
+vmd/vqc_seed2,1413.0863923489997,2,True,True
+wst/logistic,0.38193465499989543,4,True,True
+wst/weighted_knn,1.9861776530005955,9,True,True
+wst/vqc_seed0,1402.286928173,2,True,True
+wst/vqc_seed1,1412.93344592,2,True,True
+wst/vqc_seed2,1399.0647878120008,2,True,True
+lfcc/logistic,1.916853489999994,4,True,True
+lfcc/swin_seed0,345.85894431199995,0,True,True
+lfcc/swin_seed1,352.6185223659995,0,True,True
+lfcc/swin_seed2,349.92079135099993,0,True,True

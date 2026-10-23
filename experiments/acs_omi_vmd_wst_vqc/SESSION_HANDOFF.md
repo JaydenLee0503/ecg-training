@@ -1,5 +1,26 @@
 # ACS session handoff — 2026-09-25
 
+## Sensitivity study complete; independently verified — 2026-10-23 EDT
+
+All 14 fits and both sensitivity reports completed at **2026-10-16T03:59:19Z**
+(October 15, 11:59 PM Toronto), taking 24m31s excluding preparation. No fit is
+pending. On October 23, independent verification reproduced all 42 calibrated
+operating points and all 360 epochs; restart checks verified 622 new artifact
+entries, 1,088 protected source files, 27 snapshots and 12 exports with zero
+mismatches. No source drift, retraining or official-test processing occurred.
+
+Read [the completed summary](sensitivity_study_v1/reports/SUMMARY.md). At the 95% calibration target,
+VMD logistic achieved **93.89% sensitivity / 35.50% specificity**; VMD/WST VQC
+achieved **92.14% / 91.85% sensitivity** and **30.81% / 23.78% specificity**, means
+over seeds 0/1/2. LFCC logistic achieved only **82.10% sensitivity** at its 90%
+calibration target (55.55% specificity), demonstrating that targets do not
+guarantee validation performance. Higher sensitivity came with many false
+positives. KNN labeled every validation ECG positive. All warnings, negative
+results and intervals are retained; no clinical or quantum advantage is claimed.
+
+Earlier running/preparation entries are historical. Preserve completed outputs;
+do not restart the workflow. Large checkpoints/predictions remain gitignored.
+
 ## Separate sensitivity study authorized — 2026-10-15 EDT
 
 The new [sensitivity_study_v1](sensitivity_study_v1/README.md) folder contains the
