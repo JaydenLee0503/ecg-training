@@ -1,5 +1,21 @@
 # ACS session handoff — 2026-09-25
 
+## Per-study folders added — 2026-10-23 EDT
+
+The user requested one folder per experiment and a count. Start with
+[studies/README.md](studies/README.md): 3 completed classification studies
+(original development comparison, balanced training/Swin, sensitivity/calibration)
+and 2 completed feasibility assessments that stopped at their engineering gates.
+Retries, diagnostics and failed attempts are linked within their parent studies.
+The original attention implementation is listed separately as unrun under its
+initial protocol. These folders contain README and HTML indexes; canonical
+source, protocol and artifact locations were preserved. The Windows filesystem
+did not support symlink creation, so ordinary relative links are used.
+
+No model was trained or re-evaluated. The [repository catalog](../README.md) and
+[organization verification](../organization_2026-10-23.json) give the complete
+inventory and checks. Existing completion/restart instructions still apply.
+
 ## Sensitivity study complete; independently verified — 2026-10-23 EDT
 
 All 14 fits and both sensitivity reports completed at **2026-10-16T03:59:19Z**

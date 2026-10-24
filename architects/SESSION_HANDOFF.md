@@ -1,5 +1,26 @@
 # Session handoff — 2026-09-25
 
+## Experiment folders and inventory — 2026-10-23 EDT
+
+The user requested a count and one folder per experiment. The
+[catalog](../experiments/README.md) now gives each recent study its own folder:
+6 ECGData and 3 ACS/OMI completed classification studies, plus 2 ACS feasibility
+assessments that failed their gates before classifier training. Separate folders
+cover the 25 historical E1–E25 log entries (E18b belongs to E18), 5 earlier
+baseline/audit workflow groups, and 2 unrun protocol/implementation proposals.
+These categories are not interchangeable counts of classifier experiments.
+
+Folders contain README and clickable HTML indexes to canonical protocols, code,
+reports and artifacts. Original paths and frozen files remain intact. Symlink
+creation failed on the Windows-backed filesystem, including outside the sandbox;
+ordinary relative links work without symlink support. Large artifacts are still
+gitignored and are not bundled by the indexes. See the
+[machine-readable inventory](../experiments/catalog.json) and
+[organization verification](../experiments/organization_2026-10-23.json).
+
+No extraction, inference or training was run. The larger-Swin/representation
+follow-up remains unstarted; the user's current request was organization.
+
 ## ECGData Swin regularization completed; review finished — 2026-10-23 EDT
 
 The authorized epoch-selection/dropout study finished **2026-10-16T04:32:18Z**:

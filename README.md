@@ -1,11 +1,18 @@
 # ECG arrhythmia classification with Variational Mode Decomposition
 
-**New attention experiment (implementation only):**
-[Cepstral features + temporal Swin](attention%20method/README.md) lives in the
-user-requested `attention method` folder. Feature/model checks pass; no training
-has started and no predictive performance is claimed.
+**Experiment folders and count — 23 October 2026:** start with the
+[experiment catalog](experiments/README.md). It lists **9 completed main
+classification studies** (6 ECGData, 3 ACS/OMI) and **2 feasibility pilots** that
+stopped before classifier training. Each has its own folder with links to its
+protocol, code, reports and saved artifacts. Historical E1–E25 entries, earlier
+baseline/audit groups and unrun proposals are listed separately. Original files
+remain at their established paths so frozen manifests and restart commands work.
 
-**Two separate studies:** the original ECGData ARR/CHF/NSR experiments are
+The ECGData [LFCC/Swin baseline](experiments/ecgdata/04_lfcc_swin_v1/README.md),
+[regularization follow-up](experiments/ecgdata/06_lfcc_swin_regularization_v2/README.md)
+and [EMD/Hilbert study](experiments/ecgdata/05_emd_hilbert_30s/README.md) are complete.
+
+**Two datasets:** the original ECGData ARR/CHF/NSR experiments are
 documented below. The new **ACS / OMI experiment** has its own
 [workspace in experiments/acs_omi_vmd_wst_vqc/](experiments/acs_omi_vmd_wst_vqc/README.md), with its code, tests,
 data, results, protocol, reports and log. Read its

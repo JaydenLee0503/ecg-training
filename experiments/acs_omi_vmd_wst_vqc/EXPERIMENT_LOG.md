@@ -1,5 +1,17 @@
 # ACS experiment log
 
+## 2026-10-23 — per-study folder indexes
+
+Added [one folder per ACS study](studies/README.md): 3 completed classification
+comparisons and 2 feasibility assessments that failed their gates before training.
+Their folders link to existing protocols, code, reports, artifacts and attempts.
+The original attention implementation is separately marked as unrun under its
+initial protocol. Existing storage paths and frozen files were preserved; no
+training, extraction or evaluation occurred. Symbolic-link creation was unavailable
+on this filesystem, so the folders use Markdown and HTML file indexes. See the
+[repository catalog](../README.md) and
+[organization verification](../organization_2026-10-23.json).
+
 ## 2026-09-23 — ACS download and source-format verification (no training)
 
 Verified the user's `experiments/acs/data/CSV.zip` and `experiments/acs/data/ECG_row_data.zip` against the official

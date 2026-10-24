@@ -1,3 +1,11 @@
+## Study folders — 23 October 2026
+
+The [per-study folders](studies/README.md) organize the 3 completed ACS/OMI
+classification studies and 2 feasibility pilots. Each folder links to its
+protocol, code, reports, results and associated retries. Original storage paths
+are preserved. See the [repository experiment catalog](../README.md) for ECGData
+studies, historical work and the counting rules.
+
 ## Resume after sleep or restart
 
 **The entire ACS development comparison is complete**, including all 17,905 ECGs,

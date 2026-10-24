@@ -1,0 +1,134 @@
+{
+  "as_of": "2026-10-23",
+  "scope": "Catalog and folder indexes only; no original experiment files relocated and no training, extraction or inference.",
+  "base_commit": "af7d77da57eab47774e8c239353c166a59f6bcf1",
+  "counts": {
+    "completed_classification": 9,
+    "feasibility": 2,
+    "historical_numbered_entry": 25,
+    "historical_unnumbered_group": 5,
+    "not_run": 2
+  },
+  "study_record_folders": 43,
+  "resource_references": 238,
+  "markdown_and_html_links_checked": 758,
+  "broken_links": [],
+  "output_directory_coverage": {
+    "results": {
+      "top_level_entries": 55,
+      "uncovered": []
+    },
+    "attention method/results": {
+      "top_level_entries": 5,
+      "uncovered": []
+    },
+    "correct balance training set OMI/results": {
+      "top_level_entries": 1,
+      "uncovered": []
+    },
+    "experiments/acs_omi_vmd_wst_vqc/results": {
+      "top_level_entries": 22,
+      "uncovered": []
+    },
+    "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results": {
+      "top_level_entries": 11,
+      "uncovered": []
+    }
+  },
+  "completion_markers_checked": [
+    {
+      "study": "ECG-03",
+      "path": "results/vqc_improvement/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ECG-04",
+      "path": "attention method/results/ecgdata_lfcc_swin_v1/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ECG-05",
+      "path": "attention method/results/ecgdata_eyeball_30s_v3/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ECG-06",
+      "path": "attention method/results/ecgdata_lfcc_swin_regularization_v2/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ACS-01",
+      "path": "experiments/acs_omi_vmd_wst_vqc/results/omi_models_v1_retry256k/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ACS-02",
+      "path": "correct balance training set OMI/results/v1/status.json",
+      "status": "complete"
+    },
+    {
+      "study": "ACS-03",
+      "path": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/status.json",
+      "status": "complete"
+    },
+    {
+      "study": "ACS-03",
+      "path": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/completion/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ACS-P01",
+      "path": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_omi_pilot_retry64k_v1/completed.json",
+      "status": "complete"
+    },
+    {
+      "study": "ACS-P02",
+      "path": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_lead_i_feasibility_v1/completed.json",
+      "status": "complete"
+    }
+  ],
+  "original_files_sha256_checked": 510,
+  "original_files_unchanged": 504,
+  "unchanged_inventory_sha256": "dab4228dd62086ba21d10fea69bf2d23de221e0c1a495ce7f74b99d6f3a8303a",
+  "intentional_documentation_changes": [
+    {
+      "path": "EXPERIMENT_LOG.md",
+      "before_sha256": "c7251ce0656175ab6fc25c565edabacd11b956cce5d13c27715243d39d40d213",
+      "after_sha256": "5288d92905a4ce76666c5c51b94578f2cdb7474979d81de1f2272ddf1a2c27a7"
+    },
+    {
+      "path": "README.md",
+      "before_sha256": "61ba775e66798ebb7ccdc31b097bb25634cd60f70f4daeadd96d6f833ea5396d",
+      "after_sha256": "c754a0b1c514cd9de8317a1f00fb84823554fd91db4b586d1da9ca24ad6ad24f"
+    },
+    {
+      "path": "architects/SESSION_HANDOFF.md",
+      "before_sha256": "0befdcb26142af73428aaba46f2ed84eefd90f3dcb725597901f0d7cd45e4e2f",
+      "after_sha256": "101fc27329401477dcb7f7751f13cc924ce33cb9d8a649799cfe1838ac601636"
+    },
+    {
+      "path": "experiments/acs_omi_vmd_wst_vqc/EXPERIMENT_LOG.md",
+      "before_sha256": "d35263d20825329397becc1a8c6818b66c7897546986d8cf4a3ee547d2f438d2",
+      "after_sha256": "e2945374262cfc0cae8a247db7a711d5e60974088bf641c7c9fcbc13325597af"
+    },
+    {
+      "path": "experiments/acs_omi_vmd_wst_vqc/README.md",
+      "before_sha256": "7754c1ecc7485ddb285e5c44ad3713ba2d6e65b78fe98df83b31a389d4824b85",
+      "after_sha256": "bc14e28a725ef42acc2dbb193c386a67accfa4a8157ec7aa7e451ff20fafe00c"
+    },
+    {
+      "path": "experiments/acs_omi_vmd_wst_vqc/SESSION_HANDOFF.md",
+      "before_sha256": "27c4947961ce2b5291f7a29a00d4ff6e9151a3e3f0f3a8b038b93f430d3e4ceb",
+      "after_sha256": "144118b2dfebf8294b400aaeba040b0fe6f219cc38f851c5d33ac2c6ecf13472"
+    }
+  ],
+  "unexpected_original_changes": [],
+  "changed_documents_intersect_frozen_protection_manifests": false,
+  "symbolic_links_created": 0,
+  "filesystem_limitation": "Symbolic-link creation returned Operation not permitted both in the sandbox and on the elevated retry. Used ordinary Markdown/HTML relative links instead.",
+  "limitations": [
+    "This verifies catalog links, output coverage, saved status and preservation of existing tracked/control files. It does not repeat model audits or hash every large generated artifact.",
+    "Generated artifacts remain gitignored; a fresh clone does not include them.",
+    "The 25 historical log entries include setup/failed runs; the 5 unnumbered groups aggregate early exploratory workflows. Do not sum every category as completed independent classification experiments."
+  ]
+}

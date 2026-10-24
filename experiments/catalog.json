@@ -1,0 +1,755 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-23",
+  "counts": {
+    "completed_classification": 9,
+    "feasibility": 2,
+    "historical_numbered_entry": 25,
+    "historical_unnumbered_group": 5,
+    "not_run": 2
+  },
+  "counting_rule": "Count each recent scientific comparison/protocol once, including its seeds, folds, controls and retries. Feasibility studies, historical log entries, historical workflow groups and unrun proposals are separate categories; do not sum them as independent completed classification experiments.",
+  "layout": "Per-study folders contain README.md and FILES.html indexes with relative links to canonical files. Original storage paths remain intact. The Windows-backed filesystem does not support symlink creation.",
+  "entries": [
+    {
+      "id": "ECG-01",
+      "folder": "experiments/ecgdata/01_patient_vmd_wst_vqc",
+      "title": "Patient-grouped VMD versus WST with VQC",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "Corrected comparison on verified patient folds, including all three VQC seeds and classical controls. The earlier row-grouped comparisons are historical.",
+      "links": {
+        "report.md": "architects/patient_vmd_wst_vqc.md",
+        "artifacts": "results/patient_vmd_wst_vqc",
+        "code/matched_vqc.py": "scripts/matched_vqc.py",
+        "code/summarize_patient_vqc.py": "scripts/summarize_patient_vqc.py",
+        "code/ecgvmd": "ecgvmd",
+        "feature_archive.npz": "features/fixed_K8_a2000_L500_it2000_comparison.npz",
+        "attempts/smoke": "results/patient_vqc_smoke",
+        "attempts/preparation.log": "results/patient_vqc_prepare.log",
+        "attempts/training.log": "results/patient_vqc_training.log",
+        "attempts/feature_rebuild.log": "results/vmd_it2000_rebuild.log"
+      },
+      "completion_evidence": [
+        "results/patient_vmd_wst_vqc/validation.json",
+        "results/patient_vmd_wst_vqc/summary.csv"
+      ]
+    },
+    {
+      "id": "ECG-02",
+      "folder": "experiments/ecgdata/02_matched_knn_control",
+      "title": "Matched KNN control and VQC training-fit diagnostic",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "A separate fixed KNN diagnostic using the saved patient folds and VQC preprocessing. All 12 configurations are retained; previously fitted VQCs are reused, not counted as new fits.",
+      "links": {
+        "report.md": "architects/vqc_vs_spar_knn.md",
+        "artifacts": "results/patient_knn_diagnostic",
+        "protocol.json": "results/patient_knn_diagnostic/protocol.json",
+        "code/vqc_knn_diagnostic.py": "scripts/vqc_knn_diagnostic.py"
+      },
+      "completion_evidence": [
+        "results/patient_knn_diagnostic/metrics.csv",
+        "results/patient_knn_diagnostic/predictions.npz"
+      ]
+    },
+    {
+      "id": "ECG-03",
+      "folder": "experiments/ecgdata/03_vqc_improvement",
+      "title": "Nested VQC architecture and training improvement",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "Completed nested candidate selection with compact circuits, repeated encoding, richer readout and epoch selection. The report retains the negative result and all seeds.",
+      "links": {
+        "report.md": "architects/vqc_improvement_results.md",
+        "protocol.md": "architects/vqc_improvement_protocol.md",
+        "artifacts": "results/vqc_improvement",
+        "tables": "architects/vqc_improvement_tables",
+        "figures": "architects/vqc_improvement_figures",
+        "code/improve_vqc.py": "scripts/improve_vqc.py",
+        "code/report_vqc_improvement.py": "scripts/report_vqc_improvement.py"
+      },
+      "completion_evidence": [
+        "results/vqc_improvement/completed.json"
+      ]
+    },
+    {
+      "id": "ECG-04",
+      "folder": "experiments/ecgdata/04_lfcc_swin_v1",
+      "title": "LFCC and temporal Swin baseline",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "The completed ECGData LFCC/Swin baseline and logistic control. The walkthrough and Colab reproduction are supporting material for this study, not additional completed studies.",
+      "links": {
+        "report": "attention method/reports/ecgdata_lfcc_swin_v1",
+        "artifacts": "attention method/results/ecgdata_lfcc_swin_v1",
+        "feature_cache": "attention method/features/ecgdata_lfcc_v1",
+        "protocol.json": "attention method/ecgdata_protocol.json",
+        "guide.md": "attention method/ECGDATA.md",
+        "code/ecgdata.py": "attention method/ecgdata.py",
+        "code/attention_ecg": "attention method/attention_ecg",
+        "walkthrough.ipynb": "attention method/lfcc_swin_walkthrough.ipynb",
+        "colab_reproduction": "attention method/reproduce_swin"
+      },
+      "completion_evidence": [
+        "attention method/results/ecgdata_lfcc_swin_v1/completed.json"
+      ]
+    },
+    {
+      "id": "ECG-05",
+      "folder": "experiments/ecgdata/05_emd_hilbert_30s",
+      "title": "Thirty-second EMD/Hilbert morphology classifiers",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "Completed v3 extraction and patient-separated logistic/SVC comparison. Interrupted v1 and v2 extraction attempts belong to this study and remain accessible. Its window length differs from the LFCC studies.",
+      "links": {
+        "report": "attention method/reports/ecgdata_eyeball_30s_v3",
+        "artifacts": "attention method/results/ecgdata_eyeball_30s_v3",
+        "protocol.json": "attention method/ecgdata_eyeball_protocol_v3.json",
+        "code/ecgdata_eyeball.py": "attention method/attention_ecg/ecgdata_eyeball.py",
+        "attempts/v1_interrupted": "attention method/results/ecgdata_eyeball_30s_v1",
+        "attempts/v2_interrupted": "attention method/results/ecgdata_eyeball_30s_v2"
+      },
+      "completion_evidence": [
+        "attention method/results/ecgdata_eyeball_30s_v3/completed.json"
+      ]
+    },
+    {
+      "id": "ECG-06",
+      "folder": "experiments/ecgdata/06_lfcc_swin_regularization_v2",
+      "title": "LFCC/Swin epoch selection and dropout",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "Completed 90 inner fits and 30 outer trials, with all three seeds. The primary selected procedure and the fixed dropout arm are reported separately. This is not a larger-model or raw-waveform experiment.",
+      "links": {
+        "report": "attention method/reports/ecgdata_lfcc_swin_regularization_v2",
+        "artifacts": "attention method/results/ecgdata_lfcc_swin_regularization_v2",
+        "protocol.json": "attention method/ecgdata_regularization_protocol_v2.json",
+        "protocol.md": "attention method/ecgdata_regularization_protocol_v2.md",
+        "code/run_ecgdata_regularization.py": "attention method/scripts/run_ecgdata_regularization.py",
+        "code/audit_ecgdata_regularization.py": "attention method/scripts/audit_ecgdata_regularization.py",
+        "code/ecgdata_regularization.py": "attention method/attention_ecg/ecgdata_regularization.py",
+        "code/regularized_swin.py": "attention method/attention_ecg/regularized_swin.py"
+      },
+      "completion_evidence": [
+        "attention method/results/ecgdata_lfcc_swin_regularization_v2/completed.json"
+      ]
+    },
+    {
+      "id": "ACS-01",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/studies/01_vmd_wst_vqc",
+      "title": "ACS/OMI VMD versus WST with VQC and classical controls",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "Completed original development comparison. CPU/GPU extraction attempts, convergence retries, benchmarks and the failed first workflow are supporting runs within this study. Official test patients remain reserved.",
+      "links": {
+        "report": "experiments/acs_omi_vmd_wst_vqc/reports/acs_omi_results_v1",
+        "artifacts": "experiments/acs_omi_vmd_wst_vqc/results/omi_models_v1_retry256k",
+        "protocol.md": "experiments/acs_omi_vmd_wst_vqc/protocols/acs_omi_protocol_v1.md",
+        "protocol_initial.json": "experiments/acs_omi_vmd_wst_vqc/protocols/acs_omi_protocol_v1.json",
+        "protocol_final.json": "experiments/acs_omi_vmd_wst_vqc/protocols/acs_omi_protocol_v1_retry256k.json",
+        "protocols": "experiments/acs_omi_vmd_wst_vqc/protocols",
+        "code/train_models.py": "experiments/acs_omi_vmd_wst_vqc/scripts/train_models.py",
+        "code/report_models.py": "experiments/acs_omi_vmd_wst_vqc/scripts/report_models.py",
+        "code/pipeline.py": "experiments/acs_omi_vmd_wst_vqc/pipeline.py",
+        "code/training.py": "experiments/acs_omi_vmd_wst_vqc/training.py",
+        "extraction": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1_gpu_retry256k",
+        "workflow": "experiments/acs_omi_vmd_wst_vqc/results/omi_development_workflow_v2",
+        "attempts/omi_v1": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1",
+        "attempts/omi_v1_parallel": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1_parallel",
+        "attempts/omi_v1_gpu": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1_gpu",
+        "attempts/omi_v1_gpu_retry128k": "experiments/acs_omi_vmd_wst_vqc/results/omi_v1_gpu_retry128k",
+        "attempts/omi_development_workflow_v1": "experiments/acs_omi_vmd_wst_vqc/results/omi_development_workflow_v1",
+        "diagnostics/gpu_vmd_benchmark_v1": "experiments/acs_omi_vmd_wst_vqc/results/gpu_vmd_benchmark_v1",
+        "diagnostics/loader": "experiments/acs_omi_vmd_wst_vqc/results/loader",
+        "diagnostics/retry_device_validation_20260927": "experiments/acs_omi_vmd_wst_vqc/results/retry_device_validation_20260927",
+        "diagnostics/vmd_04124_diagnostic_v1": "experiments/acs_omi_vmd_wst_vqc/results/vmd_04124_diagnostic_v1",
+        "diagnostics/vmd_04124_gpu_check_v1": "experiments/acs_omi_vmd_wst_vqc/results/vmd_04124_gpu_check_v1",
+        "diagnostics/vmd_cap_01985_cpu_diagnostic_v1": "experiments/acs_omi_vmd_wst_vqc/results/vmd_cap_01985_cpu_diagnostic_v1",
+        "diagnostics/vmd_retry_extension_diagnostic_v1": "experiments/acs_omi_vmd_wst_vqc/results/vmd_retry_extension_diagnostic_v1"
+      },
+      "completion_evidence": [
+        "experiments/acs_omi_vmd_wst_vqc/results/omi_models_v1_retry256k/completed.json"
+      ]
+    },
+    {
+      "id": "ACS-02",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/studies/02_balanced_training_and_swin",
+      "title": "Balanced OMI training and LFCC/Swin comparison",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "Completed balanced VMD/WST VQC and classical fits plus LFCC/Swin and logistic fits. The original user-named workspace is preserved because its scripts and manifests depend on that path.",
+      "links": {
+        "report": "correct balance training set OMI/reports/v1",
+        "artifacts": "correct balance training set OMI/results/v1",
+        "protocol.json": "correct balance training set OMI/protocol.json",
+        "guide.md": "correct balance training set OMI/README.md",
+        "code/run.py": "correct balance training set OMI/run.py",
+        "code/balanced.py": "correct balance training set OMI/balanced.py",
+        "code/lfcc.py": "correct balance training set OMI/lfcc.py",
+        "code/swin.py": "correct balance training set OMI/swin.py"
+      },
+      "completion_evidence": [
+        "correct balance training set OMI/results/v1/status.json"
+      ]
+    },
+    {
+      "id": "ACS-03",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/studies/03_sensitivity_calibration",
+      "title": "OMI sensitivity thresholds and calibration",
+      "category": "completed_classification",
+      "status": "complete",
+      "description": "The saved-score analysis and 14 new patient-separated calibration fits are two parts of one protocol. All targets and seeds are retained. The dedicated original study folder remains canonical.",
+      "links": {
+        "report": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/reports",
+        "artifacts": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results",
+        "protocol.json": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/protocol.json",
+        "guide.md": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/README.md",
+        "code/run.py": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/run.py",
+        "code/fit.py": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/fit.py",
+        "code/prepare.py": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/prepare.py",
+        "handoff.md": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/SESSION_HANDOFF.md"
+      },
+      "completion_evidence": [
+        "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/status.json",
+        "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1/results/completion/completed.json"
+      ]
+    },
+    {
+      "id": "ACS-P01",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/studies/04_emd_hilbert_all_lead_pilot",
+      "title": "All-lead EMD/Hilbert feasibility pilot",
+      "category": "feasibility",
+      "status": "gate_failed_no_classifier",
+      "description": "The engineering assessment completed but failed its declared gate. No classifier was trained. The initial and 16k failed attempts, 64k assessment, and stopping diagnostics are one pilot family.",
+      "links": {
+        "report": "experiments/acs_omi_vmd_wst_vqc/reports/eyeball_assessment_2026-10-08",
+        "artifacts": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_omi_pilot_retry64k_v1",
+        "protocol.json": "experiments/acs_omi_vmd_wst_vqc/protocols/eyeball_omi_engineering_retry64k_v1.json",
+        "initial_proposal.md": "experiments/acs_omi_vmd_wst_vqc/protocols/eyeball_omi_pilot_v1_draft.md",
+        "execution.md": "experiments/acs_omi_vmd_wst_vqc/reports/eyeball_execution_2026-10-05.md",
+        "assessment.md": "experiments/acs_omi_vmd_wst_vqc/reports/eyeball_continuation_2026-10-08.md",
+        "code/eyeball_pilot_assessment.py": "experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_pilot_assessment.py",
+        "code/eyeball_assessment_report.py": "experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_assessment_report.py",
+        "attempts/eyeball_omi_pilot_v1": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_omi_pilot_v1",
+        "attempts/eyeball_omi_pilot_retry16k_v1": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_omi_pilot_retry16k_v1",
+        "diagnostics/eyeball_cap_17086_v1": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_cap_17086_v1",
+        "diagnostics/eyeball_stopping_diagnostic_v1": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_stopping_diagnostic_v1",
+        "diagnostics/eyeball_dependencies_v1": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_dependencies_v1"
+      },
+      "completion_evidence": [
+        "experiments/acs_omi_vmd_wst_vqc/results/eyeball_omi_pilot_retry64k_v1/completed.json"
+      ]
+    },
+    {
+      "id": "ACS-P02",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/studies/05_emd_hilbert_lead_i_pilot",
+      "title": "Lead-I EMD/Hilbert feasibility pilot",
+      "category": "feasibility",
+      "status": "gate_failed_no_classifier",
+      "description": "A separate prospective Lead-I study. Its 512-record engineering check failed the extraction-coverage gate and stopped before classifier training.",
+      "links": {
+        "report": "experiments/acs_omi_vmd_wst_vqc/reports/eyeball_lead_i_feasibility_v1",
+        "artifacts": "experiments/acs_omi_vmd_wst_vqc/results/eyeball_lead_i_feasibility_v1",
+        "protocol.json": "experiments/acs_omi_vmd_wst_vqc/protocols/eyeball_lead_i_feasibility_v1.json",
+        "execution.md": "experiments/acs_omi_vmd_wst_vqc/reports/eyeball_lead_i_execution_2026-10-08.md",
+        "code/eyeball_lead_i.py": "experiments/acs_omi_vmd_wst_vqc/scripts/eyeball_lead_i.py",
+        "code/lead_i_study.py": "experiments/acs_omi_vmd_wst_vqc/lead_i_study.py"
+      },
+      "completion_evidence": [
+        "experiments/acs_omi_vmd_wst_vqc/results/eyeball_lead_i_feasibility_v1/completed.json"
+      ]
+    },
+    {
+      "id": "E1",
+      "folder": "experiments/historical_ecgdata/e01_readiness_check",
+      "title": "Readiness check",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E1 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md"
+      },
+      "source_log_heading": "E1 — Readiness check · 6 s"
+    },
+    {
+      "id": "E2",
+      "folder": "experiments/historical_ecgdata/e02_angle_wraparound",
+      "title": "Angle wrap-around diagnostic",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E2 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md"
+      },
+      "source_log_heading": "E2 — Angle wrap-around diagnostic · 3 s"
+    },
+    {
+      "id": "E3",
+      "folder": "experiments/historical_ecgdata/e03_environment_setup",
+      "title": "Environment",
+      "category": "historical_numbered_entry",
+      "status": "setup_only",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E3 heading in the original log for settings, failures and corrections. This is environment setup, not a scientific experiment.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md"
+      },
+      "source_log_heading": "E3 — Environment · ~2 min"
+    },
+    {
+      "id": "E4",
+      "folder": "experiments/historical_ecgdata/e04_kernel_correctness_throughput",
+      "title": "Kernel correctness and throughput",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E4 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E4 — Kernel correctness and throughput · 1 min"
+    },
+    {
+      "id": "E5",
+      "folder": "experiments/historical_ecgdata/e05_invalid_kernel_probe",
+      "title": "First stage-2 probe",
+      "category": "historical_numbered_entry",
+      "status": "invalid",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E5 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E5 — First stage-2 probe · 240 s — **INVALID, wrong bandwidth**"
+    },
+    {
+      "id": "E6",
+      "folder": "experiments/historical_ecgdata/e06_gram_geometry",
+      "title": "Gram geometry sweep",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E6 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E6 — Gram geometry sweep · 90 s"
+    },
+    {
+      "id": "E7",
+      "folder": "experiments/historical_ecgdata/e07_bandwidth_cv",
+      "title": "Bandwidth CV sweep",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E7 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E7 — Bandwidth CV sweep · 730 s"
+    },
+    {
+      "id": "E8",
+      "folder": "experiments/historical_ecgdata/e08_product_state_factorization",
+      "title": "Product-state factorisation",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E8 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E8 — Product-state factorisation · 1 s — **key finding**"
+    },
+    {
+      "id": "E9",
+      "folder": "experiments/historical_ecgdata/e09_bandwidth_and_classical_rivals",
+      "title": "Deeper bandwidths + tuned rivals",
+      "category": "historical_numbered_entry",
+      "status": "partially_failed",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E9 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E9 — Deeper bandwidths + tuned rivals · 720 s"
+    },
+    {
+      "id": "E10",
+      "folder": "experiments/historical_ecgdata/e10_iqp_geometry_and_rivals",
+      "title": "IQP geometry, tuned rivals, full-scale product kernel",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E10 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E10 — IQP geometry, tuned rivals, full-scale product kernel · 400 s"
+    },
+    {
+      "id": "E11",
+      "folder": "experiments/historical_ecgdata/e11_entangled_iqp_comparison",
+      "title": "Entangled IQP vs classical rivals",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E11 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E11 — Entangled IQP vs classical rivals · 1830 s"
+    },
+    {
+      "id": "E12",
+      "folder": "experiments/historical_ecgdata/e12_seed_noise_floor",
+      "title": "Noise floor",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E12 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/quantum_kernel_probe.py": "scripts/quantum_kernel_probe.py"
+      },
+      "source_log_heading": "E12 — Noise floor · 60 s — **the number that interprets E11**"
+    },
+    {
+      "id": "E13",
+      "folder": "experiments/historical_ecgdata/e13_vqc_throughput",
+      "title": "VQC throughput",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E13 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py"
+      },
+      "source_log_heading": "E13 — VQC throughput · 3 min"
+    },
+    {
+      "id": "E14",
+      "folder": "experiments/historical_ecgdata/e14_collapsed_vqc_smoke",
+      "title": "VQC first smoke test",
+      "category": "historical_numbered_entry",
+      "status": "failed_model_collapse",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E14 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py"
+      },
+      "source_log_heading": "E14 — VQC first smoke test · 148 s — **FAILED, model collapsed**"
+    },
+    {
+      "id": "E15",
+      "folder": "experiments/historical_ecgdata/e15_vqc_learning_rate_budget",
+      "title": "VQC learning-rate and step-budget sweep",
+      "category": "historical_numbered_entry",
+      "status": "interrupted",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E15 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py"
+      },
+      "source_log_heading": "E15 — VQC learning-rate and step-budget sweep · 737 s then killed"
+    },
+    {
+      "id": "E16",
+      "folder": "experiments/historical_ecgdata/e16_interrupted_vqc_training_curve",
+      "title": "VQC training curve at full scale",
+      "category": "historical_numbered_entry",
+      "status": "interrupted",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E16 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py"
+      },
+      "source_log_heading": "E16 — VQC training curve at full scale · started 23:02:07, killed at 3000 s timeout (epoch 30 of 100)"
+    },
+    {
+      "id": "E17",
+      "folder": "experiments/historical_ecgdata/e17_linear_head_control",
+      "title": "The linear-head control",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E17 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md"
+      },
+      "source_log_heading": "E17 — The linear-head control · recorded 2026-08-29 23:17:02 · 20 s — **the control that should have come first**"
+    },
+    {
+      "id": "E18",
+      "folder": "experiments/historical_ecgdata/e18_vqc_capacity_probe",
+      "title": "Capacity probe (overfit 96 samples)",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E18 heading in the original log for settings, failures and corrections. E18b corrects the depth-4 record and is included here, not counted again.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py",
+        "artifacts/e18_capacity_probe.txt": "results/e18_capacity_probe.txt"
+      },
+      "source_log_heading": "E18 — Capacity probe (overfit 96 samples) · recorded 2026-08-30 00:10:39"
+    },
+    {
+      "id": "E19",
+      "folder": "experiments/historical_ecgdata/e19_vqc_full_training_curve",
+      "title": "The step budget, done properly",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E19 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py",
+        "artifacts/e19_vqc_curve_full.log": "results/e19_vqc_curve_full.log"
+      },
+      "source_log_heading": "E19 — The step budget, done properly · 2026-08-30 12:26–12:51 · 1475 s — **reverses E17**"
+    },
+    {
+      "id": "E20",
+      "folder": "experiments/historical_ecgdata/e20_vqc_fivefold",
+      "title": "Stage 4, the five-fold",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E20 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py",
+        "artifacts/e20_vqc_fivefold.csv": "results/e20_vqc_fivefold.csv",
+        "artifacts/e20_vqc_fivefold.log": "results/e20_vqc_fivefold.log"
+      },
+      "source_log_heading": "E20 — Stage 4, the five-fold · 2026-08-30 16:15-16:52 · 2218 s — **concludes path B**"
+    },
+    {
+      "id": "E21",
+      "folder": "experiments/historical_ecgdata/e21_nested_kernel_bandwidth",
+      "title": "Bandwidth nested in-fold",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E21 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/kernel_nested_bw.py": "scripts/kernel_nested_bw.py"
+      },
+      "source_log_heading": "E21 — Bandwidth nested in-fold · 2026-08-30 16:33 · 26 s — **closes open item 3**"
+    },
+    {
+      "id": "E22",
+      "folder": "experiments/historical_ecgdata/e22_nested_iqp_full_scale",
+      "title": "IQP nested at full scale",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E22 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/kernel_nested_bw.py": "scripts/kernel_nested_bw.py",
+        "artifacts/e22_iqp_nested.csv": "results/e22_iqp_nested.csv",
+        "artifacts/e22_iqp_nested.log": "results/e22_iqp_nested.log"
+      },
+      "source_log_heading": "E22 — IQP nested at full scale · 2026-08-30 18:14-18:33 · 1108 s — **answers the entanglement question**"
+    },
+    {
+      "id": "E23",
+      "folder": "experiments/historical_ecgdata/e23_qubit_width_cost",
+      "title": "Register width: what widening actually costs",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E23 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/vqc_run.py": "scripts/vqc_run.py"
+      },
+      "source_log_heading": "E23 — Register width: what widening actually costs · 2026-08-30 17:00-18:10"
+    },
+    {
+      "id": "E24",
+      "folder": "experiments/historical_ecgdata/e24_vqc_readout_probe",
+      "title": "Where the VQC's deficit actually comes from",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E24 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/readout_probe.py": "scripts/readout_probe.py",
+        "artifacts/e24_readout_probe.txt": "results/e24_readout_probe.txt"
+      },
+      "source_log_heading": "E24 — Where the VQC's deficit actually comes from · 2026-08-30 19:32-19:52 · 545 s + probe"
+    },
+    {
+      "id": "E25",
+      "folder": "experiments/historical_ecgdata/e25_full_metric_panel",
+      "title": "The full metric panel, and a paired bootstrap",
+      "category": "historical_numbered_entry",
+      "status": "historical",
+      "description": "Historical numbered log entry; this catalog does not recertify its result. Classifier scores from this era use row groups, not verified patients. See the exact E25 heading in the original log for settings, failures and corrections.",
+      "links": {
+        "experiment_log.md": "EXPERIMENT_LOG.md",
+        "quantum_stage.md": "QUANTUM_STAGE.md",
+        "code/metrics_table.py": "scripts/metrics_table.py",
+        "artifacts/e25_iqp_nested.csv": "results/e25_iqp_nested.csv",
+        "artifacts/e25_iqp_nested.log": "results/e25_iqp_nested.log",
+        "artifacts/e25_iqp_nested_metrics.csv": "results/e25_iqp_nested_metrics.csv",
+        "artifacts/e25_iqp_nested_preds.npz": "results/e25_iqp_nested_preds.npz",
+        "artifacts/e25_vqc_fivefold.csv": "results/e25_vqc_fivefold.csv",
+        "artifacts/e25_vqc_fivefold.log": "results/e25_vqc_fivefold.log",
+        "artifacts/e25_vqc_fivefold_models": "results/e25_vqc_fivefold_models",
+        "artifacts/e25_vqc_fivefold_preds.npz": "results/e25_vqc_fivefold_preds.npz",
+        "artifacts/all_metrics.csv": "results/all_metrics.csv",
+        "artifacts/all_metrics.md": "results/all_metrics.md"
+      },
+      "source_log_heading": "E25 — The full metric panel, and a paired bootstrap · 22:09–23:10 · 26 s + 18 min + 37 min"
+    },
+    {
+      "id": "H-01",
+      "folder": "experiments/historical_ecgdata/h01_classical_feature_baselines",
+      "title": "Early classical feature, classifier and rhythm controls",
+      "category": "historical_unnumbered_group",
+      "status": "historical",
+      "description": "Early notebook ablations and baseline comparisons grouped by their original shared workflow. Includes rhythm/control features, feature selection and associated probes. Historical row-grouped scores are not patient-independent.",
+      "links": {
+        "report.md": "README.md",
+        "notebook.ipynb": "03_baseline_and_quantum_prep.ipynb",
+        "code/run_pipeline.py": "run_pipeline.py",
+        "artifacts/rhythm_confound.csv": "results/rhythm_confound.csv"
+      }
+    },
+    {
+      "id": "H-02",
+      "folder": "experiments/historical_ecgdata/h02_vmd_alpha_convergence",
+      "title": "VMD alpha and convergence-budget sweep",
+      "category": "historical_unnumbered_group",
+      "status": "historical",
+      "description": "The early alpha/iteration-budget sweep, recorded in the original README. These are historical row-grouped measurements.",
+      "links": {
+        "report.md": "README.md",
+        "code/alpha_sweep.py": "scripts/alpha_sweep.py",
+        "artifacts/alpha_sweep.csv": "results/alpha_sweep.csv"
+      }
+    },
+    {
+      "id": "H-03",
+      "folder": "experiments/historical_ecgdata/h03_wst_vmd_row_grouped",
+      "title": "Historical WST/VMD comparison and temporal-pooling controls",
+      "category": "historical_unnumbered_group",
+      "status": "historical",
+      "description": "Original row-grouped comparison, bin-mean control and learning curves. Superseded for patient-independent interpretation by ECG-01; retains failed and interrupted logs.",
+      "links": {
+        "report.md": "architects/wst_vs_vmd_vqc.md",
+        "code/wst_vs_vmd_vqc.py": "scripts/wst_vs_vmd_vqc.py",
+        "artifacts/wst_vs_vmd_curve.log": "results/wst_vs_vmd_curve.log",
+        "artifacts/wst_vs_vmd_curve_VMD_modes___rhythm.csv": "results/wst_vs_vmd_curve_VMD_modes___rhythm.csv",
+        "artifacts/wst_vs_vmd_curve_WST_log.csv": "results/wst_vs_vmd_curve_WST_log.csv",
+        "artifacts/wst_vs_vmd_vqc.csv": "results/wst_vs_vmd_vqc.csv",
+        "artifacts/wst_vs_vmd_vqc.log": "results/wst_vs_vmd_vqc.log",
+        "artifacts/wst_vs_vmd_vqc_preds.npz": "results/wst_vs_vmd_vqc_preds.npz",
+        "artifacts/wst_vqc.csv": "results/wst_vqc.csv",
+        "artifacts/wst_vqc.log": "results/wst_vqc.log",
+        "artifacts/wst_vqc.killed-run.log": "results/wst_vqc.killed-run.log",
+        "artifacts/wst_vqc_preds.npz": "results/wst_vqc_preds.npz",
+        "artifacts/wst_vqc_binmean.csv": "results/wst_vqc_binmean.csv",
+        "artifacts/wst_vqc_binmean.log": "results/wst_vqc_binmean.log",
+        "artifacts/wst_vqc_binmean_preds.npz": "results/wst_vqc_binmean_preds.npz"
+      }
+    },
+    {
+      "id": "H-04",
+      "folder": "experiments/historical_ecgdata/h04_wst_descriptor_controls",
+      "title": "Historical WST envelope-descriptor controls",
+      "category": "historical_unnumbered_group",
+      "status": "historical",
+      "description": "Descriptor and seed controls from the original WST/VMD report. Grouped separately from standard scattering coefficients; historical row-grouped scores.",
+      "links": {
+        "report.md": "architects/wst_vs_vmd_vqc.md",
+        "code/wst_descriptor_probe.py": "scripts/wst_descriptor_probe.py",
+        "artifacts/wst_desc_seeds.csv": "results/wst_desc_seeds.csv",
+        "artifacts/wst_descriptors.csv": "results/wst_descriptors.csv",
+        "artifacts/wst_env_descriptors.npz": "results/wst_env_descriptors.npz",
+        "artifacts/wst_vqc_desc.csv": "results/wst_vqc_desc.csv",
+        "artifacts/wst_vqc_desc.log": "results/wst_vqc_desc.log",
+        "artifacts/wst_vqc_desc_preds.npz": "results/wst_vqc_desc_preds.npz"
+      }
+    },
+    {
+      "id": "H-05",
+      "folder": "experiments/historical_ecgdata/h05_scattering_and_split_audit",
+      "title": "Scattering numerical and KNN split audit",
+      "category": "historical_unnumbered_group",
+      "status": "audit_complete",
+      "description": "Numerical reference checks and KNN split diagnostics that motivated patient-group correction. This is an audit, not an additional main model-comparison study.",
+      "links": {
+        "report.md": "architects/scattering_audit_2026-09-21.md",
+        "artifacts": "results/scattering_audit",
+        "knn_leakage.csv": "results/knn_leakage.csv"
+      }
+    },
+    {
+      "id": "D-01",
+      "folder": "experiments/ecgdata/drafts/learning_curve",
+      "title": "ECGData LFCC/Swin learning-curve proposal",
+      "category": "not_run",
+      "status": "protocol_only",
+      "description": "A declared follow-up protocol without a completed real-data run. Excluded from completed-study counts.",
+      "links": {
+        "protocol.json": "attention method/ecgdata_learning_curve_protocol.json",
+        "protocol.md": "attention method/ecgdata_learning_curve_protocol.md"
+      }
+    },
+    {
+      "id": "D-02",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/studies/drafts/original_attention_implementation",
+      "title": "Original ACS attention implementation",
+      "category": "not_run",
+      "status": "implementation_only",
+      "description": "Original feature/model implementation and synthetic checks. No standalone real-data training run under this initial protocol; the later balanced ACS study is ACS-02.",
+      "links": {
+        "protocol.json": "attention method/protocol.json",
+        "guide.md": "attention method/README.md",
+        "code/attention_ecg": "attention method/attention_ecg",
+        "code/check.py": "attention method/check.py"
+      }
+    }
+  ],
+  "shared_historical_outputs": {
+    "kernel_nested_bw.csv": "results/kernel_nested_bw.csv",
+    "kernel_nested_bw_metrics.csv": "results/kernel_nested_bw_metrics.csv",
+    "kernel_nested_bw_preds.npz": "results/kernel_nested_bw_preds.npz",
+    "quantum_gram.png": "results/quantum_gram.png",
+    "quantum_gram_bw.png": "results/quantum_gram_bw.png",
+    "quantum_kernel_bw.csv": "results/quantum_kernel_bw.csv",
+    "quantum_kernel_probe.csv": "results/quantum_kernel_probe.csv",
+    "vqc_curve.csv": "results/vqc_curve.csv"
+  },
+  "not_counted": [
+    "Literature reviews",
+    "Data/download audits",
+    "Software unit tests",
+    "Reproduction notebooks",
+    "Per-seed/per-fold fits",
+    "Interrupted retries within an existing study",
+    "Larger-Swin/representation follow-up: not started"
+  ]
+}

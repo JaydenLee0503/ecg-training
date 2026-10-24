@@ -1,5 +1,22 @@
 # Experiment log — the quantum stage
 
+## 2026-10-23 — experiment inventory and folder organization
+
+Created a [catalog](experiments/README.md) with one folder per recent study and
+separate folders for historical records and unrun proposals. Counts: 9 completed
+main classification studies (6 ECGData, 3 ACS/OMI), 2 feasibility assessments
+that stopped before classifier training, 25 historical E1–E25 log entries,
+5 earlier baseline/audit workflow groups, and 2 unrun proposals. E18b remains
+part of E18. Seeds, folds, retries and reproduction notebooks do not each count
+as a new study; setup and historical probes are not completed classifier studies.
+
+Each folder has a README and clickable file index. Original files and paths
+were preserved. The filesystem rejected symbolic-link creation even outside the
+sandbox, so the indexes use ordinary relative links. The
+[verification record](experiments/organization_2026-10-23.json) documents link,
+count, artifact-coverage and preservation checks. No numerical experiment was
+started or repeated; the larger-Swin follow-up remains unstarted.
+
 ## 2026-09-29 — ECGData LFCC + Swin completed
 
 The user authorized execution after checkpoint `eba3a78`. The unchanged attention
