@@ -1,0 +1,34 @@
+2026-10-24T03:53:49Z Built 21222 grid windows; v1 subset identity verified (1620 windows)
+2026-10-24T03:53:57Z LFCC of the v1 subset is bit-identical to the v1 cache
+{
+  "status": "complete",
+  "manifest_sha256": "22c32be171497c96bdb89ff84cebb0eb3cc6092a92ee8a44a7cff3de720974b9",
+  "shape": [
+    21222,
+    13,
+    1,
+    16
+  ],
+  "patients": 80,
+  "rows": 162,
+  "class_counts": {
+    "ARR": {
+      "windows": 12576,
+      "patients": 47
+    },
+    "CHF": {
+      "windows": 3930,
+      "patients": 15
+    },
+    "NSR": {
+      "windows": 4716,
+      "patients": 18
+    }
+  },
+  "v1_subset_windows": 1620,
+  "v1_features_identical": true,
+  "v1_windows_identical": true,
+  "reused_shards": 0,
+  "seconds": 17.245205776001967,
+  "training_started": false
+}

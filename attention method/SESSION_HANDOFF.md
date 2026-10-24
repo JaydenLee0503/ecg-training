@@ -1,5 +1,19 @@
 # Attention method handoff — 2026-09-25
 
+## All-window LFCC/Swin study (ECG-07) completed — 2026-10-24
+
+At the user's request, a separate study in
+[experiments/ecgdata/07_lfcc_swin_all_windows](../experiments/ecgdata/07_lfcc_swin_all_windows/README.md)
+retrained the unchanged v1 Swin and logistic recipes on all 131 non-overlapping
+windows per ECGData row (21,222 windows; v1 used 10 per row, 7.6% of the signal),
+with the same 80 patients, outer folds and seeds 0/1/2. The 1,620 v1 windows are a
+verified bit-identical subset. All 20 fits completed 2026-10-24T05:11:23Z (1 h 17 min).
+**Do not retrain.** On the identical v1 windows Swin reached 86.83% window accuracy,
+macro-F1 0.8390, 95.83% patient vote (v1 83.35% / 0.8006 / 94.17%); primary
+macro-F1 difference +0.0384 [+0.0153, +0.0602]. The patient-vote gain is not
+established. Data volume and optimizer updates are confounded. Full record:
+the study's EXPERIMENT_LOG.md. This file's v1/v2 artifacts were only read.
+
 ## Regularization v2 completed and audited — 2026-10-23 EDT
 
 The authorized study completed on **2026-10-16T04:32:18Z** (00:32 EDT), with

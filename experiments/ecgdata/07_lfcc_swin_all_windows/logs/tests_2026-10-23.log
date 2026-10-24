@@ -1,0 +1,11 @@
+test_better_arm_is_positive (test_study.BootstrapTests.test_better_arm_is_positive) ... ok
+test_identical_arms_have_zero_difference (test_study.BootstrapTests.test_identical_arms_have_zero_difference) ... ok
+test_tiny_swin_and_control_fit_without_patient_leakage (test_study.FitTests.test_tiny_swin_and_control_fit_without_patient_leakage) ... ok
+test_off_grid_start_rejected (test_study.GridTests.test_off_grid_start_rejected) ... ok
+test_patient_crossing_folds_rejected (test_study.GridTests.test_patient_crossing_folds_rejected) ... ok
+test_sampled_v1_windows_are_exact_grid_windows (test_study.GridTests.test_sampled_v1_windows_are_exact_grid_windows) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 33.755s
+
+OK

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/mnt/d/Projects/test-ecg-training/experiments/ecgdata/07_lfcc_swin_all_windows/run.py", line 30, in <module>
+    main()
+  File "/mnt/d/Projects/test-ecg-training/experiments/ecgdata/07_lfcc_swin_all_windows/run.py", line 25, in main
+    result = study.report()
+             ^^^^^^^^^^^^^^
+  File "/mnt/d/Projects/test-ecg-training/experiments/ecgdata/07_lfcc_swin_all_windows/study.py", line 388, in report
+    write_markdown(analysis)
+  File "/mnt/d/Projects/test-ecg-training/experiments/ecgdata/07_lfcc_swin_all_windows/study.py", line 412, in write_markdown
+    observed = r['arms'][a_name]['mean'][scope][metric]-r['arms'][b_name]['mean'][scope][metric]
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+KeyError: 'acro_f1'
