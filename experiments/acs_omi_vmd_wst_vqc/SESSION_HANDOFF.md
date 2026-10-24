@@ -1,5 +1,19 @@
 # ACS session handoff — 2026-09-25
 
+## OMI improvement study authorized and preparing — 2026-10-23 EDT
+
+The user approved Swin dropout/epoch selection, LFCC logistic tuning and a raw
+12-lead CNN control. The separate [study folder](omi_improvement_v2/README.md)
+holds its complete protocol, code, tests, outputs and log. All 9 CPU/GPU checks
+passed; preparation is verifying earlier artifacts and freezing inputs. No new
+real-data fit has started at this dated entry. Consult its handoff/status.
+
+Model selection uses three inner patient folds within the sensitivity-study
+subfit cohort. Calibration and existing validation patients stay separate; all
+neural seeds 0/1/2 and both Swin arms are retained. Prior completed controls are
+reused where identical. Official test waveforms remain untouched. Do not duplicate
+a running workflow or retrain completed fits after a restart.
+
 ## Per-study folders added — 2026-10-23 EDT
 
 The user requested one folder per experiment and a count. Start with

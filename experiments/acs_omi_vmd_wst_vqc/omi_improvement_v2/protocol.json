@@ -1,0 +1,20 @@
+{
+  "id": "omi-improvement-v2-20261023",
+  "authorization": "User approved the proposed OMI dropout/epoch selection, logistic tuning and raw 12-lead CNN comparison on 2026-10-23.",
+  "parent": "experiments/acs_omi_vmd_wst_vqc/sensitivity_study_v1",
+  "balanced": "correct balance training set OMI",
+  "split": "reuse sensitivity-study subfit/calibration/validation exactly; no official test waveforms",
+  "inner": {"folds": 3, "seed": 20261023, "method": "StratifiedGroupKFold on subfit records only", "selection": "pooled inner out-of-fold average precision, averaged over all three neural seeds", "ties": "earlier epoch, then zero dropout; logistic smaller C"},
+  "seeds": [0, 1, 2],
+  "epochs": [10, 20, 40],
+  "swin_dropout": [0.0, 0.1],
+  "logistic_C": [0.01, 0.1, 1.0, 10.0, 100.0],
+  "sampling": {"method": "all originals plus random minority duplication to equal class counts", "inner_seed": 20261023, "final_seed": 20261015, "class_weight": null},
+  "training": {"epochs": 40, "batch_size": 128, "lr": 0.001, "min_lr": 0.0001, "weight_decay": 0.01, "gradient_clip_norm": 1.0, "shuffle_seed_offset": 10000, "optimizer": "AdamW", "schedule": "cosine horizon 40, including earlier stopped refits", "precision": "float32", "deterministic": true, "tf32": false},
+  "swin_model": {"n_leads": 12, "n_ceps": 20, "num_classes": 2, "embed_dim": 64, "depths": [2, 2, 2], "heads": [2, 4, 8], "window_size": 8},
+  "raw_model": {"input": "5000 samples x 12 leads at native 500 Hz, physical mV", "normalization": "per-lead population mean/std across unique fitting records and samples; no per-record standardization", "stem": "Conv1d 12->16 kernel15 stride4 padding7, GroupNorm4, GELU", "blocks": "residual 16->32 stride2, 32->64 stride2, 64->64 stride2; kernel7 padding3, GroupNorm4 and GELU; 1x1 skip", "head": "global temporal mean, dropout0.1, linear64->2", "filtering_resampling_augmentation": "none", "architecture_search": false},
+  "evaluation": {"primary": "selected Swin minus matched fixed-40 Swin average precision", "secondary": "each arm versus tuned logistic, raw CNN versus selected Swin; all seeds and per-class/confusion metrics", "thresholds": "largest calibration score meeting target, ties included; freeze before validation inference; no refit afterward", "targets_percent": [80, 90, 95], "fixed_threshold": 0.5, "bootstrap_draws": 2000, "bootstrap_seed": 20261023, "unit": "ECG prediction; patient-cluster bootstrap", "multiplicity_adjustment": false},
+  "reuse": "verified sensitivity-study fixed C=1 logistic and fixed-40 zero-dropout Swin on identical subfit/calibration; reuse zero-dropout final Swin only if epoch40 selected",
+  "limits": "Existing validation repeatedly examined. Intervals condition on fitted models, chosen settings and cutoffs, excluding retraining/selection uncertainty. Raw CNN changes both representation and classifier. This is not a replication of a published model. No promised accuracy or clinical validity.",
+  "official_test_processed": false
+}

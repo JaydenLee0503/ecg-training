@@ -1,5 +1,19 @@
 # Session handoff — 2026-09-25
 
+## OMI improvement study authorized and preparing — 2026-10-23 EDT
+
+The user approved OMI Swin dropout/epoch selection, LFCC logistic tuning and a
+small raw 12-lead CNN. All new work is in
+[omi_improvement_v2](../experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/README.md).
+All 9 CPU/GPU checks passed, including exact dropout recovery. Preparation is
+verifying protected artifacts and freezing the new protocol; no real-data fit
+has started at this entry. Read the study handoff and actual status markers.
+
+The protocol reuses sensitivity-study subfit/calibration/validation patients,
+uses three inner patient folds for model selection and retains all seeds 0/1/2.
+Completed prior fits are reused when settings match. Official test waveforms
+remain reserved. This entry records a new authorized study, not improved results.
+
 ## Experiment folders and inventory — 2026-10-23 EDT
 
 The user requested a count and one folder per experiment. The
