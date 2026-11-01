@@ -32,3 +32,8 @@ predictions. It does not overwrite the completed study. The results tables later
 in the notebook still show the original completed comparison; fresh-fit metrics
 are saved in the new output directory. GPU is optional but recommended. These
 are exploratory internal results, not clinical validation.
+
+The saved study used Python 3.12.3, NumPy 2.5.2, SciPy 1.18.1,
+scikit-learn 1.9.0, PyTorch 2.7.1+cu128 and deterministic float32 training.
+GPU results can differ slightly across hardware or library versions. See the
+study's frozen manifest and fit records for the exact environment and settings.

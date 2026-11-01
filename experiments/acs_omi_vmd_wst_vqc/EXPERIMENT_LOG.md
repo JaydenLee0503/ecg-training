@@ -815,3 +815,6 @@ independent audit reproduced 16 grouped operating points and intervals. Results,
 code, split limitations, failure/warning detail and log are under
 `threshold_comparison_v1/`. The original validation patients have been repeatedly
 examined; this is not clinical/external validation.
+
+The notebook README additionally records the tested Python, numerical and
+PyTorch versions; no dependency installation or OMI model refitting was needed.
