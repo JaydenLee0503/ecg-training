@@ -228,3 +228,14 @@ at 75% and 0.8006 at 100% of training patients: paired difference +0.0207,
 95% interval [+0.0024,+0.0373]. Smaller subsets also got fewer optimizer updates.
 The independent saved-fit audit passed; see ECG-08 REPORT.md for limitations,
 including an incomplete transitive source fingerprint. Do not retrain.
+
+## ECG-09 representation comparison — 2026-11-01 UTC
+
+ECG-09 is an active, checkpointed 35-fit comparison using the identical
+all-window patients/folds/seeds: 32 log bands with Swin and logistic, plus a raw
+CNN, against saved ECG-07. Its synthetic, recovery and CPU/GPU checks passed;
+the first saved Swin checkpoint passed independent CPU reload checks. A
+one-shot monitor will run the saved-result audit after the writer exits. See
+`experiments/ecgdata/09_representation_comparison/SESSION_HANDOFF.md` and live
+status/markers before any resume. No final result is claimed until reporting and
+full audit finish. The user chose not to prepare an additional dataset yet.
