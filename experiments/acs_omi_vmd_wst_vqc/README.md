@@ -1,3 +1,12 @@
+# Latest OMI notebook and threshold analysis — 2026-11-01 UTC
+
+The completed [LFCC–Swin and logistic notebook](notebooks/README.md) and
+[threshold comparison](threshold_comparison_v1/README.md) use saved patient-separated
+models and do not process official test waveforms. The 2026-09-27 continuation
+section below is historical; the original ACS extraction and classifier study
+finished in October. Consult [SESSION_HANDOFF.md](SESSION_HANDOFF.md) and actual
+completion markers before any restart.
+
 ## Study folders — 23 October 2026
 
 The [per-study folders](studies/README.md) organize the 3 completed ACS/OMI
