@@ -57,3 +57,8 @@ waits for the writer to exit, verifies that both the run and report finished,
 then runs the independent `audit.py` once. It never starts training or touches
 checkpoints. `monitor_status.json`, `monitor.log` and eventual `audit.log` record
 its actual state; absence of an audit pass must not be interpreted as validation.
+
+Two isolated completion-monitor tests passed (`tests/monitor_test.log`): an
+incomplete writer never triggers audit, and a completed run triggers the audit
+once then reuses a passed audit. These tests use temporary dummy artifacts; the
+real monitor remains active and its final audit has not yet run.
