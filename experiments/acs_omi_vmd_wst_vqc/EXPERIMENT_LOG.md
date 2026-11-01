@@ -797,3 +797,21 @@ patient-bootstrap interval [-0.0833,-0.0309]. The saved-prediction, threshold,
 patient-group and artifact audit passed. Read `undersampled_v1/REPORT.md` for
 Swin seeds, false-positive tradeoffs, run times and limitations. The official
 test waveforms were not processed.
+
+## 2026-10-31 EDT / 2026-11-01 UTC — OMI notebook and threshold analysis
+
+Prepared and executed the manuscript-ordered OMI LFCC–Swin and logistic notebook
+in `notebooks/omi_lfcc_swin_logistic_training.ipynb`: all eight code cells have
+saved, non-error outputs. It verifies and reuses the completed undersampling
+models by default; an explicit environment flag enables separately checkpointed
+retraining with held-out calibration and validation. It does not process official
+test waveforms. The reused OMI engine's CPU checks passed (8 pass, 1 GPU skipped),
+with NumPy/joblib deprecation warnings retained in `notebooks/verification_tests.log`.
+
+A separate saved-score threshold analysis reuses previously frozen 0.5 and
+80/90/95%-target calibration thresholds for undersampled and matched oversampled
+logistic and all three Swin seeds. It retained 2,000 patient-bootstrap draws and
+independent audit reproduced 16 grouped operating points and intervals. Results,
+code, split limitations, failure/warning detail and log are under
+`threshold_comparison_v1/`. The original validation patients have been repeatedly
+examined; this is not clinical/external validation.

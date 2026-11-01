@@ -1,0 +1,24 @@
+test_dropout_recovery_and_reload (test_study.StudyTests.test_dropout_recovery_and_reload) ... full: epoch 1/2, loss=0.90139, 0.1s
+full: epoch 2/2, loss=0.77395, 0.0s
+resume: epoch 1/2, loss=0.90139, 0.0s
+resume: epoch 2/2, loss=0.77395, 0.0s
+ok
+test_gpu_recovery_and_numerics (test_study.StudyTests.test_gpu_recovery_and_numerics) ... skipped 'GPU preflight explicitly enabled'
+test_inner_patient_isolation_and_coverage (test_study.StudyTests.test_inner_patient_isolation_and_coverage) ... ok
+test_logistic_train_only_scaler (test_study.StudyTests.test_logistic_train_only_scaler) ... /home/jaydenlee/venvs/test-ecg-training/lib/python3.12/site-packages/joblib/numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+/home/jaydenlee/venvs/test-ecg-training/lib/python3.12/site-packages/joblib/numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+ok
+test_normalization_ignores_held_out (test_study.StudyTests.test_normalization_ignores_held_out) ... ok
+test_raw_shape_and_finite_gradients (test_study.StudyTests.test_raw_shape_and_finite_gradients) ... ok
+test_sampling_preserves_originals (test_study.StudyTests.test_sampling_preserves_originals) ... ok
+test_selection_ties_and_threshold_ties (test_study.StudyTests.test_selection_ties_and_threshold_ties) ... ok
+test_zero_dropout_equivalent (test_study.StudyTests.test_zero_dropout_equivalent) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 17.477s
+
+OK (skipped=1)

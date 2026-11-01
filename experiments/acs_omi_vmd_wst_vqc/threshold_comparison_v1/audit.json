@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "operating_points": 16,
+  "metrics_per_point": 7,
+  "bootstrap_draws": 2000,
+  "comparisons_note": "individual fixed thresholds, seeds averaged; no new models or calibration fitted"
+}
