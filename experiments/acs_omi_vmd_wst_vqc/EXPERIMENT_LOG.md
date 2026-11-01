@@ -785,3 +785,15 @@ The two initial audit exports failed on the sandbox's path-case mismatch;
 approved outside-sandbox execution completed them. Independent check script
 was prepared during the original session and run on October 23. The pre-existing
 Swin audit modification and unrelated regularization outputs remain untouched.
+
+## 2026-10-31 — patient-grouped undersampled OMI comparison
+
+Completed the separate undersampled v1 experiment: 733 positive and 733 negative
+ECGs from 1,345 patients, retaining all records of selected subfit patients. The
+fixed LFCC logistic and three seeded Swin fits used the original natural-prevalence
+calibration and validation partitions. Primary logistic AP was 0.1306 versus
+0.1841 for the matched oversampled control; difference -0.0535 with paired 95%
+patient-bootstrap interval [-0.0833,-0.0309]. The saved-prediction, threshold,
+patient-group and artifact audit passed. Read `undersampled_v1/REPORT.md` for
+Swin seeds, false-positive tradeoffs, run times and limitations. The official
+test waveforms were not processed.

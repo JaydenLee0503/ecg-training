@@ -156,3 +156,16 @@ succeeded under `/tmp/ecg-attention-deps`, leaving the existing environment inta
 See [implementation record](reports/implementation.md), [validation evidence](reports/validation.json),
 and [declared settings](protocol.json). Future runners, controls and evaluation are
 pending; do not infer approval to train from the existence of these files.
+
+## 2026-10-31 — manuscript notebook and patient-count learning curve
+
+Updated `reproduce_swin/lfcc_swin_training.ipynb` in manuscript order and executed
+all 10 code cells with saved output; the first attempt failed on LFCC tuple
+unpacking, then the corrected notebook ran successfully. It verifies and reuses
+v1 models, includes the logistic control, and presents regularization and
+all-window results. ECG-08 completed 45 new Swin and 45 logistic fits, with
+100% baseline reuse; primary macro-F1 difference 100% minus 75% was +0.0207
+[+0.0024,+0.0373]. Independent artifact/split/normalization/metric audit passed.
+The learning curve changes optimizer-step count with sample size and its manifest
+did not directly hash every transitive import. Details and files are under
+`experiments/ecgdata/08_patient_learning_curve/`.

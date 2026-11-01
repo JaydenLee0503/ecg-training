@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "new_fit_markers_checked": 90,
+  "outer_test_patients_disjoint": true,
+  "nested_subsets_verified": true,
+  "normalization_and_class_weights_verified": 45,
+  "pooled_accuracy_and_macro_f1_verified": 8,
+  "analysis_sha256": "fb72cd569118a71359d967f9a36bdea8605e74c4e35dab719d961d3d00b145ee",
+  "manifest_sha256": "ca9898a4ddcf701f605a1aea3d86f140eaffd2cbd4907a6390818f0451c7f77f"
+}

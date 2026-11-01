@@ -7,7 +7,7 @@ patient-vote accuracy: **94.17%**. Read the
 
 This is a separate protocol from the original ACS setup. The original ACS raw
 archives, protocols, adapter and model defaults are intact. Preparation used CPU;
-training used the separate CUDA environment. ACS remains paused.
+training used the separate CUDA environment. That dated baseline did not run ACS training.
 
 ## Frozen scientific settings
 
@@ -124,3 +124,22 @@ full histories, all seeds, controls, bootstrap intervals and validation are in t
 [results directory](reports/ecgdata_lfcc_swin_v1/results.md). See also the
 [historical preparation report](reports/ecgdata_preparation.md) and unchanged
 [protocol](ecgdata_protocol.json). Completed runs should be verified and reused.
+
+## Manuscript workflow and later experiments
+
+The executed [training and manuscript notebook](reproduce_swin/lfcc_swin_training.ipynb)
+now follows the cohort, patient splits, LFCC, model, training, controls, metrics,
+uncertainty and follow-up results in manuscript order. By default it verifies and
+reuses the 15 Swin and five logistic v1 fits. Setting `ECG_RUN_FRESH=1` runs the
+original full protocol into a separate output directory. The notebook requires
+the project checkout and the local, gitignored data and saved runs; the earlier
+self-contained bundle description applies to the previous notebook version.
+
+Subsequent patient-separated experiments include the [regularization study](reports/ecgdata_lfcc_swin_regularization_v2/SUMMARY.md)
+and [all-window study](../experiments/ecgdata/07_lfcc_swin_all_windows/reports/report.md).
+The all-window study trained on 21,222 windows and achieved 86.83% window accuracy
+and 0.8390 macro-F1 on the same 1,620 baseline windows; extra training windows
+and optimizer updates are confounded. The regularization selected-procedure
+macro-F1 improvement interval includes zero. The patient-count learning curve is
+in [ECG-08](../experiments/ecgdata/08_patient_learning_curve/); consult its
+completion marker and report for actual status before citing a result.

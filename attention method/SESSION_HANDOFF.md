@@ -212,3 +212,19 @@ Pending for a later training request: real-data engineering verification, resuma
 extraction with provenance, persistent normalization packaging, declared training
 budget, training runner and classical controls, full prediction/uncertainty reporting.
 Keep official test patients reserved and retain all seeds 0/1/2 and failures.
+
+## Manuscript notebook and ECG-08 — 2026-10-31
+
+The notebook `reproduce_swin/lfcc_swin_training.ipynb` now executes in manuscript
+order and verifies/reuses the original Swin and logistic fits; all 10 code cells
+executed successfully after correcting an LFCC tuple-unpacking error. It requires
+the repository and local artifacts. The new separately documented ECG-08
+patient-count learning curve implements the previously drafted protocol, and
+uses verified 100% baseline fits. Check its completion marker and experiment
+log for actual progress before citing results or resuming a run.
+
+ECG-08 subsequently completed all 90 new fits. Swin window macro-F1 was 0.7799
+at 75% and 0.8006 at 100% of training patients: paired difference +0.0207,
+95% interval [+0.0024,+0.0373]. Smaller subsets also got fewer optimizer updates.
+The independent saved-fit audit passed; see ECG-08 REPORT.md for limitations,
+including an incomplete transitive source fingerprint. Do not retrain.

@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "records": 1466,
+  "patients": 1345,
+  "seed_models_checked": 3,
+  "primary_metric_reproduced": true,
+  "calibration_thresholds_recomputed": 12,
+  "subfit_patients_whole": true,
+  "validation_patients_disjoint": true,
+  "manifest_sha256": "ebd42aac26f86c1a18d59592302147aa75f8187004da79938454c3b0036ca1fa",
+  "results_sha256": "7e4ad00028a9bb9bd980f1da7dc219015d9d927d878abcc515d1444a337faf85"
+}

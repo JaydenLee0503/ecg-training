@@ -1,0 +1,138 @@
+{
+  "metrics": {
+    "swin_25": {
+      "window_macro_f1": 0.708887308855047,
+      "window_accuracy": 0.7594650205761319,
+      "patient_vote_macro_f1": 0.7819554636064804,
+      "patient_vote_accuracy": 0.8333333333333334
+    },
+    "logistic_25": {
+      "window_macro_f1": 0.6969185396750031,
+      "window_accuracy": 0.7430041152263375,
+      "patient_vote_macro_f1": 0.8061042091435603,
+      "patient_vote_accuracy": 0.8458333333333333
+    },
+    "swin_50": {
+      "window_macro_f1": 0.7490332372695918,
+      "window_accuracy": 0.7934156378600822,
+      "patient_vote_macro_f1": 0.8633581716826507,
+      "patient_vote_accuracy": 0.8916666666666666
+    },
+    "logistic_50": {
+      "window_macro_f1": 0.7169691988077408,
+      "window_accuracy": 0.7495884773662551,
+      "patient_vote_macro_f1": 0.8114133457932448,
+      "patient_vote_accuracy": 0.8458333333333333
+    },
+    "swin_75": {
+      "window_macro_f1": 0.7798831833116006,
+      "window_accuracy": 0.8218106995884774,
+      "patient_vote_macro_f1": 0.887551757657429,
+      "patient_vote_accuracy": 0.9125
+    },
+    "logistic_75": {
+      "window_macro_f1": 0.7262841524104494,
+      "window_accuracy": 0.7598765432098765,
+      "patient_vote_macro_f1": 0.8307797923561431,
+      "patient_vote_accuracy": 0.8624999999999999
+    },
+    "swin_100": {
+      "window_macro_f1": 0.8005932232909828,
+      "window_accuracy": 0.8335390946502058,
+      "patient_vote_macro_f1": 0.9269442221464694,
+      "patient_vote_accuracy": 0.9416666666666668
+    },
+    "logistic_100": {
+      "window_macro_f1": 0.734194496178095,
+      "window_accuracy": 0.7648148148148147,
+      "patient_vote_macro_f1": 0.851716247139588,
+      "patient_vote_accuracy": 0.875
+    }
+  },
+  "paired": {
+    "swin_100_minus_25": {
+      "point": {
+        "window_macro_f1": 0.09170591443593579,
+        "window_accuracy": 0.07407407407407396,
+        "patient_vote_macro_f1": 0.14498875853998905,
+        "patient_vote_accuracy": 0.10833333333333339
+      },
+      "intervals": {
+        "window_macro_f1": [
+          0.05239861494446541,
+          0.13234136684109427
+        ],
+        "window_accuracy": [
+          0.04229128556910575,
+          0.10926440329218096
+        ],
+        "patient_vote_macro_f1": [
+          0.07992292618804007,
+          0.2143181853519842
+        ],
+        "patient_vote_accuracy": [
+          0.05833333333333324,
+          0.16666666666666663
+        ]
+      }
+    },
+    "swin_100_minus_50": {
+      "point": {
+        "window_macro_f1": 0.051559986021391,
+        "window_accuracy": 0.040123456790123635,
+        "patient_vote_macro_f1": 0.06358605046381871,
+        "patient_vote_accuracy": 0.050000000000000155
+      },
+      "intervals": {
+        "window_macro_f1": [
+          0.023679158612020433,
+          0.08107525567053052
+        ],
+        "window_accuracy": [
+          0.018749356995884817,
+          0.06214371141975326
+        ],
+        "patient_vote_macro_f1": [
+          0.01856844352637667,
+          0.1154448029166713
+        ],
+        "patient_vote_accuracy": [
+          0.012500000000000178,
+          0.08750000000000002
+        ]
+      }
+    },
+    "swin_100_minus_75": {
+      "point": {
+        "window_macro_f1": 0.020710039979382255,
+        "window_accuracy": 0.011728395061728403,
+        "patient_vote_macro_f1": 0.039392464489040435,
+        "patient_vote_accuracy": 0.029166666666666785
+      },
+      "intervals": {
+        "window_macro_f1": [
+          0.002420876945469705,
+          0.03725531675856986
+        ],
+        "window_accuracy": [
+          -0.0028815586419754153,
+          0.026671874999999814
+        ],
+        "patient_vote_macro_f1": [
+          0.002105413811144535,
+          0.08307399971009057
+        ],
+        "patient_vote_accuracy": [
+          0.004166666666666541,
+          0.05843749999999955
+        ]
+      }
+    }
+  },
+  "bootstrap": {
+    "seed": 20260925,
+    "draws": 2000,
+    "rejected": 0
+  },
+  "caveat": "Patient bootstrap conditional on predictions; subset and initialization vary together; fewer patients also means fewer optimizer steps."
+}

@@ -33,3 +33,14 @@ checkout of this folder contains only the code; the local folder has everything.
 A different GPU or PyTorch version gives slightly different weights, so expect results close to,
 not bit-identical with, the original 83.35% window accuracy / 0.8006 macro-F1 / 94.17% patient vote.
 A one-fit CPU test of this folder reproduced every original predicted class for that fit.
+
+## Updated manuscript notebook
+
+The current notebook uses the **project checkout** and the original local saved
+artifacts rather than only the historical self-contained bundle described above.
+It verifies and reuses the completed v1 Swin and logistic fits, then displays
+regularization and all-window follow-ups. The version committed with this update
+contains executed outputs. Set `ECG_RUN_FRESH=1` before starting the kernel to run
+the original full training recipe into a separate output directory. This option
+requires the source data and the verified cache and may take substantial time.
+Models, datasets and features remain gitignored and are not provided by Git.
