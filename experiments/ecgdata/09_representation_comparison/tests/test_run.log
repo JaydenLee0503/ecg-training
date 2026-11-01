@@ -1,0 +1,9 @@
+test_32_band_swin_and_control_fit (test_study.RepresentationChecks.test_32_band_swin_and_control_fit) ... ok
+test_filterbank_matches_existing_lfcc_and_batch (test_study.RepresentationChecks.test_filterbank_matches_existing_lfcc_and_batch) ... ok
+test_raw_cnn_shape_and_finite_gradient (test_study.RepresentationChecks.test_raw_cnn_shape_and_finite_gradient) ... ok
+test_raw_fit_patient_isolation_and_reuse (test_study.RepresentationChecks.test_raw_fit_patient_isolation_and_reuse) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 17.498s
+
+OK
