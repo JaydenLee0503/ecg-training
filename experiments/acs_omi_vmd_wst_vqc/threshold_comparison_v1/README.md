@@ -13,3 +13,8 @@ Recompute from the repository root using the existing source artifacts:
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B experiments/acs_omi_vmd_wst_vqc/threshold_comparison_v1/analyze.py
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training/bin/python -B experiments/acs_omi_vmd_wst_vqc/threshold_comparison_v1/audit.py
 ```
+
+[REPORT_INTERVALS.md](REPORT_INTERVALS.md) presents the same 16 operating points
+with pointwise sensitivity, specificity and precision intervals. It is generated
+from the already audited analysis JSON by `render_intervals.py` without new
+inference, fitting or resampling.

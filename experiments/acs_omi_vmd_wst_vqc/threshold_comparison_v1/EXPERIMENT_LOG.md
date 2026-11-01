@@ -20,3 +20,7 @@ captured. The run and audit logs are retained (`run.log`, `audit.json`). The
 executed OMI notebook displays this comparison and can explicitly initiate a
 separate LFCC/Swin plus logistic retraining workflow; default notebook execution
 verifies/reuses completed models and does not train or decode test waveforms.
+
+Generated the supplemental `REPORT_INTERVALS.md` from the audited analysis JSON
+so all 16 operating points show pointwise 95% intervals for sensitivity,
+specificity and precision. No predictions, thresholds, models or draws changed.
