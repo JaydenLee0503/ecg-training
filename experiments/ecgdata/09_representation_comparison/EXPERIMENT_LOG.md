@@ -32,3 +32,11 @@ in 17.498 s (`tests/test_run.log`). The original three checks passed before laun
 During the first real fit the 32-band Swin saved epoch checkpoints normally.
 The full study is substantially longer than the original small-window tests;
 check live status and per-fit markers rather than inferring a completion time.
+
+Two additional post-launch checks passed: an interrupted 2-epoch raw-CNN CPU fit
+resumed with bit-identical final weights and predictions (16.423 s), and CPU/GPU
+forward/gradient comparisons passed for both the 32-band Swin and raw CNN (3.779 s).
+Their exact commands and outputs are in `tests/test_raw_recovery.py`,
+`tests/recovery_test.log`, `tests/test_cuda.py`, and `tests/cuda_test.log`. The
+first full 32-band Swin fit (fold 0, seed 0) completed in 331.6 s; subsequent
+fits continue. This is a runtime observation, not a final result or reliable ETA.

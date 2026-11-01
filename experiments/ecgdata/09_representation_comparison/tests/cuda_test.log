@@ -1,0 +1,6 @@
+test_forward_and_gradients (test_cuda.CudaAgreement.test_forward_and_gradients) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 3.779s
+
+OK

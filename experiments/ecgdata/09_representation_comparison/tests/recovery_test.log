@@ -1,0 +1,6 @@
+test_interrupted_resume_matches_uninterrupted (test_raw_recovery.RawRecoveryTest.test_interrupted_resume_matches_uninterrupted) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 16.423s
+
+OK
