@@ -75,3 +75,8 @@ CPU checkpoint reload and patient-boundary spot check. Maximum CPU/GPU saved
 probability differences were 1.28e-08, 1.77e-08 and 1.86e-09 for seeds 0/1/2;
 `tests/audit_first_raw.py` and `tests/first_raw_audit.log` preserve the check.
 The study continued to later patient folds without inspecting interim scores.
+
+At 2026-11-01T04:24:34Z, a read-only progress snapshot captured 15 complete
+marker statuses and SHA-256 digests and the current training log, without inspecting
+held-out scores. See `progress/20261101T042434Z.json` and `.log`; the snapshot
+records local marker hashes but does not back up the gitignored checkpoints.

@@ -1,0 +1,16 @@
+Verified and reused ECG-09 features
+band_logistic_fold0: verified/completed in 0.5s
+band_swin_seed0_fold0: verified/completed in 331.6s
+band_swin_seed1_fold0: verified/completed in 312.2s
+band_swin_seed2_fold0: verified/completed in 327.8s
+raw_cnn_seed0_fold0: verified/completed in 60.1s
+raw_cnn_seed1_fold0: verified/completed in 58.3s
+raw_cnn_seed2_fold0: verified/completed in 57.2s
+band_logistic_fold1: verified/completed in 0.4s
+band_swin_seed0_fold1: verified/completed in 331.6s
+band_swin_seed1_fold1: verified/completed in 330.1s
+band_swin_seed2_fold1: verified/completed in 332.5s
+raw_cnn_seed0_fold1: verified/completed in 57.9s
+raw_cnn_seed1_fold1: verified/completed in 59.0s
+raw_cnn_seed2_fold1: verified/completed in 58.4s
+band_logistic_fold2: verified/completed in 0.4s

@@ -1,0 +1,73 @@
+{
+  "captured_utc": "20261101T042434Z",
+  "status": {
+    "status": "running",
+    "last_completed": "band_logistic_fold2",
+    "pid": 90076,
+    "updated_utc": "2026-11-01T04:24:10Z"
+  },
+  "completed_fit_markers": [
+    {
+      "fit": "band_logistic_fold0",
+      "marker_sha256": "b311f92553fc62ee62ec749f9d20d3145db290429c5e59301e0f26723ce30754"
+    },
+    {
+      "fit": "band_logistic_fold1",
+      "marker_sha256": "a50658045872e8466245004e4dca1b170cfacf4175602d7868445f54a92c5201"
+    },
+    {
+      "fit": "band_logistic_fold2",
+      "marker_sha256": "8955200a9731ed921e9ec3fc60ec4d97148ea4cc9d048f46f44a40a8cdb136d0"
+    },
+    {
+      "fit": "band_swin_seed0_fold0",
+      "marker_sha256": "c3ac37c8269161e1b09167bc7180e1cbd2555df209769dd207a1373a42c39d28"
+    },
+    {
+      "fit": "band_swin_seed0_fold1",
+      "marker_sha256": "f5dea0da0d804f68b89b4dc8120ffcf8a7b5c3ae6742cf04415275fd71e7f30a"
+    },
+    {
+      "fit": "band_swin_seed1_fold0",
+      "marker_sha256": "26e856890caa2b3ab18bab5b251dbb218f545d2afb953bde9fc91c96cd84ae73"
+    },
+    {
+      "fit": "band_swin_seed1_fold1",
+      "marker_sha256": "5c9f2a19e578fb5c56d8c7e1c5779c5f1d3202fb029be350da846d3804fd22be"
+    },
+    {
+      "fit": "band_swin_seed2_fold0",
+      "marker_sha256": "1263a4824ab12d1358f888333690489017d64e5165ef0560e6cff008ec4eab19"
+    },
+    {
+      "fit": "band_swin_seed2_fold1",
+      "marker_sha256": "ff39d0b08fa3458d738a6de432845fa6665c6233ce32765daa23470b4dcc9327"
+    },
+    {
+      "fit": "raw_cnn_seed0_fold0",
+      "marker_sha256": "06f562fa8ba4701d9ea8487a1e58d5197118970e5a4693480c2f415b00b39a44"
+    },
+    {
+      "fit": "raw_cnn_seed0_fold1",
+      "marker_sha256": "c8ea2ddcc0680e4877e8ec45bf22b4c0e21a424830e6d3ced301243c1de39664"
+    },
+    {
+      "fit": "raw_cnn_seed1_fold0",
+      "marker_sha256": "07639091f49fa36d3791f4d508a3527cf1c55916e0fb0c91eb44bee44385ea78"
+    },
+    {
+      "fit": "raw_cnn_seed1_fold1",
+      "marker_sha256": "9837f541287d30b3b38666eae52d3113e78a7020b001e1ee4fb5c5a068517ea4"
+    },
+    {
+      "fit": "raw_cnn_seed2_fold0",
+      "marker_sha256": "34189f136e2a8bd9bc31c69f0254e34e29fd2983ca484537a91943b6fad1bb91"
+    },
+    {
+      "fit": "raw_cnn_seed2_fold1",
+      "marker_sha256": "8baf836309ceb8bbb5ae89afdea708edd9b244048eefe928d45c93f5a6b43a6f"
+    }
+  ],
+  "training_log_sha256": "4f4ffcb81d2e09041fee5aa8ec778e70b40a0a288e8accbd3ccdb145093bc9c5",
+  "note": "Progress only; no held-out scores were inspected. Results require all planned fits and final audit."
+}
