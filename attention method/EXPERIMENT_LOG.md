@@ -169,3 +169,14 @@ all-window results. ECG-08 completed 45 new Swin and 45 logistic fits, with
 The learning curve changes optimizer-step count with sample size and its manifest
 did not directly hash every transitive import. Details and files are under
 `experiments/ecgdata/08_patient_learning_curve/`.
+
+## 2026-11-01 UTC — ECG-09 notebook integration
+
+Added a status-aware ECG-09 section to the existing manuscript notebook. It
+shows the new comparison only when the separate full-run audit passes; otherwise
+it prints the last run status. Re-executed all 11 code cells successfully, with
+saved outputs. A separate post-execution inspection command initially raised a
+TypeError because it treated the notebook's JSON text-line list as a string;
+the corrected inspection verified all 11 outputs and the pending-state message.
+This was an inspection-script issue, not a notebook or model failure. The
+ECG-09 experiment itself remained in progress at this dated snapshot.

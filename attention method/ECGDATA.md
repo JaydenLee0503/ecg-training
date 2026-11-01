@@ -143,3 +143,9 @@ and optimizer updates are confounded. The regularization selected-procedure
 macro-F1 improvement interval includes zero. The patient-count learning curve is
 in [ECG-08](../experiments/ecgdata/08_patient_learning_curve/); consult its
 completion marker and report for actual status before citing a result.
+
+The notebook also includes a status-aware section for the separate
+[ECG-09 representation comparison](../experiments/ecgdata/09_representation_comparison/README.md).
+It displays the final report only when the completed-study audit has passed;
+otherwise its saved output says the comparison is pending. Re-execute the
+notebook after completion to display the final audited results.

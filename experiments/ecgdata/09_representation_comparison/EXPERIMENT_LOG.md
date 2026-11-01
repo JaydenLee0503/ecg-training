@@ -62,3 +62,10 @@ Two isolated completion-monitor tests passed (`tests/monitor_test.log`): an
 incomplete writer never triggers audit, and a completed run triggers the audit
 once then reuses a passed audit. These tests use temporary dummy artifacts; the
 real monitor remains active and its final audit has not yet run.
+
+The first full raw-CNN fit (fold 0, seed 0) completed in 60.1 s. The existing
+ECGData manuscript notebook gained a status-aware ECG-09 section and all 11 code
+cells were re-executed with saved outputs; it displays results only after the
+independent full-run audit passes. Initial notebook-output inspection had a JSON
+text-list handling TypeError, corrected in a repeat verification; the notebook
+execution itself succeeded. No interim scores were used for decisions.
