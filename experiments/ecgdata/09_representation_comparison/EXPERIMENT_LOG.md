@@ -69,3 +69,9 @@ cells were re-executed with saved outputs; it displays results only after the
 independent full-run audit passes. Initial notebook-output inspection had a JSON
 text-list handling TypeError, corrected in a repeat verification; the notebook
 execution itself succeeded. No interim scores were used for decisions.
+
+All three fold-0 raw-CNN fits completed at 40 epochs and passed an independent
+CPU checkpoint reload and patient-boundary spot check. Maximum CPU/GPU saved
+probability differences were 1.28e-08, 1.77e-08 and 1.86e-09 for seeds 0/1/2;
+`tests/audit_first_raw.py` and `tests/first_raw_audit.log` preserve the check.
+The study continued to later patient folds without inspecting interim scores.

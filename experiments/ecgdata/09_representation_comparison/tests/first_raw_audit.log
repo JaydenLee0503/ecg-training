@@ -1,0 +1,4 @@
+seed 0 CPU reload maximum probability error 1.280568540096283e-08
+seed 1 CPU reload maximum probability error 1.7695128917694092e-08
+seed 2 CPU reload maximum probability error 1.862645149230957e-09
+Three raw checkpoints, held-out patient boundaries and 40-epoch counts verified.
