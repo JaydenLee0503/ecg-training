@@ -21,3 +21,14 @@ writer lock, saves epoch checkpoints and rejects source/manifest changes. Inspec
 before resuming. If training finished but reporting was interrupted, invoke
 `study.py report` rather than refitting. The completed-run branch does not invoke
 the report automatically. No official OMI test data are used by this ECGData study.
+
+Versioned `provenance/` copies preserve the feature/training manifests, feature
+completion marker and extraction summary. They record hashes but do not replace
+large gitignored feature caches, checkpoints, or predictions. CPU and optional
+CUDA/recovery test logs are in `tests/`; setting `ECG09_TEST_CUDA=1` enables the
+host GPU test.
+
+A one-shot `monitor.py` waits for the launched training process to exit and then
+runs `audit.py` on completed artifacts; inspect `monitor_status.json` and
+`audit.log`. The monitor does not train and must not be duplicated. A passed
+final audit is required before citing the newly generated results.

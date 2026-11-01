@@ -40,3 +40,20 @@ Their exact commands and outputs are in `tests/test_raw_recovery.py`,
 `tests/recovery_test.log`, `tests/test_cuda.py`, and `tests/cuda_test.log`. The
 first full 32-band Swin fit (fold 0, seed 0) completed in 331.6 s; subsequent
 fits continue. This is a runtime observation, not a final result or reliable ETA.
+
+Copied the feature/training manifests, feature completion marker and extraction
+summary to the versioned `provenance/` directory while the immutable run was
+active. The copies record the original source/input hashes; the large data,
+checkpoints and predictions remain in gitignored directories.
+
+The first completed 32-band Swin fit passed an independent check of its
+training-only normalizer and a CPU checkpoint reload on eight held-out windows;
+maximum probability difference versus saved GPU inference was 2.0861626e-07.
+No model selection was performed. `tests/audit_first_fit.py` and
+`tests/first_fit_audit.log` retain the reproducible check.
+
+A separate one-shot `monitor.py` was started after the training writer. It only
+waits for the writer to exit, verifies that both the run and report finished,
+then runs the independent `audit.py` once. It never starts training or touches
+checkpoints. `monitor_status.json`, `monitor.log` and eventual `audit.log` record
+its actual state; absence of an audit pass must not be interpreted as validation.

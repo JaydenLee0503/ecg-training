@@ -1,0 +1,8 @@
+{
+  "status": "complete",
+  "files": {
+    "manifest.json": "8633b78862a7c21147841264f22bfa18e0fc55a796d001ba8eb86d5a177456ab",
+    "arrays.npz": "1699df2bb544b01bc340bb384d81339341e1dfd7ffca25fe22e857a2cef3b8fa",
+    "extraction.json": "3a44ab9c642828f524bc5ff88c796dc4aeff5a35a9533d23e61e62b42f1a8316"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "seconds": 3.940970553000625,
+  "shape": [
+    21222,
+    13,
+    1,
+    32
+  ],
+  "lfcc_max_error": 7.62939453125e-06,
+  "exclusions": 0,
+  "started_windows": 21222
+}

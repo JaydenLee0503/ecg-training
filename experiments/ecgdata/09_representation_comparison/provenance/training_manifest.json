@@ -1,0 +1,137 @@
+{
+  "sources": {
+    "experiments/ecgdata/09_representation_comparison/study.py": "6cf9c5961e5e77cae04dd184b69fcf8e106f18eb6f92bd89fc69bb7a43ef5ab9",
+    "experiments/ecgdata/09_representation_comparison/PROTOCOL.md": "41f47a5b3ca278940d512f1ed54665160e1e13c0f3e8d6368f8a6cd64266c066",
+    "experiments/ecgdata/07_lfcc_swin_all_windows/protocol.json": "8fc29ab53593a14b70052ad17cdc9a5023d504cb84114579bead997aa37bd008",
+    "experiments/ecgdata/07_lfcc_swin_all_windows/study.py": "12bd72ed2872d3e3994546267a262cbaf91044c48ca4f96810fc09b41883a1b7",
+    "attention method/attention_ecg/ecgdata.py": "732b449cdf3332e704eff0d7d803e84903b37330ba0295e09f9fbfdc5ab2fd1a",
+    "attention method/attention_ecg/ecgdata_training.py": "db917c268ae38f229a202650211cdea1940652cab5f64d8e4c8d2cdecd7ab8df",
+    "attention method/attention_ecg/ecgdata_report.py": "9935973e427d6421cbed2a7e37613cb83e77bcd9de54a70bd0b879afec8c6ea3",
+    "attention method/attention_ecg/cepstral.py": "7dd2f45dd1f8e7f21fbf8ef58fe0e2ce83f4b6416b0edee70141e267536a3c0f",
+    "attention method/attention_ecg/model.py": "df3cc984adce7ddc9a07ab7529343f79a5c0e3e7365b949163a635e335645115",
+    "ecgvmd/data.py": "ee16e893508110b733750fc8f9643a079952705e0ff61a279689f56fc330e5b5",
+    "ecgvmd/segment.py": "bf104ea1b5054499359ce8e72fda8092eb223db939b3318ec464a368441d9a3e",
+    "ecgvmd/config.py": "0e5ae80c6c91bee38b3e8ec522f4a552d9d3a0e1d5729f1ee617ea1ac52fa9f0",
+    "ecgvmd/ecgdata_subjects.csv": "b0dfbd8d0f4c030a4a83eaf9eeff81c1ba1d508b5078eca473fa8502cc86855e",
+    "ecgvmd/ecgdata_subjects.json": "d3eb834a78498f0c8401ae46d650bf3e5320ac63da34c37245a8f514af70c8e4"
+  },
+  "feature_completed_sha256": "c9ceb702d7cc2ff9365a6565d6609351496b25f665010154853026d3fa63e959",
+  "protocol": {
+    "id": "ecgdata_lfcc_swin_all_windows_v3",
+    "created": "2026-10-23",
+    "question": "Does training and evaluating the unchanged v1 LFCC/Swin and logistic recipes on every non-overlapping 500-sample window of ECGData.mat, instead of 10 sampled windows per row, change held-out patient performance?",
+    "classes": [
+      "ARR",
+      "CHF",
+      "NSR"
+    ],
+    "data": {
+      "mat": "ECGData.mat",
+      "mat_sha256": "031ccc6b3fc905742e70a44d810377ba655dd58b346c84485e9e7beab03d140a",
+      "fs": 128,
+      "seg_len": 500,
+      "windows_per_row": 131,
+      "rows": 162,
+      "n_windows": 21222,
+      "grid": "non-overlapping, start = j * 500 for j = 0..130; final 36 samples of each 65,536-sample row unused",
+      "zscore_each_window": true,
+      "exclusions": "none"
+    },
+    "reference_v1": {
+      "cache": "attention method/features/ecgdata_lfcc_v1",
+      "run": "attention method/results/ecgdata_lfcc_swin_v1",
+      "protocol": "attention method/ecgdata_protocol.json",
+      "subset_check": "the 1,620 v1 windows must be exactly grid windows (row, start/500) with bit-identical z-scored samples and LFCC features"
+    },
+    "folds": {
+      "source": "v1 per-window fold column mapped to patients (five StratifiedGroupKFold folds, seed 0, from results/patient_vmd_wst_vqc)",
+      "rule": "every window of a patient inherits that patient's v1 fold; no patient crosses folds"
+    },
+    "cepstral": {
+      "fs": 128,
+      "frame_samples": 128,
+      "hop_samples": 32,
+      "n_fft": 256,
+      "n_filters": 32,
+      "n_ceps": 16,
+      "fmin": 0.0,
+      "fmax": 64.0,
+      "spacing": "linear",
+      "power_floor": 1e-12
+    },
+    "model": {
+      "n_leads": 1,
+      "n_ceps": 32,
+      "num_classes": 3,
+      "embed_dim": 16,
+      "depths": [
+        2,
+        2
+      ],
+      "heads": [
+        2,
+        4
+      ],
+      "window_size": 4
+    },
+    "training": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "epochs": 40,
+      "batch_size": 32,
+      "optimizer": "AdamW",
+      "lr": 0.001,
+      "min_lr": 0.0001,
+      "weight_decay": 0.01,
+      "class_weights": "n_train / (3 * class_count)",
+      "gradient_clip_norm": 1.0,
+      "selection": "fixed architecture and 40 epochs; no early stopping, no tuning, no outer-label selection",
+      "shuffle_seed_offset": 10000,
+      "cpu_threads": 1,
+      "implementation": "attention_ecg.ecgdata_training.fit_swin, unchanged",
+      "note": "40 epochs over ~13x more windows gives ~13x more optimizer updates than v1; this is part of the tested change and is not separated from the data increase"
+    },
+    "control": {
+      "kind": "temporal mean and population std of cepstra -> StandardScaler -> logistic regression",
+      "C": 1.0,
+      "class_weight": "balanced",
+      "max_iter": 2000,
+      "solver": "lbfgs",
+      "implementation": "attention_ecg.ecgdata_training.fit_control, unchanged"
+    },
+    "evaluation": {
+      "primary": "window macro-F1 of all-window Swin minus v1 Swin, both evaluated on the identical 1,620 v1 held-out windows (mean over seeds 0/1/2), paired patient bootstrap",
+      "secondary": [
+        "same difference for window accuracy and patient-vote accuracy/macro-F1 on the 1,620 v1 windows",
+        "all-window logistic minus v1 logistic on the 1,620 v1 windows",
+        "window and patient-vote metrics on all 21,222 held-out windows (patient vote over every window of the patient)",
+        "all-window Swin minus all-window logistic"
+      ],
+      "patient_vote_tie": "lowest class index in ARR, CHF, NSR order",
+      "bootstrap_unit": "patient",
+      "bootstrap_resamples": 2000,
+      "bootstrap_seed": 20260925,
+      "interval_scope": "pointwise 95% percentile intervals conditional on saved out-of-fold predictions; seeds averaged inside each draw; no retraining or multiplicity adjustment"
+    },
+    "caveats": [
+      "The same 80 patients and outer folds have informed earlier decisions; this is internal evidence, not an external test.",
+      "Windows from one patient are correlated; more windows are not more independent patients.",
+      "Source database and diagnosis are confounded in ECGData.",
+      "Results classify ARR/CHF/NSR, not MI/OMI."
+    ],
+    "execution": {
+      "training_requires_explicit_cli_flag": true,
+      "device": "cuda",
+      "deterministic": "torch deterministic algorithms, TF32 disabled, CUBLAS_WORKSPACE_CONFIG=:4096:8, float32"
+    }
+  },
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 5070",
+  "python": "3.12.3",
+  "numpy": "2.5.2",
+  "torch": "2.7.1+cu128",
+  "cuda": "12.8"
+}
