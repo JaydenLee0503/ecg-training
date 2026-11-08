@@ -68,3 +68,15 @@ index; the approved host commit succeeded. The full GPU workflow started at
 2026-10-24T01:32:20Z, PID 102537 (launch execution session 24142). Its output is
 retained in workflow.log. Existing preparation was verified and reused. No new
 validation result exists at this launch entry; check actual completion markers.
+
+## 2026-11-07 EDT — manuscript notebook integration
+
+After the final audit and independent check passed, the OMI manuscript notebook
+was extended with the completed model-improvement report. The saved primary
+selected-Swin minus fixed-Swin AP difference is +0.0066, with paired 95%
+interval [-0.0115,+0.0243]; the improvement is not established. All nine code
+cells were re-executed with saved, non-error outputs; the fresh-training branch
+was disabled. The notebook checks both saved audit statuses before displaying the
+report. Jupyter emitted a local TCP transport warning; execution succeeded.
+See `../notebooks/refresh_2026-11-07.log`. No fitting or official test inference
+occurred during notebook refresh.

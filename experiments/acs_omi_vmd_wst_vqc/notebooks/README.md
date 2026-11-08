@@ -4,6 +4,8 @@
 contains saved outputs for every code cell. It explains the patient split,
 undersampling, LFCC features, Swin/logistic models, training, calibration,
 validation results and patient-bootstrap threshold analysis in manuscript order.
+It also displays the separately audited OMI model-improvement report, covering
+selected Swin settings, tuned logistic regression and a raw-waveform CNN control.
 By default it verifies and reads the completed study; it does not train again.
 
 To execute the notebook, use the repository checkout, the existing Python
@@ -37,3 +39,10 @@ The saved study used Python 3.12.3, NumPy 2.5.2, SciPy 1.18.1,
 scikit-learn 1.9.0, PyTorch 2.7.1+cu128 and deterministic float32 training.
 GPU results can differ slightly across hardware or library versions. See the
 study's frozen manifest and fit records for the exact environment and settings.
+
+After the completed model-improvement study was audited, the notebook was
+re-executed on 2026-11-07 EDT with all nine code cells saving non-error outputs.
+The added report requires versioned `omi_improvement_v2/reports/SUMMARY.md`,
+`audit.json`, and `independent_check.json` and verifies both audit statuses.
+See `refresh_2026-11-07.log`; Jupyter emitted a local TCP transport warning.
+No training occurred during this refresh.
