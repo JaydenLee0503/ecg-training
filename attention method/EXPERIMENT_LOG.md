@@ -180,3 +180,14 @@ TypeError because it treated the notebook's JSON text-line list as a string;
 the corrected inspection verified all 11 outputs and the pending-state message.
 This was an inspection-script issue, not a notebook or model failure. The
 ECG-09 experiment itself remained in progress at this dated snapshot.
+
+## 2026-11-07 EDT — ECG-09 completed, notebook refreshed
+
+The interrupted comparison resumed from the verified checkpoint and completed
+35 new fits; independent saved-artifact audit passed. Mean primary-window
+macro-F1 was 0.8846 for log-band Swin, 0.8390 for LFCC Swin and 0.5795 for
+the raw CNN. The paired log-band minus LFCC interval was [0.0202,0.0800].
+Refreshed `reproduce_swin/lfcc_swin_training.ipynb` after the audit; all 11
+code cells have saved, non-error output, including the completed comparison.
+Jupyter emitted a local TCP transport warning; execution completed. Complete
+metrics, provenance and limitations: `experiments/ecgdata/09_representation_comparison/reports/COMPLETION_REVIEW.md`.

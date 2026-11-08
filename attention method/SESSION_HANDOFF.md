@@ -246,3 +246,13 @@ GPU and numerical environment matched. The unchanged runner and one-time audit
 monitor were restarted. See ECG-09 SESSION_HANDOFF.md and actual status/markers;
 no final result or audit existed at launch. Earlier OMI notebook and threshold
 results remain complete.
+
+## ECG-09 completed — 2026-11-07 EDT
+
+All 35 new fits completed and the independent audit passed. The manuscript
+notebook was refreshed with the audited report and all 11 code cells have
+saved non-error outputs. The primary paired window macro-F1 improvement for
+log-band Swin over LFCC Swin was +0.0457 [0.0202,0.0800]; see ECG-09
+`reports/COMPLETION_REVIEW.md` for all controls, results and limitations.
+Full caches/models remain local and gitignored; predicted classes and analysis
+are versioned. Do not retrain the completed experiment.
