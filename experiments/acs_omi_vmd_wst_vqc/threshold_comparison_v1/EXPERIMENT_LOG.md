@@ -24,3 +24,14 @@ verifies/reuses completed models and does not train or decode test waveforms.
 Generated the supplemental `REPORT_INTERVALS.md` from the audited analysis JSON
 so all 16 operating points show pointwise 95% intervals for sensitivity,
 specificity and precision. No predictions, thresholds, models or draws changed.
+
+## 2026-11-07 EDT — post-restart integrity check
+
+The user resumed the broader ECGData/OMI task after a restart. Without inference,
+refitting or official-test processing, verified the five threshold-analysis
+artifacts against the completion marker and all 52 files listed by the completed
+undersampling run. All checks passed. Confirmed that the OMI notebook has eight
+executed code cells with non-error saved output; the notebook SHA-256 is recorded
+in `restart_check_2026-11-07.json`. The first check produced the same successful
+result; its scope wording was clarified and the check repeated to record that it
+writes its own audit JSON while treating source artifacts as read-only.

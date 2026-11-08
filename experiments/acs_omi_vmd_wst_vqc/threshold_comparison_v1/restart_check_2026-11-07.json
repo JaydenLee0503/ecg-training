@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "checked_utc": "2026-11-08T00:13:11Z",
+  "threshold_artifacts_checked": 5,
+  "undersampling_artifacts_checked": 52,
+  "notebook_code_cells": 8,
+  "notebook_outputs_present": true,
+  "notebook_sha256": "ba1a09cfe66f8909d836573ccbaae34b8507b7f40a09d4f511a6bf55ec941010",
+  "issues": [],
+  "scope": "source artifacts read-only; writes this JSON audit; no inference, fitting or official-test processing"
+}

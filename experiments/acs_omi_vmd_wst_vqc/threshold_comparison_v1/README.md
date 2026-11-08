@@ -18,3 +18,8 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /home/jaydenlee/venvs/test-ecg-training
 with pointwise sensitivity, specificity and precision intervals. It is generated
 from the already audited analysis JSON by `render_intervals.py` without new
 inference, fitting or resampling.
+
+The post-restart [checksum and notebook-output check](restart_check_2026-11-07.json)
+verified the saved threshold and undersampling artifacts. It can be repeated with
+`restart_check.py`; it writes its own JSON audit and does not run inference or
+training.
