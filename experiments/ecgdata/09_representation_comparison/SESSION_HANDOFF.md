@@ -61,3 +61,8 @@ It refuses unaudited results, performs no training, checks all cell outputs and
 preserves concurrent notebook edits. Its two safety tests passed; the real refresh
 was not run at the resume snapshot. Commit the refreshed notebook and completed
 reports after the remaining saved-artifact checks.
+
+Post-restart GPU driver/software inventory: `restart_environment_2026-11-07.json`.
+Current NVIDIA driver 610.88; the original ECG-09 launch manifest did not pin
+its driver version, so equality across the restart cannot be established. Other
+recorded numerical-library versions and GPU model match the original records.

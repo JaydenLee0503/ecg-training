@@ -1,0 +1,39 @@
+{
+  "captured_utc": "2026-11-08T00:16:09Z",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "versions": {
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.0",
+    "pandas": "3.0.5",
+    "joblib": "1.5.3"
+  },
+  "torch": "2.7.1+cu128",
+  "cuda_runtime": "12.8",
+  "cuda_available": true,
+  "device_name": "NVIDIA GeForce RTX 5070",
+  "nvidia_smi": {
+    "command": [
+      "nvidia-smi",
+      "--query-gpu=name,driver_version,memory.total",
+      "--format=csv,noheader"
+    ],
+    "exit_code": 0,
+    "stdout": "NVIDIA GeForce RTX 5070, 610.88, 12227 MiB",
+    "stderr": ""
+  },
+  "threads_and_determinism": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "original_manifest": {
+    "device": "cuda",
+    "device_name": "NVIDIA GeForce RTX 5070",
+    "python": "3.12.3",
+    "numpy": "2.5.2",
+    "torch": "2.7.1+cu128",
+    "cuda": "12.8"
+  },
+  "driver_note": "Original ECG-09 launch manifest did not record GPU driver version; driver equality across restart is not established."
+}

@@ -121,3 +121,13 @@ it before audit produced the expected `RuntimeError` and did not alter the
 notebook. Two synthetic safety tests passed in 0.050 s, including a concurrent
 notebook edit; see `tests/refresh_test.log`. The real refresh remains pending the
 completed experiment and final audit.
+
+The post-restart host environment inventory is saved in
+`restart_environment_2026-11-07.json`; the reproducible helper is
+`capture_restart_environment.py`. Current driver is 610.88, GPU RTX 5070 with
+12,227 MiB, and the recorded Python, NumPy, SciPy, scikit-learn, pandas, joblib,
+PyTorch and CUDA versions match the original run manifest or post-launch
+inventory. The original ECG-09 manifest did not record the GPU driver, so its
+version cannot be verified against launch. This is a provenance limitation, not
+proof of numerical drift. The fold 3 Swin seed 2 fit completed in 383.7 seconds;
+its longer runtime is recorded without assigning an unverified cause.
