@@ -66,3 +66,16 @@ Post-restart GPU driver/software inventory: `restart_environment_2026-11-07.json
 Current NVIDIA driver 610.88; the original ECG-09 launch manifest did not pin
 its driver version, so equality across the restart cannot be established. Other
 recorded numerical-library versions and GPU model match the original records.
+
+## Completed and audited — 2026-11-07 EDT
+
+The resumed writer and monitor exited successfully; 35/35 fits, final report and
+independent audit are complete. Do not resume or retrain. The primary paired
+window macro-F1 difference was +0.0457 [0.0202,0.0800]. Read
+`reports/COMPLETION_REVIEW.md`, `REPORT.md`, `analysis.json` and `audit.json`
+for all seeds, controls, intervals and limitations. The report and portable
+predicted-class table are versioned; full feature caches, model artifacts,
+probabilities and bootstrap draws are still local and gitignored. The executed
+ECGData manuscript notebook now contains the audited report in all 11 successful
+code cells. OMI notebook and threshold study were checked separately; the
+official OMI test set remains unused. User chose existing cohort first.

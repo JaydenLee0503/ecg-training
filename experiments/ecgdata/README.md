@@ -1,6 +1,6 @@
 # ECGData studies
 
-Eight completed ECGData classification studies and one active representation comparison. Status is a dated snapshot; check the latest markers before resuming.
+Nine completed ECGData studies. Status is a dated snapshot; check the latest markers before resuming.
 
 | ID | Experiment | Status |
 |---|---|---|
@@ -12,6 +12,6 @@ Eight completed ECGData classification studies and one active representation com
 | ECG-06 | [LFCC/Swin epoch selection and dropout](06_lfcc_swin_regularization_v2/README.md) | complete |
 | ECG-07 | [LFCC/Swin on all windows](07_lfcc_swin_all_windows/README.md) | complete |
 | ECG-08 | [Patient-count learning curve](08_patient_learning_curve/README.md) | complete |
-| ECG-09 | [Log-band and raw-waveform comparison](09_representation_comparison/README.md) | running at launch snapshot; check markers |
+| ECG-09 | [Log-band and raw-waveform comparison](09_representation_comparison/README.md) | complete and independently audited |
 
 The [learning-curve draft](drafts/learning_curve/README.md) is historical; ECG-08 implements it. [Complete catalog](../README.md).

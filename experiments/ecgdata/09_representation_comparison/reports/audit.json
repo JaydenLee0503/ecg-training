@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "feature_lfcc_max_error": 7.62939453125e-06,
+  "fit_markers": 35,
+  "model_reload_spot_checks": 35,
+  "normalizers_checked": 15,
+  "patient_isolation": true,
+  "metrics_checked": 10,
+  "primary_bootstrap_draws": 2000,
+  "rejected": 0,
+  "seconds": 8.691925813000125,
+  "training_manifest_sha256": "e79de68d1d8471add1b9044ce4d58e8f62ceb6f81645878c7de75c016b31e4e6",
+  "analysis_sha256": "12fb69122b1236f5c0214b1f51f923c0ca5577e8d7165cd9c20bfe37ea80a590"
+}

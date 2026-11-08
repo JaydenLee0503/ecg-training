@@ -38,3 +38,14 @@ with `refresh_notebook.py` using the existing interpreter. Jupyter needs a local
 kernel socket, which may require host execution in this environment. The helper
 refuses to run without a passed audit, verifies output from every code cell, does
 not train a model, and preserves any notebook edits made during execution.
+
+## Completed results — 2026-11-07 EDT
+
+All 35 new fits and the independent audit completed. Read the
+[completion review](reports/COMPLETION_REVIEW.md), [results](reports/REPORT.md),
+[analysis](reports/analysis.json) and [audit](reports/audit.json). A compact
+[held-out prediction table](reports/predictions.csv.gz) is versioned; full model
+outputs, probabilities and feature caches remain local and gitignored. The
+executed ECGData manuscript notebook now includes the audited comparison. The
+OMI analysis is separate and no official OMI test data were used. Do not retrain
+completed fits merely because the session or computer restarted.

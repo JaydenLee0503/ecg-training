@@ -139,3 +139,35 @@ it passed in 2.086 s (`tests/test_reporting.py`, `tests/reporting_test.log`).
 The first successful synthetic run printed dummy scores; the test was rerun
 with those scores suppressed to avoid confusing them with research results.
 No real held-out scores were inspected or used for decisions in this check.
+
+## 2026-11-07 EDT / 2026-11-08 UTC — completion and audited notebook
+
+The resumed runner reused all 23 completed fits, continued the intact epoch-6
+checkpoint, completed the remaining 12 fits, wrote the report and exited 0.
+The completion marker reports 35 new fits; fit-time sum 6,343.7 seconds excludes
+feature preparation/reporting and spans the interruption. The one-time monitor
+finished the independent audit at 2026-11-08T00:47:39Z with exit 0: all 35 fit
+markers, 35 reload spot checks, 15 normalizers, patient isolation, 10 metric
+sets and 2,000 primary bootstrap draws passed; no draw was rejected. Full
+settings, all per-seed results, confusion matrices, per-fit runtimes and recorded
+warnings: `reports/analysis.json`. Training, monitor and audit logs are saved.
+
+Primary window macro-F1: log-band Swin 0.8846 versus LFCC Swin 0.8390; paired
+difference +0.0457, 95% interval [+0.0202,+0.0800]. Raw CNN 0.5795 was worse;
+log-band logistic was 0.8345. Patient-vote accuracy difference has interval
+[0.0,+0.0542]. These are conditional, pointwise intervals on a small repeatedly
+examined cohort with diagnosis/source confounding; no external validation.
+Representations also change projection dimensions and raw CNN changes model.
+Read `reports/COMPLETION_REVIEW.md` and the frozen protocol before interpretation.
+
+After the audit, `refresh_notebook.py` executed the ECGData manuscript notebook
+on the host, using the existing interpreter and disabling fresh training. All
+11 code cells have saved, non-error output, including the ECG-09 results.
+Jupyter emitted its local TCP transport warning; the notebook completed. See
+`notebook_refresh_2026-11-07.log`. Exported all 21,222 saved out-of-fold window
+class predictions to versioned `reports/predictions.csv.gz` (SHA-256
+e38a9b7b5238b1c800543d1fd1c27cfbb57db0678b8fa424242a0fd73fe3a9be).
+`export_predictions.py` verified every primary window accuracy and macro-F1
+against the audited analysis, 80 patients and one held-out fold per patient.
+Full probabilities, models, caches and bootstrap draws remain local/gitignored.
+No model was retrained during the notebook refresh or prediction export.
