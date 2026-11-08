@@ -131,3 +131,11 @@ inventory. The original ECG-09 manifest did not record the GPU driver, so its
 version cannot be verified against launch. This is a provenance limitation, not
 proof of numerical drift. The fold 3 Swin seed 2 fit completed in 383.7 seconds;
 its longer runtime is recorded without assigning an unverified cause.
+
+Before the real run finished, exercised the complete ECG-09 reporting path with
+30 synthetic examples and 35 simulated fit records. The test generated both
+report sets, the prediction export and the full 2,000-draw paired bootstrap;
+it passed in 2.086 s (`tests/test_reporting.py`, `tests/reporting_test.log`).
+The first successful synthetic run printed dummy scores; the test was rerun
+with those scores suppressed to avoid confusing them with research results.
+No real held-out scores were inspected or used for decisions in this check.
