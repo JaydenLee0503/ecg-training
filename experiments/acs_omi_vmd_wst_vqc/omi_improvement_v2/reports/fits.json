@@ -1,0 +1,1330 @@
+[
+  {
+    "path": "final/logistic_tuned/fit/fit.json",
+    "C": 0.01,
+    "seconds": 0.9511835470002552,
+    "iterations": [
+      88
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T03:15:41Z"
+  },
+  {
+    "path": "final/raw/seed0/fit/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 0,
+      "epochs": 40,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 285.79758378300176,
+    "parameters": 121442,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 410726912,
+    "completed_at_utc": "2026-11-08T00:39:03Z"
+  },
+  {
+    "path": "final/raw/seed1/fit/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 1,
+      "epochs": 40,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 278.34629251200386,
+    "parameters": 121442,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 395757568,
+    "completed_at_utc": "2026-11-08T00:43:45Z"
+  },
+  {
+    "path": "final/raw/seed2/fit/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 2,
+      "epochs": 40,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 273.06337837799947,
+    "parameters": 121442,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 397230592,
+    "completed_at_utc": "2026-11-08T00:48:16Z"
+  },
+  {
+    "path": "final/swin0/seed0/fit/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 0,
+      "epochs": 10,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 71.56578509199971,
+    "parameters": 2175718,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 313377792,
+    "completed_at_utc": "2026-10-24T03:16:45Z"
+  },
+  {
+    "path": "final/swin0/seed1/fit/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 1,
+      "epochs": 10,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 97.84753922100208,
+    "parameters": 2175718,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 261116928,
+    "completed_at_utc": "2026-11-08T00:18:30Z"
+  },
+  {
+    "path": "final/swin0/seed2/fit/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 2,
+      "epochs": 10,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 69.70325098600006,
+    "parameters": 2175718,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 304671744,
+    "completed_at_utc": "2026-11-08T00:19:41Z"
+  },
+  {
+    "path": "final/swin1/seed0/fit/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 0,
+      "epochs": 40,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 277.6390838320003,
+    "parameters": 2175718,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 352658432,
+    "completed_at_utc": "2026-11-08T00:24:14Z"
+  },
+  {
+    "path": "final/swin1/seed1/fit/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 1,
+      "epochs": 40,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 250.08000461399934,
+    "parameters": 2175718,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 326528000,
+    "completed_at_utc": "2026-11-08T00:28:21Z"
+  },
+  {
+    "path": "final/swin1/seed2/fit/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 2,
+      "epochs": 40,
+      "inner": false,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 249.06441140099923,
+    "parameters": 2175718,
+    "unique_fit_records": 11458,
+    "balanced_counts": [
+      10725,
+      10725
+    ],
+    "peak_cuda_bytes": 352658432,
+    "completed_at_utc": "2026-11-08T00:32:26Z"
+  },
+  {
+    "path": "inner/logistic/C0.01/fold0/fit.json",
+    "C": 0.01,
+    "seconds": 1.7410891849995096,
+    "iterations": [
+      76
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:28Z"
+  },
+  {
+    "path": "inner/logistic/C0.01/fold1/fit.json",
+    "C": 0.01,
+    "seconds": 0.4333588499994221,
+    "iterations": [
+      74
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:33Z"
+  },
+  {
+    "path": "inner/logistic/C0.01/fold2/fit.json",
+    "C": 0.01,
+    "seconds": 0.4221471839991864,
+    "iterations": [
+      70
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:37Z"
+  },
+  {
+    "path": "inner/logistic/C0.1/fold0/fit.json",
+    "C": 0.1,
+    "seconds": 0.9411429140000109,
+    "iterations": [
+      160
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:29Z"
+  },
+  {
+    "path": "inner/logistic/C0.1/fold1/fit.json",
+    "C": 0.1,
+    "seconds": 0.6807709719996637,
+    "iterations": [
+      148
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:34Z"
+  },
+  {
+    "path": "inner/logistic/C0.1/fold2/fit.json",
+    "C": 0.1,
+    "seconds": 0.7179578310006036,
+    "iterations": [
+      149
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:38Z"
+  },
+  {
+    "path": "inner/logistic/C1/fold0/fit.json",
+    "C": 1.0,
+    "seconds": 1.1079969729998993,
+    "iterations": [
+      227
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:30Z"
+  },
+  {
+    "path": "inner/logistic/C1/fold1/fit.json",
+    "C": 1.0,
+    "seconds": 1.02316204699855,
+    "iterations": [
+      245
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:35Z"
+  },
+  {
+    "path": "inner/logistic/C1/fold2/fit.json",
+    "C": 1.0,
+    "seconds": 1.0178343110001151,
+    "iterations": [
+      217
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:39Z"
+  },
+  {
+    "path": "inner/logistic/C10/fold0/fit.json",
+    "C": 10.0,
+    "seconds": 1.1397131949997856,
+    "iterations": [
+      245
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:31Z"
+  },
+  {
+    "path": "inner/logistic/C10/fold1/fit.json",
+    "C": 10.0,
+    "seconds": 0.9720317360006447,
+    "iterations": [
+      268
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:36Z"
+  },
+  {
+    "path": "inner/logistic/C10/fold2/fit.json",
+    "C": 10.0,
+    "seconds": 1.1239547749992198,
+    "iterations": [
+      248
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:41Z"
+  },
+  {
+    "path": "inner/logistic/C100/fold0/fit.json",
+    "C": 100.0,
+    "seconds": 1.1023047430007864,
+    "iterations": [
+      260
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:32Z"
+  },
+  {
+    "path": "inner/logistic/C100/fold1/fit.json",
+    "C": 100.0,
+    "seconds": 1.1737911790005455,
+    "iterations": [
+      277
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:37Z"
+  },
+  {
+    "path": "inner/logistic/C100/fold2/fit.json",
+    "C": 100.0,
+    "seconds": 1.082300228999884,
+    "iterations": [
+      256
+    ],
+    "warnings": [],
+    "reload_exact": true,
+    "completed_at_utc": "2026-10-24T01:43:42Z"
+  },
+  {
+    "path": "inner/raw/fold0/seed0/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 249.1518914979988,
+    "parameters": 121442,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 367172096,
+    "completed_at_utc": "2026-10-24T02:47:04Z"
+  },
+  {
+    "path": "inner/raw/fold0/seed1/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 223.42039206499976,
+    "parameters": 121442,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T02:50:32Z"
+  },
+  {
+    "path": "inner/raw/fold0/seed2/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 221.13661747600054,
+    "parameters": 121442,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T02:54:00Z"
+  },
+  {
+    "path": "inner/raw/fold1/seed0/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 222.23557578700093,
+    "parameters": 121442,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T02:57:29Z"
+  },
+  {
+    "path": "inner/raw/fold1/seed1/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 221.69767281199893,
+    "parameters": 121442,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T03:00:58Z"
+  },
+  {
+    "path": "inner/raw/fold1/seed2/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 225.38653202200112,
+    "parameters": 121442,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T03:04:30Z"
+  },
+  {
+    "path": "inner/raw/fold2/seed0/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 229.53187387400067,
+    "parameters": 121442,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T03:08:06Z"
+  },
+  {
+    "path": "inner/raw/fold2/seed1/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 240.30619152500003,
+    "parameters": 121442,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T03:11:50Z"
+  },
+  {
+    "path": "inner/raw/fold2/seed2/fit.json",
+    "settings": {
+      "arm": "raw",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 236.27347225599988,
+    "parameters": 121442,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 368645120,
+    "completed_at_utc": "2026-10-24T03:15:32Z"
+  },
+  {
+    "path": "inner/swin0/fold0/seed0/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 203.3494976789989,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 261116928,
+    "completed_at_utc": "2026-10-24T01:47:32Z"
+  },
+  {
+    "path": "inner/swin0/fold0/seed1/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 202.09210498500033,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 287247360,
+    "completed_at_utc": "2026-10-24T01:50:43Z"
+  },
+  {
+    "path": "inner/swin0/fold0/seed2/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 200.3518252069989,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 313377792,
+    "completed_at_utc": "2026-10-24T01:53:50Z"
+  },
+  {
+    "path": "inner/swin0/fold1/seed0/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 195.61550499699842,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 287247360,
+    "completed_at_utc": "2026-10-24T01:56:54Z"
+  },
+  {
+    "path": "inner/swin0/fold1/seed1/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 196.13241955100057,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 313377792,
+    "completed_at_utc": "2026-10-24T01:59:58Z"
+  },
+  {
+    "path": "inner/swin0/fold1/seed2/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 195.46776701199997,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 339508224,
+    "completed_at_utc": "2026-10-24T02:03:01Z"
+  },
+  {
+    "path": "inner/swin0/fold2/seed0/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 195.313243255001,
+    "parameters": 2175718,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 365638656,
+    "completed_at_utc": "2026-10-24T02:06:03Z"
+  },
+  {
+    "path": "inner/swin0/fold2/seed1/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 195.62279932899946,
+    "parameters": 2175718,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 391769088,
+    "completed_at_utc": "2026-10-24T02:09:06Z"
+  },
+  {
+    "path": "inner/swin0/fold2/seed2/fit.json",
+    "settings": {
+      "arm": "swin0",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 196.51313478700104,
+    "parameters": 2175718,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 417899520,
+    "completed_at_utc": "2026-10-24T02:12:10Z"
+  },
+  {
+    "path": "inner/swin1/fold0/seed0/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 206.96656136899946,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 465886208,
+    "completed_at_utc": "2026-10-24T02:15:23Z"
+  },
+  {
+    "path": "inner/swin1/fold0/seed1/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 209.25194362399998,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 492016640,
+    "completed_at_utc": "2026-10-24T02:18:39Z"
+  },
+  {
+    "path": "inner/swin1/fold0/seed2/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 210.09174697699927,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7149,
+      7149
+    ],
+    "peak_cuda_bytes": 518147072,
+    "completed_at_utc": "2026-10-24T02:21:57Z"
+  },
+  {
+    "path": "inner/swin1/fold1/seed0/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 205.17743308699937,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 544277504,
+    "completed_at_utc": "2026-10-24T02:25:10Z"
+  },
+  {
+    "path": "inner/swin1/fold1/seed1/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 212.32011291799972,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 570407936,
+    "completed_at_utc": "2026-10-24T02:28:31Z"
+  },
+  {
+    "path": "inner/swin1/fold1/seed2/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 216.10121883400097,
+    "parameters": 2175718,
+    "unique_fit_records": 7638,
+    "balanced_counts": [
+      7150,
+      7150
+    ],
+    "peak_cuda_bytes": 596538368,
+    "completed_at_utc": "2026-10-24T02:31:51Z"
+  },
+  {
+    "path": "inner/swin1/fold2/seed0/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 0,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 210.78380730000026,
+    "parameters": 2175718,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 622668800,
+    "completed_at_utc": "2026-10-24T02:35:10Z"
+  },
+  {
+    "path": "inner/swin1/fold2/seed1/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 1,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 205.97599337200154,
+    "parameters": 2175718,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 648799232,
+    "completed_at_utc": "2026-10-24T02:38:23Z"
+  },
+  {
+    "path": "inner/swin1/fold2/seed2/fit.json",
+    "settings": {
+      "arm": "swin1",
+      "seed": 2,
+      "epochs": 40,
+      "inner": true,
+      "training": {
+        "epochs": 40,
+        "batch_size": 128,
+        "lr": 0.001,
+        "min_lr": 0.0001,
+        "weight_decay": 0.01,
+        "gradient_clip_norm": 1.0,
+        "shuffle_seed_offset": 10000,
+        "optimizer": "AdamW",
+        "schedule": "cosine horizon 40, including earlier stopped refits",
+        "precision": "float32",
+        "deterministic": true,
+        "tf32": false
+      }
+    },
+    "seconds": 202.3143536819989,
+    "parameters": 2175718,
+    "unique_fit_records": 7640,
+    "balanced_counts": [
+      7151,
+      7151
+    ],
+    "peak_cuda_bytes": 309103616,
+    "completed_at_utc": "2026-10-24T02:41:34Z"
+  }
+]

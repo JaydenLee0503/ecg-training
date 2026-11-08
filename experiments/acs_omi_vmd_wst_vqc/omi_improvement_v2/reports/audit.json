@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "time_utc": "2026-11-08T00:52:52Z",
+  "artifact_entries": 1274,
+  "protected_files": 1732,
+  "per_seed_metrics_verified": 14,
+  "thresholds_reconstructed": 42,
+  "official_test_processed": false,
+  "context_sha": "a9f655bad8be1f95e1c9aa1d77f7acc73100122afe25896c03e43eb200eaf2ec"
+}

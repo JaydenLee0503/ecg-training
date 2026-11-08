@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "models": 14,
+  "thresholds": 42,
+  "patients_disjoint": true,
+  "official_test_processed": false
+}

@@ -12,6 +12,22 @@
   "layout": "Per-study folders contain README.md and FILES.html indexes with relative links to canonical files. Original storage paths remain intact. The Windows-backed filesystem does not support symlink creation.",
   "entries": [
     {
+      "id": "ACS-04",
+      "folder": "experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2",
+      "title": "OMI dropout, logistic tuning and raw CNN",
+      "category": "completed_classification_after_2026_10_23",
+      "status": "complete",
+      "description": "Completed 7 November 2026: three-fold inner patient selection, independent calibration thresholds, all neural seeds 0/1/2, matched completed controls and a fixed raw 12-lead CNN. Additional to the historical 23 October counts.",
+      "links": {
+        "protocol.md": "experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/PROTOCOL.md",
+        "guide.md": "experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/README.md",
+        "handoff.md": "experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/SESSION_HANDOFF.md",
+        "code": "experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2",
+        "artifacts": "experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/results"
+      },
+      "completion_evidence": ["experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/results/completed.json"]
+    },
+    {
       "id": "ECG-01",
       "folder": "experiments/ecgdata/01_patient_vmd_wst_vqc",
       "title": "Patient-grouped VMD versus WST with VQC",

@@ -2,6 +2,10 @@
 
 Three completed classification studies and two feasibility assessments that stopped before classifier training.
 
+A later classification study, [ACS-04 — OMI dropout, logistic tuning and raw
+CNN](../omi_improvement_v2/README.md), completed on 7 November 2026. It is
+additional to the historical three-study count above.
+
 | ID | Experiment | Status |
 |---|---|---|
 | ACS-01 | [ACS/OMI VMD versus WST with VQC and classical controls](01_vmd_wst_vqc/README.md) | complete |
