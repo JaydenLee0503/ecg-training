@@ -32,3 +32,9 @@ A one-shot `monitor.py` waits for the launched training process to exit and then
 runs `audit.py` on completed artifacts; inspect `monitor_status.json` and
 `audit.log`. The monitor does not train and must not be duplicated. A passed
 final audit is required before citing the newly generated results.
+
+After the final audit passes, refresh the previously executed manuscript notebook
+with `refresh_notebook.py` using the existing interpreter. Jupyter needs a local
+kernel socket, which may require host execution in this environment. The helper
+refuses to run without a passed audit, verifies output from every code cell, does
+not train a model, and preserves any notebook edits made during execution.

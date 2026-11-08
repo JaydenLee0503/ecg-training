@@ -112,3 +112,12 @@ checkpoint. New writer PID at launch: 430581; PID is not durable. Console:
 at 00:04:46Z; its output is `monitor_resume_2026-11-07.log` and its current
 status is `monitor_status.json`. It waits for this writer and then audits only a
 completed run/report. No final result or audit pass exists at this launch snapshot.
+
+Prepared `refresh_notebook.py` for the post-audit notebook update. It verifies
+that the ECG-09 report and successful audit exist, disables fresh model training,
+executes all notebook cells, and only replaces the notebook after checking every
+cell output and ensuring the original did not change during execution. Running
+it before audit produced the expected `RuntimeError` and did not alter the
+notebook. Two synthetic safety tests passed in 0.050 s, including a concurrent
+notebook edit; see `tests/refresh_test.log`. The real refresh remains pending the
+completed experiment and final audit.

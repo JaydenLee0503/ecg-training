@@ -54,3 +54,10 @@ restarts. A one-time monitor was also restarted. Read live `results/status.json`
 `monitor_status.json` before any action. No final report/audit existed at launch;
 the resume is not permission to run a second writer. Full records and the
 initial inspection-helper key error are in EXPERIMENT_LOG.md.
+
+After the full audit passes, run `refresh_notebook.py` using the existing Python
+environment on the host (Jupyter local kernel sockets are sandbox-restricted).
+It refuses unaudited results, performs no training, checks all cell outputs and
+preserves concurrent notebook edits. Its two safety tests passed; the real refresh
+was not run at the resume snapshot. Commit the refreshed notebook and completed
+reports after the remaining saved-artifact checks.
