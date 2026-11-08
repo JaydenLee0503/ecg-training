@@ -80,3 +80,35 @@ At 2026-11-01T04:24:34Z, a read-only progress snapshot captured 15 complete
 marker statuses and SHA-256 digests and the current training log, without inspecting
 held-out scores. See `progress/20261101T042434Z.json` and `.log`; the snapshot
 records local marker hashes but does not back up the gitignored checkpoints.
+
+At approximately 2026-11-01T04:30Z, a read-only progress check verified the completion markers and recorded
+artifact hashes for the first 16 completed fits; no interim scores were inspected.
+The run remained active at that snapshot. This check does not replace the final
+full-cohort, all-fit and patient-bootstrap audit.
+
+## 2026-11-07 EDT / 2026-11-08 UTC — restart and verified continuation
+
+The user asked to continue after a restart. At inspection the old status said
+running with the stale 2026-11-01 PID; no host writer or monitor was alive.
+There were 23 completed fit markers, including all three full outer folds and
+fold 3 logistic plus Swin seed 0. Read-only SHA-256 checks verified all 14
+frozen source files, all 117 files listed by the 23 completed fits, the feature
+manifest and all three feature-cache marker entries with zero mismatches. The
+interrupted fold 3 seed 1 checkpoint was at epoch 6 and its stored checksum
+matched. Python 3.12.3, NumPy 2.5.2, PyTorch 2.7.1+cu128 and the host NVIDIA
+GeForce RTX 5070 matched the run manifest. No held-out predictions were inspected
+or used to change the protocol.
+
+The initial inspection helper erroneously requested a nonexistent nested `versions`
+key after completing its fit/source checks; a corrected separate check verified
+the actual top-level version keys and feature checksums. The sandbox did not
+expose `/dev/dxg`; the authorized host check found CUDA available. These were
+inspection/environment issues, not training failures.
+
+Resumed the unchanged runner on the host GPU. At 2026-11-08T00:04:31Z it
+verified and reused the 23 completed fits and began continuing the saved epoch-6
+checkpoint. New writer PID at launch: 430581; PID is not durable. Console:
+`training_resume_2026-11-07.log`. Restarted the separate one-time audit monitor
+at 00:04:46Z; its output is `monitor_resume_2026-11-07.log` and its current
+status is `monitor_status.json`. It waits for this writer and then audits only a
+completed run/report. No final result or audit pass exists at this launch snapshot.

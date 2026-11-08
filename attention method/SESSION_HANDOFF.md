@@ -239,3 +239,10 @@ one-shot monitor will run the saved-result audit after the writer exits. See
 `experiments/ecgdata/09_representation_comparison/SESSION_HANDOFF.md` and live
 status/markers before any resume. No final result is claimed until reporting and
 full audit finish. The user chose not to prepare an additional dataset yet.
+
+ECG-09 resumed 2026-11-07 EDT after its stale prior status was checked: 23
+completed fits and the epoch-6 checkpoint passed integrity checks; the original
+GPU and numerical environment matched. The unchanged runner and one-time audit
+monitor were restarted. See ECG-09 SESSION_HANDOFF.md and actual status/markers;
+no final result or audit existed at launch. Earlier OMI notebook and threshold
+results remain complete.

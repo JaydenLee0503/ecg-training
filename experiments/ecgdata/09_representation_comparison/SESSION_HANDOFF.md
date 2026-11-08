@@ -40,3 +40,17 @@ completed report/analysis with the user's configured identity. Do not cite
 incomplete or unaudited outcomes. Bootstrap intervals are patient-cluster and
 conditional on saved predictions; the repeatedly used 80-patient cohort has
 diagnosis/source confounding and is not external validation.
+
+## Resumed 2026-11-07 EDT
+
+The old Nov-1 status was stale after restart. Verified 23 completed fits (117
+listed artifacts), 14 frozen sources, all three feature-cache files and the
+interrupted `band_swin_seed1_fold3` epoch-6 checkpoint with zero mismatches. The
+existing interpreter and RTX 5070/CUDA fingerprint matched the saved manifest.
+The unchanged host GPU runner was resumed at approximately 2026-11-08T00:04Z,
+reusing all completed fits. Launch writer PID 430581; do not trust PIDs across
+restarts. A one-time monitor was also restarted. Read live `results/status.json`,
+`training_resume_2026-11-07.log`, the active checkpoint and
+`monitor_status.json` before any action. No final report/audit existed at launch;
+the resume is not permission to run a second writer. Full records and the
+initial inspection-helper key error are in EXPERIMENT_LOG.md.
