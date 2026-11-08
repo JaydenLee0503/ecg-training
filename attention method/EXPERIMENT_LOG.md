@@ -191,3 +191,12 @@ Refreshed `reproduce_swin/lfcc_swin_training.ipynb` after the audit; all 11
 code cells have saved, non-error output, including the completed comparison.
 Jupyter emitted a local TCP transport warning; execution completed. Complete
 metrics, provenance and limitations: `experiments/ecgdata/09_representation_comparison/reports/COMPLETION_REVIEW.md`.
+
+## 2026-11-07 EDT — mentor handoff documentation
+
+The reproduce_swin README still led with historical self-contained/Colab
+instructions for an older notebook, despite the current manuscript notebook
+requiring the project checkout and verified local artifacts. Corrected it and
+added `MANUSCRIPT_HANDOFF.md` with both notebooks, paths, local artifacts and
+versioned report links. Checked all links and file paths. This documentation
+change did not run training or change the saved notebook results.
