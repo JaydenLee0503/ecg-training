@@ -1,5 +1,42 @@
 # Session handoff — 2026-09-25
 
+## OMI improvement completed — 2026-11-07 EST
+
+The [OMI improvement study](../experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/reports/SUMMARY.md)
+completed at 2026-11-08T00:53:34Z. Primary selected-Swin minus fixed-Swin AP
++0.0066 has 95% patient-bootstrap interval [-0.0115, +0.0243], so the primary
+improvement is not established. Raw CNN AP 0.2803 versus tuned logistic 0.2022
+is a promising secondary internal result; at the 90% calibration target, raw CNN
+achieved 90.10% sensitivity and 50.47% specificity. Its pointwise paired AP
+difference versus tuned logistic is +0.0781 [0.0294, 0.1288].
+
+The completion audit verified 1,274 output entries and 1,732 protected files;
+independent checks reproduced all 14 seed-level ranking metrics and 42
+calibration thresholds. The cohort has been repeatedly examined; official test
+waveforms remain reserved. Do not retrain the completed study.
+
+## ECGData all-window Swin study (ECG-07) complete — 2026-10-24 01:11 EDT
+
+The user requested an ECGData-only follow-up in its own folder:
+[ECG-07](../experiments/ecgdata/07_lfcc_swin_all_windows/README.md) trains the
+unchanged v1 LFCC/Swin and logistic recipes on all 21,222 non-overlapping windows
+(131 per row instead of 10), same patients/folds/seeds. 20/20 fits finished at
+05:11:23Z. On the identical 1,620 v1 windows Swin achieved **86.83% window
+accuracy, macro-F1 0.8390, 95.83% patient vote** versus 83.35% / 0.8006 / 94.17%;
+macro-F1 difference +0.0384 [+0.0153, +0.0602]. Patient-vote gain not established;
+more data and more updates are confounded. Read its EXPERIMENT_LOG.md (includes a
+report-writer bug and its fix). No OMI work was done; the running OMI job was not touched.
+
+## OMI improvement workflow launched — 2026-10-23 21:32 EDT
+
+The new [OMI study](../experiments/acs_omi_vmd_wst_vqc/omi_improvement_v2/SESSION_HANDOFF.md)
+started its full GPU workflow at 2026-10-24T01:32:20Z after all 9 CPU/GPU checks
+and preparation passed. Preparation verified 1,732 protected files. Implementation
+checkpoint b018f78; automatic raw caching, inner fitting, final calibration and
+reporting are running. No new performance result exists at this launch snapshot.
+Read the actual status and logs; do not launch a duplicate or retrain completed
+fits. Official test waveforms remain reserved.
+
 ## OMI improvement study authorized and preparing — 2026-10-23 EDT
 
 The user approved OMI Swin dropout/epoch selection, LFCC logistic tuning and a
@@ -679,3 +716,61 @@ Sources checked on 2026-09-22:
 
 These were earlier options. Continue from the verified ACS preparation described
 above and the user's current request, without automatically starting training.
+
+## Manuscript notebook and new patient-group studies — 2026-10-31
+
+Updated `attention method/reproduce_swin/lfcc_swin_training.ipynb` to run in
+manuscript order using verified completed v1 models and to show regularization
+and all-window results. All 10 notebook code cells executed; a first execution
+failed at an LFCC tuple-unpacking error, which was fixed before the successful
+rerun. The notebook requires the project and local saved artifacts. A separate
+ECG-08 patient-count learning curve and OMI undersampling study were launched;
+read `experiments/ecgdata/08_patient_learning_curve/EXPERIMENT_LOG.md` and
+`experiments/acs_omi_vmd_wst_vqc/undersampled_v1/EXPERIMENT_LOG.md`, actual
+completion markers and reports for current status. Their source protocols and
+outputs are separate from existing experiments. Do not duplicate active writers.
+
+Both new studies subsequently finished. ECG-08's 100%-minus-75% window macro-F1
+was +0.0207 [+0.0024,+0.0373]; the training-step count is confounded. OMI
+undersampled logistic AP was 0.1306 vs matched oversampled 0.1841; paired
+difference -0.0535 [-0.0833,-0.0309]. Both independent audits passed; detailed
+results and provenance limits are in the respective study reports. Preserve the
+saved outputs and check markers rather than repeating completed training.
+
+## ECG-09 and OMI notebook follow-up — 2026-10-31 EDT
+
+The user approved the existing-cohort representation comparisons and requested
+full logbook records and an OMI LFCC/Swin/logistic notebook. ECG-09 lives in
+`experiments/ecgdata/09_representation_comparison/`: 32 log bands, matching
+logistic, raw CNN and verified ECG-07 baseline, identical patient folds/seeds.
+Feature preparation passed and fitting is checkpointed; consult status/logs and
+completion markers before any resume. The OMI notebook is executed and the
+separate OMI saved-threshold analysis completed with an independent audit; see
+`experiments/acs_omi_vmd_wst_vqc/notebooks/` and `threshold_comparison_v1/`.
+The user chose existing-cohort comparisons first, not additional dataset preparation.
+
+## ECG-09 resumed — 2026-11-07 EDT
+
+The user asked to continue after restart. Verified 23 completed ECG-09 fits,
+117 saved fit artifacts, frozen sources and feature cache; the interrupted fold-3
+seed-1 checkpoint was intact at epoch 6. Host GPU and pinned environment matched.
+Resumed the same runner and restarted its one-time audit monitor at 2026-11-08
+00:04 UTC. Consult the ECG-09 session handoff, current status/checkpoint and
+`training_resume_2026-11-07.log`; launch state is not a finished result. OMI
+notebook and saved-threshold analysis are complete and were not retrained.
+
+## ECG-09 completed — 2026-11-07 EDT
+
+The resumed 35-fit ECG-09 comparison finished and independent audit passed;
+the executed manuscript notebook contains the results. Primary log-band minus
+LFCC Swin window macro-F1 +0.0457 [0.0202,0.0800]; the raw CNN performed
+worse. See ECG-09 `reports/COMPLETION_REVIEW.md` for all seeds, controls,
+patient-vote uncertainty, provenance and the small/confounded cohort limitation.
+Prediction classes and reports are versioned; models and feature caches remain
+local/gitignored. No retraining is required. OMI notebook and threshold analysis
+remain complete, with the official OMI test untouched. The user chose existing
+cohort comparisons before considering any additional dataset.
+
+The mentor handoff is `MANUSCRIPT_HANDOFF.md`. The ECGData notebook README
+was corrected: historical self-contained/Colab instructions do not apply to
+the present notebook, which needs the checkout and listed local artifacts.

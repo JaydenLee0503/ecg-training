@@ -2,6 +2,9 @@
 
 [Open the clickable experiment index](FILES.html).
 
+**Completed 7 November 2026:** [ACS-04 — OMI dropout, logistic tuning and raw CNN](acs_omi_vmd_wst_vqc/omi_improvement_v2/README.md).
+It is additional to the historical 23 October counts below.
+
 As of **23 October 2026**, there are **9 completed main classification studies**
 (6 ECGData and 3 ACS/OMI), plus **2 completed feasibility assessments that failed
 their gates before classifier training**: **11 recent studies in total**.
@@ -27,6 +30,7 @@ The 5 unnumbered groups organize the existing workflows, not every notebook cell
 | ECG-04 | [LFCC and temporal Swin baseline](ecgdata/04_lfcc_swin_v1/README.md) | complete |
 | ECG-05 | [Thirty-second EMD/Hilbert morphology classifiers](ecgdata/05_emd_hilbert_30s/README.md) | complete |
 | ECG-06 | [LFCC/Swin epoch selection and dropout](ecgdata/06_lfcc_swin_regularization_v2/README.md) | complete |
+| ECG-07 | [LFCC/Swin on all ECGData windows](ecgdata/07_lfcc_swin_all_windows/README.md) | complete (2026-10-24; not in the 23 October counts above) |
 | ACS-01 | [ACS/OMI VMD versus WST with VQC and classical controls](acs_omi_vmd_wst_vqc/studies/01_vmd_wst_vqc/README.md) | complete |
 | ACS-02 | [Balanced OMI training and LFCC/Swin comparison](acs_omi_vmd_wst_vqc/studies/02_balanced_training_and_swin/README.md) | complete |
 | ACS-03 | [OMI sensitivity thresholds and calibration](acs_omi_vmd_wst_vqc/studies/03_sensitivity_calibration/README.md) | complete |
@@ -78,3 +82,13 @@ attempt, so no symbolic links were created.
 Literature reviews, download checks, software tests and reproduction notebooks
 are supporting records, not additional classifier experiments. Historical
 row-grouped scores must not be described as patient-independent results.
+
+## 2026-10-31 follow-ups
+
+- [ECG-08 patient-count learning curve](ecgdata/08_patient_learning_curve/README.md): complete, with 90 new fits and verified reuse of the 100% baseline.
+- [OMI undersampled training v1](acs_omi_vmd_wst_vqc/undersampled_v1/README.md): complete, with one balanced patient-group subset, three Swin seeds and a logistic control. See its report for the negative primary AP result.
+
+## 2026-11-01 follow-ups
+
+- [ECG-09 log-band/Swin and raw-CNN comparison](ecgdata/09_representation_comparison/README.md): active at launch; check status and audit before citing results.
+- [OMI LFCC training notebook](acs_omi_vmd_wst_vqc/notebooks/README.md) and [saved-score threshold comparison](acs_omi_vmd_wst_vqc/threshold_comparison_v1/README.md): complete.

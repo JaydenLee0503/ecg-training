@@ -1,5 +1,25 @@
 # ACS session handoff — 2026-09-25
 
+## OMI improvement completed — 2026-11-07 EST
+
+The [completed report](omi_improvement_v2/reports/SUMMARY.md) retains all seeds,
+52 fit records and 1,350 epochs. Primary selected-Swin minus fixed-Swin AP
++0.0066 [-0.0115, +0.0243] does not establish improvement. Raw CNN AP 0.2803
+versus tuned logistic 0.2022 is a secondary internal result; at the 90%
+calibration target raw sensitivity was 90.10% and specificity 50.47%.
+All 1,274 output and 1,732 protected artifact entries passed the audit; independent
+checks reproduced 14 seed-level ranking metrics and all 42 thresholds. Validation
+has been repeatedly examined and official test waveforms remain reserved.
+
+## OMI improvement workflow launched — 2026-10-23 21:32 EDT
+
+The [new study](omi_improvement_v2/SESSION_HANDOFF.md) started its automatic GPU
+workflow at 2026-10-24T01:32:20Z. All 9 CPU/GPU checks passed; preparation verified
+1,732 protected files and retained the exact 17,905-ECG development cohort.
+Implementation checkpoint b018f78. Read results/status.json and workflow.log in
+that study, not historical launch prose, before resuming. No new validation
+result exists at this entry. Official test waveforms remain reserved.
+
 ## OMI improvement study authorized and preparing — 2026-10-23 EDT
 
 The user approved Swin dropout/epoch selection, LFCC logistic tuning and a raw
@@ -653,3 +673,43 @@ test patients reserved. Extraction does not automatically start model training.
 No result establishes clinical validity, research novelty, transform superiority
 or quantum advantage. ACS scores are not directly comparable to the original
 ARR/CHF/NSR task or the unverified paper's validation accuracy.
+
+## Undersampled OMI study — 2026-10-31
+
+A new patient-grouped undersampling comparison is in `undersampled_v1/`. It
+retains 733 positive and 733 negative training ECGs from 1,345 patients, keeping
+mixed-label patients' selected records together. Calibration/validation retain
+natural prevalence; original sensitivity-study models are matched controls.
+Read its protocol, log, completion marker and report for actual status. The
+first synthetic selection test passed. Official test waveforms remain reserved.
+
+The undersampling study finished: logistic AP 0.1306 versus matched oversampled
+0.1841 (difference -0.0535, patient-bootstrap 95% interval [-0.0833,-0.0309]).
+All three Swin seeds finished; their mean AP was 0.1502, sensitivity 70.74%,
+specificity 69.32% at threshold 0.5. Independent saved-artifact, calibration
+and patient-group audit passed; see `undersampled_v1/REPORT.md`. Do not retrain
+completed fits. Official test waveforms remain reserved.
+
+## OMI notebook and threshold follow-up — 2026-10-31 EDT
+
+`notebooks/omi_lfcc_swin_logistic_training.ipynb` is executed with output in all
+8 code cells. It verifies/reuses existing fits by default; the optional explicit
+training branch writes a separate output directory. `threshold_comparison_v1/`
+recomputes the saved fixed and 80/90/95% calibration-target tradeoffs on the
+same validation cohort, with 2,000 paired patient-bootstrap draws. Its independent
+audit passed. No new OMI training or official-test waveform decoding occurred.
+See the local experiment log for all records and captured test warnings.
+
+## OMI restart integrity check — 2026-11-07 EDT
+
+The completed threshold analysis and undersampling source artifacts were checked
+without inference or retraining: five threshold files and all 52 parent files
+matched their recorded hashes. The saved notebook still has eight executed code
+cells with non-error outputs. See `threshold_comparison_v1/restart_check_2026-11-07.json`
+and its reproducible helper. It writes only the audit JSON. No official test
+waveforms were processed.
+
+The OMI manuscript notebook now also displays the independently checked and
+audited `omi_improvement_v2` summary; all nine cells were executed and saved.
+The selected-Swin AP improvement interval includes zero. See the study report
+for all seeds, controls and limitations; no notebook-refresh training occurred.
